@@ -15,21 +15,23 @@ public class PhosphoMotifMatching {
 	public static void execute(String[] args) {
 		
 		try {
+			HashMap map_motif = MotifTools.grabMotif(args[0]); ////"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Phosphorylation\\all_motif.txt");			
+			String inputFastaFile = args[1];
+			String completeMatch = args[2];
 			String outputFile = args[3]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\Differential_Peptide_Analysis\\IdentifyKinase\\Kinase_09192014.txt";
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			
-			HashMap map_motif = MotifTools.grabMotif(args[0]); ////"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Phosphorylation\\all_motif.txt");			
 			
-			String completeMatch = args[2];
+			
 			boolean complete_match_flag = false;
-			if (completeMatch.equals("yes")) {
+			if (completeMatch.toUpperCase().equals("YES")) {
 				complete_match_flag = true;
 			}
-			LinkedList query_name_list = MotifTools.grabFastaQueryName(args[1]); //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\Differential_Peptide_Analysis\\AddFastSequence\\extended.fasta");
-			LinkedList query_name_list_meta = MotifTools.grabFastaQueryNameMeta(args[1]); //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\Differential_Peptide_Analysis\\AddFastSequence\\extended.fasta");
-			LinkedList query_list = MotifTools.grabFastaQuery(args[1]); //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\Differential_Peptide_Analysis\\AddFastSequence\\extended.fasta");
-			LinkedList query_list_orig = MotifTools.grabFastaQueryOrig(args[1]);
+			LinkedList query_name_list = MotifTools.grabFastaQueryName(inputFastaFile); //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\Differential_Peptide_Analysis\\AddFastSequence\\extended.fasta");
+			LinkedList query_name_list_meta = MotifTools.grabFastaQueryNameMeta(inputFastaFile); //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\Differential_Peptide_Analysis\\AddFastSequence\\extended.fasta");
+			LinkedList query_list = MotifTools.grabFastaQuery(inputFastaFile); //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\Differential_Peptide_Analysis\\AddFastSequence\\extended.fasta");
+			LinkedList query_list_orig = MotifTools.grabFastaQueryOrig(inputFastaFile);
 			
 			if (query_name_list.size() == query_name_list_meta.size() 
 					&& query_name_list.size() == query_list.size() 

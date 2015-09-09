@@ -24,16 +24,34 @@ public class AddRelativeQuantificationJUMP {
 		try {
 			String originalFile = args[0];
 			String ascoreFile = args[1];
-			//String totalProteomeFile = args[2];
-			String groupInfo = args[2];
-			String outputFile = args[3];
-			String summaryFile = args[4];
+			String totalProteomeFile = args[2];
+			String groupInfo = args[3];
+			String outputFile = args[4];
+			String summaryFile = args[5];
+			String useTotal = args[6].trim();  // this is a flag for indicating the data used to determine kinase activity.
+										// useTotal = 1 is total proteome then phospho proteome
+										// useTotal = 2 is phospho proteome then whole
+										// useTotal = 3 is user defined then same as 1
+										// useTotal = 4 is user defined then same as 2
+			String special_case = args[7]; // this contains a list of special case
+			
 			
 			System.out.println("Running Grab Data From Ascore");
-			HashMap ascore = grabDataFromAscore(ascoreFile, groupInfo);
+			HashMap ascore = grabDataFromPhosphoProteome(ascoreFile, groupInfo);
 			System.out.println("Load Phosphoproteome File Info");
 			//HashMap total = grabDataFromTotal(totalProteomeFile, groupInfo);
-			HashMap total = grabDataFromTotal(ascoreFile, groupInfo);
+			
+			HashMap kinase_activity_phospho = grabKinaseActivityFromPhospho(ascoreFile, groupInfo);
+			HashMap kinase_activity_wholepro= grabKinaseActivityFromWholeProteome(totalProteomeFile, groupInfo);
+			HashMap total = new HashMap();
+			if (useTotal.equals("1")) {
+				total = combineKinaseActivity(kinase_activity_wholepro, kinase_activity_phospho);
+			} else if (useTotal.equals("2")) {
+				total = combineKinaseActivity(kinase_activity_phospho, kinase_activity_wholepro);
+			} else {
+				total = kinase_activity_phospho;
+			}
+			
 			System.out.println("Load Total Proteome Info");
 
 			FileWriter fwriter = new FileWriter(outputFile);
@@ -235,7 +253,7 @@ public class AddRelativeQuantificationJUMP {
 		}
 		return map;
 	}
-	public static HashMap grabDataFromAscore(String fileName, String groupInfo) {
+	public static HashMap grabDataFromPhosphoProteome(String fileName, String groupInfo) {
 		HashMap map = new HashMap();
 		String[] groups = groupInfo.split(":");
 		
@@ -299,7 +317,121 @@ public class AddRelativeQuantificationJUMP {
 		}
 		return map;
 	}
-	public static HashMap grabDataFromTotal(String fileName, String groupInfo) {
+	public static HashMap grabKinaseActivityFromWholeProteome(String fileName, String groupInfo) {
+		HashMap map = new HashMap();
+		String[] groups = groupInfo.split(":");
+		
+		try {
+			
+			
+			FileInputStream fstream = new FileInputStream(fileName);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));
+			in.readLine();
+			in.readLine();
+			while (in.ready()) {
+				String str = in.readLine();
+				String[] split = str.split("\t");
+				if (split.length > 3) {
+					//String acc_id = split[1].split("\\|")[1];
+					String geneName = split[3].toUpperCase();
+					String peptide = split[8];
+					String uniprotName = split[1];
+										
+					if (checkGeneNameUniprotCombo(geneName, uniprotName)) {
+						if (split.length <= 23) {
+							if (geneName.equals("AKT1")) {
+								System.out.println(str);
+							}
+							//System.out.println(str);
+						} else {
+							String data = "";
+							//String data = split[22];
+							//for (int i = 23; i <= 31; i++) {
+								//data += "\t" + split[i];
+							//}
+							LinkedList[] list_groups = new LinkedList[groups.length];
+							for (int i = 0; i < groups.length; i++) {
+								list_groups[i] = new LinkedList();
+							}
+							int buffer = 23;
+							
+							// convert the data into a linkedlist
+							for (int i = 0 + buffer; i <= 9 + buffer; i++) {
+								for (int j = 0; j < groups.length; j++) {
+									String[] split_group = groups[j].split(",");
+									for (int k = 0; k < split_group.length; k++) {
+										int group_id = new Integer(split_group[k].trim());
+										if (group_id == (i - buffer)) {
+											list_groups[j].add(split[i]);
+										}
+									}
+								}
+							}
+							
+							// place the data into a linkedlist
+							
+							for (int j = 0; j < groups.length; j++) {
+								double[] num = MathTools.convertListStr2Double(list_groups[j]);
+								if (j == 0) {
+									data += MathTools.mean(num) + "";
+								} else {
+									data += "\t" + MathTools.mean(num);
+								}
+							}
+							//System.out.println(geneName + "\t" + data);
+							if (map.containsKey(geneName)) {
+								HashMap peptideHash = (HashMap)map.get(geneName);
+								peptideHash.put(uniprotName, data);
+								map.put(geneName, peptideHash);
+								if (geneName.equals("AKT1")) {
+									System.out.println("Should add to map");
+								}
+							} else {
+								HashMap peptideHash = new HashMap();
+								peptideHash.put(uniprotName, data);
+								map.put(geneName, peptideHash);
+								if (geneName.equals("AKT1")) {
+									System.out.println("Else Should add to map");
+								}
+							}
+						}					
+					}
+				}
+			}
+			in.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return map;
+	}
+	
+	/**
+	 * When combining the kinase activity, the new list for put stuff in firstMap as priority
+	 * @param firstMap
+	 * @param secondMap
+	 * @return
+	 */
+	public static HashMap combineKinaseActivity(HashMap firstMap, HashMap secondMap) {
+		HashMap newMap = new HashMap();
+		Iterator itr = firstMap.keySet().iterator();
+		while (itr.hasNext()) {
+			String key = (String)itr.next();
+			HashMap peptideHash = (HashMap)firstMap.get(key);
+			newMap.put(key, peptideHash);
+		}
+		
+		itr = secondMap.keySet().iterator();
+		while (itr.hasNext()) {
+			String key = (String)itr.next();
+			if (!newMap.containsKey(key)) {
+				HashMap peptideHash = (HashMap)secondMap.get(key);
+				newMap.put(key, peptideHash);
+			}
+		}
+		return newMap;
+	}
+	public static HashMap grabKinaseActivityFromPhospho(String fileName, String groupInfo) {
 		HashMap map = new HashMap();
 		String[] groups = groupInfo.split(":");
 		

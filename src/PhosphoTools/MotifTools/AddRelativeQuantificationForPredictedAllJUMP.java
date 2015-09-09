@@ -23,17 +23,25 @@ public class AddRelativeQuantificationForPredictedAllJUMP {
 		try {
 			String originalFile = args[0];
 			String ascoreFile = args[1];
-			//String totalProteomeFile = args[2];
+			String totalProteomeFile = args[2];
 			//String kinase_name = args[3];
 			
 			//String kinase_gene = args[3];
 			//String motif_name = args[4];
-			String motif_all_file = args[2];			
+			String motif_all_file = args[3];			
 			HashMap kinase_map = MotifTools.grabKinase2Motif(motif_all_file);
 			
-			String groupInfo = args[3];
-			String outputFolder = args[4];
+			String groupInfo = args[4];
+			String outputFolder = args[5];
 			
+			String useTotal = args[6].trim();  // this is a flag for indicating the data used to determine kinase activity.
+			// useTotal = 1 is total proteome then phospho proteome
+			// useTotal = 2 is phospho proteome then whole
+			// useTotal = 3 is user defined then same as 1
+			// useTotal = 4 is user defined then same as 2
+			String specialKase = args[7]; // this contains a list of special case
+
+
 			String SubstrateTag = "";
 			String KinaseTag = "";
 			String[] groups = groupInfo.split(":");
@@ -49,12 +57,23 @@ public class AddRelativeQuantificationForPredictedAllJUMP {
 			//String outputFile = args[6];
 			
 			//System.out.println("Running Grab Data From Ascore");
-			HashMap ascore = AddRelativeQuantificationJUMP.grabDataFromAscore(ascoreFile, groupInfo);
+			HashMap ascore = AddRelativeQuantificationJUMP.grabDataFromPhosphoProteome(ascoreFile, groupInfo);
 			//System.out.println("Load Ascore File");
 			//HashMap total = AddRelativeQuantificationJUMP.grabDataFromTotal(totalProteomeFile, groupInfo);
-			HashMap total = AddRelativeQuantificationJUMP.grabDataFromTotal(ascoreFile, groupInfo);
+			//HashMap total = AddRelativeQuantificationJUMP.grabDataFromTotal(ascoreFile, groupInfo);
+			HashMap kinase_activity_phospho = AddRelativeQuantificationJUMP.grabKinaseActivityFromPhospho(ascoreFile, groupInfo);
+			HashMap kinase_activity_wholepro= AddRelativeQuantificationJUMP.grabKinaseActivityFromWholeProteome(totalProteomeFile, groupInfo);
+			HashMap total = new HashMap();
+			if (useTotal.equals("1")) {
+				total = AddRelativeQuantificationJUMP.combineKinaseActivity(kinase_activity_wholepro, kinase_activity_phospho);
+			} else if (useTotal.equals("2")) {
+				total = AddRelativeQuantificationJUMP.combineKinaseActivity(kinase_activity_phospho, kinase_activity_wholepro);
+			} else {
+				total = kinase_activity_phospho;
+			}
+			
 			//System.out.println("Load Total Proteome File");
-
+			
 			Iterator itr_kinase = kinase_map.keySet().iterator();
 			while (itr_kinase.hasNext()) {
 				String kinase_name = (String)itr_kinase.next();
@@ -97,7 +116,7 @@ public class AddRelativeQuantificationForPredictedAllJUMP {
 										String peptideStr = (String)itr.next();
 										String totalData = (String)peptideHash.get(peptideStr);
 										//String totalData = (String)total.get(geneName);
-										System.out.println(ascoreData);
+										//System.out.println(ascoreData);
 										String[] ascoreDataSplit = ascoreData.split("\t");
 										double[] ascoreDataNum = new double[ascoreDataSplit.length];
 										for (int i = 0; i < ascoreDataSplit.length; i++) {

@@ -123,30 +123,73 @@ public class RNASEQStatsReport {
 	
 	public static STATISTICS getStats(String fileName, String name) {
 		STATISTICS stat = new STATISTICS();
+		String lastLine = "";
 		try {
 			
+			int count = 0;
 			FileInputStream fstream = new FileInputStream(fileName);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
 			while (in.ready()) {
-				
-				stat.NAME = name;
-				stat.TOTAL = in.readLine().split(" ")[0];
-				stat.QC_FAILURE = in.readLine().split(" ")[0];
-				stat.DUPLICATES = in.readLine().split(" ")[0];
-				stat.MAPPED = in.readLine().split(" ")[0];
-				stat.PAIRED = in.readLine().split(" ")[0];
-				stat.READ1 = in.readLine().split(" ")[0];
-				stat.READ2 = in.readLine().split(" ")[0];
-				stat.MAPPED_PAIRED = in.readLine().split(" ")[0];
-				stat.ITSELF_MATE_MAPPED = in.readLine().split(" ")[0];
-				stat.SINGLETON = in.readLine().split(" ")[0];
-				stat.MATE_MAPPED_TO_DIFF_CHR = in.readLine().split(" ")[0];
-				stat.MATE_MAPPED_TO_DIFF_CHR_5MAPQ = in.readLine().split(" ")[0];
-				
-				
+				String str = in.readLine();
+				count++;
+			}
+			in.close();
+			
+			if (count == 12) {
+				fstream = new FileInputStream(fileName);
+				din = new DataInputStream(fstream);
+				in = new BufferedReader(new InputStreamReader(din));
+				while (in.ready()) {
+					
+					stat.NAME = name;
+					
+					stat.TOTAL = in.readLine().split(" ")[0];					
+					stat.QC_FAILURE = in.readLine().split(" ")[0];
+					stat.DUPLICATES = in.readLine().split(" ")[0];
+					stat.MAPPED = in.readLine().split(" ")[0];
+					stat.PAIRED = in.readLine().split(" ")[0];
+					stat.READ1 = in.readLine().split(" ")[0];
+					stat.READ2 = in.readLine().split(" ")[0];
+					stat.MAPPED_PAIRED = in.readLine().split(" ")[0];
+					stat.ITSELF_MATE_MAPPED = in.readLine().split(" ")[0];
+					stat.SINGLETON = in.readLine().split(" ")[0];
+					stat.MATE_MAPPED_TO_DIFF_CHR = in.readLine().split(" ")[0];
+					stat.MATE_MAPPED_TO_DIFF_CHR_5MAPQ = in.readLine().split(" ")[0];
+					
+					
+				}
+				in.close();
+			} else if (count == 11) {
+				fstream = new FileInputStream(fileName);
+				din = new DataInputStream(fstream);
+				in = new BufferedReader(new InputStreamReader(din));
+				while (in.ready()) {
+					
+					stat.NAME = name;
+					
+					//stat.QC_FAILURE = in.readLine().split(" ")[0];
+					stat.TOTAL = in.readLine().split(" ")[0];
+					stat.DUPLICATES = in.readLine().split(" ")[0];
+					stat.MAPPED = in.readLine().split(" ")[0];
+					stat.PAIRED = in.readLine().split(" ")[0];
+					stat.READ1 = in.readLine().split(" ")[0];
+					stat.READ2 = in.readLine().split(" ")[0];
+					stat.MAPPED_PAIRED = in.readLine().split(" ")[0];
+					stat.ITSELF_MATE_MAPPED = in.readLine().split(" ")[0];
+					stat.SINGLETON = in.readLine().split(" ")[0];
+					stat.MATE_MAPPED_TO_DIFF_CHR = in.readLine().split(" ")[0];
+					stat.MATE_MAPPED_TO_DIFF_CHR_5MAPQ = in.readLine().split(" ")[0];
+					
+					
+				}
+				in.close();
+			} else {
+				System.out.println("QC File is not in the expected format");
 			}
 		} catch (Exception e) {
+			System.out.println("Failed to read: " + fileName);
+			System.out.println(lastLine);
 			e.printStackTrace();
 		}
 		return stat;

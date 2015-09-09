@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 
 public class StatTests {
@@ -44,7 +46,13 @@ public class StatTests {
     private static final int DECIMALS = 3;
 
     public static void main(String[] args) throws Exception {
-        int tests = 0;
+    	double[] pvals = {0.01, 0.02, 0.04, 0.01, 0.04};
+    	double[] fdrs = BenjaminiHochberg(pvals);
+    	for (int i = 0; i < pvals.length; i++) {
+    		System.out.println(fdrs[i]);
+    	}
+    	System.out.println();
+        /*int tests = 0;
         String filename = null;
 
         for (int i = 0; i < args.length; i++) {
@@ -93,6 +101,7 @@ public class StatTests {
         System.out.println("(c) David Hopwood <hopwood@zetnet.co.uk>, 2000/04/23.");
         System.out.println("Based partly on code (c) T. Kadosawa <kadosawa@niaes.affrc.go.jp>.");
         System.out.println();
+        */
     }
 
     /** Number of categories. */
@@ -211,6 +220,39 @@ public class StatTests {
         }
     }
 
+    
+    /**
+     * Generate BenjaminiHochberg method
+     */
+    public static double[] BenjaminiHochberg(double[] pvalues) {
+    	String[] pvalue_str = new String[pvalues.length];
+    	String[] terms_strs = new String[pvalues.length];
+    	int count = 0;
+    	LinkedList list = new LinkedList();
+    	for (double pval: pvalues) {    		    		
+    		pvalue_str[count] = new Double(pvalues[count]).toString(); 
+    		terms_strs[count] = "FAKEGO_" + count;
+    		list.add(terms_strs[count]);
+    		count++;
+    	}
+    	BenjaminiHochbergFDR fdr = new BenjaminiHochbergFDR(pvalue_str, terms_strs, "0.05");
+    	fdr.calculate();
+    	String[] fdr_strs = fdr.getAdjustedPvalues();
+    	String[] go_label = fdr.getOrdenedGOLabels();
+    	double[] fdr_vals = new double[fdr_strs.length];
+    	Iterator itr = list.iterator();    	
+    	while (itr.hasNext()) {
+    		String terms = (String)itr.next();
+	    	for (int i = 0; i < fdr_strs.length; i++) {
+	    		//fdr_vals[i] = new Double(fdr_strs[i]);
+	    		if (terms.equals(go_label[i])) {
+	    			int index = new Integer(go_label[i].replaceAll("FAKEGO_", ""));
+	    			fdr_vals[index] = new Double(fdr_strs[i]);
+	    		}
+	    	}
+    	}
+    	return fdr_vals;
+    }
     /** Write the output table to a PrintStream. */
     public void writeTable(PrintStream out) {
         out.print(nspaces(13));

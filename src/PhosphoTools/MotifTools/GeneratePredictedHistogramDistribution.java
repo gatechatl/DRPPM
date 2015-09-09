@@ -19,12 +19,14 @@ public class GeneratePredictedHistogramDistribution {
 		String motif_all_file = args[0];
 		String original_outputFolder = args[1];
 		String outputPNGFolder = args[2];
+		int line = new Integer(args[3]);
+		String type = args[4];
 		HashMap kinase_map = MotifTools.grabKinase2Motif(motif_all_file);
 		Iterator itr_kinase = kinase_map.keySet().iterator();
 		while (itr_kinase.hasNext()) {
 			String kinase_name = (String)itr_kinase.next();
 			String inputFile = original_outputFolder + "/Predicted_" + kinase_name + "_relative_quantification.txt";
-			String script = generateHistogramScript(inputFile, outputPNGFolder + "/" + kinase_name + ".png", kinase_name);
+			String script = generateHistogramScript(inputFile, outputPNGFolder + "/" + kinase_name + ".png", kinase_name, line, type);
 			executeRScript(script, outputPNGFolder);			
 		}
 		
@@ -64,14 +66,25 @@ public class GeneratePredictedHistogramDistribution {
         	e.printStackTrace();
         }
 	}
-	public static String generateHistogramScript(String inputFile, String outputPNG, String geneName) {
-		String script = "";
-		script += "library(ggplot2);\n";
-		//script += "library(gridExtra);\n";
-		script += "data=read.csv(\"" + inputFile + "\", sep=\"\\t\", header=F);\n";
-		script += "png(file = \"" + outputPNG + "\", width=600,height=500);\n";
-		script += "qplot(as.numeric(data.matrix(data[,11])),geom=\"blank\", main=\"Predicted " + geneName + " Pearson Cor Histogram\") + geom_line(aes(y=..density..), stat = 'density') + geom_histogram(aes(y=..density..), alpha = 0.4, colour = \"black\", fill=\"lightblue\") + xlab(\"Spearman Correlation\");\n";
-		script += "dev.off();\n";
-		return script;
+	public static String generateHistogramScript(String inputFile, String outputPNG, String geneName, int lineNum, String type) {
+		if (type.toUpperCase().equals("PEARSON")) {
+			String script = "";
+			script += "library(ggplot2);\n";
+			//script += "library(gridExtra);\n";
+			script += "data=read.csv(\"" + inputFile + "\", sep=\"\\t\", header=F);\n";
+			script += "png(file = \"" + outputPNG + "\", width=600,height=500);\n";
+			script += "qplot(as.numeric(data.matrix(data[," + lineNum + "])),geom=\"blank\", main=\"Predicted " + geneName + " Pearson Cor Histogram\") + geom_line(aes(y=..density..), stat = 'density') + geom_histogram(aes(y=..density..), alpha = 0.4, colour = \"black\", fill=\"lightblue\") + xlab(\"Pearson Correlation\");\n";
+			script += "dev.off();\n";
+			return script;
+		} else {
+			String script = "";
+			script += "library(ggplot2);\n";
+			//script += "library(gridExtra);\n";
+			script += "data=read.csv(\"" + inputFile + "\", sep=\"\\t\", header=F);\n";
+			script += "png(file = \"" + outputPNG + "\", width=600,height=500);\n";
+			script += "qplot(as.numeric(data.matrix(data[," + lineNum + "])),geom=\"blank\", main=\"Predicted " + geneName + " Spearman Cor Histogram\") + geom_line(aes(y=..density..), stat = 'density') + geom_histogram(aes(y=..density..), alpha = 0.4, colour = \"black\", fill=\"lightblue\") + xlab(\"Spearman Correlation\");\n";
+			script += "dev.off();\n";
+			return script;			
+		}
 	}
 }

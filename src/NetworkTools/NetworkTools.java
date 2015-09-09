@@ -34,7 +34,7 @@ public class NetworkTools {
 				String protein2 = split[3].toUpperCase();
 				if (map.containsKey(protein1)) {
 					LinkedList list = (LinkedList)map.get(protein1);
-					if (!list.contains(protein2)) {
+					if (!list.contains(protein2) && !protein1.equals(protein2)) {
 						list.add(protein2);
 					}
 					map.put(protein1, list);
@@ -45,7 +45,7 @@ public class NetworkTools {
 				}
 				if (map.containsKey(protein2)) {
 					LinkedList list = (LinkedList)map.get(protein2);
-					if (!list.contains(protein1)) {
+					if (!list.contains(protein1) && !protein2.equals(protein1)) {
 						list.add(protein1);
 					}
 					map.put(protein1, list);					

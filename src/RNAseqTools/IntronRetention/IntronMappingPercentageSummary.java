@@ -18,7 +18,7 @@ public class IntronMappingPercentageSummary {
 		
 		String inputFile = args[0];
 		String outputFile = args[1];
-		String groupingFile = args[2];
+		//String groupingFile = args[2];
 		
 		createTable(inputFile, outputFile);
 		

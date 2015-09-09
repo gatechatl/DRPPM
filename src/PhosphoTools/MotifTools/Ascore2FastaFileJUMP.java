@@ -12,8 +12,15 @@ import java.util.LinkedList;
 
 import org.apache.commons.math3.stat.inference.TTest;
 
+import org.apache.commons.math3.distribution.NormalDistribution;
+
 import Statistics.General.MathTools;
 
+/**
+ * 
+ * @author tshaw
+ *
+ */
 public class Ascore2FastaFileJUMP {
 
 	public static void main(String[] args) {
@@ -26,7 +33,8 @@ public class Ascore2FastaFileJUMP {
 		}*/
 		double[] list1 = {1, 2, 3, 2};
 		double[] list2 = {4, 5, 6, 7, 8};
-		System.out.println(calcTTest(list2, list1));
+		//System.out.println(calcTTest(list2, list1));
+		System.out.println(singleSampleTest(list1, 0));
 	}
 	public static void execute(String[] args) {
 		
@@ -75,9 +83,22 @@ public class Ascore2FastaFileJUMP {
 				for (int i = 0; i < group2Split.length; i++) {
 					group2Val[i] = new Double(split[new Integer(group2Split[i])]);
 				}
+				double pvalue = 2;
+				double logFC = -1;
+				if (group1Val.length == 0 || group2Val.length == 0 || (group1Val.length == 1 && group2Val.length == 1)) {
+					
+				} else {
+					logFC = calcLogFold(group1Val, group2Val);
+					if (group1Val.length == 1) {
+						pvalue = singleSampleTest(group2Val, group1Val[0]);
+					} else if (group2Val.length == 1) {
+						pvalue = singleSampleTest(group1Val, group2Val[0]);
+					} else {
+						pvalue = calcTTest(group1Val, group2Val);											
+					}
+				}
+				
 				//double pvalue = new Double(split[pvalue_index]);
-				double pvalue = calcTTest(group1Val, group2Val);
-				double logFC = calcLogFold(group1Val, group2Val);
 				
 				if (pvalue <= cutoff) {
 					LinkedList list = MotifTools.convert(MotifTools.replaceTag(split[peptide_index].trim()));
@@ -104,6 +125,7 @@ public class Ascore2FastaFileJUMP {
 						count++;
 					}
 				}
+			
 			}
 			in.close();
 			outUP.close();
@@ -116,6 +138,33 @@ public class Ascore2FastaFileJUMP {
 	public static double calcTTest(double[] list1, double[] list2) {
 		TTest ttest = new TTest();
 		return ttest.tTest(list1, list2);
+	}
+	
+	public static double singleSampleTest(double[] list1, double value) {
+		return getSmallestVal(calcCumulativeProb(list1, value));
+	}
+	/**
+	 * Assuming a two tailed test when grabbing the pvalue from the PDF
+	 * @param pvalue
+	 * @return
+	 */
+	public static double getSmallestVal(double pvalue) {
+		if (pvalue < 0 || pvalue > 1) {
+			return -1;
+		}
+		if (pvalue <= 0.5) {
+			return pvalue * 2;
+		} else {
+			return (1 - pvalue) * 2;
+		}
+	}
+	public static double calcCumulativeProb(double [] list1, double value) {
+		double mean = MathTools.mean(list1);
+		double stdev = MathTools.standardDeviation(list1);
+		NormalDistribution dist = new NormalDistribution(mean, stdev);
+		double pvalue = dist.cumulativeProbability(value);
+		
+		return pvalue;
 	}
 	public static double calcLogFold(double[] list1, double[] list2) {
 		double mean1 = MathTools.mean(list1);

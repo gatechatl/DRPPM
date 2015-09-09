@@ -57,17 +57,14 @@ public class AddNetworkNeighborEvidence {
 			HashMap known_kinase2substrate = getKnownKinaseSubstrateList(Phosphosite_kinase_substrate);
 			
 			System.out.println("Load Known Kinase Motif");
-			HashMap kinase2motifName = getKinase2MotifName(motif_all_annotation_file);
-						
+			HashMap kinase2motifName = getKinase2MotifName(motif_all_annotation_file);						
 			HashMap motifName2kinase = getMotifName2Kinase(motif_all_annotation_file);
-
 			HashMap motif_statistics = new HashMap();
 			HashMap negative_dataset = new HashMap();
 			try {
-
 				FileWriter fwriter = new FileWriter(outputFile);
 				BufferedWriter out = new BufferedWriter(fwriter);
-				out.write("ProteinName\tPosition\tExtendedSeq\tOrigSeq\tPredictedMotif\tPredictedMotifName\tPredictedGeneName\tPredictedPSSMPvalue\tTopPSSMHitGene\tTopPSSMPValue\tPhosphosite_KINASE\tPhophosite_GeneName\tPhosphosite_Accession\tPearsonCorrel\tPearsonPvalue\tSpearman\tKinaseCorrelName\tEvaluatedKinase\tNetworkAnnotation\n\n");
+				out.write("ProteinName\tPosition\tExtendedSeq\tOrigSeq\tPredictedMotif\tPredictedMotifName\tPredictedGeneName\tPredictedPSSMPvalue\tTopPSSMHitGene\tTopPSSMPValue\tPhosphosite_KINASE\tPhophosite_GeneName\tPhosphosite_Accession\tPearsonCorrel\tPearsonPvalue\tSpearman\tKinaseCorrelName\tEvaluatedKinase\tNetworkAnnotation\tNeighboringGenes\n\n");
 				// out.write("ProteinName\tPosition\tExtendedSeq\tOrigSeq\tPredictedMotif\tPredictedMotifName\tPhosphosite_KINASE\tPhophosite_GeneName\tPhosphosite_Accession\tEvaluatedKinase\tNetworkAnnotation\n");
 
 				FileWriter summary_fwriter = new FileWriter(summaryFile);
@@ -76,9 +73,7 @@ public class AddNetworkNeighborEvidence {
 				int count = 0;
 				HashMap uniq_protein_phosite = new HashMap();
 
-				HashMap predicted_list = new HashMap(); // generate a predicted
-				
-				
+				HashMap predicted_list = new HashMap(); // generate a predicted				
 														// list
 				FileInputStream fstream = new FileInputStream(
 						Phosphosite_hrpd_motif_output_all_file);
@@ -142,6 +137,8 @@ public class AddNetworkNeighborEvidence {
 					}
 					predicted_list_str.put(kinase, total);
 				}
+				
+				
 				// System.out.println("Finished Loading Predicted_List: " +
 				// count);
 				
@@ -179,7 +176,7 @@ public class AddNetworkNeighborEvidence {
 							// (String)motifName2kinase.get(motif_name);
 							// for (String kinase: kinases.split(",")) {
 							for (String kinase: split[16].split(",")) {
-
+								
 								if (!kinase.equals("NA")) {	
 									kinase = kinase.toUpperCase();
 									
@@ -187,7 +184,9 @@ public class AddNetworkNeighborEvidence {
 									
 									LinkedList predicted_gene_list = (LinkedList) predicted_list
 											.get(kinase);
-		
+									
+									
+									
 									// check if present in annotated motif database
 									// already
 									boolean checkIfPresentAlready = false;
@@ -244,14 +243,19 @@ public class AddNetworkNeighborEvidence {
 														.add(local_sub_gene
 																.toUpperCase());
 											}
-										}
+										} // while loop
 		
 										if (found_local_substrate) {
 											String totalList = "";
 											Iterator itr3 = found_local_substrates.iterator();
 											while (itr3.hasNext()) {
-												totalList += (String) itr3.next() + ",";
+												totalList += (String) "[" + itr3.next() + "],";
 											}
+											itr3 = found_local_predicted_substrates.iterator();
+											while (itr3.hasNext()) {
+												totalList += (String) "(" + itr3.next() + "),";
+											}
+											
 											if (checkIfPresentAlready) {
 												if (motif_statistics.containsKey(key)) {
 													LinkedList list = (LinkedList) motif_statistics
@@ -283,12 +287,12 @@ public class AddNetworkNeighborEvidence {
 														//+ kinase
 														//+ ":present_found_neighbor-"
 														//+ ":found_neighbor-"
-														+ "found_neighbor-"
+														+ "found_neighbor\t"
 														+ totalList + "\n");
 											} else {
 												out.write(str + "\t" + kinase + "\t"
 														//+ kinase + ":found_neighbor-"
-														+ "found_neighbor-"
+														+ "found_neighbor\t"
 														+ totalList + "\n");
 												if (motif_statistics.containsKey(key)) {
 													LinkedList list = (LinkedList) motif_statistics
@@ -302,6 +306,16 @@ public class AddNetworkNeighborEvidence {
 												}
 											}
 										} else if (found_local_predicted_substrate) {
+											
+											String totalList = "";
+											Iterator itr3 = found_local_substrates.iterator();
+											while (itr3.hasNext()) {
+												totalList += (String) "[" + itr3.next() + "],";
+											}
+											itr3 = found_local_predicted_substrates.iterator();
+											while (itr3.hasNext()) {
+												totalList += (String) "(" + itr3.next() + "),";
+											}
 											if (checkIfPresentAlready) {
 												if (motif_statistics.containsKey(key)) {
 													LinkedList list = (LinkedList) motif_statistics
@@ -317,7 +331,8 @@ public class AddNetworkNeighborEvidence {
 												if (kinase.equals("NA")) {
 													System.out.println("Kinase is NA, this isn't right");
 												}
-												out.write(str + "\t" + kinase + "\t" + kinase + ":present_found_predicted_neighbor\n");
+												out.write(str + "\t" + kinase + "\t" + "found_predicted_neighbor\t"
+														+ totalList + "\n");
 											} else {
 												if (motif_statistics.containsKey(key)) {
 													LinkedList list = (LinkedList) motif_statistics
@@ -334,7 +349,8 @@ public class AddNetworkNeighborEvidence {
 												out.write(str + "\t" + kinase + "\t"
 														//+ kinase
 														//+ ":found_predicted_neighbor\n");
-														+ "found_predicted_neighbor\n");
+														+ "found_predicted_neighbor\t"
+														+ totalList + "\n");
 											}
 										} else {
 											if (checkIfPresentAlready) {
@@ -356,7 +372,7 @@ public class AddNetworkNeighborEvidence {
 												out.write(str + "\t" + kinase + "\t"
 														//+ kinase
 														//+ ":present_but_no_neighbor\n");
-														+ "no_neighbor\n");
+														+ "no_neighbor\tNA\n");
 		
 												String rand_gene = getRandomGene(rand,
 														known_kinase2substrate);
@@ -373,7 +389,7 @@ public class AddNetworkNeighborEvidence {
 											} else {
 												out.write(str + "\t" + kinase + "\t"
 														//+ kinase + ":no_neighbor\n");
-														+ "no_neighbor\n");
+														+ "no_neighbor\tNA\n");
 												if (motif_statistics.containsKey(key)) {
 													LinkedList list = (LinkedList) motif_statistics
 															.get(key);
@@ -394,7 +410,7 @@ public class AddNetworkNeighborEvidence {
 													+ "\t"
 													//+ kinase
 													//+ ":present_but_missing_in_interactiveDB\n");
-													+ "missing_in_interactiveDB\n");
+													+ "missing_in_interactiveDB\tNA\n");
 											if (motif_statistics.containsKey(key)) {
 												LinkedList list = (LinkedList) motif_statistics
 														.get(key);
@@ -408,7 +424,7 @@ public class AddNetworkNeighborEvidence {
 										} else {
 											out.write(str + "\t" + kinase + "\t"
 													//+ kinase
-													+ ":missing_in_interactiveDB\n");
+													+ ":missing_in_interactiveDB\tNA\n");
 											if (motif_statistics.containsKey(key)) {
 												LinkedList list = (LinkedList) motif_statistics
 														.get(key);
@@ -428,7 +444,7 @@ public class AddNetworkNeighborEvidence {
 					} else { // check if contains uniprot key
 
 						out.write(str + "\t" + "NA"
-								+ "\tMissingUniprot2GeneID\n");
+								+ "\tMissingUniprot2GeneID\tNA\n");
 					}
 					
 				}
