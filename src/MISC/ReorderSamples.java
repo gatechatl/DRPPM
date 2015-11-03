@@ -36,7 +36,8 @@ public class ReorderSamples {
 			Iterator itr = reversereflist.iterator();
 			while (itr.hasNext()) {
 				String key = (String)itr.next();
-				reflist.add(key);
+				reflist.add(key.replaceAll("_", ".").replaceAll("-", "."));
+				
 			}
 			//reflist = reversereflist; // under reverse
 			
@@ -44,7 +45,7 @@ public class ReorderSamples {
 			LinkedList geneList = new LinkedList();
 			HashMap map = new HashMap();
 			HashMap mapID = new HashMap();
-			for (int i = 1; i <= size; i++) {
+			//for (int i = 1; i <= size; i++) {
 				geneList = new LinkedList();
 				LinkedList list = new LinkedList();
 				
@@ -58,18 +59,21 @@ public class ReorderSamples {
 					String str = in.readLine();
 					String[] split = str.split("\t");
 					for (int j = 1; j < splitTitle.length; j++) {
-						if (!reflist.contains(splitTitle[j])) {
-							System.out.println(splitTitle[j]);
+						if (!reflist.contains(splitTitle[j].replaceAll("-", "."))) {
+							System.out.println(splitTitle[j].replaceAll("-", "."));
 						}
-						map.put(splitTitle[j].trim() + "_" + split[0], split[j]);
+						map.put(splitTitle[j].trim().replaceAll("_", ".").replaceAll("-", ".") + "_" + split[0], split[j]);
 					}
 					//list.add(split[i]);
 					geneList.add(split[0]);
+					if (geneList.size() % 1000 == 0) {
+						System.out.println(geneList.size());
+					}
 					//System.out.println(split[0]);
 				}
 				in.close();
 				
-			}
+			//}
 			
 			//String outputFile = "C:\\Users\\tshaw\\Desktop\\RNASEQ\\Mckinnon\\GSEA_05282014\\GSEA_SJMMHGGNORM_RNAseq_Exon_Read_Count_gene_fpkm_uniq_reorder.txt";
 			

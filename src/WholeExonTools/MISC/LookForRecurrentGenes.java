@@ -32,7 +32,7 @@ public class LookForRecurrentGenes {
 			}
 			in.close();
 			
-			
+			HashMap list = new HashMap();
 			HashMap newMap = new HashMap();
 			Iterator itr = map.keySet().iterator();
 			while (itr.hasNext()) {
@@ -44,8 +44,15 @@ public class LookForRecurrentGenes {
 				if (newMap.containsKey(gene)) {
 					int num = (Integer)newMap.get(gene) + 1;
 					newMap.put(gene, num);
+					if (list.containsKey(gene)) {
+						String sampleName = (String)list.get(gene) + "," + sample;
+						list.put(gene, sampleName);
+					} else {
+						list.put(gene, sample);
+					}
 				} else {
 					newMap.put(gene, 1);
+					list.put(gene, sample);
 				}
 				//System.out.println(key + "\t" + map.get(key));
 			}
@@ -54,7 +61,7 @@ public class LookForRecurrentGenes {
 			while (itr.hasNext()) {
 				String key = (String)itr.next();
 				int num = (Integer)newMap.get(key);
-				System.out.println(key + "\t" + num);
+				System.out.println(key + "\t" + num + "\t" + list.get(key));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -28,10 +28,12 @@ public class IntronRetentionHistogramData {
 			String groupingFile = args[1];
 			String summary_outputFile = args[2];
 			String summary2_outputFile = args[3];
+			String split_str = "_";
 			
 			if (args.length > 4) {
 				count = new Integer(args[4]);
 				total = new Double(args[5]);
+				split_str = args[6];
 			}
 			double[] bins = new double[count];
 			
@@ -56,8 +58,8 @@ public class IntronRetentionHistogramData {
 			String header = "Bins";
 			while (itr.hasNext()) {
 				String fileName = (String)itr.next();
-				out_summary.write("\t" + fileName.split("_")[0]);
-				header += "\t" + fileName.split("_")[0];
+				out_summary.write("\t" + fileName.split(split_str)[0]);
+				header += "\t" + fileName.split(split_str)[0];
 				HashMap map = new HashMap();
 				FileInputStream fstream = new FileInputStream(fileName);
 				DataInputStream din = new DataInputStream(fstream);
@@ -112,9 +114,9 @@ public class IntronRetentionHistogramData {
 				out.close();
 			}
 			HashMap groupInfo = getGroupInfo(groupingFile);			
-			HashMap sampleIndex = getSampleIndex(header);
-			HashMap groupInfoIndex = convertGroupSample2Index(groupInfo, sampleIndex);
-			HashMap index2Group = convertIndex2Group(groupInfo, sampleIndex);
+			HashMap sampleIndex = getSampleIndex(header, split_str);
+			HashMap groupInfoIndex = convertGroupSample2Index(groupInfo, sampleIndex, split_str);
+			HashMap index2Group = convertIndex2Group(groupInfo, sampleIndex, split_str);
 			
 			out_summary.write("\n");
 			LinkedList list = new LinkedList();
@@ -152,7 +154,7 @@ public class IntronRetentionHistogramData {
 		}
 	}
 
-	public static HashMap convertGroupSample2Index(HashMap groupInfo, HashMap sampleIndex) {
+	public static HashMap convertGroupSample2Index(HashMap groupInfo, HashMap sampleIndex, String split_str) {
 		HashMap newGroupInfo = new HashMap();
 		Iterator itr = groupInfo.keySet().iterator();
 		while (itr.hasNext()) {
@@ -162,7 +164,7 @@ public class IntronRetentionHistogramData {
 			String newStuff = "";
 			for (String sample: split) {
 				//System.out.println(sample);
-				sample = sample.split("_")[0];
+				sample = sample.split(split_str)[0];
 				int index = (Integer)sampleIndex.get(sample);
 				if (newStuff.equals("")) {
 					newStuff = index + "";
@@ -174,7 +176,7 @@ public class IntronRetentionHistogramData {
 		}
 		return newGroupInfo;
 	}
-	public static HashMap convertIndex2Group(HashMap groupInfo, HashMap sampleIndex) {
+	public static HashMap convertIndex2Group(HashMap groupInfo, HashMap sampleIndex, String split_str) {
 		HashMap newGroupInfo = new HashMap();
 		Iterator itr = groupInfo.keySet().iterator();
 		while (itr.hasNext()) {
@@ -183,7 +185,7 @@ public class IntronRetentionHistogramData {
 			String[] split = stuff.split("\t");
 			String newStuff = "";
 			for (String sample: split) {
-				sample = sample.split("_")[0];
+				sample = sample.split(split_str)[0];
 				int index = (Integer)sampleIndex.get(sample);
 				newGroupInfo.put(index, group);
 			}
@@ -191,11 +193,11 @@ public class IntronRetentionHistogramData {
 		}
 		return newGroupInfo;
 	}
-	public static HashMap getSampleIndex(String header) {
+	public static HashMap getSampleIndex(String header, String split_str) {
 		HashMap map = new HashMap();
 		String[] split = header.split("\t");
 		for (int i = 1; i < split.length; i++) {
-			map.put(split[i].split("_")[0], i);
+			map.put(split[i].split(split_str)[0], i);
 		}
 		return map;
 	}

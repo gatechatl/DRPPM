@@ -12,6 +12,9 @@ import java.util.HashMap;
 
 public class RNASEQStatsReport {
 
+	public static String parameter_info() {
+		return "[folder] [outputFile] [coding] [intron]";
+	}
 	public static void execute(String[] args) {
 		
 		try {

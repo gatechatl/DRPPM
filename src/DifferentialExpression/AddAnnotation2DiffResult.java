@@ -117,7 +117,7 @@ public class AddAnnotation2DiffResult {
 				String str = in.readLine();
 				boolean isTRUE = false;
 				String[] split = str.split("\t");
-				String geneName = split[0].replaceAll("\"", "");
+				String geneName = split[0].replaceAll("\"", "").split(":")[0];
 				String annotation = "";
 				itr = tags.iterator();
 				while (itr.hasNext()) {

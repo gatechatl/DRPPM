@@ -60,6 +60,7 @@ public class HeatmapGeneration {
 			e.printStackTrace();
 		}
 	}
+	
 	public static void executeMADCOL(String[] args) {
 		try {
 
@@ -90,6 +91,58 @@ public class HeatmapGeneration {
 			LinkedList sample_names = readGroupList(sampleNameFile);
 			String sample_names_str = list2str(sample_names);
 			System.out.println(generateTopMADHeatmapScript(inputFile, outputFile, sample_names_str, "Top" + topN + " MAD Heatmap", topN, meta));
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}		
+	}
+	
+	public static void executePHeatMAD(String[] args) {
+		try {
+
+			String inputFile = args[0]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\phospho_peptide_raw_data_GBM_Name_Collapse.txt";
+			int topN = new Integer(args[1]);
+			String sampleNameFile = args[2];
+			String outputFile = args[3]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\Phospho_peptide_GBM_Genes.png";
+			//String geneSetFile = args[1]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\GangMouseGeneListAnalysis.txt";
+			String futureParameter = ""; // this parameter contains the specification of the heatmap
+			//String h2mFile = args[3]; //"C:\\Users\\tshaw\\Desktop\\RNASEQ\\hs_mm_homo_r66.txt";
+			
+			//String takeLogStr = args[5];
+			
+			String takeLogStr = "FALSE";
+			
+			boolean takeLog = false;
+			
+			if (takeLogStr.toUpperCase().equals("TRUE")) {			
+				takeLog = true;			
+			}
+			
+			String listA = ""; //"'p1a','p1b','P2','P3','N1','N2','N3','Ctl1','Ctl2','Ctl3'";
+			String geneSet = ""; //"\"Pdgfra\", \"Kit\", \"Met\", \"Egfr\", \"Igf1r\", \"Braf\", \"Nras\", \"Kras\", \"Pik3ca\", \"Mycn\", \"Myc\", \"Mdm2\", \"Mdm4\", \"Cdk4\", \"Cdk6\", \"Ccnd2\", \"Nf1\", \"Pten\", \"Trp53\", \"Cdkn2a\", \"Cdkn2b\", \"Cdkn2c\", \"Rb1\"";
+			
+			//HashMap h2m = human2mouse(h2mFile);
+			
+			//LinkedList geneSet_list = readGroupList(geneSetFile);
+			
+			LinkedList allGeneName = readGeneNames(inputFile);
+						
+			//geneSet_list = convertH2MGene(geneSet_list, h2m);
+			
+			LinkedList sample_names = readGroupList(sampleNameFile);
+			String sample_names_str = list2str(sample_names);
+			
+			//geneSet_list = filterList(geneSet_list, allGeneName);
+			
+			
+			//geneSet = list2str(geneSet_list);
+			//geneSet = list2str(allGeneName);
+			
+			System.out.println(generatePHeatmapMAD(inputFile, outputFile, sample_names_str, "Top" + topN + " MAD Heatmap", topN));
+			//System.out.println(generateHeatmapScript(inputFile, outputFile, listA, geneSet, "Title", takeLog, geneSet_list.size()));
+
 			
 		} catch (Exception e) {
 			
@@ -141,6 +194,75 @@ public class HeatmapGeneration {
 			System.out.println(generateTopMADHeatmapScript(inputFile, outputFile, sample_names_str, "Top" + topN + " MAD Heatmap", topN, "NA"));
 			//System.out.println(generateHeatmapScript(inputFile, outputFile, listA, geneSet, "Title", takeLog, geneSet_list.size()));
 
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}		
+	}
+	public static void executePHeat(String[] args) {
+		try {
+
+			String inputFile = args[0]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\phospho_peptide_raw_data_GBM_Name_Collapse.txt";
+			String listAFile = args[1]; //"";
+			String geneSetFile = args[2]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\GangMouseGeneListAnalysis.txt";
+			String outputFile = args[3]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\Phospho_peptide_GBM_Genes.png";
+			boolean row_cluster = true;
+			boolean col_cluster = true;
+			String title = "";
+			if (args.length > 4) { 			
+				title = args[4];
+				if (args[5].toUpperCase().equals("TRUE")) {
+					row_cluster = true;
+				} else {
+					row_cluster = false;
+				}
+				if (args[6].toUpperCase().equals("TRUE")) {
+					col_cluster = true;
+				} else {
+					col_cluster = false;
+				}
+				
+			}
+			
+			String futureParameter = ""; // this parameter contains the specification of the heatmap
+			//String h2mFile = args[3]; //"C:\\Users\\tshaw\\Desktop\\RNASEQ\\hs_mm_homo_r66.txt";
+			
+			//String takeLogStr = args[5];
+			
+			String takeLogStr = "FALSE";
+			
+			boolean takeLog = false;
+			
+			if (takeLogStr.toUpperCase().equals("TRUE")) {			
+				takeLog = true;			
+			}
+			
+			String listA = ""; //"'p1a','p1b','P2','P3','N1','N2','N3','Ctl1','Ctl2','Ctl3'";
+			String geneSet = ""; //"\"Pdgfra\", \"Kit\", \"Met\", \"Egfr\", \"Igf1r\", \"Braf\", \"Nras\", \"Kras\", \"Pik3ca\", \"Mycn\", \"Myc\", \"Mdm2\", \"Mdm4\", \"Cdk4\", \"Cdk6\", \"Ccnd2\", \"Nf1\", \"Pten\", \"Trp53\", \"Cdkn2a\", \"Cdkn2b\", \"Cdkn2c\", \"Rb1\"";
+			
+			//HashMap h2m = human2mouse(h2mFile);
+			
+			LinkedList listA_list = new LinkedList();
+			
+			if (!(listAFile.equals("") || listAFile.toUpperCase().equals("NA"))) {
+				listA_list = readGroupList(listAFile);
+			}
+			
+			LinkedList geneSet_list = readGroupList(geneSetFile);
+			
+			LinkedList allGeneName = readGeneNames(inputFile);
+						
+			//geneSet_list = convertH2MGene(geneSet_list, h2m);
+			
+			geneSet_list = filterList(geneSet_list, allGeneName);
+			
+			listA = list2str(listA_list);
+			
+			geneSet = list2strV2(geneSet_list);
+			
+			System.out.println(generatePHeatmapScript(inputFile, outputFile, listA, geneSet, title, takeLog, geneSet_list.size(), true, true));
 			
 		} catch (Exception e) {
 			
@@ -494,6 +616,56 @@ public class HeatmapGeneration {
 	/**
 	 * Generate Heatmap3 plots
 	 */
+	public static String generatePHeatmapScript(String inputFile, String outputFile, String listA, String geneSet, String title, boolean log, int size, boolean col_cluster, boolean row_cluster) {
+		String script = "";
+		
+		script += "allDat = read.table(\"" + inputFile.replaceAll("\\\\", "/") + "\", header=TRUE, row.names=1 );\n";
+		script += "selection = allDat;\n";
+		if (!listA.equals("")) {
+			script += "A = c(" + listA + ")\n";
+			script += "col_labels = A;\n";
+		} else {
+			script += "col_labels = colnames(selection);\n";
+		}
+
+		script += "sampleLocation = col_labels;\n";
+		//script += "sampleNames = col_labels[sampleLocation];\n";
+		script += "sampleNames = col_labels;\n";
+		script += "labels = sampleNames;\n";
+		script += "colnames(selection) = col_labels;\n";
+
+		if (log) {
+			script += "selection = log2(selection[labels] + 0.1);\n";
+		}
+
+		script += "rows = length(selection[,1]);\n";
+
+		script += "zselection = apply(selection, 1, scale);\n";
+
+		script += "zselection = apply(zselection, 1, rev)\n";
+
+		script += "colnames(zselection) = names(selection)\n";
+
+		script += "selection = as.matrix(zselection);\n";
+		
+		script += geneSet;
+
+		script += "dataset = selection[geneList,]\n";
+		
+		script += "library(pheatmap)\n";
+		script += "minimum = -3;\n";
+		script += "maximum = 3;\n";
+		script += "bk = c(seq(minimum,minimum/2, length=100), seq(minimum/2,maximum/2,length=100),seq(maximum/2,maximum,length=100))\n";
+		script += "hmcols<- colorRampPalette(c(\"dark blue\",\"blue\",\"white\",\"red\", \"dark red\"))(length(bk)-1)\n";
+		
+		script += "png(file = \"" + outputFile + "\", width=1000,height=700)\n";
+		script += "pheatmap(dataset, cluster_col = F, cluster_row = T, fontsize_row = 13, show_rownames = F, color=hmcols)\n";
+		script += "dev.off();\n";		
+		return script;
+	}
+	/**
+	 * Generate Heatmap3 plots
+	 */
 	public static String generateHeatmapScript(String inputFile, String outputFile, String listA, String geneSet, String title, boolean log, int size, boolean col_cluster, boolean row_cluster) {
 		String script = "";
 		
@@ -673,6 +845,46 @@ public class HeatmapGeneration {
 		
 		result += "colSideColors = cbind(sample_col);\n";
 		return result;
+	}
+	
+	
+	public static String generatePHeatmapMAD(String inputFile, String outputFile, String listA, String title, int topCount) {
+		String script = "";
+
+		script += "allDat = read.table(\"" + inputFile + "\", header=TRUE, row.names=1 );\n";
+		script += "selection = allDat;\n";
+		
+		script += "A = c(" + listA + ")\n";
+		script += "col_labels = A;\n";
+		//script += "sampleLocation = grep("SJMMHGG", col_labels);\n";
+		script += "sampleLocation = which(colnames(selection) == col_labels);\n";
+		script += "isexpr <- rowSums(selection[,sampleLocation]>1) >= length(col_labels) / 3;\n";
+		script += "selection = selection[isexpr,]\n";		
+		script += "sampleNames = col_labels;\n";
+		script += "labels = sampleNames;\n";
+		script += "colnames(selection) = col_labels;\n";
+		script += "selection = log2(selection[labels] + 0.1);\n";
+		script += "rows = length(selection[,1]);\n";
+		script += "zselection = apply(selection, 1, scale);\n";
+		script += "zselection = apply(zselection, 1, rev)\n";
+		script += "colnames(zselection) = names(selection)\n";
+		script += "selection = as.matrix(zselection);\n";
+		script += "Mad = apply(selection, 1, mad);\n";
+		script += "selection = cbind(selection, Mad)\n";
+		script += "topNMad = head(sort(selection[,\"Mad\"],decreasing=TRUE), n = " + topCount + ")\n";
+		script += "topN_Index = which(selection[,\"Mad\"] > min(topNMad))\n";
+		script += "dataset = data.matrix(selection[topN_Index,labels])\n";
+		
+		script += "library(pheatmap)\n";
+		script += "minimum = -3;\n";
+		script += "maximum = 3;\n";
+		script += "bk = c(seq(minimum,minimum/2, length=100), seq(minimum/2,maximum/2,length=100),seq(maximum/2,maximum,length=100))\n";
+		script += "hmcols<- colorRampPalette(c(\"dark blue\",\"blue\",\"white\",\"red\", \"dark red\"))(length(bk)-1)\n";
+		
+		script += "png(file = \"" + outputFile + "\", width=1000,height=700)\n";
+		script += "pheatmap(dataset, cluster_col = T, cluster_row = T, fontsize_row = 13, show_rownames = F, color=hmcols)\n";
+		script += "dev.off();\n";
+		return script;
 	}
 	/**
 	 * Generate Heatmap3 plots

@@ -19,9 +19,11 @@ public class GSEAHeatmap {
 		script += "allDat = read.table(\"" + inputFile + "\", header=TRUE, row.names=1 );\n";
 		script += "scaled = apply(allDat, 2, scale);\n";
 		script += "all = apply(scaled, 1, rev)\n";
+		script += "newall = apply(all, 2, function(x) ifelse(x > 3, 3, x))\n";
+		script += "newall = apply(newall, 2, function(x) ifelse(x < -3, -3, x))\n";
+		script += "all = newall;\n";
 		script += "colnames(all) = rownames(allDat)\n";
 		script += "library(pheatmap)\n";
-
 		script += "minimum = -3;\n";
 		script += "maximum = 3;\n";
 		script += "bk = c(seq(minimum,minimum/2, length=100), seq(minimum/2,maximum/2,length=100),seq(maximum/2,maximum,length=100))\n";

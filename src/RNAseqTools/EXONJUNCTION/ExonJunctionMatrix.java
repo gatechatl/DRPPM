@@ -7,6 +7,11 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 
+/**
+ * Convert the exonjunction into a mtrix
+ * @author tshaw
+ *
+ */
 public class ExonJunctionMatrix {
 
 	public static void execute(String[] args) {

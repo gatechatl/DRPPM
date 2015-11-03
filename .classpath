@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="lib" path="C:/Users/tshaw/workspace_Proteomics/SJDNARNAProPhoMetPipe/lib/commons-math3-3.3.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tshaw/workspace_Proteomics/SJDNARNAProPhoMetPipe/lib/jaligner-1.0.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tshaw/workspace_Proteomics/SJDNARNAProPhoMetPipe/lib/docx4j-3.2.1.jar"/>
@@ -26,5 +26,6 @@
 	<classpathentry kind="lib" path="C:/Users/tshaw/workspace_Proteomics/SJDNARNAProPhoMetPipe/lib/biojava3-aa-prop-3.0.5.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tshaw/workspace_Proteomics/SJDNARNAProPhoMetPipe/lib/biojava3-protein-disorder-3.0.5.jar"/>
 	<classpathentry kind="lib" path="C:/Users/tshaw/workspace_Proteomics/SJDNARNAProPhoMetPipe/lib/SJPSSM_20150624.jar"/>
+	<classpathentry kind="lib" path="C:/Users/tshaw/workspace_Proteomics/SJDNARNAProPhoMetPipe/lib/slf4j-simple-1.7.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
