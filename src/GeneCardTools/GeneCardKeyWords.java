@@ -71,7 +71,7 @@ public class GeneCardKeyWords {
 			while (in.ready()) {
 				String str = in.readLine().trim();
 				String[] split = str.split("\t");
-				String gene = split[geneIndex];
+				String gene = split[geneIndex].replaceAll("\"", "").toUpperCase();
 				String script = "wget http://www.genecards.org/cgi-bin/carddisp.pl?gene=" + gene + " -O temp_output";
 				CommandLine.executeCommand(script);
 
@@ -79,33 +79,37 @@ public class GeneCardKeyWords {
 				for (int i = 0; i < found.length; i++) {
 					found[i] = false;
 				}
-				FileInputStream fstream2 = new FileInputStream("temp_output");
-				DataInputStream din2 = new DataInputStream(fstream2);
-				BufferedReader in2 = new BufferedReader(new InputStreamReader(din2));
-				while (in2.ready()) {
-					String str2 = in2.readLine().trim().replaceAll(" ", "_");
+				File f = new File("temp_output");
+				if (f.exists()) {
+					FileInputStream fstream2 = new FileInputStream("temp_output");
+					DataInputStream din2 = new DataInputStream(fstream2);
+					BufferedReader in2 = new BufferedReader(new InputStreamReader(din2));
+					while (in2.ready()) {
+						String str2 = in2.readLine().trim().replaceAll(" ", "_");
+						int i = 0;
+						for (String keyword: keywords) {
+							if (str2.contains(keyword)) {
+								found[i] = true;
+							}
+							i++;
+						}
+					}
+					in2.close();
 					int i = 0;
+					String result = "";
 					for (String keyword: keywords) {
-						if (str2.contains(keyword)) {
-							found[i] = true;
+						if (result.equals("")) {
+							result = found[i] + "";
+						} else {
+							result += "\t" + found[i];
 						}
 						i++;
 					}
+					System.out.println(str + "\t" + result);
+					f.delete();
 				}
-				in2.close();
-				int i = 0;
-				String result = "";
-				for (String keyword: keywords) {
-					if (result.equals("")) {
-						result = found[i] + "";
-					} else {
-						result += "\t" + found[i];
-					}
-					i++;
-				}
-				System.out.println(str + "\t" + result);
-				File f = new File("temp_output");
-				f.delete();
+				//File f = new File("temp_output");
+				
 			}
 			in.close();
 			

@@ -70,11 +70,11 @@ public class GenerateSNVUnpairedScript {
 		
 		String script = "sh " + shellScriptPath + " " + bamSampleFile.replaceAll("_",  "") + " " + bamFile + " " + refBamFile + " " + bamSampleFile + "_" + refSampleFile + ".control.out " + bamSampleFile + "_" + refSampleFile + ".low.out " + bamSampleFile + "_" + refSampleFile + ".high_20.out ";
 		
-		
 		String softLink = "ln -s " + outputPath + "/" + bamSampleFile + "_" + refSampleFile + ".low.out " + bamSampleFile + "_" + refSampleFile + ".low.out";
 		CommandLine.executeCommand(softLink);
 		softLink = "ln -s " + outputPath + "/" + bamSampleFile + "_" + refSampleFile + ".control.out " + bamSampleFile + "_" + refSampleFile + ".control.out";
 		CommandLine.executeCommand(softLink);
+		
 		softLink = "ln -s " + outputPath + "/" + bamSampleFile + "_" + refSampleFile + ".high_20.out " + bamSampleFile + "_" + refSampleFile + ".high_20.out";
 		CommandLine.executeCommand(softLink);
 		

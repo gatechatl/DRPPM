@@ -12,6 +12,12 @@ import java.util.HashMap;
  *
  */
 public class ConvertUniprot2GeneAndAppend {
+	public static String type() {
+		return "IDCONVERT";
+	}
+	public static String description() {
+		return "Reads the human or mouse's ID conversion table and";
+	}
 	public static String parameter_info() {
 		return "[mapID_reference] [inputFile] [uniprot_index]";
 	}

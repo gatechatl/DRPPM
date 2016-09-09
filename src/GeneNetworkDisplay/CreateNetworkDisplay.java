@@ -14,6 +14,9 @@ import java.util.UUID;
 
 public class CreateNetworkDisplay {
 
+	public static String parameter_info() {
+		return "[inputFolder] [outputfolder] [networkName]";
+	}
 	public static void execute(String[] args) {
 		//String inputFile = "C:\\Users\\tshaw\\Desktop\\INTEGRATION\\GenerateHTMLExamples\\graph.txt";
 		try {

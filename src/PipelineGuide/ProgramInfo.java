@@ -6,7 +6,7 @@ package PipelineGuide;
  *
  */
 public class ProgramInfo {
-	public static String VERSION = "20151016";
+	public static String VERSION = "20160713";
 
 	public static void execute(String[] args) {
 		

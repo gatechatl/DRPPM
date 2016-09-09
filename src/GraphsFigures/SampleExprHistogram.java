@@ -6,11 +6,25 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.LinkedList;
-
+/**
+ * A program for generating histogram, although it was originally intended for sample expression, 
+ * but it can still plot a histogram for any counts
+ * @author tshaw
+ *
+ */
 public class SampleExprHistogram {
 
 	public static void main(String[] args) {
 		
+	}
+	public static String type() {
+		return "GRAPH";
+	}
+	public static String description() {
+		return "A program for generating histogram for a matrix table";
+	}
+	public static String parameter_info() {
+		return "[inputFile] [outputPath] [takeLog] [min] [max] [binwidth: def is 30]";
 	}
 	public static void execute(String[] args) {
 		String inputFile = args[0];
@@ -18,7 +32,11 @@ public class SampleExprHistogram {
 		boolean takeLog = Boolean.valueOf(args[2]);
 		double min = readNum(args[3]);
 		double max = readNum(args[4]);
-		System.out.println(createHistogram(inputFile, outputPath, takeLog, min, max));
+		double binwidth = 30; 
+		if (args.length > 5) {
+			binwidth = readNum(args[5]);
+		}
+		System.out.println(createHistogram(inputFile, outputPath, takeLog, min, max, binwidth));
 		
 	}
 	public static double readNum(String str) {
@@ -42,7 +60,7 @@ public class SampleExprHistogram {
 	  }  
 	  return true;  
 	}
-	public static String createHistogram(String inputFile, String outputPath, boolean logFile, double min, double max) {
+	public static String createHistogram(String inputFile, String outputPath, boolean logFile, double min, double max, double binwidth) {
 		LinkedList sampleNames = new LinkedList();
 		try {
 			FileInputStream fstream = new FileInputStream(inputFile);
@@ -65,18 +83,18 @@ public class SampleExprHistogram {
 		Iterator itr = sampleNames.iterator();
 		while (itr.hasNext()) {
 			String sampleName = (String)itr.next();
-			script += "png(file = \"" + outputPath + "/" + sampleName + "_histogram.png\", width=1000,height=800)\n";
+			script += "png(file = \"" + outputPath + "/" + sampleName + "_histogram.png\", width=600,height=500)\n";
 			if (logFile) {															
 				if (min >= 0 && max >= 0) {
-					script += "qplot(log2(data[,'" + sampleName + "']), xlim=c(" + min + "," + max + "));\n";
+					script += "qplot(log2(data[,'" + sampleName + "']), xlim=c(" + min + "," + max + "), binwidth = " + binwidth + ");\n";
 				} else {
-					script += "qplot(log2(data[,'" + sampleName + "']));\n";
+					script += "qplot(log2(data[,'" + sampleName + "']), binwidth = " + binwidth + ");\n";
 				}
 			} else {
 				if (min >= 0 && max >= 0) {
-					script += "qplot(data[,'" + sampleName + "'], xlim=c(" + min + "," + max + "));\n";
+					script += "qplot(data[,'" + sampleName + "'], xlim=c(" + min + "," + max + "), binwidth = " + binwidth + ");\n";
 				} else {
-					script += "qplot(data[,'" + sampleName + "']);\n";
+					script += "qplot(data[,'" + sampleName + "'], binwidth = " + binwidth + ");\n";
 				}				
 			}
 			script += "dev.off();\n";

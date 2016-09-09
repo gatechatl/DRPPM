@@ -9,6 +9,16 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 
+/**
+ * See HELP string or run with no arguments for usage.
+ * <p>
+ * The code used to calculate a Fisher p-value comes originally from a
+ * <a href="http://infofarm.affrc.go.jp/~kadasowa/fishertest.htm">JavaScript program</a>
+ * by T. Kadosawa (kadosawa@niaes.affrc.go.jp).
+ *
+ * @author David Hopwood
+ * @date   2000/04/23
+ */
 public class StatTests {
     private static final String HELP =
         "Usage: java StatTests [-phi] [-fisher1] [-fisher2] filename [>outputfile]\n" +

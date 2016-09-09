@@ -48,12 +48,17 @@ public class PCAPlot {
 		script += "rownames(mat)=genenames\n";
 		script += "isexpr <- rowSums(mat>1) >= 1\n";
 		script += "mat <- mat[isexpr,]\n";
+		script += "mat <- log2(mat + 0.00001);\n";
 		script += "colnames = colnames(mat);\n";
 		script += "rownames = rownames(mat);\n";
 		script += "revmat = apply(mat, 1, rev)\n";
 		script += "pca.object <- prcomp(revmat)\n";
 		script += "scores = pca.object$x\n";
+		script += "var = cumsum((pca.object$sdev)^2) / sum(pca.object$sdev^2)\n";
+		script += "varexp = c(var[1], var[2]-var[1], var[3]-var[2])\n";
 		script += "write.csv(scores, file=\"" + outputFile + "\");\n";
+		script += "write.csv(varexp, file=\"" + outputFile + ".variance\");\n";
+		
 		return script;
 	}
 	public static HashMap parseColorFile(String colorFile) {

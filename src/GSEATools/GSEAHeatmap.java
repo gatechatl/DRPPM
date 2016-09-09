@@ -30,7 +30,7 @@ public class GSEAHeatmap {
 		script += "hmcols<- colorRampPalette(c(\"dark blue\",\"blue\",\"white\",\"red\", \"dark red\"))(length(bk)-1)\n";
 		
 		script += "png(file = \"" + outputFile + "\", width=1000,height=800)\n";
-		script += "pheatmap(all, cluster_col = F, cluster_row = F, fontsize_row = 9, color=hmcols)\n";
+		script += "pheatmap(all, cluster_col = F, cluster_row = T, fontsize_row = 9, color=hmcols)\n";
 		script += "dev.off();\n";
 		return script;
 	}

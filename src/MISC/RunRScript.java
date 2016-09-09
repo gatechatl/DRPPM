@@ -18,8 +18,8 @@ public class RunRScript {
 			e.printStackTrace();
 		}
 	}
-	public static void runRScript(String script) {
-		executeCommand("R --vanilla < " + script);
+	public static void runRScript(String scriptFile) {
+		executeCommand("R --vanilla < " + scriptFile);
 	}
 	public static void executeCommand(String executeThis) {
     	try {

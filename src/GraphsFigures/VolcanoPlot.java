@@ -13,6 +13,9 @@ import java.util.LinkedList;
  */
 public class VolcanoPlot {
 
+	public static String parameter_info() {
+		return "[InputLIMMAoutputFile] [OutputPNG] [pvalue] [logFC] [annotation tag can leave blank] [optional fontsize]";
+	}
 	/**
 	 * The label produced by the limma is offset by 1
 	 * @param inputFile
@@ -104,9 +107,12 @@ public class VolcanoPlot {
 		script += "rownames[data$P.Value > " + pvalue + "] = \"\";\n";
 		script += "rownames[logFold < " + logfold + "] = \"\";\n";
 
-		script += "png(file = \"" + outputFile + "\", width=3000,height=2000)\n";
+		script += "png(file = \"" + outputFile + "\", width=2000,height=1400)\n";
 		
-		script += "ggplot(data=data, aes(x=logFC, y=-log10(P.Value), label=rownames)) + geom_point(alpha=0.4, size=2.0) + geom_text(size=10,aes(colour=8), alpha=0.8) + theme(axis.text = element_text(size=rel(5)),legend.position=\"none\") + theme(axis.title.y = element_text(size = rel(5))) + theme(axis.title.x = element_text(size = rel(5)));\n";
+		if (tag.equals("NOTAG")) {
+			tag = "";
+		}
+		script += "ggplot(data=data, aes(x=logFC, y=-log10(P.Value), label=rownames)) + geom_point(alpha=0.4, size=2.0) + geom_text(size=12,aes(colour=8), alpha=0.9) + theme(axis.text = element_text(size=rel(4)),legend.position=\"none\") + theme(axis.title.y = element_text(size = rel(4))) + theme(axis.title.x = element_text(size = rel(4))) + theme(plot.title = element_text(size = rel(4))) + ggtitle(\"" + tag + "\");\n";
 
 		script += "dev.off()";
 		return script;
@@ -127,7 +133,7 @@ public class VolcanoPlot {
 		script += "rownames[data$P.Value > 0.001] = \"\";\n";
 		script += "rownames[data$logFold < 1] = \"\";\n";*/
 
-		script += "png(file = \"" + outputFile + "\", width=3000,height=2000)\n";
+		script += "png(file = \"" + outputFile + "\", width=2000,height=1300)\n";
 		
 		script += "ggplot(data=data, aes(x=logFC, y=-log10(P.Value))) + geom_point(alpha=0.4, size=2.0) + theme(axis.text = element_text(size=rel(5)),legend.position=\"none\")+ theme(axis.title.y = element_text(size = rel(5))) + theme(axis.title.x = element_text(size = rel(5)));\n";
 

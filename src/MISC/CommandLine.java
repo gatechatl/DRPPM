@@ -8,8 +8,10 @@ import java.io.InputStreamReader;
 import java.util.UUID;
 
 public class CommandLine {
+	
 	public static void execute(String[] args) {
 		try {
+			
 			String scriptFile = args[0];
 			executeCommand(scriptFile);
 			

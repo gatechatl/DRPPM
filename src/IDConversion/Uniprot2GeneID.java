@@ -14,6 +14,16 @@ import java.util.LinkedList;
  */
 public class Uniprot2GeneID {
 
+	public static void execute(String[] args) {
+		
+		try {
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	public static HashMap uniprot2geneID(String inputFile) {
 		HashMap map = new HashMap();
 		try {

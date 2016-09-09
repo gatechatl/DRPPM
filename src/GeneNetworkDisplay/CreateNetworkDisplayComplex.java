@@ -15,6 +15,9 @@ import java.util.UUID;
 
 public class CreateNetworkDisplayComplex {
 
+	public static String parameter_info() {
+		return "[metaEdgeFile] [metaNodeFile] [networkName] [networkType] [fontSize] [outputFolder]\nNetworkType: COSE,BREADTHFIRST,CONCENTRIC";
+	}
 	public static void execute(String[] args) {
 		//String inputFile = "C:\\Users\\tshaw\\Desktop\\INTEGRATION\\GenerateHTMLExamples\\graph.txt";
 		try {
@@ -24,6 +27,8 @@ public class CreateNetworkDisplayComplex {
 			String networkType = args[3];
 			int fontSize = new Integer(args[4]);
 			String outputFolder = args[5];
+			
+			
 			String outputJSFile = outputFolder + "/output.js";
 			String outputHTML = outputFolder + "/index.html";
 			
@@ -152,6 +157,7 @@ public class CreateNetworkDisplayComplex {
 		HashMap ycoord = new HashMap();
 		HashMap shape = new HashMap();
 		HashMap value = new HashMap();
+		HashMap size = new HashMap();
 		try {
 			
 			FileInputStream fstream = new FileInputStream(inputFile);
@@ -179,19 +185,45 @@ public class CreateNetworkDisplayComplex {
 					edgecolor = "#ff0000";
 				} else if (edgecolor.equals("blue")) {
 					edgecolor = "#4d8bc9";
+				} else if (edgecolor.contains("rgb")) {
+					
+					edgecolor = edgecolor.replaceAll(" ", "");
+					edgecolor = edgecolor.replaceAll("rgb\\(", "");
+					edgecolor = edgecolor.replaceAll("\\)", "");
+					System.out.println(edgecolor);
+					double r = new Double(edgecolor.split(",")[0]);
+					double g = new Double(edgecolor.split(",")[1]);
+					double b = new Double(edgecolor.split(",")[2]);
+					edgecolor = String.format("#%02x%02x%02x", r, g, b);
+				} else if (edgecolor.contains("#")){ 
+					edgecolor = edgecolor;
 				} else {
-					edgecolor = "#000";
+					edgecolor = "#000000";
 				}
 				if (backcolor.equals("red")) {
 					backcolor = "#ff0000";
 				} else if (backcolor.equals("blue")) {
 					backcolor = "#4d8bc9";
+				} else if (backcolor.contains("rgb")) {
+					
+					backcolor = backcolor.replaceAll(" ", "");
+					backcolor = backcolor.replaceAll("rgb\\(", "");
+					backcolor = backcolor.replaceAll("\\)", "");
+					System.out.println(backcolor);
+					int r = new Integer(backcolor.split(",")[0]);
+					int g = new Integer(backcolor.split(",")[1]);
+					int b = new Integer(backcolor.split(",")[2]);					
+					backcolor = String.format("#%02x%02x%02x", r, g, b);
+				} else if (backcolor.contains("#")) {
+					backcolor = backcolor;					
+					
 				} else {
-					backcolor = "#000";
+					backcolor = "#ffffff";
 				}
 				
 				String shapeval = split[6];
 				String nodevalue = split[7];
+				String size1 = split[8];
 				weight.put(split[0], weight1);
 				//weight.put(split[2], weight2);
 				edgecolour.put(split[0], edgecolor);
@@ -203,6 +235,7 @@ public class CreateNetworkDisplayComplex {
 				//ycoord.put(split[2], ycoord2);
 				shape.put(split[0], shapeval);
 				value.put(split[0], nodevalue);
+				size.put(split[0], size1);
 			}
 			in.close();
 		} catch (Exception e) {
@@ -223,6 +256,7 @@ public class CreateNetworkDisplayComplex {
 			entry.BACKCOLOUR = (String)backcolour.get(key);
 			entry.VALUE = (String)value.get(key);
 			entry.SHAPE = (String)shape.get(key);
+			entry.SIZE = (String)size.get(key);
 			conn_list.add(entry);
 		}
 		return conn_list;
@@ -413,8 +447,10 @@ public class CreateNetworkDisplayComplex {
 		str += ".selector('node')\n";
 		str += ".css({\n";
 		str += "'shape': 'data(faveShape)',\n";
-        str += "'width': 'mapData(biz, 0, 1, 50, 100)',\n";
-        str += "'height': 'mapData(biz, 0, 1, 50, 100)',\n";
+        //str += "'width': 'mapData(biz, 0, 1, 50, 100)',\n";
+		str += "'width': 'data(biz)',\n";
+        //str += "'height': 'mapData(biz, 0, 1, 50, 100)',\n";
+		str += "'height': 'data(biz)',\n";
 		//str += "'height': 160,\n";
 		//str += "'width': 160,\n";
 		str += "'font-size': " + fontSize + ",\n";
@@ -463,14 +499,15 @@ public class CreateNetworkDisplayComplex {
 			double value = new Double(entry.VALUE);
 			String orig_value = entry.VALUE;
 			String shape = entry.SHAPE;
+			String size = entry.SIZE;
 			str += ".selector('#" + key + "')\n";
 			str += ".css({\n";
 			//if (filter.containsKey(key)) {
 			//	System.out.println("ls " + "../../../Genes/" + key + ".png");
 			
 			
-			String rgb = "rgb(255, 255, 255)";
-			if (value < firstQuartile) {
+			String rgb = "" + back_color + "";//"rgb(255, 255, 255)";
+			/*if (value < firstQuartile) {
 				value = firstQuartile;
 			}
 			if (value > thirdQuartile) {
@@ -480,44 +517,15 @@ public class CreateNetworkDisplayComplex {
 			if (value != Double.NaN){
 				int ratio = new Double((1 - (value - firstQuartile) / (thirdQuartile - firstQuartile)) * 155).intValue() + 100;
 				rgb = "rgb(255, " + ratio + "," + ratio + ")";
-				/*if (value > median) {
-					int ratio = new Double((1 - (value - firstQuartile) / (thirdQuartile - firstQuartile)) * 255).intValue();
-					rgb = "rgb(255," + ratio + "," + ratio + ")";
-				} else {
-					int ratio = new Double((value - firstQuartile) / (thirdQuartile - firstQuartile) * 255).intValue();
-					rgb = "rgb(" + ratio + "," + ratio + ", 255)";					
-				}*/
+				
 			}
-			 			
-			/*if (expression.containsKey(key)) {
-				String expr = (String)expression.get(key);
-				if (expr.equals("NA")) {
-					value = Double.NaN;
-				} else {
-					value = new Double(expr);
-					value = value - 0.5;
-					//System.out.println(value);
-					if (value >= 0) {
-						int ratio = new Double((1.0 - value / 0.5) * 255).intValue();
-						rgb = "rgb(255," + ratio + "," + ratio + ")"; 
-					} else {
-						int ratio = new Double((1.0 - value / -0.5) * 255).intValue();
-						rgb = "rgb(" + ratio + "," + ratio + ", 255)";
-					}
-				}
-			}*/
+			 	
 			if (value == Double.NaN) {
 				rgb = "rgb(255, 255, 255)";
-			}
+			}*/
 			str += "'background-color': '" + rgb + "'\n";
 			//str += "'background-color': '" + rgb + "'\n";
 			
-			
-			/*if (rawExpression.containsKey(key)) {
-				str += "'content': '" + (String)rawExpression.get(key) + "FPKM'\n";
-			} else {
-				str += "'content': '" + (String)rawExpression.get(key) + "FPKM'\n";
-			}*/
 			//str += "'background-image': 'Output/" + key + ".png'\n";
 				
 				
@@ -544,7 +552,7 @@ public class CreateNetworkDisplayComplex {
 			String genes = entry.KEGG_NAME.replaceAll("\t", ",");
 			
 			count++;
-			int size = 1000;
+			int size = new Integer(entry.SIZE);
 			int bwidth = 3;
 			//String bcolor = "#000";
 			String edgecolor = entry.EDGECOLOUR;
@@ -598,10 +606,18 @@ public class CreateNetworkDisplayComplex {
 			expr = "" + new Double(new Double(new Double(entry.VALUE) * 100).intValue()) / 100;
 			//}	
 			if (kegg_list.size() != count) {				
-				str += "{ data: { id: '" + key + "', name: '" + key + "(" + expr + ")" + "', genes: '" + genes + "', weight: " + weight + ", faveShape: '" + faveShape + "', baz: " + size + ", faveColor: '" + edgecolor + "', bwidth: " + bwidth + "}, position:{x: " + new Double(new Double(entry.XCOORD) * 1.5).intValue() + ",y: " + new Double(new Double(entry.YCOORD) * 1.5).intValue() + "}},\n";
+				if (expr.equals("0.0")) {
+					str += "{ data: { id: '" + key + "', name: '" + key + "', genes: '" + genes + "', weight: " + weight + ", faveShape: '" + faveShape + "', biz: " + size + ", faveColor: '" + edgecolor + "', bwidth: " + bwidth + "}, position:{x: " + new Double(new Double(entry.XCOORD) * 1.5).intValue() + ",y: " + new Double(new Double(entry.YCOORD) * 1.5).intValue() + "}},\n";
+				} else {
+					str += "{ data: { id: '" + key + "', name: '" + key + "(" + expr + ")" + "', genes: '" + genes + "', weight: " + weight + ", faveShape: '" + faveShape + "', biz: " + size + ", faveColor: '" + edgecolor + "', bwidth: " + bwidth + "}, position:{x: " + new Double(new Double(entry.XCOORD) * 1.5).intValue() + ",y: " + new Double(new Double(entry.YCOORD) * 1.5).intValue() + "}},\n";
+				}
 			} else {
-				str += "{ data: { id: '" + key + "', name: '" + key + "(" + expr + ")" + "', genes: '" + genes + "', weight: " + weight + ", faveShape: '" + faveShape + "', baz: " + size + ", faveColor: '" + edgecolor + "', bwidth: " + bwidth + "}, position:{x: " + new Double(new Double(entry.XCOORD) * 1.5).intValue() + ",y: " + new Double(new Double(entry.YCOORD) * 1.5).intValue() + "}}\n";
-				//str += "{ data: { id: '" + key + "', weight: 50, faveShape: 'rectangle', baz: " + size + "} }\n";
+				if (expr.equals("0.0")) {
+					str += "{ data: { id: '" + key + "', name: '" + key + "', genes: '" + genes + "', weight: " + weight + ", faveShape: '" + faveShape + "', biz: " + size + ", faveColor: '" + edgecolor + "', bwidth: " + bwidth + "}, position:{x: " + new Double(new Double(entry.XCOORD) * 1.5).intValue() + ",y: " + new Double(new Double(entry.YCOORD) * 1.5).intValue() + "}}\n";
+				} else {
+					str += "{ data: { id: '" + key + "', name: '" + key + "(" + expr + ")" + "', genes: '" + genes + "', weight: " + weight + ", faveShape: '" + faveShape + "', biz: " + size + ", faveColor: '" + edgecolor + "', bwidth: " + bwidth + "}, position:{x: " + new Double(new Double(entry.XCOORD) * 1.5).intValue() + ",y: " + new Double(new Double(entry.YCOORD) * 1.5).intValue() + "}}\n";
+				}
+				//str += "{ data: { id: '" + key + "', weight: 50, faveShape: 'rectangle', biz: " + size + "} }\n";
 			}
 		}
 		str += "],\n";
@@ -700,9 +716,17 @@ public class CreateNetworkDisplayComplex {
 			str += "name: 'breadthfirst',\n";
 			//str += "name: '" + graphType + "',\n";
 			//str += "name: 'preset',\n";
-			str += "directed: true,\n";
+			str += "directed: false,\n";
 			str += "padding: 10\n";
 			str += "},\n";
+		} else if (networkType.equals("COSE")) {
+			str += "layout: {\n";
+			str += "name: 'cose',\n";
+			//str += "name: '" + graphType + "',\n";
+			//str += "name: 'preset',\n";
+			str += "directed: false,\n";
+			str += "padding: 10\n";
+			str += "},\n";			
 		} else {
 			str += "layout: {\n";
 			//str += "name: 'breadthfirst',\n";
@@ -802,6 +826,7 @@ public class CreateNetworkDisplayComplex {
 		public String XCOORD = "";
 		public String YCOORD = "";
 		public String WEIGHT = "";
+		public String SIZE = "";
 		public String EDGECOLOUR = "";
 		public String BACKCOLOUR = "";
 		public boolean MEMBRANE = false;

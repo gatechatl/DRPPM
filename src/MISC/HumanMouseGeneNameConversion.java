@@ -81,6 +81,58 @@ public class HumanMouseGeneNameConversion {
 			e.printStackTrace();
 		}
 	}
+	public static void executeHuman2MouseMatrix(String[] args) {				
+		try {
+			
+			String hs2mmFile = args[1]; //"C:\\Users\\tshaw\\Desktop\\RNASEQ\\hs_mm_homo_r66.txt";
+			HashMap human2mouse = human2mouse(hs2mmFile);
+			String inputFile = args[0]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\GangGeneListAnalysis.txt";
+			FileInputStream fstream = new FileInputStream(inputFile);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));
+			System.out.println(in.readLine());
+			while (in.ready()) {
+				String str = in.readLine();
+				String[] split = str.split("\t");
+				String data = "";
+				for (int i = 1; i < split.length; i++) {
+					data += "\t" + split[i];
+				}
+				if (human2mouse.containsKey(split[0])) {
+					System.out.println(human2mouse.get(split[0]) + data);
+				}				
+			}
+			in.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static void executeMouse2HumanMatrix(String[] args) {				
+		try {
+			
+			String hs2mmFile = args[1]; //"C:\\Users\\tshaw\\Desktop\\RNASEQ\\hs_mm_homo_r66.txt";
+			HashMap mouse2human = mouse2human(hs2mmFile);
+			String inputFile = args[0]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\GangGeneListAnalysis.txt";
+			FileInputStream fstream = new FileInputStream(inputFile);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));
+			System.out.println(in.readLine());
+			while (in.ready()) {
+				String str = in.readLine();
+				String[] split = str.split("\t");
+				String data = "";
+				for (int i = 1; i < split.length; i++) {
+					data += "\t" + split[i];
+				}
+				if (mouse2human.containsKey(split[0])) {
+					System.out.println(mouse2human.get(split[0]) + data);
+				}				
+			}
+			in.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	public static void executeHuman2Mouse(String[] args) {				
 		try {
 			

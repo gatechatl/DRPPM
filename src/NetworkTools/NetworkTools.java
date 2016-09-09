@@ -13,7 +13,17 @@ import java.util.LinkedList;
  *
  */
 public class NetworkTools {
-
+	
+	public static LinkedList overlapModuleWithGraph(String inputFile, String sifDB) {
+		LinkedList list = new LinkedList();
+		try {
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	/**
 	 * Each protein contains a linkedlist of proteins
 	 * @param fileName

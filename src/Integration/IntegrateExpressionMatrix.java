@@ -21,7 +21,7 @@ import Statistics.General.MathTools;
 public class IntegrateExpressionMatrix {
 	
 	public static String parameter_info() {
-		return "[phosphoFile] [proteomeFile] [rnaFile (put NA if not available)] [weightFile] [outputMatrix]";
+		return "[phosphoFile] [proteomeFile] [rnaFile (put NA if not available)] [weightFile] [unannotated_weights pho,whole,rna:0.5,0.2,0.1] [outputMatrix] [outputMatrixSummary]";
 	}
 	public static void execute(String[] args) {
 		
@@ -56,6 +56,8 @@ public class IntegrateExpressionMatrix {
 			BufferedWriter out_final = new BufferedWriter(fwriter_final);			
 									
 			out.write("Accession\tGeneName\tSiteInfo\tDataType\tWeight\tWeightedLogFC_Sample1\tWeightedLogFC_Sample2\tWeightedLogFC_Sample3\tWeightedLogFC_Sample4\tWeightedLogFC_Sample5\tWeightedLogFC_Sample6\tWeightedLogFC_Sample7\tWeightedLogFC_Sample8\tWeightedLogFC_Sample9\tWeightedLogFC_Sample10\tLogFC_Sample1\tLogFC_Sample2\tLogFC_Sample3\tLogFC_Sample4\tLogFC_Sample5\tLogFC_Sample6\tLogFC_Sample7\tLogFC_Sample8\tLogFC_Sample9\tLogFC_Sample10\tOrig_Sample1\tOrig_Sample2\tOrig_Sample3\tOrig_Sample4\tOrig_Sample5\tOrig_Sample6\tOrig_Sample7\tOrig_Sample8\tOrig_Sample9\tOrig_Sample10\n");
+			out_final.write("Accession\tGeneName\tWeight\tSample1_Activity\tSample2_Activity\tSample3_Activity\tSample4_Activity\tSample5_Activity\tSample6_Activity\tSample7_Activity\tSample8_Activity\tSample9_Activity\tSample10_Activity\n");
+			
 			if (rnaFile.equals("NA")) {								
 				Iterator itr = accession2Gene.keySet().iterator();
 				while (itr.hasNext()) {

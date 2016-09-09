@@ -18,8 +18,7 @@ public class GenerateDTAFilesScript {
 			String program = args[4];
 			String path = args[5];
 			String outputFolder = args[6];
-			
-			
+						
 			FileInputStream fstream = new FileInputStream(fileName);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
@@ -31,7 +30,7 @@ public class GenerateDTAFilesScript {
 				String scan_number = split[scan_number_idx];
 				String charge = split[charge_idx];
 				String id = name + "." + scan_number + "." + 1 + "." + charge;
-				System.out.println("perl " + program + " " + path + " " + outputFolder + " " + id);
+					System.out.println("perl " + program + " " + path + " " + outputFolder + " " + id);
 			}
 			in.close();						
 			

@@ -47,6 +47,10 @@ public class CalculateLIMMA {
 		String warning = "The program should be executed as the following";
 		return warning;
 	}
+	
+	public static String parameter_info_compare_one_group() {
+		return "[inputFile] [groupFile] [outputFileUp] [outputFileDown] [outputFileAll] [type] [takeLog] [quanNorm]";
+	}
 	public static void CompareOneGroup(String[] args) {
 		try {
 			String inputFile = args[0];
@@ -77,6 +81,9 @@ public class CalculateLIMMA {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public static String parameter_info_compare_two_group() {
+		return "[inputFile] [group1File] [group2File] [outputFileUp] [outputFileDown] [outputFileAll] [type] [takeLog] [quanNorm]";
 	}
 	public static void CompareTwoGroup(String[] args) {
 		try {
@@ -109,6 +116,53 @@ public class CalculateLIMMA {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public static String parameter_info_compare_three_group_flex() {
+		return "[inputFile] [group1File] [group2File] [group3File] [outputFileFilter] [outputFileAll] [pvalue] [foldChange] [takeLog] [quanNorm]";
+	}
+	public static void CompareThreeGroupFlex(String[] args) {
+		try {
+			String inputFile = args[0];
+			String groupFile1 = args[1];
+			String groupFile2 = args[2];
+			String groupFile3 = args[3];
+			LinkedList groupA_list = readGroupList(groupFile1);
+			String groupA = list2str(groupA_list);
+			LinkedList groupB_list = readGroupList(groupFile2);
+			String groupB = list2str(groupB_list);
+			LinkedList groupC_list = readGroupList(groupFile3);
+			String groupC = list2str(groupC_list);
+			String outputFileFilter = args[4];
+			String outputFileAll = args[5];			
+			double pvalue = new Double(args[6]);
+			double foldchange = new Double(args[7]);
+			
+			boolean takeLog = Boolean.valueOf(args[8]);			
+			boolean cutMinExpr = Boolean.valueOf(args[9]);
+			boolean quanNorm = false;
+			if (args.length >= 11) {
+				quanNorm = Boolean.valueOf(args[10]);
+			}
+			
+			/*boolean takeLog = Boolean.valueOf(args[7]);
+			if (type.toUpperCase().equals("ALL")) {
+				System.out.println(createScriptLimma(inputFile, outputFileUp, outputFileDown, outputFileAll, groupA, groupOther, 1.0, 0, takeLog));
+			} else if (type.toUpperCase().equals("PVALUE")){
+				System.out.println(createScriptLimma(inputFile, outputFileUp, outputFileDown, outputFileAll, groupA, groupOther, 0.05, 0, takeLog));
+			} else if (type.toUpperCase().equals("FOLDCHANGE")) {
+				System.out.println(createScriptLimma(inputFile, outputFileUp, outputFileDown, outputFileAll, groupA, groupOther, 1.0, 1.0, takeLog));
+			} else {
+				System.out.println(createScriptLimma(inputFile, outputFileUp, outputFileDown, outputFileAll, groupA, groupOther, 0.05, 1.0, takeLog));
+			}*/
+			
+			System.out.println(createScriptLimmaThreeGroup(inputFile, outputFileFilter, outputFileAll, groupA, groupB, groupC, pvalue, foldchange, takeLog, cutMinExpr, quanNorm));
+			//System.out.println(createScriptLimma(inputFile, outputFileUp, outputFileDown, groupA, groupOther, 0.05, 1.0));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static String parameter_info_compare_two_group_flex() {
+		return "[inputFile] [group1File] [group2File] [outputFileUp] [outputFileDown] [outputFileAll] [pvalue] [foldChange] [takeLog] [quanNorm]";
 	}
 	public static void CompareTwoGroupFlex(String[] args) {
 		try {
@@ -239,7 +293,7 @@ public class CalculateLIMMA {
 	public static String createScriptLimma(String inputFile, String outputFileUp, String outputFileDown, String outputFileAll, String listA, String listB, double pvalue, double logFold, boolean takeLog, boolean quanNorm) {
 		String script = "";
 		script += "library(limma);\n";
-		script += "library(edgeR)\n";
+		script += "#library(edgeR)\n";
 		script += "data=read.csv(\"" + inputFile + "\", sep=\"\\t\", header=T, as.is=T);\n";
 		script += "gene=data[,1]\n";
 		script += "allDat = data;\n";
@@ -262,6 +316,8 @@ public class CalculateLIMMA {
 			script += "mat = log2(mat + 0.1);\n";
 		}
 
+		
+		
 		if (quanNorm) {
 			script += "quantile_normalisation <- function(df){\n";
 			script += "df_rank <- apply(df,2,rank,ties.method=\"min\")\n";
@@ -285,12 +341,12 @@ public class CalculateLIMMA {
 		script += "fit2 <- contrasts.fit(fit, contrast.matrix)\n";
 		script += "fit2 <- eBayes(fit2);\n";
 		script += "options(digits=4)\n";
-		script += "top1 = topTable(fit2,coef=1,n=30000,sort=\"p\", p.value=1.0, adjust.method=\"BH\")\n";
+		script += "top1 = topTable(fit2,coef=1,n=300000,sort=\"p\", p.value=1.0, adjust.method=\"BH\")\n";
 		script += "top1Pos = top1$logFC > " + logFold + "\n";
 		script += "top1 = top1[top1Pos,]\n";
 		script += "top1Pos = top1$P.Value < " + pvalue + "\n";
 		script += "top1 = top1[top1Pos,]\n";
-		script += "top1Pval = head(sort(top1$P.Value,decreasing=FALSE), n = 30000)\n";
+		script += "top1Pval = head(sort(top1$P.Value,decreasing=FALSE), n = 300000)\n";
 		script += "write.table(top1, file=\"" + outputFileUp + "\", sep=\"\t\");\n";
 		
 		
@@ -298,26 +354,108 @@ public class CalculateLIMMA {
 		script += "fit2 <- contrasts.fit(fit, contrast.matrix)\n";
 		script += "fit2 <- eBayes(fit2);\n";
 		script += "options(digits=4)\n";
-		script += "top1 = topTable(fit2,coef=1,n=30000,sort=\"p\", p.value=1.0, adjust.method=\"BH\")\n";
+		script += "top1 = topTable(fit2,coef=1,n=300000,sort=\"p\", p.value=1.0, adjust.method=\"BH\")\n";
 		script += "top1Pos = top1$logFC > " + logFold + "\n";
 		script += "top1 = top1[top1Pos,]\n";
 		script += "top1Pos = top1$P.Value < " + pvalue + "\n";
 		script += "top1 = top1[top1Pos,]\n";
-		script += "top1Pval = head(sort(top1$P.Value,decreasing=FALSE), n = 30000)\n";
+		script += "top1Pval = head(sort(top1$P.Value,decreasing=FALSE), n = 300000)\n";
 		script += "write.table(top1, file=\"" + outputFileDown + "\", sep=\"\t\");\n";
 		
 		script += "contrast.matrix <- makeContrasts(groupAOtherA - groupAOtherB, levels=designA)\n";
 		script += "fit2 <- contrasts.fit(fit, contrast.matrix)\n";
 		script += "fit2 <- eBayes(fit2);\n";
 		script += "options(digits=4)\n";
-		script += "top1 = topTable(fit2,coef=1,n=30000,sort=\"p\", p.value=1.0, adjust.method=\"BH\")\n";
-		script += "top1Pval = head(sort(top1$P.Value,decreasing=FALSE), n = 30000)\n";
+		script += "top1 = topTable(fit2,coef=1,n=300000,sort=\"p\", p.value=1.0, adjust.method=\"BH\")\n";
+		script += "top1Pval = head(sort(top1$P.Value,decreasing=FALSE), n = 300000)\n";
 		script += "write.table(top1, file=\"" + outputFileAll + "\", sep=\"\t\");\n";
 		script += "library(ggplot2)\n";
-		script += "png(\"MAPLOT_" + outputFileAll + ".png\")\n";
+		script += "png(\"" + outputFileAll + "_MAPLOT.png\", width=500,height=400)\n";
 		script += "p=ggplot(top1, aes(AveExpr,logFC)) + geom_hline(yintercept=0,alpha=0.5) +geom_point(aes(colour=adj.P.Val),alpha=0.5)+scale_colour_gradient(low=\"blue\",high=\"black\")\n";
 		script += "p+xlab(\"Average Log Expression[A]\")+ylab(\"logFC[M]\");\n";
 		script += "dev.off();\n";
+		return script;
+	}
+	
+	public static String createScriptLimmaThreeGroup(String inputFile, String outputFileFilter, String outputFileAll, String listA, String listB, String listC, double pvalue, double logFold, boolean takeLog, boolean cutMinExpr, boolean quanNorm) {
+		String script = "";
+		script += "library(limma);\n";
+		script += "#library(edgeR)\n";
+		script += "data=read.csv(\"" + inputFile + "\", sep=\"\\t\", header=T, as.is=T);\n";
+		script += "gene=data[,1]\n";
+		script += "allDat = data;\n";
+		script += "selection = allDat;\n";
+		script += "genenames = selection[,1];\n";
+		script += "col_labels = colnames(allDat[1,]);\n";
+		script += "sampleNames = col_labels[2:length(col_labels)];\n";
+		script += "colnames(selection) = col_labels;\n";
+		script += "rownames(selection) = genenames;\n";
+		script += "A = c(" + listA + ")\n";
+		script += "B = c(" + listB + ")\n";
+		script += "C = c(" + listC + ")\n";
+		script += "mat = selection[,c(A, B, C)];\n";
+		//script += "numTop = 50;\n";
+		script += "rownames(mat)=genenames\n";
+
+		// need to make this a parameter
+		if (cutMinExpr) {
+			script += "isexpr <- rowSums(mat>1) >= 1\n";
+			script += "mat <- mat[isexpr,]\n";
+		}
+		if (takeLog) {
+			script += "mat = log2(mat + 0.1);\n";
+		}
+		
+
+		if (quanNorm) {
+			script += "quantile_normalisation <- function(df){\n";
+			script += "df_rank <- apply(df,2,rank,ties.method=\"min\")\n";
+			script += "df_sorted <- data.frame(apply(df, 2, sort))\n";
+			script += "df_mean <- apply(df_sorted, 1, mean)\n";			   
+			script += "index_to_mean <- function(my_index, my_mean){\n";
+			script += "return(my_mean[my_index])\n";
+			script += "}\n";			   
+			script += "df_final <- apply(df_rank, 2, index_to_mean, my_mean=df_mean)\n";
+			script += "rownames(df_final) <- rownames(df)\n";
+			script += "return(df_final)\n";
+			script += "}\n";
+			script += "mat = quantile_normalisation(mat);\n";
+		}
+		
+		script += "groupAOther = factor(c(rep(\"A\", length(A)), rep(\"B\", length(B)), rep(\"C\", length(C))));\n";
+		script += "designA = model.matrix(~0 + groupAOther);\n";
+		script += "colnames(designA) <- c(\"group1\", \"group2\", \"group3\");\n";
+		
+		script += "fit <- lmFit(mat,design = designA)\n";
+		script += "contrast.matrix <- makeContrasts(group2-group1, group3-group2, group3-group1, levels=designA)\n";
+		//script += "contrast.matrix <- makeContrasts(groupAOtherA - groupAOtherB, groupAOtherC - groupAOtherB, groupAOtherC - groupAOtherA, levels=designA)\n";
+		script += "fit2 <- contrasts.fit(fit, contrast.matrix)\n";
+		script += "fit2 <- eBayes(fit2);\n";
+		script += "options(digits=4)\n";
+		script += "top1 = topTableF(fit2,n=300000,p.value=1.0, adjust.method=\"BH\")\n";
+		//script += "top1Pos = top1$logFC > " + logFold + "\n";
+		//script += "top1 = top1[top1Pos,]\n";
+		script += "passLG <- rowSums(top1[,1:3]>" + logFold + ") >= 1\n";
+		script += "top1 = top1[passLG,]\n";
+		script += "top1Pos = top1$P.Value < " + pvalue + "\n";
+		script += "top1 = top1[top1Pos,]\n";
+		script += "top1Pval = head(sort(top1$P.Value,decreasing=FALSE), n = 300000)\n";
+		script += "write.table(top1, file=\"" + outputFileFilter + "\", sep=\"\t\");\n";
+		
+		
+		
+		script += "contrast.matrix <- makeContrasts(group2-group1, group3-group2, group3-group1, levels=designA)\n";
+		script += "fit2 <- contrasts.fit(fit, contrast.matrix)\n";
+		script += "fit2 <- eBayes(fit2);\n";
+		script += "options(digits=4)\n";
+		script += "top1 = topTableF(fit2,n=300000,p.value=1.0, adjust.method=\"BH\")\n";
+		script += "top1Pval = head(sort(top1$P.Value,decreasing=FALSE), n = 300000)\n";
+		script += "write.table(top1, file=\"" + outputFileAll + "\", sep=\"\t\");\n";
+		script += "library(ggplot2)\n";
+		/*script += "png(\"" + outputFileAll + "_MAPLOT.png\", width=500,height=400)\n";
+		script += "p=ggplot(top1, aes(AveExpr,logFC)) + geom_hline(yintercept=0,alpha=0.5) +geom_point(aes(colour=adj.P.Val),alpha=0.5)+scale_colour_gradient(low=\"blue\",high=\"black\")\n";
+		script += "p+xlab(\"Average Log Expression[A]\")+ylab(\"logFC[M]\");\n";
+		script += "dev.off();\n";*/
 		return script;
 	}
 	public static String createSampleList() {

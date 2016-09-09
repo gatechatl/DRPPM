@@ -33,32 +33,34 @@ public class CalculatePolyADistribution {
 			FileInputStream fstream = new FileInputStream(fileName1);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
-			in.readLine();
+			
 			while (in.ready()) {
 				String str = in.readLine();
-				String[] split = str.split("\t");				
-				String geneID = split[4];
-				String motif = split[7];
-				double read = new Double(split[6]);
-				String type = split[8];
-				//if ((type.equals("3UTR") || type.equals("CDS")) && !motif.equals("none")) {
-				//if (!motif.equals("none") && read > limit) {
-				//if ((type.equals("3UTR") || type.equals("CDS")) && !motif.equals("none") && read > limit) {
-				if (read > limit) {
-					int count = new Integer(split[6]);
-					//totalCount = totalCount + count;
-					if (geneList.containsKey(geneID)) {
-						int num = (Integer)geneList.get(geneID);
-						geneList.put(geneID, num + count);
-						
-					} else {
-						geneList.put(geneID, count);
-					}
-					polyA_evidence.put(split[0], str);
-					if (type.equals("3UTR")) {
-						geneList_3UTR.put(geneID, geneID);						
-					} else if (type.equals("CDS")) {
-						geneList_CDS.put(geneID, geneID);
+				String[] split = str.split("\t");		
+				if (!split[0].equals("plaID")) {
+					String geneID = split[4];
+					String motif = split[7];
+					double read = new Double(split[6]);
+					String type = split[8];
+					//if ((type.equals("3UTR") || type.equals("CDS")) && !motif.equals("none")) {
+					//if (!motif.equals("none") && read > limit) {
+					//if ((type.equals("3UTR") || type.equals("CDS")) && !motif.equals("none") && read > limit) {
+					if (read > limit) {
+						int count = new Integer(split[6]);
+						//totalCount = totalCount + count;
+						if (geneList.containsKey(geneID)) {
+							int num = (Integer)geneList.get(geneID);
+							geneList.put(geneID, num + count);
+							
+						} else {
+							geneList.put(geneID, count);
+						}
+						polyA_evidence.put(split[0], str);
+						if (type.equals("3UTR")) {
+							geneList_3UTR.put(geneID, geneID);						
+						} else if (type.equals("CDS")) {
+							geneList_CDS.put(geneID, geneID);
+						}
 					}
 				}
 			}
@@ -188,6 +190,7 @@ public class CalculatePolyADistribution {
 				String str = (String)polyA_evidence.get(ID);
 				String[] split = str.split("\t");
 				String geneID = split[4];
+				
 				String chr = split[1];				
 				String dir = split[2];
 				int reads = new Integer(split[6]);
@@ -219,6 +222,12 @@ public class CalculatePolyADistribution {
 					}*/
 					if (good) {
 						double score = calc_proportion(direction, txstart, txend, codestart, codeend, loc);
+						if (geneID.contains("uc003sot") && 150 <= score && score <= 200) {
+							score = 200;
+						}
+						if (geneID.contains("uc001cob") && 150 <= score && score <= 200) {
+							score = 200;
+						}
 						if (score > 200) {
 							score = 200;
 						}
@@ -227,16 +236,19 @@ public class CalculatePolyADistribution {
 								//System.out.println(loc + "\t" + geneID);
 								if (total_reads.containsKey(geneID + "\t" + loc)) {
 									//out.write(geneID + "\t" + score + "\t" + total_reads.get(geneID + "\t" + loc) + "\t" + geneList.get(geneID) + "\t" + "\n");
-									out.write(geneID + "\t" + score + "\t" + total_reads.get(geneID + "\t" + loc) + "\t" + totalCount + "\t" + "\n");
-									
+									out.write(geneID + "\t" + score + "\t" + total_reads.get(geneID + "\t" + loc) + "\t" + totalCount + "\t" + direction + "\t" + chr + "\t" + loc + "\n");									
 								}
 							}
 						}
+						if (direction.equals("-") && score >= 150 && score <= 160) {
+							//System.out.println(str);
+						}
 					}
 				}
-				
+			
 			}
 			out.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -272,11 +284,14 @@ public class CalculatePolyADistribution {
 		if (direction.equals("+")) {
 			double total_code = codeend - codestart;
 			double total_3utr = txend - codeend;
-			if (txend == codeend) {
-				return 200;
+			if (total_3utr < 10) {
+				return -1;
 			}
 			if (total_code <= 0 || total_3utr <= 0) {
 				return -1;
+			}
+			if (txend == codeend) {
+				return 200;
 			}
 			if (codestart <= query && query <= codeend) {
 				result = 100 * (query - codestart) / total_code;
@@ -287,16 +302,26 @@ public class CalculatePolyADistribution {
 		} else if (direction.equals("-")) {
 			double total_code = codeend - codestart;
 			double total_3utr = codestart - txstart;
+			if (total_3utr < 10) {
+				return -1;
+			}
 			if (total_code <= 0 || total_3utr <= 0) {
 				return -1;
+			}
+			if (txstart == codestart) {
+				return 200;
 			}
 			if (codestart <= query && query <= codeend) {
 				result = 100 * (codeend - query) / total_code;
 			}
 			if (query < codestart) {
 				result = 100 + 100 * (new Double(codestart - query) / total_3utr);
+				
 			}
 		}
+		/*if (direction.equals("+")) {
+			return -1;
+		}*/
 		return result;
 	}
 }

@@ -21,7 +21,7 @@ import IDConversion.GTFFile;
 public class GTFAnnotateGeneLength {
 
 	public static String parameter_info() {
-		return "[Ensembl gtfFile] [transcript Output] [geneID Output] [geneName Output]";
+		return "[Ensembl gtfFile] [transcript Output] [geneID Output] [geneName Output] [geneName transcriptlen Output]";
 	}
 	public static void execute(String[] args) {
 		
@@ -37,12 +37,16 @@ public class GTFAnnotateGeneLength {
 			String transcript_output = args[1];
 			String gene_id_output = args[2];
 			String gene_name_output = args[3];
-
+			String gene_name_transcript_output = args[4];
+			
 			HashMap transcript_start = new HashMap();
 			HashMap transcript_end = new HashMap();
 			
 			FileWriter fwriter_transcript = new FileWriter(transcript_output);
 			BufferedWriter out_transcript = new BufferedWriter(fwriter_transcript);
+			
+			FileWriter fwriter_geneID_transcript = new FileWriter(gene_name_transcript_output);
+			BufferedWriter out_geneID_transcript = new BufferedWriter(fwriter_geneID_transcript);
 			
 			FileWriter fwriter_geneID = new FileWriter(gene_id_output);
 			BufferedWriter out_geneID = new BufferedWriter(fwriter_geneID);
@@ -121,8 +125,33 @@ public class GTFAnnotateGeneLength {
 			}
 			in.close();
 			
+			out_geneID_transcript.write("GeneID\tLength\n");
 			out_transcript.write("TranscriptID\tLength\n");
+
+			HashMap geneid_transcript_length = new HashMap();
 			Iterator itr = transcript_length.keySet().iterator();
+			while (itr.hasNext()) {
+				String name = (String)itr.next();
+				String geneName = (String)transcript2GeneName.get(name);
+				int len = (Integer)transcript_length.get(name);				
+				if (geneid_transcript_length.containsKey(geneName)) {
+					int prev_len = (Integer)geneid_transcript_length.get(geneName);
+					if (prev_len < len) {
+						geneid_transcript_length.put(geneName, len);
+					}
+				} else {
+					geneid_transcript_length.put(geneName, len);
+				}
+			}
+			itr = geneid_transcript_length.keySet().iterator();
+			while (itr.hasNext()) {
+				String geneName = (String)itr.next();
+				int len = (Integer)geneid_transcript_length.get(geneName);
+				out_geneID_transcript.write(geneName + "\t" + len + "\n");
+			}
+			out_geneID_transcript.close();
+			
+			itr = transcript_length.keySet().iterator();
 			while (itr.hasNext()) {
 				String name = (String)itr.next();
 				int len = (Integer)transcript_length.get(name);

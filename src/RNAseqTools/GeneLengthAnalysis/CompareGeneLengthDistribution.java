@@ -14,7 +14,7 @@ import MISC.CommandLine;
 public class CompareGeneLengthDistribution {
 
 	public static String parameter_info() {
-		return "[upRegInputFile] [dnRegInputFile] [reference] [outputFile] [outputFoldChange]";
+		return "[upRegInputFile] [dnRegInputFile] [reference] [x_label] [min_expression] [min_length] [outputFile] [outputFoldChange]";
 	}
 	public static void execute(String[] args) {
 		
@@ -24,8 +24,10 @@ public class CompareGeneLengthDistribution {
 			String allRegInputFile = args[2];
 			String reference = args[3];
 			String x_lab = args[4]; //TranscriptLength
-			String outputFile = args[5];
-			String outputFoldChange = args[6];
+			double min_expression = new Double(args[5]);
+			double min_length = new Double(args[6]);
+			String outputFile = args[7];
+			String outputFoldChange = args[8];
 			
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
@@ -62,14 +64,12 @@ public class CompareGeneLengthDistribution {
 				String foldChange = split[1];
 				String geneName = split[0].replaceAll("\"", "");
 				
-				if (map.containsKey(geneName) && aveExpr > 2.0 && new Integer((String)map.get(geneName)) > 900) {
+				if (map.containsKey(geneName) && aveExpr > min_expression && new Integer((String)map.get(geneName)) > min_length) {
 					allList.put(geneName, map.get(geneName));
 					outFC.write(geneName + "\t" + map.get(geneName) + "\t" + foldChange + "\n");
 				}
 			}
-			in.close();
-			
-			
+			in.close();						
 			
 			outFC.close();
 			
@@ -131,9 +131,9 @@ public class CompareGeneLengthDistribution {
 	public static String generateXYPlot(String inputFile, String outputFile, String xlab, String ylab) {
 		String script = "library(ggplot2);\n";
 		script += "data1 = read.table(\"" + inputFile + "\", sep=\"\\t\",header=T);\n";
-		script += "png(file = \"" + outputFile + "\", width=1000,height=800)\n";
+		script += "png(file = \"" + outputFile + "\", width=500,height=400)\n";
 		script += "d = ggplot(data1, aes(x=" + xlab + ", y=" + ylab + "))\n";
-		script += "d = d + geom_point() + geom_smooth(method=\"loess\") + scale_x_log10(breaks=c(10, 100, 1000, 10000, 100000, 1000000, 10000000)) + theme(text=element_text(size=30)) \n";
+		script += "d = d + geom_point() + geom_smooth(method=\"loess\") + scale_x_log10(breaks=c(10, 100, 1000, 10000, 100000, 1000000, 10000000)) + theme(text=element_text(size=20)) \n";
 		//script += "d = d + geom_point() + geom_smooth(method=lm, se=TRUE);\n";
 		script += "d\n";
 		script += "dev.off()";

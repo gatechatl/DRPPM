@@ -10,8 +10,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+/**
+ * Generate the phosphorylation site plot for all the substrates for a protein
+ * @author tshaw
+ *
+ */
 public class KinaseSubstratePainter {
 
+	
 	public static void main(String[] args) {
 		
 		try {
@@ -147,7 +153,12 @@ public class KinaseSubstratePainter {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}	
+	}
+	
+	public static String parameter_info() {
+		return "[inputFile] [gffFile] [geneName] [outputFile]";
+	}
+	
 	public static void execute(String[] args) {
 		try {
 			String inputFile = args[0]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\Differential_Peptide_Analysis\\AddFastSequence\\MOUSE_TTEST_COORD.txt";

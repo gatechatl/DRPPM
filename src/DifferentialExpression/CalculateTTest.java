@@ -34,6 +34,9 @@ public class CalculateTTest {
 		}		
 	}*/
 	
+	public static String parameter_info() {
+		return "[inputFile] [groupAFile] [groupBFile] [outputUpRegFile] [outputDnRegFile] [outputAllFile] [filterType] [takeLog]";
+	}
 	public static void execute(String[] args) {
 		try {
 			String inputFile = args[0];			

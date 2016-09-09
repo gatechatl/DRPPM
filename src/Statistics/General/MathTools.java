@@ -1,6 +1,7 @@
 package Statistics.General;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -24,16 +25,33 @@ public class MathTools {
 			double val = (Double)itr.next();
 			System.out.println(val);
 		}*/
-		double[] vals = {1, 2, 3, 2, 1, 2, 3};
+		double[] vals = {-1, -2, -3, 1, 2};
 		//System.out.println(standardError(vals));
 		//System.out.println(log2(4));
 		double[] val1 = {1, 2, 3, 4};
 		double[] val2 = {5, 4, 3, 3};
 		//double[] val2 = {3, 3, 4, 5};
-		System.out.println(2 - PearsonCorrelPvalue(val1, val2));
+		//System.out.println(2 - PearsonCorrelPvalue(val1, val2));
 		
+		double[] val3 = {0.619229099, -0.796565867, 1.135480384, 0.420745752, -2.290236978, -1.791960526, -2.934336201, -2.823691462};
+		double[] val3_zscore = zscores(val3);
+		/*for (double score: val3_zscore) {
+			System.out.println(score);
+		}*/
+		System.out.println(median(vals));
 		//System.out.println();
 	}
+	
+	public static double[] zscores(double[] values) {
+		double mean = mean(values);
+		double sd = standardDeviation(values);
+		double[] zscores = new double[values.length];
+		for (int i = 0; i < values.length; i++) {
+			zscores[i] = (values[i] - mean) / sd; 
+		}
+		return zscores;
+	}
+	
 	/**
 	 * Convert 2 log2
 	 * @param x
@@ -82,12 +100,15 @@ public class MathTools {
 		}
 		return num;
 	}
+	
 	public static double median(double[] m) {
-	    int middle = m.length/2;
-	    if (m.length%2 == 1) {
-	        return m[middle];
+		double[] temp = m;
+		Arrays.sort(temp);
+	    int middle = temp.length/2;
+	    if (temp.length%2 == 1) {
+	        return temp[middle];
 	    } else {
-	        return (m[middle-1] + m[middle]) / 2.0;
+	        return (temp[middle-1] + temp[middle]) / 2.0;
 	    }
 	}
 	public static double mean(double[] m) {
@@ -96,6 +117,15 @@ public class MathTools {
 	        sum += m[i];
 	    }
 	    return sum / m.length;
+	}
+	public static double max(double[] m) {
+	    double max = m[0];
+	    for (int i = 0; i < m.length; i++) {
+	        if (m[i] > max) {
+	        	max = m[i];
+	        }
+	    }
+	    return max;
 	}
 	public static double PopulationVariance(double[] set) {
 		DescriptiveStatistics stats = new DescriptiveStatistics();

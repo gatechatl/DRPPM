@@ -24,7 +24,8 @@ public class MATSScriptGenerator {
 		}
 	}
 	public static String generateScript(String inputFile1, String inputFile2, String gtfPath, String outputFile, String pythonPath) {
-		String script = "python " + pythonPath + " -b1 " + readFileList(inputFile1) + " -b2 " + readFileList(inputFile2) + " -gtf " + gtfPath + " -o " + outputFile + " -t paired -len 101 -a 8 -c 0.0001 -analysis U -expressionChange 10000";		
+		//String script = "python " + pythonPath + " -b1 " + readFileList(inputFile1) + " -b2 " + readFileList(inputFile2) + " -gtf " + gtfPath + " -o " + outputFile + " -t paired -len 101 -a 8 -c 0.0001 -analysis U -expressionChange 10000";		
+		String script = "python " + pythonPath + " -b1 " + readFileList(inputFile1) + " -b2 " + readFileList(inputFile2) + " -gtf " + gtfPath + " -o " + outputFile + " -t paired -len 101 -a 8 -c 0.0001 -analysis U";
 		return script;
 	}
 	public static String readFileList(String inputFile) {

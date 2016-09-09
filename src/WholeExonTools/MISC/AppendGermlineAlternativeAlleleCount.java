@@ -58,10 +58,23 @@ public class AppendGermlineAlternativeAlleleCount {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
-				String chr = "chr" + split[3];
+				String chr = "";
+				if (split[3].contains("chr")) {
+					chr = split[3];
+				} else {
+					chr = "chr" + split[3];
+				}
 				String position = split[4];
-				String orig_nuc = split[13];
-				String new_nuc = split[14];
+				String orig_nuc = "";
+				String new_nuc = "";
+				if (split[13].contains(">")) {
+					orig_nuc = split[13].split(">")[0];
+					new_nuc = split[13].split(">")[1];
+				} else {
+					orig_nuc = split[13];
+					new_nuc = split[14];
+				}
+				
 				out.write(str);
 				for (int i = 1; i < headers.length; i++) {
 					

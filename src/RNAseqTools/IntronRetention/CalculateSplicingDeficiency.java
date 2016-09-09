@@ -126,7 +126,9 @@ public class CalculateSplicingDeficiency {
 					int intron_length = (Integer)intron_total.get(key);
 					int exon_length = (Integer)exon_total.get(key);
 					double sd = (new Double(no_intron_reads) / intron_length) / (new Double(no_exon_reads) / exon_length);
-					out.write(key + "\t" + sd + "\t" + no_intron_reads + "\t" + intron_length + "\t" + no_exon_reads + "\t" + exon_length + "\n");				
+					if (no_intron_reads >= 5 && no_exon_reads >= 5) {
+						out.write(key + "\t" + sd + "\t" + no_intron_reads + "\t" + intron_length + "\t" + no_exon_reads + "\t" + exon_length + "\n");
+					}
 				}
 			}
 			out.close();

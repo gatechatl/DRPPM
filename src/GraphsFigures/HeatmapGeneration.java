@@ -201,6 +201,9 @@ public class HeatmapGeneration {
 			
 		}		
 	}
+	public static String PHeat_Parameter_Info() {
+		return "[inputFile] [sampleName] [geneSetFile] [outputPng] [title] [rowclust] [colClust] [TakeLog] [width] [height] [rowFontSize] [colFontSize] [colorType]";
+	}
 	public static void executePHeat(String[] args) {
 		try {
 
@@ -210,7 +213,13 @@ public class HeatmapGeneration {
 			String outputFile = args[3]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\Phospho_peptide_GBM_Genes.png";
 			boolean row_cluster = true;
 			boolean col_cluster = true;
+			String width_size = "800";
+			String height_size = "1200";
 			String title = "";
+			String takeLogStr = "FALSE";
+			String row_font_size = "11";
+			String col_font_size = "11";
+			int colorType = 0;
 			if (args.length > 4) { 			
 				title = args[4];
 				if (args[5].toUpperCase().equals("TRUE")) {
@@ -224,6 +233,24 @@ public class HeatmapGeneration {
 					col_cluster = false;
 				}
 				
+				
+				
+				if (args.length > 7) {
+					if (args[7].toUpperCase().equals("TRUE")) {
+						takeLogStr = "TRUE";
+					} else {
+						takeLogStr = "FALSE";
+					}
+					width_size = args[8];
+					height_size = args[9];
+				}
+				if (args.length > 10) {
+					row_font_size = args[10];
+					col_font_size = args[11];
+				}
+				if (args.length > 12) {
+					colorType = new Integer(args[12]);
+				}
 			}
 			
 			String futureParameter = ""; // this parameter contains the specification of the heatmap
@@ -231,7 +258,6 @@ public class HeatmapGeneration {
 			
 			//String takeLogStr = args[5];
 			
-			String takeLogStr = "FALSE";
 			
 			boolean takeLog = false;
 			
@@ -262,7 +288,7 @@ public class HeatmapGeneration {
 			
 			geneSet = list2strV2(geneSet_list);
 			
-			System.out.println(generatePHeatmapScript(inputFile, outputFile, listA, geneSet, title, takeLog, geneSet_list.size(), true, true));
+			System.out.println(generatePHeatmapScript(inputFile, outputFile, listA, geneSet, title, takeLog, geneSet_list.size(), col_cluster, row_cluster, width_size, height_size, row_font_size, col_font_size, colorType));
 			
 		} catch (Exception e) {
 			
@@ -554,7 +580,9 @@ public class HeatmapGeneration {
 				String str = in.readLine().trim();
 				String[] split = str.split("\t");
 				if (!split[0].equals("null")) {
-					list.add(split[0]);
+					if (!list.contains(split[0])) {
+						list.add(split[0]);
+					}
 				}
 			}
 			in.close();
@@ -579,10 +607,14 @@ public class HeatmapGeneration {
 				if (first) {
 					groupA += "'" + str + "'";					
 					first = false;
-					groupA_list.add(str);
+					if (!groupA_list.contains(str)) {
+						groupA_list.add(str);
+					}
 				} else {
 					groupA += ",'" + str + "'";
-					groupA_list.add(str);
+					if (!groupA_list.contains(str)) {
+						groupA_list.add(str);
+					}
 				}
 			}
 			in.close();
@@ -613,10 +645,21 @@ public class HeatmapGeneration {
 		return groupB;
 	}
 	
+	public static String grabCluster() {
+		String script = "";
+		script += "clust <- cbind(dataset, cluster = cutree(hm$tree_row, k = 4))\n";
+		script += "cluster1 = which(clust[,\"cluster\"] == 4)\n";
+		script += "dataset2 = data.matrix(selection[rownames(as.matrix(cluster1)),labels])\n";
+		script += "png(file = \"SJMMNORM_Youngdon_All_20160405_pheatmap_cluster.png\", width=800,height=1400)\n";
+		script += "pheatmap(dataset2, cluster_col = T, cluster_row = T, fontsize_row = 13, show_rownames = T, color=hmcols)\n";
+		script += "dev.off();\n";
+		script += "write.table(allDat[rownames(as.matrix(cluster1)),hm$tree_col$labels], \"Cluster1.txt\", sep = \"\\t\");\n";
+		return script;
+	}
 	/**
 	 * Generate Heatmap3 plots
 	 */
-	public static String generatePHeatmapScript(String inputFile, String outputFile, String listA, String geneSet, String title, boolean log, int size, boolean col_cluster, boolean row_cluster) {
+	public static String generatePHeatmapScript(String inputFile, String outputFile, String listA, String geneSet, String title, boolean log, int size, boolean col_cluster, boolean row_cluster, String width_size, String height_size, String row_font_size, String col_font_size, int colorType) {
 		String script = "";
 		
 		script += "allDat = read.table(\"" + inputFile.replaceAll("\\\\", "/") + "\", header=TRUE, row.names=1 );\n";
@@ -627,7 +670,8 @@ public class HeatmapGeneration {
 		} else {
 			script += "col_labels = colnames(selection);\n";
 		}
-
+		
+		
 		script += "sampleLocation = col_labels;\n";
 		//script += "sampleNames = col_labels[sampleLocation];\n";
 		script += "sampleNames = col_labels;\n";
@@ -655,11 +699,31 @@ public class HeatmapGeneration {
 		script += "library(pheatmap)\n";
 		script += "minimum = -3;\n";
 		script += "maximum = 3;\n";
+		script += "if (abs(min(dataset)) > abs(max(dataset))) {\n";
+		script += "dataset[dataset < -abs(max(dataset))] = -abs(max(dataset))\n";
+		script += "} else {\n";
+		script += "dataset[dataset > abs(min(dataset))] = abs(min(dataset))\n";
+		script += "}\n";
 		script += "bk = c(seq(minimum,minimum/2, length=100), seq(minimum/2,maximum/2,length=100),seq(maximum/2,maximum,length=100))\n";
-		script += "hmcols<- colorRampPalette(c(\"dark blue\",\"blue\",\"white\",\"red\", \"dark red\"))(length(bk)-1)\n";
+		if (colorType == 0) {
+			script += "hmcols<- colorRampPalette(c(\"dark blue\",\"blue\",\"white\",\"red\", \"dark red\"))(length(bk)-1)\n";
+		} else if (colorType == 1) {
+			script += "hmcols<- colorRampPalette(c(\"#34c5fd\",\"black\",\"red\"))(length(bk)-1)\n";
+		} else if (colorType == 2) {
+			script += "hmcols<- colorRampPalette(c(\"green\",\"black\",\"red\"))(length(bk)-1)\n";
+		}
 		
-		script += "png(file = \"" + outputFile + "\", width=1000,height=700)\n";
-		script += "pheatmap(dataset, cluster_col = F, cluster_row = T, fontsize_row = 13, show_rownames = F, color=hmcols)\n";
+		script += "png(file = \"" + outputFile + "\", width=" + width_size + ",height=" + height_size + ")\n";
+		String cluster_col = "T";
+		String cluster_row = "T";
+		if (!col_cluster) {
+			cluster_col = "F";
+		}
+		if (!row_cluster) {
+			cluster_row = "F";
+		}
+		
+		script += "pheatmap(dataset, cluster_col = " + cluster_col + ", cluster_row = " + cluster_row + ", fontsize_row = " + row_font_size + ", fontsize_col = " + col_font_size + ", show_rownames = T, color=hmcols)\n";
 		script += "dev.off();\n";		
 		return script;
 	}
@@ -878,6 +942,13 @@ public class HeatmapGeneration {
 		script += "library(pheatmap)\n";
 		script += "minimum = -3;\n";
 		script += "maximum = 3;\n";
+		
+		script += "if (abs(min(dataset)) > abs(max(dataset))) {\n";
+		script += "dataset[dataset < -abs(max(dataset))] = -abs(max(dataset))\n";
+		script += "} else {\n";
+		script += "dataset[dataset > abs(min(dataset))] = abs(min(dataset))\n";
+		script += "}\n";
+		
 		script += "bk = c(seq(minimum,minimum/2, length=100), seq(minimum/2,maximum/2,length=100),seq(maximum/2,maximum,length=100))\n";
 		script += "hmcols<- colorRampPalette(c(\"dark blue\",\"blue\",\"white\",\"red\", \"dark red\"))(length(bk)-1)\n";
 		

@@ -18,6 +18,7 @@ public class GTFFile {
 	public static HashMap geneid2biotype = new HashMap();
 	public static HashMap geneName2biotype = new HashMap();
 	
+	
 	public static void initialize(String fileName) {
 		
 		try {
