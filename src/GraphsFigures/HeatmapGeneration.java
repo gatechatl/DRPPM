@@ -723,8 +723,10 @@ public class HeatmapGeneration {
 			cluster_row = "F";
 		}
 		
-		script += "pheatmap(dataset, cluster_col = " + cluster_col + ", cluster_row = " + cluster_row + ", fontsize_row = " + row_font_size + ", fontsize_col = " + col_font_size + ", show_rownames = T, color=hmcols)\n";
-		script += "dev.off();\n";		
+		script += "result2 = pheatmap(dataset, cluster_col = " + cluster_col + ", cluster_row = " + cluster_row + ", fontsize_row = " + row_font_size + ", fontsize_col = " + col_font_size + ", show_rownames = T, color=hmcols)\n";
+		script += "dev.off();\n";
+		script += "clust <- cbind(result2, cluster = cutree(result2$tree_row, k = 10))\n";
+		script += "write.table(rownames(clust), file=\"" + outputFile + "._ordered_colnames.txt\")\n";
 		return script;
 	}
 	/**
@@ -804,6 +806,8 @@ public class HeatmapGeneration {
 		script += "result2 = heatmap.3(selection[geneList,], col=hmcols, breaks = myBreaks, rowsep = 0, scale=\"none\", dendrogram=\"both\", Rowv = " + row_cluster_flag + ", Colv = " + col_cluster_flag + ",\n";
 		script += "key=TRUE, keysize=0.5,symkey=FALSE, density.info=\"none\", margins=c(30,10), trace=\"none\", cexRow=1.2, cexCol=1.5, main=\"" + title + "\", NumColSideColors= 1.0)\n"; //ColSideColors=colSideColors
 		script += "dev.off();\n";
+		
+		script += "write(colnames(selection[geneList,])[result2$colInd], file=\"" + outputFile.replaceAll("\\\\", "/") + "_ordered_colnames.txt\")";
 		return script;
 	}
 	

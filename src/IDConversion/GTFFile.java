@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 
 public class GTFFile {
@@ -17,8 +18,8 @@ public class GTFFile {
 	public static HashMap transcript2exon = new HashMap();
 	public static HashMap geneid2biotype = new HashMap();
 	public static HashMap geneName2biotype = new HashMap();
-	
-	
+	public static HashMap geneName2geneID = new HashMap();
+	public static HashMap geneid2coord = new HashMap();
 	public static void initialize(String fileName) {
 		
 		try {
@@ -43,7 +44,31 @@ public class GTFFile {
 					String gene_biotype = grabMeta(meta, "gene_biotype");
 					String gene_name = grabMeta(meta, "gene_name");
 					String biotype = grabMeta(meta, "gene_biotype");
+					if (geneid2coord.containsKey(gene_id)) {
+						int length = new Integer(end) - new Integer(start);
+						String stuff = (String)geneid2coord.get(gene_id);
+						String[] split2 = stuff.split(":");
+						int old_length = new Integer(split2[1].split("-")[1]) - new Integer(split2[1].split("-")[0]);
+						if (length > old_length) {
+							geneid2coord.put(gene_id, chr + ":" + start + "-" + end + ":" + direct);
+						}
+					} else {
+						geneid2coord.put(gene_id, chr + ":" + start + "-" + end + ":" + direct);
+					}
 					
+					if (geneName2geneID.containsKey(gene_name)) {
+						LinkedList geneID = (LinkedList)geneName2geneID.get(gene_name);
+						if (!geneID.contains(gene_id)) {
+							geneID.add(gene_id);
+							geneName2geneID.put(gene_name, geneID);
+						}
+					} else {
+						LinkedList geneID = new LinkedList();
+						if (!geneID.contains(gene_id)) {
+							geneID.add(gene_id);
+							geneName2geneID.put(gene_name, geneID);
+						}
+					}
 					geneid2geneName.put(gene_id, gene_name); // convert gene id to gene name
 					geneid2biotype.put(gene_id, biotype);
 					geneName2biotype.put(gene_name, biotype);

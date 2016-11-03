@@ -20,7 +20,7 @@ public class SpearmanRankCorrelation {
 		return "Calculate Spearman Rank Correlation between single sample matrix and bulk reference";
 	}
 	public static String parameter_info() {
-		return "[inputFile] [referenceFile] [referenceSampleName] [compare2referenceFile] [correlationMatrix]";
+		return "[inputFile] [referenceFile] [referenceSampleName] [compare2referenceFile] [correlationMatrix] [cutoff]";
 	}
 	public static void execute(String[] args) {
 		

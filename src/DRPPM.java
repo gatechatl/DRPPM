@@ -1,4 +1,14 @@
-import genomics.GCScanner;
+import gene_network_display.CreateNetworkDisplay;
+import gene_network_display.CreateNetworkDisplayComplex;
+import gene_network_display.CreateNetworkDisplayExpression;
+import gene_network_display.DisplayJsonFileNetwork;
+import gene_network_display.GenerateEdgeMetaData;
+import gene_network_display.GenerateNodeMetaData;
+import gene_network_display.GenerateNodeMetaDataSize;
+import gene_network_display.NetworkNodeHighlight;
+import genomics.gctools.GCScanner;
+import genomics.openreadingframe.GenerateLowComplexityDomainInfo;
+import genomics.openreadingframe.OpenReadingFrameFinder;
 import gtf_manupulation.Filter3PrimeGTFExon;
 
 import java.io.BufferedReader;
@@ -8,13 +18,17 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import customscript.AppendChromosomeNumber;
+import customscript.ElenaConvertRefSeq2GeneName;
 import jump.pipeline.tools.ExtractUniqPeptides;
 import jump.pipeline.tools.FilterPSMInformationPeptide;
 import jump.pipeline.tools.FilterPSMInformationProteinName;
 import jump.pipeline.tools.GeneratePhosphoPeptideMatrix;
 import jump.pipeline.tools.GenerateProteomeGeneMatrix;
 import jump.pipeline.tools.MergeRowsMaximizePSM;
+import pathway.tools.PathwayKappaScore;
 import proteomics.SimulatedPeptideDigestion;
+import stjude.projects.leventaki.SummarizeLeventakiProject;
 import stjude.tools.rnaseq.RNASEQConfig2MappingScriptGenerator;
 import BlastTool.GenerateBlastFile;
 import DifferentialExpression.AddAnnotation2DiffFisher;
@@ -57,13 +71,6 @@ import GSEATools.GSEAHeatmap;
 import GSEATools.GenerateGSEAInputCLSFile;
 import GSEATools.GenerateGSEAInputGCTFile;
 import GeneCardTools.GeneCardKeyWords;
-import GeneNetworkDisplay.CreateNetworkDisplay;
-import GeneNetworkDisplay.CreateNetworkDisplayComplex;
-import GeneNetworkDisplay.CreateNetworkDisplayExpression;
-import GeneNetworkDisplay.GenerateEdgeMetaData;
-import GeneNetworkDisplay.GenerateNodeMetaData;
-import GeneNetworkDisplay.GenerateNodeMetaDataSize;
-import GeneNetworkDisplay.NetworkNodeHighlight;
 import GenerateNUC2PROT.Extract100PercentMatch;
 import GenerateNUC2PROT.ExtractSequenceFromAlignment;
 import GenerateNUC2PROT.MakeFastaSingleLine;
@@ -85,10 +92,13 @@ import GraphsFigures.SingleScatterPlot;
 import GraphsFigures.VolcanoPlot;
 import IDConversion.ConvertUniprot2GeneAndAppend;
 import IDConversion.EnsemblGeneID2GeneName;
+import IDConversion.GeneName2EnsemblID;
 import IDConversion.GenerateConversionTable;
 import IDConversion.MicroarrayAddGeneName;
 import IDConversion.RefSeq2GeneName;
+import IDConversion.SubGeneFromConversionTable;
 import IDConversion.kgXrefConversion;
+import IDConversion.kgXrefConversionProtein2GeneName;
 import IDConversion.Ensembl.GenerateEnsembl2GeneNameTable;
 import Integration.GenerateGeneWeightFile;
 import Integration.IntegrateExpressionMatrix;
@@ -134,6 +144,7 @@ import MouseModelQC.FPKMBoxPlotOfGeneKO;
 import MouseModelQC.FPKMBoxPlotOfGeneKOSampleSpecific;
 import MouseModelQC.RenameSampleForBoxPlot;
 import NetworkTools.ParseThroughSIF;
+import NetworkTools.Layout.GenerateLayoutForEachHub;
 import NetworkTools.Layout.GenerateMultipleCircles;
 import NetworkTools.Layout.GenerateMultipleCirclesEdge;
 import NetworkTools.Layout.GenerateMultipleCirclesLabels;
@@ -141,6 +152,7 @@ import NetworkTools.MISC.BioPlex2HumanInteractome;
 import NetworkTools.MISC.GenerateGraphStatistics;
 import NetworkTools.MISC.GenerateSubgraph;
 import NetworkTools.STRINGdbParsing.AppendGeneName2StringNetwork;
+import NetworkTools.STRINGdbParsing.CleanBioplexTSVFile;
 import NetworkTools.STRINGdbParsing.Convert2SIFFile;
 import NetworkTools.STRINGdbParsing.Convert2SJGraphFormat;
 import NetworkTools.STRINGdbParsing.StringDBFilter;
@@ -163,6 +175,9 @@ import PhosphoTools.CoordConversion.ConvertProteinCoord;
 import PhosphoTools.CoordConversion.Kin2SubConvert2Coordinate;
 import PhosphoTools.CoordConversion.HumanCentricProteinAlignment;
 import PhosphoTools.CoordConversion.MouseCentricProteinAlignment;
+import PhosphoTools.DegenerativeMotif.ExtendJUMPqSite;
+import PhosphoTools.DegenerativeMotif.GenerateFastaFileFromJUMPqPeptide;
+import PhosphoTools.DegenerativeMotif.GenerateFastaFileFromJUMPqSite;
 import PhosphoTools.Enrichment.GenerateEnrichmentBarPlot;
 import PhosphoTools.Enrichment.GenerateEnrichmentFileInput;
 import PhosphoTools.Enrichment.GenerateKinaseSubstrateGMT;
@@ -185,6 +200,8 @@ import PhosphoTools.HongBoProject.GenerateComprehensiveGeneList;
 import PhosphoTools.HongBoProject.GenerateMotifXFasta;
 import PhosphoTools.HongBoProject.GenerateMotifXFastaAll;
 import PhosphoTools.HongBoProject.GenerateNetworkBasedOnClusters;
+import PhosphoTools.HongBoProject.HongboAnnotateMotifInformation;
+import PhosphoTools.HongBoProject.HongboAnnotateMotifInformationYuxinFile;
 import PhosphoTools.HongBoProject.KinaseFamilyCluster;
 import PhosphoTools.HongBoProject.OverlapPeptide2Phosphosite;
 import PhosphoTools.HongBoProject.PhosphoMotifEnrichment;
@@ -193,12 +210,16 @@ import PhosphoTools.HongBoProject.WGCNAKinaseEnrichmentPvalue;
 import PhosphoTools.HongBoProject.WGCNAModifyShape;
 import PhosphoTools.HongBoProject.WGCNANetwork;
 import PhosphoTools.KinaseActivity.AssignKnownKinaseSubstrateRelationship;
+import PhosphoTools.KinaseActivity.AssignKnownKinaseSubstrateRelationshipFlex;
 import PhosphoTools.KinaseActivity.CleanWhlProteome;
 import PhosphoTools.KinaseActivity.ConvertMatrix2IKAPInput;
 import PhosphoTools.KinaseActivity.ConvertMatrix2IKAPInputNormalize;
 import PhosphoTools.KinaseActivity.NormalizeMatrix2IKAP;
+import PhosphoTools.KinaseActivity.NormalizeMatrix2IKAPFlex;
 import PhosphoTools.KinaseActivity.NormalizePhosphoAgainstWhole;
+import PhosphoTools.KinaseActivity.NormalizePhosphoAgainstWholeFlex;
 import PhosphoTools.KinaseActivity.NormalizeWholeGenome;
+import PhosphoTools.KinaseActivity.NormalizeWholeGenomeFlex;
 import PhosphoTools.KinaseCentricReport.ActivityPhosphositeForAll;
 import PhosphoTools.KinaseCentricReport.ActivityPhosphositeForKinase;
 import PhosphoTools.KinaseCentricReport.SummarizeKinaseInformation;
@@ -374,7 +395,18 @@ import RNAseqTools.Mapping.STARMappingScriptGenerator;
 import RNAseqTools.Mapping.STARMappingScriptGeneratorForTrimFastq;
 import RNAseqTools.Mapping.SummarizeStarMapping;
 import RNAseqTools.Mapping.TrimmomaticScriptGenerator;
+import RNAseqTools.SingleCell.Bootstrap.Filter0PSamples;
+import RNAseqTools.SingleCell.Bootstrap.GenerateTrueFalseMatrix;
+import RNAseqTools.SingleCell.Bootstrap.VariantMatrixBootstrap;
+import RNAseqTools.SingleCell.CellOfOrigin.FisherExactTest2groupcomparison;
+import RNAseqTools.SingleCell.CellOfOrigin.GenerateMatrixForTwoGroups;
+import RNAseqTools.SingleCell.CellOfOrigin.GenerateNodeMetaBasedOnGroups;
+import RNAseqTools.SingleCell.CellOfOrigin.GenerateSIFfromMinimumSpanningTree;
+import RNAseqTools.SingleCell.CellOfOrigin.PostProcessingOfVariantMatrix;
+import RNAseqTools.SingleCell.CellRanger.GeneratePCAScatterPlotPython;
+import RNAseqTools.SingleCell.CellRanger.SpecialClassForDougGreen;
 import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelation;
+import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelationMatrix;
 import RNAseqTools.SingleCell.MappingPipeline.CombineFastqFiles;
 import RNAseqTools.SingleCell.MappingPipeline.GenerateFqFileList;
 import RNAseqTools.SingleCell.MappingPipeline.GenerateFqFileListParallel;
@@ -382,6 +414,8 @@ import RNAseqTools.SingleCell.MappingPipeline.RemoveNAGenes;
 import RNAseqTools.SingleCell.MappingPipeline.SingleCellRNAseqMapAndQuan;
 import RNAseqTools.SingleCell.MappingPipeline.SingleCellRNAseqMapAndQuanReg;
 import RNAseqTools.SingleCell.MappingPipeline.ValidateSTARMapping;
+import RNAseqTools.SingleCell.RibosomeDepletion.CombineSingleCellSampleIntoOne;
+import RNAseqTools.SingleCell.RibosomeDepletion.SeparateGeneMatrixIntoTwo;
 import RNAseqTools.SingleCell.ZeroAnalysis.CompileDataForViolinPlot;
 import RNAseqTools.SingleCell.ZeroAnalysis.GrabGeneLessThanValue;
 import RNAseqTools.SingleCell.ZeroAnalysis.GrabGeneOverValue;
@@ -419,7 +453,10 @@ import UniprotAnnotation.ExtractUniprotInfo;
 import UniprotAnnotation.GenerateIDConversionMasterTable;
 import UniprotTool.ExtractFastaOrganism;
 import WholeExonTool.Indel.FilterDuplicatedHits;
+import WholeExonTool.SJSNVIndelPipeline.GenerateGRCh37liteSNVIndelScript;
+import WholeExonTool.SJSNVIndelPipeline.GenerateHg19SNVIndelScript;
 import WholeExonTool.SJSNVIndelPipeline.GenerateMm9SNVIndelScript;
+import WholeExonTool.SNPPopulationDistribution.SNPrsPopulation;
 import WholeExonTool.Summarize.AddSiftPrediction;
 import WholeExonTool.Summarize.EXCAPGenerateSampleType;
 import WholeExonTool.Summarize.EXCAPSummary;
@@ -431,6 +468,7 @@ import WholeExonTool.circos.Indel2CircosInput;
 import WholeExonTool.circos.SNV2CircosInput;
 import WholeExonTool.circos.SV2CircosInput;
 import WholeExonTools.AppendBamReviewFile;
+import WholeExonTools.GenerateSNVTableFromMutationTable;
 import WholeExonTools.ExomeProbeDesign.GenerateExomeProbeData;
 import WholeExonTools.MISC.AppendGermlineAlternativeAlleleCount;
 import WholeExonTools.MISC.GenerateSNV4File;
@@ -442,15 +480,16 @@ import WholeExonTools.Special.MouseGermlineAnalysis.Mouse2HumanProteinPaintInput
 import WholeExonTools.Special.MouseGermlineAnalysis.SummarizeMouseIndelAnalysis;
 import WholeExonTools.UnpairedPipeline.GenerateSNVPseudoUnpairedScript;
 import WholeExonTools.UnpairedPipeline.GenerateSNVUnpairedScript;
+import WholeExonTools.UnpairedPipeline.GenerateSNVUnpairedScriptSimple;
 import WordDocumentGenerator.GenerateDisplayIonReport;
 import WordDocumentGenerator.Txt2Excel;
 import WordDocumentGenerator.KinaseSummary.GenerateWordKinaseSummary;
 import Xenograph.CustomFastaCombiner;
 
 /**
- * Collection of scripts and pipelines over time for DNA RNA Proteomics
+ * Collection of scripts and pipelines for DNA RNA Proteomics
  * Phosphoproteomics and Metabolomic and Metagenomics This is the centralized
- * jar class for combining all datatype Last updated 2016-01-15
+ * jar class for combining all datatype Last updated 2016-10-24
  * 
  * @author Timothy Shaw
  * 
@@ -638,6 +677,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				HumanMouseGeneNameConversion.executeMouse2Human(args_remain);
+				//executeMouse2HumanCapitalize
+			} else if (type.equals("-mouse2humanCapitalizeIfNotFound")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out
+							.println("drppm -mouse2human [inputFile] [hs2mmFile]");
+					System.exit(0);
+				}
+				HumanMouseGeneNameConversion.executeMouse2HumanCapitalize(args_remain);
+				//
 			} else if (type.equals("-mouse2humanMatrix")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
@@ -973,6 +1022,17 @@ public class DRPPM {
 				if (args_remain.length == 0) {
 					System.out
 							.println("drppm -SampleFilter [input] [terms separated by comma] [outputFile] [yes/no contains keyword?]");
+					System.out.println("The list of terms");
+					System.exit(0);
+				}
+				SampleFilter.execute(args_remain);
+				;
+
+			} else if (type.equals("-FilterSample")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out
+							.println("drppm -FilterSample [input] [terms separated by comma] [outputFile] [yes/no contains keyword?]");
 					System.out.println("The list of terms");
 					System.exit(0);
 				}
@@ -4831,6 +4891,357 @@ public class DRPPM {
 					System.exit(0);
 				}
 				Mouse2GTF.execute(args_remain);
+				// GenerateSNVTableFromMutationTable
+			} else if (type.equals("-GenerateSNVTableFromMutationTable")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateSNVTableFromMutationTable "
+							+ GenerateSNVTableFromMutationTable.parameter_info());
+					System.exit(0);
+				}
+				GenerateSNVTableFromMutationTable.execute(args_remain);
+				// PostProcessingOfVariantMatrix
+			} else if (type.equals("-PostProcessingOfVariantMatrix")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -PostProcessingOfVariantMatrix "
+							+ PostProcessingOfVariantMatrix.parameter_info());
+					System.exit(0);
+				}
+				PostProcessingOfVariantMatrix.execute(args_remain);
+				// kgXrefConversionProtein2GeneName
+			} else if (type.equals("-kgXrefConversionProtein2GeneName")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -kgXrefConversionProtein2GeneName "
+							+ kgXrefConversionProtein2GeneName.parameter_info());
+					System.exit(0);
+				}
+				kgXrefConversionProtein2GeneName.execute(args_remain);
+				// SpearmanRankCorrelationMatrix
+			} else if (type.equals("-SpearmanRankCorrelationMatrix")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SpearmanRankCorrelationMatrix "
+							+ SpearmanRankCorrelationMatrix.parameter_info());
+					System.exit(0);
+				}
+				SpearmanRankCorrelationMatrix.execute(args_remain);
+				// OpenReadingFrameFinder
+			} else if (type.equals("-OpenReadingFrameFinder")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -OpenReadingFrameFinder "
+							+ OpenReadingFrameFinder.parameter_info());
+					System.exit(0);
+				}
+				OpenReadingFrameFinder.execute(args_remain);
+				// FisherExactTest2groupcomparison
+			} else if (type.equals("-FisherExactTest2groupcomparison")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -FisherExactTest2groupcomparison "
+							+ FisherExactTest2groupcomparison.parameter_info());
+					System.exit(0);
+				}
+				FisherExactTest2groupcomparison.execute(args_remain);
+				// GenerateMatrixForTwoGroups
+			} else if (type.equals("-GenerateMatrixForTwoGroups")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateMatrixForTwoGroups "
+							+ GenerateMatrixForTwoGroups.parameter_info());
+					System.exit(0);
+				}
+				GenerateMatrixForTwoGroups.execute(args_remain);
+				// GenerateSIFfromMinimumSpanningTree
+			} else if (type.equals("-GenerateSIFfromMinimumSpanningTree")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateSIFfromMinimumSpanningTree "
+							+ GenerateSIFfromMinimumSpanningTree.parameter_info());
+					System.exit(0);
+				}
+				GenerateSIFfromMinimumSpanningTree.execute(args_remain);
+				// GenerateNodeMetaBasedOnGroups
+			} else if (type.equals("-GenerateNodeMetaBasedOnGroups")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateNodeMetaBasedOnGroups "
+							+ GenerateNodeMetaBasedOnGroups.parameter_info());
+					System.exit(0);
+				}
+				GenerateNodeMetaBasedOnGroups.execute(args_remain);
+				// GeneratePCAScatterPlotPython
+			} else if (type.equals("-GeneratePCAScatterPlotPython")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GeneratePCAScatterPlotPython "
+							+ GeneratePCAScatterPlotPython.parameter_info());
+					System.exit(0);
+				}
+				GeneratePCAScatterPlotPython.execute(args_remain);
+				// SpecialClassForDougGreen
+			} else if (type.equals("-SpecialClassForDougGreen")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SpecialClassForDougGreen "
+							+ SpecialClassForDougGreen.parameter_info());
+					System.exit(0);
+				}
+				SpecialClassForDougGreen.execute(args_remain);
+				// SeparateGeneMatrixIntoTwo
+			} else if (type.equals("-SeparateGeneMatrixIntoTwo")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SeparateGeneMatrixIntoTwo "
+							+ SeparateGeneMatrixIntoTwo.parameter_info());
+					System.exit(0);
+				}
+				SeparateGeneMatrixIntoTwo.execute(args_remain);
+				// CombineSingleCellSampleIntoOne
+			} else if (type.equals("-CombineSingleCellSampleIntoOne")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CombineSingleCellSampleIntoOne "
+							+ CombineSingleCellSampleIntoOne.parameter_info());
+					System.exit(0);
+				}
+				CombineSingleCellSampleIntoOne.execute(args_remain);
+				// SubGeneFromConversionTable
+			} else if (type.equals("-SubGeneFromConversionTable")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SubGeneFromConversionTable "
+							+ SubGeneFromConversionTable.parameter_info());
+					System.exit(0);
+				}
+				SubGeneFromConversionTable.execute(args_remain);
+				// GeneName2EnsemblID
+			} else if (type.equals("-GeneName2EnsemblID")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GeneName2EnsemblID "
+							+ GeneName2EnsemblID.parameter_info());
+					System.exit(0);
+				}
+				GeneName2EnsemblID.execute(args_remain);
+				// AppendChromosomeNumber
+			} else if (type.equals("-AppendChromosomeNumber")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -AppendChromosomeNumber "
+							+ AppendChromosomeNumber.parameter_info());
+					System.exit(0);
+				}
+				AppendChromosomeNumber.execute(args_remain);
+				// GenerateLowComplexityDomainInfo
+			} else if (type.equals("-GenerateLowComplexityDomainInfo")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateLowComplexityDomainInfo "
+							+ GenerateLowComplexityDomainInfo.parameter_info());
+					System.exit(0);
+				}
+				GenerateLowComplexityDomainInfo.execute(args_remain);
+				// ElenaConvertRefSeq2GeneName
+			} else if (type.equals("-ElenaConvertRefSeq2GeneName")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -ElenaConvertRefSeq2GeneName "
+							+ ElenaConvertRefSeq2GeneName.parameter_info());
+					System.exit(0);
+				}
+				ElenaConvertRefSeq2GeneName.execute(args_remain);
+				// GenerateHg19SNVIndelScript
+			} else if (type.equals("-GenerateHg19SNVIndelScript")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateHg19SNVIndelScript "
+							+ GenerateHg19SNVIndelScript.parameter_info());
+					System.exit(0);
+				}
+				GenerateHg19SNVIndelScript.execute(args_remain);
+				// GenerateGRCh37liteSNVIndelScript
+			} else if (type.equals("-GenerateGRCh37liteSNVIndelScript")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateGRCh37liteSNVIndelScript "
+							+ GenerateGRCh37liteSNVIndelScript.parameter_info());
+					System.exit(0);
+				}
+				GenerateGRCh37liteSNVIndelScript.execute(args_remain);
+				// GenerateSNVUnpairedScriptSimple
+			} else if (type.equals("-GenerateSNVUnpairedScriptSimple")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateSNVUnpairedScriptSimple "
+							+ GenerateSNVUnpairedScriptSimple.parameter_info());
+					System.exit(0);
+				}
+				GenerateSNVUnpairedScriptSimple.execute(args_remain);
+				// VariantMatrixBootstrap
+			} else if (type.equals("-VariantMatrixBootstrap")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -VariantMatrixBootstrap "
+							+ VariantMatrixBootstrap.parameter_info());
+					System.exit(0);
+				}
+				VariantMatrixBootstrap.execute(args_remain);
+				// Filter0PSamples
+			} else if (type.equals("-Filter0PSamples")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -Filter0PSamples "
+							+ Filter0PSamples.parameter_info());
+					System.exit(0);
+				}
+				Filter0PSamples.execute(args_remain);
+				// GenerateTrueFalseMatrix
+			} else if (type.equals("-GenerateTrueFalseMatrix")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateTrueFalseMatrix "
+							+ GenerateTrueFalseMatrix.parameter_info());
+					System.exit(0);
+				}
+				GenerateTrueFalseMatrix.execute(args_remain);
+				// DisplayJsonFileNetwork
+			} else if (type.equals("-DisplayJsonFileNetwork")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -DisplayJsonFileNetwork "
+							+ DisplayJsonFileNetwork.parameter_info());
+					System.exit(0);
+				}
+				DisplayJsonFileNetwork.execute(args_remain);
+				// GenerateLayoutForEachHub
+			} else if (type.equals("-GenerateLayoutForEachHub")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateLayoutForEachHub "
+							+ GenerateLayoutForEachHub.parameter_info());
+					System.exit(0);
+				}
+				GenerateLayoutForEachHub.execute(args_remain);
+				// NormalizeMatrix2IKAPFlex
+			} else if (type.equals("-NormalizeMatrix2IKAPFlex")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -NormalizeMatrix2IKAPFlex "
+							+ NormalizeMatrix2IKAPFlex.parameter_info());
+					System.exit(0);
+				}
+				NormalizeMatrix2IKAPFlex.execute(args_remain);
+				// NormalizeWholeGenomeFlex
+			} else if (type.equals("-NormalizeWholeGenomeFlex")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -NormalizeWholeGenomeFlex "
+							+ NormalizeWholeGenomeFlex.parameter_info());
+					System.exit(0);
+				}
+				NormalizeWholeGenomeFlex.execute(args_remain);
+				// NormalizePhosphoAgainstWholeFlex
+			} else if (type.equals("-NormalizePhosphoAgainstWholeFlex")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -NormalizePhosphoAgainstWholeFlex "
+							+ NormalizePhosphoAgainstWholeFlex.parameter_info());
+					System.exit(0);
+				}
+				NormalizePhosphoAgainstWholeFlex.execute(args_remain);
+				// AssignKnownKinaseSubstrateRelationshipFlex
+			} else if (type.equals("-AssignKnownKinaseSubstrateRelationshipFlex")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -AssignKnownKinaseSubstrateRelationshipFlex "
+							+ AssignKnownKinaseSubstrateRelationshipFlex.parameter_info());
+					System.exit(0);
+				}
+				AssignKnownKinaseSubstrateRelationshipFlex.execute(args_remain);
+				// SNPrsPopulation
+			} else if (type.equals("-SNPrsPopulation")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SNPrsPopulation "
+							+ SNPrsPopulation.parameter_info());
+					System.exit(0);
+				}
+				SNPrsPopulation.execute(args_remain);
+				// GenerateFastaFileFromJUMPqSite
+			} else if (type.equals("-GenerateFastaFileFromJUMPqSite")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateFastaFileFromJUMPqSite "
+							+ GenerateFastaFileFromJUMPqSite.parameter_info());
+					System.exit(0);
+				}
+				GenerateFastaFileFromJUMPqSite.execute(args_remain);
+				// ExtendJUMPqSite
+			} else if (type.equals("-ExtendJUMPqSite")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -ExtendJUMPqSite "
+							+ ExtendJUMPqSite.parameter_info());
+					System.exit(0);
+				}
+				ExtendJUMPqSite.execute(args_remain);
+				// GenerateFastaFileFromJUMPqPeptide
+			} else if (type.equals("-GenerateFastaFileFromJUMPqPeptide")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateFastaFileFromJUMPqPeptide "
+							+ GenerateFastaFileFromJUMPqPeptide.parameter_info());
+					System.exit(0);
+				}
+				GenerateFastaFileFromJUMPqPeptide.execute(args_remain);
+				// HongboAnnotateMotifInformation
+			} else if (type.equals("-HongboAnnotateMotifInformation")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -HongboAnnotateMotifInformation "
+							+ HongboAnnotateMotifInformation.parameter_info());
+					System.exit(0);
+				}
+				HongboAnnotateMotifInformation.execute(args_remain);
+				// HongboAnnotateMotifInformationYuxinFile
+			} else if (type.equals("-HongboAnnotateMotifInformationYuxinFile")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -HongboAnnotateMotifInformationYuxinFile "
+							+ HongboAnnotateMotifInformationYuxinFile.parameter_info());
+					System.exit(0);
+				}
+				HongboAnnotateMotifInformationYuxinFile.execute(args_remain);
+				// 
+			} else if (type.equals("-SummarizeLeventakiProject")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SummarizeLeventakiProject "
+							+ SummarizeLeventakiProject.parameter_info());
+					System.exit(0);
+				}
+				SummarizeLeventakiProject.execute(args_remain);
+				// CleanBioplexTSVFile
+			} else if (type.equals("-CleanBioplexTSVFile")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CleanBioplexTSVFile "
+							+ CleanBioplexTSVFile.parameter_info());
+					System.exit(0);
+				}
+				CleanBioplexTSVFile.execute(args_remain);
+				// PathwayKappaScore
+			} else if (type.equals("-PathwayKappaScore")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -PathwayKappaScore "
+							+ PathwayKappaScore.parameter_info());
+					System.exit(0);
+				}
+				PathwayKappaScore.execute(args_remain);
 				// 
 			} else {
 				System.out.println("Here are the available programs");

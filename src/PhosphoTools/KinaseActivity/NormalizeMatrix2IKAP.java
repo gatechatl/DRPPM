@@ -45,8 +45,7 @@ public class NormalizeMatrix2IKAP {
 			HashMap count_kinase = new HashMap();
 			HashMap map = new HashMap();			
 			HashMap value = new HashMap();
-			
-			
+						
 			FileInputStream fstream = new FileInputStream(inputFile);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));

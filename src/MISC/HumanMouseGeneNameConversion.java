@@ -173,6 +173,29 @@ public class HumanMouseGeneNameConversion {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void executeMouse2HumanCapitalize(String[] args) {				
+		try {
+			
+			String hs2mmFile = args[1]; //"C:\\Users\\tshaw\\Desktop\\RNASEQ\\hs_mm_homo_r66.txt";
+			HashMap mouse2human = mouse2human(hs2mmFile);
+			String inputFile = args[0]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\GangGeneListAnalysis.txt";
+			FileInputStream fstream = new FileInputStream(inputFile);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));
+			while (in.ready()) {
+				String str = in.readLine();
+				if (mouse2human.containsKey(str)) {
+					System.out.println(mouse2human.get(str));
+				} else {
+					System.out.println(str.toUpperCase());
+				}
+			}
+			in.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	public static HashMap human2mouse(String hs_mm_homo_r66) {
 		HashMap human2mouse = new HashMap();
 		try {

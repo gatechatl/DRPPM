@@ -72,7 +72,7 @@ public class RNASEQConfig2MappingScriptGenerator {
 	public static String submitSTARMappingScript(String organism) {
 		String fastaPath = "";
 		if (organism.equals("mm9")) {
-			fastaPath = "/nfs_exports/genomes/1/Mus_musculus/mm9/STAR_small/";
+			fastaPath = "/nfs_exports/genomes/1/Mus_musculus/mm9/STAR/";
 		} else if (organism.equals("hg19")) {
 			fastaPath = "/nfs_exports/genomes/1/Homo_sapiens/GRCh37-lite/STAR/GRCh37p13_GenCode19/";
 		} else if (organism.equals("xenograph")) {

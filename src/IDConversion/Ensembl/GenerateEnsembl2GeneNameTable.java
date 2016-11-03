@@ -11,8 +11,7 @@ import java.util.Iterator;
 
 public class GenerateEnsembl2GeneNameTable {
 
-	public static String parameter_info() {
-		
+	public static String parameter_info() {		
 		return "[entrezFile] [peptideFile] [outputFile]";
 	}
 	

@@ -95,25 +95,27 @@ public class MergeGeneName {
 			out.write(header + "\n");
 			while (in.ready()) {
 				String str = in.readLine();
-				String[] split = str.split("\t");
-				String[] tags = split[tagIndex].split(" ");
-				System.out.println(split[tagIndex] + "\t" + tags.length);
-				
-				for (int j = 0; j < tags.length; j = j + 2) {
-					String tag = tags[j];
-					System.out.println(tag);
-					if (map.containsKey(tag)) {
-						String[] split2 = ((String)map.get(tag)).split("\t");
-						String newStr = tag;
-						for (int i = tagIndex + 1; i < split.length; i++) {
-							newStr += "\t" + split2[i] + "," + split[i];
+				if (!str.contains("Infinity") && !str.contains("null")) {
+					String[] split = str.split("\t");
+					String[] tags = split[tagIndex].split(" ");
+					System.out.println(split[tagIndex] + "\t" + tags.length);
+					
+					for (int j = 0; j < tags.length; j = j + 2) {
+						String tag = tags[j];
+						System.out.println(tag);
+						if (map.containsKey(tag)) {
+							String[] split2 = ((String)map.get(tag)).split("\t");
+							String newStr = tag;
+							for (int i = tagIndex + 1; i < split.length; i++) {
+								newStr += "\t" + split2[i] + "," + split[i];
+								
+							}
 							
+							map.put(tag, newStr);
+						} else {
+							
+							map.put(tag, str);
 						}
-						
-						map.put(tag, newStr);
-					} else {
-						
-						map.put(tag, str);
 					}
 				}
 			}
@@ -125,19 +127,20 @@ public class MergeGeneName {
 				if (!key.equals("")) {
 					String str = (String)map.get(key);
 					String[] split = str.split("\t");
-					String newStr = "\"" + key + "\"";
-					for (int i = 1; i < split.length; i++) {
-						
-						String[] split2 = split[i].split(",");
-						double[] values = new double[split2.length];
-						for (int j = 0; j < split2.length; j++) {
-							values[j] = new Double(split2[j]);
+					if (!str.contains("Infinity") && !str.contains("null")) {
+						String newStr = "\"" + key + "\"";
+						for (int i = 1; i < split.length; i++) {
+							
+							String[] split2 = split[i].split(",");
+							double[] values = new double[split2.length];
+							for (int j = 0; j < split2.length; j++) {
+								values[j] = new Double(split2[j]);
+							}
+							
+							newStr += "\t" + MathTools.mean(values);
 						}
-						
-						newStr += "\t" + MathTools.mean(values);
-					}
-					result.put(key, newStr);
-					if (!newStr.contains("Infinity") && !newStr.contains("null")) {
+						result.put(key, newStr);
+					//if (!newStr.contains("Infinity") && !newStr.contains("null") && !newStr.contains("\tNaN")) {
 						out.write(newStr + "\n");
 					}
 				}
@@ -163,25 +166,27 @@ public class MergeGeneName {
 			out.write(header + "\n");
 			while (in.ready()) {
 				String str = in.readLine();
-				String[] split = str.split("\t");
-				String[] tags = split[tagIndex].split(" ");
-				System.out.println(split[tagIndex] + "\t" + tags.length);
-				
-				for (int j = 0; j < tags.length; j = j + 2) {
-					String tag = tags[j];
-					System.out.println(tag);
-					if (map.containsKey(tag)) {
-						String[] split2 = ((String)map.get(tag)).split("\t");
-						String newStr = tag;
-						for (int i = tagIndex + 1; i < split.length; i++) {
-							newStr += "\t" + split2[i] + "," + split[i];
+				if (!str.contains("Infinity") && !str.contains("null")) {
+					String[] split = str.split("\t");
+					String[] tags = split[tagIndex].split(" ");
+					System.out.println(split[tagIndex] + "\t" + tags.length);
+					
+					for (int j = 0; j < tags.length; j = j + 2) {
+						String tag = tags[j];
+						System.out.println(tag);
+						if (map.containsKey(tag)) {
+							String[] split2 = ((String)map.get(tag)).split("\t");
+							String newStr = tag;
+							for (int i = tagIndex + 1; i < split.length; i++) {
+								newStr += "\t" + split2[i] + "," + split[i];
+								
+							}
 							
+							map.put(tag, newStr);
+						} else {
+							
+							map.put(tag, str);
 						}
-						
-						map.put(tag, newStr);
-					} else {
-						
-						map.put(tag, str);
 					}
 				}
 			}
@@ -194,18 +199,22 @@ public class MergeGeneName {
 					String str = (String)map.get(key);
 					String[] split = str.split("\t");
 					String newStr = "\"" + key + "\"";
-					for (int i = 1; i < split.length; i++) {
-						
-						String[] split2 = split[i].split(",");
-						double[] values = new double[split2.length];
-						for (int j = 0; j < split2.length; j++) {
-							values[j] = new Double(split2[j]);
+					if (!str.contains("Infinity") && !str.contains("null")) {
+						for (int i = 1; i < split.length; i++) {
+							
+							String[] split2 = split[i].split(",");
+							double[] values = new double[split2.length];
+							for (int j = 0; j < split2.length; j++) {
+								values[j] = new Double(split2[j]);
+							}
+							
+							newStr += "\t" + MathTools.max(values);
 						}
+						result.put(key, newStr);
 						
-						newStr += "\t" + MathTools.max(values);
+						out.write(newStr + "\n");
 					}
-					result.put(key, newStr);
-					out.write(newStr + "\n");
+					//out.write(newStr + "\n");
 				}
 			}
 			out.close();
@@ -231,18 +240,20 @@ public class MergeGeneName {
 			out.write(header + "\n");
 			while (in.ready()) {
 				String str = in.readLine();
-				String[] split = str.split("\t");
-				if (map.containsKey(split[tagIndex])) {
-					String[] split2 = ((String)map.get(split[tagIndex])).split("\t");
-					String newStr = split[tagIndex];
-					for (int i = 1; i < split.length; i++) {
-						newStr += "\t" + split2[i] + "," + split[i];
+				if (!str.contains("Infinity") && !str.contains("null")) {
+					String[] split = str.split("\t");
+					if (map.containsKey(split[tagIndex])) {
+						String[] split2 = ((String)map.get(split[tagIndex])).split("\t");
+						String newStr = split[tagIndex];
+						for (int i = 1; i < split.length; i++) {
+							newStr += "\t" + split2[i] + "," + split[i];
+							
+						}
 						
+						map.put(split[tagIndex], newStr);
+					} else {
+						map.put(split[tagIndex], str);
 					}
-					
-					map.put(split[tagIndex], newStr);
-				} else {
-					map.put(split[tagIndex], str);
 				}
 			}
 			in.close();
@@ -254,18 +265,22 @@ public class MergeGeneName {
 					String str = (String)map.get(key);
 					String[] split = str.split("\t");
 					String newStr = split[tagIndex];
-					for (int i = 1; i < split.length; i++) {
-						
-						String[] split2 = split[i].split(",");
-						double[] values = new double[split2.length];
-						for (int j = 0; j < split2.length; j++) {
-							values[j] = new Double(split2[j]);
+					if (!str.contains("Infinity") && !str.contains("null")) {
+						for (int i = 1; i < split.length; i++) {
+							
+							String[] split2 = split[i].split(",");
+							double[] values = new double[split2.length];
+							for (int j = 0; j < split2.length; j++) {
+								values[j] = new Double(split2[j]);
+							}
+							
+							newStr += "\t" + MathTools.median(values);
 						}
+						result.put(split[tagIndex], newStr);
 						
-						newStr += "\t" + MathTools.median(values);
+						out.write(newStr + "\n");
 					}
-					result.put(split[tagIndex], newStr);
-					out.write(newStr + "\n");
+					//out.write(newStr + "\n");
 				}
 			}
 			out.close();

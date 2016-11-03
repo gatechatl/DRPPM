@@ -38,7 +38,7 @@ public class EnsemblGeneID2GeneName {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
-				String geneName = (String)gtf.geneid2geneName.get(split[0]);
+				String geneName = (String)gtf.geneid2geneName.get(split[0].replaceAll("\"",  ""));				
 				//System.out.println(str + "\t" + geneName);
 				out.write(geneName + "");
 				for (int i = 1; i < split.length; i++) {

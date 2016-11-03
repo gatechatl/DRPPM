@@ -41,7 +41,7 @@ public class Convert2SIFFile {
 			}
 			while (in.ready()) {
 				String str = in.readLine();
-				String[] split = str.split("\t");
+				String[] split = str.split("\t");				
 				out.write(split[index1] + "\tconnection\t" + split[index2] + "\n");
 			}
 			in.close();

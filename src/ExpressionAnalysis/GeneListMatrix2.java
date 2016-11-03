@@ -52,7 +52,7 @@ public class GeneListMatrix2 {
 				for (String gene: genes) {
 					list.add(gene);
 				}*/
-				list2.add(split[0]);
+				list2.add(split[0].toUpperCase());
 			}
 			in.close();
 			map.put(pathwayName, list2);

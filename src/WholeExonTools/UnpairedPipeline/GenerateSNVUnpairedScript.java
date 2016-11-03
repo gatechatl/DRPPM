@@ -22,7 +22,7 @@ public class GenerateSNVUnpairedScript {
 		return "[inputBamList] [refBam] [shellscriptFile] [SnpDetectFolder]";
 	}
 	public static void execute(String[] args) {
-		
+
 		String inputBam = args[0];
 		String refBam = args[1];		
 		String shellScriptFile = args[2];
@@ -45,6 +45,8 @@ public class GenerateSNVUnpairedScript {
 			e.printStackTrace();
 		}
 	}
+
+	
 	public static String grabSampleName(String str) {
 		String[] split = str.split("\\/");
 		String sample = split[split.length - 1].split("-")[0].split("\\.")[0];		
