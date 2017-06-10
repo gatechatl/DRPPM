@@ -1,6 +1,6 @@
 package TranscriptionFactorTools;
 
-import DifferentialExpression.AddAnnotation2DiffFisher;
+import mathtools.expressionanalysis.differentialexpression.AddAnnotation2DiffFisher;
 
 /**
  * Produce a list of enriched TFs

@@ -24,7 +24,7 @@ public class AssignKnownKinaseSubstrateRelationshipFlex {
 		return "KINASEACTIVITY";
 	}
 	public static String parameter_info() {
-		return "[inputJUMPqSiteFile] [phosphosite_kinsub_file] [outputJUMPqFile] [outputMatrixFile]";
+		return "[inputJUMPqSiteFile] [phosphosite_kinsub_file] [numSamples] [outputJUMPqFile] [outputMatrixFile]";
 	}
 	public static void execute(String[] args) {
 		

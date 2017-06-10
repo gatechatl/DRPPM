@@ -14,6 +14,16 @@ import java.io.InputStreamReader;
  */
 public class ConvertGSEAList2AnnotationFile {
 
+	//ConvertGSEAList2AnnotationFile
+	public static String description() {
+		return "Specialized function that converts GSEA gmt file to a regular list";
+	}
+	public static String type() {
+		return "GSEA";
+	}
+	public static String parameter_info() {
+		return "[inputFIle] [outputFolder] [outputLinkForEachEntry]";
+	}
 	public static void execute(String[] args) {
 		
 		try {

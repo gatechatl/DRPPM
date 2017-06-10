@@ -1,5 +1,7 @@
 package RNAseqTools.IntronRetention;
 
+import idconversion.cross_species.HumanMouseGeneNameConversion;
+
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
@@ -7,8 +9,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-
-import MISC.HumanMouseGeneNameConversion;
 
 
 public class OverlapMouseHumanGeneName {

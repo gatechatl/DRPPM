@@ -1,13 +1,13 @@
 package ProteinFeature.Charge;
 
+import idconversion.tools.Uniprot2GeneID;
+
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import IDConversion.Uniprot2GeneID;
 
 /**
  * Match the fasta sequence to human reference, must be of uniprot id

@@ -53,7 +53,7 @@ public class ReorderSamples {
 				fstream = new FileInputStream(inputFile);
 				din = new DataInputStream(fstream);
 				in = new BufferedReader(new InputStreamReader(din));
-				String[] splitTitle = in.readLine().split("\t");
+				String[] splitTitle = in.readLine().replaceAll("_", ".").replaceAll("-", ".").split("\t");
 				
 				while (in.ready()) {
 					String str = in.readLine();

@@ -1,4 +1,4 @@
-package Constants;
+package constants;
 
 /**
  * Put some standard config path here 

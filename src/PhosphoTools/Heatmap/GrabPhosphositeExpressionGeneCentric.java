@@ -1,13 +1,13 @@
 package PhosphoTools.Heatmap;
 
+import idconversion.tools.Uniprot2GeneID;
+
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.LinkedList;
-
-import IDConversion.Uniprot2GeneID;
 
 /**
  * For TMT based expression profile of phosphosite, 

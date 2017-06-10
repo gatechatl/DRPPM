@@ -8,6 +8,11 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
+/**
+ * In a gmt file, converts the human genes to mouse genes.
+ * @author tshaw
+ *
+ */
 public class ConvertGSEAHuman2Mouse {
 
 	public static void main(String[] args) {
@@ -18,6 +23,16 @@ public class ConvertGSEAHuman2Mouse {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	//
+	public static String description() {
+		return "Convert human genes to mouse genes for gmt file";
+	}
+	public static String type() {
+		return "GSEA";
+	}
+	public static String parameter_info() {
+		return "[hs2mmFile] [inputFile] [outputFile]";
 	}
 	public static void execute(String[] args) {
 		

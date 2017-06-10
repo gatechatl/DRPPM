@@ -1,5 +1,7 @@
 package PhosphoTools.Network;
 
+import idconversion.tools.Uniprot2GeneID;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -11,7 +13,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
-import IDConversion.Uniprot2GeneID;
 import NetworkTools.NetworkTools;
 
 /**

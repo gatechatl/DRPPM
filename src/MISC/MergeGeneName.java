@@ -198,6 +198,7 @@ public class MergeGeneName {
 				if (!key.equals("")) {
 					String str = (String)map.get(key);
 					String[] split = str.split("\t");
+					//String newStr = "\"" + key + "\"";
 					String newStr = "\"" + key + "\"";
 					if (!str.contains("Infinity") && !str.contains("null")) {
 						for (int i = 1; i < split.length; i++) {

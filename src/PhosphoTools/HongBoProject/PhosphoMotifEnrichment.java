@@ -12,9 +12,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.UUID;
 
-import EnrichmentTool.MapUtilsBig2Small;
-import EnrichmentTool.MapUtilsSmall2Big;
-import EnrichmentTool.OverRepresentationAnalysisFDR;
+import functional.pathway.enrichment.MapUtilsBig2Small;
+import functional.pathway.enrichment.MapUtilsSmall2Big;
+import functional.pathway.enrichment.OverRepresentationAnalysisFDR;
 import MISC.CommandLine;
 import Statistics.General.MathTools;
 

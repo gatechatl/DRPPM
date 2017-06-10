@@ -8,6 +8,11 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
+/**
+ * We should calculate the median and remove annotation that is listed as novel
+ * @author tshaw
+ *
+ */
 public class GeneVsJunctionFC {
 
 	public static String parameter_info() {

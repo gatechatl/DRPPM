@@ -69,7 +69,7 @@ public class Fastq2FileList {
 				if (mapR2.containsKey(sampleName)) {
 					String R1_path = (String)mapR1.get(sampleName);
 					String R2_path = (String)mapR2.get(sampleName);
-					out.write(R1_path + "\t" + R2_path + "\t" + sampleName + "\n");
+					out.write(R1_path + "\t" + R2_path + "\t" + sampleName.replaceAll(".fastq.gz", "").replaceAll(".fastq", "") + "\n");
 				}
 			}
 			

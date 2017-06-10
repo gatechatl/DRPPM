@@ -1,8 +1,8 @@
 package Test;
 
-import java.util.HashMap;
+import idconversion.tools.GTFFile;
 
-import IDConversion.GTFFile;
+import java.util.HashMap;
 
 public class ReadEnsemblGTFFile {
 

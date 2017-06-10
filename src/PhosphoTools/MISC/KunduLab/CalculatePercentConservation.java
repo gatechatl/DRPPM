@@ -196,16 +196,17 @@ public class CalculatePercentConservation {
 		Iterator itr = pos.keySet().iterator();
 		while (itr.hasNext()) {
 			String name = (String)itr.next();
-			if (isVertebrate(name)) {
+			//if (isVertebrate(name)) {
 				total++;
-			}
+			//}
 		}
 		pos = (HashMap)pos_map.get(i);
 		itr = pos.keySet().iterator();
 		while (itr.hasNext()) {
 			String name = (String)itr.next();
 			String loc_nuc = (String)pos.get(name);
-			if ((loc_nuc.equals("S") || loc_nuc.equals("T")) && isVertebrate(name)) {
+			//if ((loc_nuc.equals("S") || loc_nuc.equals("T")) && isVertebrate(name)) {
+			if ((loc_nuc.equals("S") || loc_nuc.equals("T"))) {
 				match++;
 			}
 		}
@@ -263,16 +264,17 @@ public class CalculatePercentConservation {
 		Iterator itr = pos.keySet().iterator();
 		while (itr.hasNext()) {
 			String name = (String)itr.next();
-			if (isVertebrate(name)) {
+			//if (isVertebrate(name)) {
 				total++;
-			}
+			//}
 		}
 		pos = (HashMap)pos_map.get(i);
 		itr = pos.keySet().iterator();
 		while (itr.hasNext()) {
 			String name = (String)itr.next();
 			String loc_nuc = (String)pos.get(name);
-			if (loc_nuc.equals(nuc) && isVertebrate(name)) {
+			//if (loc_nuc.equals(nuc) && isVertebrate(name)) {
+			if (loc_nuc.equals(nuc)) {
 				match++;
 			}
 		}

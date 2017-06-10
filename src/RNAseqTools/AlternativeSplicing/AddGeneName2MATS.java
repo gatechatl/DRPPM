@@ -1,13 +1,13 @@
 package RNAseqTools.AlternativeSplicing;
 
+import idconversion.tools.GTFFile;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
-
-import IDConversion.GTFFile;
 
 /**
  * If an ensembl gtf file was used for MATS, it doesn't 

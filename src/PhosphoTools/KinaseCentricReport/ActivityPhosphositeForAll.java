@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class ActivityPhosphositeForAll {
 
 	public static String parameter_info() {
-		return "[inputFile] [Active]";
+		return "[inputFile] [Activivity Induce Flag TRUE/FALSE]";
 	}
 	public static void execute(String[] args) {
 		

@@ -52,6 +52,20 @@ public class MathTools {
 		return zscores;
 	}
 	
+	public static double[] log2zscores(double[] values) {
+		double[] new_values = new double[values.length];
+		for (int i = 0; i < values.length; i++) {
+			new_values[i] = log2(values[i] + 0.000001);
+		}
+		double mean = mean(new_values);
+		double sd = standardDeviation(new_values);
+		double[] zscores = new double[values.length];
+		for (int i = 0; i < new_values.length; i++) {
+			zscores[i] = (new_values[i] - mean) / sd; 
+		}
+		return zscores;
+	}
+	
 	/**
 	 * Convert 2 log2
 	 * @param x
@@ -158,6 +172,22 @@ public class MathTools {
 		
 		return sc.correlation(set1, set2);
 	}
+	public static double SpearmanRankPvalue(double[] set1, double[] set2) {
+		SpearmansCorrelation sc = new SpearmansCorrelation();	
+		double r = sc.correlation(set1, set2);
+		double df = (set1.length + set2.length) / 2 - 2;
+		double tvalue = -1;
+		if (r == 1) {
+			tvalue = Integer.MAX_VALUE;
+		} else {
+			tvalue = r * Math.sqrt(df / (1 - r * r));
+		}
+		tvalue = r * Math.sqrt(df / (1 - r * r));
+		TTest ttest = new TTest();
+		TDistribution tdistr = new TDistribution(df);		
+		//return df;
+		return (1 - tdistr.cumulativeProbability(tvalue)) * 2;
+	}
 	public static double PearsonCorrel(double[] set1, double[] set2) {
 		PearsonsCorrelation pc = new PearsonsCorrelation();
 		return pc.correlation(set1,  set2);
@@ -178,5 +208,29 @@ public class MathTools {
 		//return df;
 		return (1 - tdistr.cumulativeProbability(tvalue)) * 2;
 		//return Math.sqrt(df / (1 - r * r));
+	}
+	public static double pval2zscore(double pval) {
+		return StatisticsConversion.inverseCumulativeProbability(pval / 2) * -1;
+	}
+	public static double stouffer_meta_analysis(LinkedList Zis, LinkedList weights) {
+		
+		double score = 0;
+		Iterator itr = Zis.iterator();
+		Iterator itr_weight = weights.iterator();
+		while (itr.hasNext()) {
+			double Zi = (Double)itr.next();
+			double weight = (Double)itr_weight.next();
+			score += weight * Zi;
+		}		
+		double den = 0;
+		
+		itr = Zis.iterator();
+		itr_weight = weights.iterator();
+		while (itr.hasNext()) {
+			double Zi = (Double)itr.next();
+			double weight = (Double)itr_weight.next();
+			den += weight * weight;
+		}
+		return score / Math.sqrt(den);
 	}
 }

@@ -95,6 +95,7 @@ public class ConvertProteinCoord {
 					out.write(str + "\n");
 					//out.write(sub_uniprot + "\t" + sub_gene + "\t" + sub_org + "\t" + sub_loc + "\t" + sub_seq + "\t" + "\n");
 				} else if (map.containsKey(sub_uniprot)) {
+					
 					AlignmentData data = (AlignmentData)map.get(sub_uniprot);
 					String type = "";
 					int pred_loc = -1;

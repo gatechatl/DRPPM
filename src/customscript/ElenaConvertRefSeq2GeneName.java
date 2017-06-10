@@ -1,4 +1,4 @@
-package customscript;
+package customScript;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;

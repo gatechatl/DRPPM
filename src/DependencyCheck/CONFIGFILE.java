@@ -1,4 +1,4 @@
-package DependencyCheck;
+package dependencycheck;
 
 /**
  * Read in the config file for the RNA Protein Phospho file pipeline

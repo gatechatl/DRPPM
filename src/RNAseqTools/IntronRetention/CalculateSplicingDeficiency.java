@@ -116,6 +116,7 @@ public class CalculateSplicingDeficiency {
 						
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
+			out.write("GeneID\tSplicingDeficiency\tNumIntronReads\tIntronLength\tNumExonReads\tExonLength\n");
 			Iterator itr = all_genes.keySet().iterator();
 			while (itr.hasNext()) {
 				String key = (String)itr.next();

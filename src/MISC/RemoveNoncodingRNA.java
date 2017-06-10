@@ -46,6 +46,16 @@ public class RemoveNoncodingRNA {
 			e.printStackTrace();
 		}
 	}
+	
+	public static String description() {
+		return "Remove genes annotated as noncoding RNAs";
+	}
+	public static String type() {
+		return "MISC";
+	}
+	public static String parameter_info() {
+		return "[inputMatrixFile] [noncoding gene Ref File] [outputFileredMatrixFile]";
+	}
 	public static void execute(String[] args) {
 		
 		try {

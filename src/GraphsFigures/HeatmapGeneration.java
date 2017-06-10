@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import Constants.CONFIG;
+import constants.CONFIG;
 
 public class HeatmapGeneration {
 
@@ -664,6 +664,7 @@ public class HeatmapGeneration {
 		
 		script += "allDat = read.table(\"" + inputFile.replaceAll("\\\\", "/") + "\", header=TRUE, row.names=1 );\n";
 		script += "selection = allDat;\n";
+		script += "rownames = rownames(selection);\n";
 		if (!listA.equals("")) {
 			script += "A = c(" + listA + ")\n";
 			script += "col_labels = A;\n";
@@ -689,13 +690,17 @@ public class HeatmapGeneration {
 		script += "zselection = apply(zselection, 1, rev)\n";
 
 		script += "colnames(zselection) = names(selection)\n";
-
+		
+		
 		script += "selection = as.matrix(zselection);\n";
+		script += "rownames(selection) = rownames;\n";
+		script += "selection[is.na(selection)] = 0;\n";
 		
 		script += geneSet;
-
+		
 		script += "dataset = selection[geneList,]\n";
 		
+		script += "dataset = dataset[apply(dataset[,-1], 1, function(x) !all(x==0)),]\n";
 		script += "library(pheatmap)\n";
 		script += "minimum = -3;\n";
 		script += "maximum = 3;\n";
@@ -807,7 +812,8 @@ public class HeatmapGeneration {
 		script += "key=TRUE, keysize=0.5,symkey=FALSE, density.info=\"none\", margins=c(30,10), trace=\"none\", cexRow=1.2, cexCol=1.5, main=\"" + title + "\", NumColSideColors= 1.0)\n"; //ColSideColors=colSideColors
 		script += "dev.off();\n";
 		
-		script += "write(colnames(selection[geneList,])[result2$colInd], file=\"" + outputFile.replaceAll("\\\\", "/") + "_ordered_colnames.txt\")";
+		script += "write(colnames(selection[geneList,])[result2$colInd], file=\"" + outputFile.replaceAll("\\\\", "/") + "_ordered_colnames.txt\")\n";
+		script += "write(rownames(selection[geneList,])[result2$rowInd], file=\"" + outputFile.replaceAll("\\\\", "/") + "_ordered_rownames.txt\")\n";
 		return script;
 	}
 	
@@ -1017,6 +1023,7 @@ public class HeatmapGeneration {
 		script += "dev.off();\n";
 		
 		script += "write(colnames(dataset)[result$colInd], file=\"" + outputFile + "_ordered_colnames.txt\")\n";
+		script += "write(rownames(dataset)[result$rowInd], file=\"" + outputFile + "_ordered_rownames.txt\")\n";
 		return script;
 	}
 	

@@ -49,37 +49,38 @@ public class CombineHTSEQResult {
 				while (in2.ready()) {
 					String str2 = in2.readLine();
 					String[] split = str2.split("\t");
-					if (map.containsKey(split[0])) {
-						HashMap count = (HashMap)map.get(split[0]);
-						
-						count.put(fileName, new Double(split[1]));
-						map.put(split[0], count);
-						
-						if (total_count_map.containsKey(fileName)) {
-							double read = (Double)total_count_map.get(fileName);
-							read += new Double(split[1]);
-							total_count_map.put(fileName, read);
+					if (!split[0].contains("__")) {
+						if (map.containsKey(split[0])) {
+							HashMap count = (HashMap)map.get(split[0]);
+							
+							count.put(fileName, new Double(split[1]));
+							map.put(split[0], count);
+							
+							if (total_count_map.containsKey(fileName)) {
+								double read = (Double)total_count_map.get(fileName);
+								read += new Double(split[1]);
+								total_count_map.put(fileName, read);
+							} else {
+								double read = 0;
+								read += new Double(split[1]);
+								total_count_map.put(fileName, read);
+							}
 						} else {
-							double read = 0;
-							read += new Double(split[1]);
-							total_count_map.put(fileName, read);
-						}
-					} else {
-						HashMap count = new HashMap();
-						count.put(fileName, new Double(split[1]));
-						map.put(split[0], count);
-						
-						if (total_count_map.containsKey(fileName)) {
-							double read = (Double)total_count_map.get(fileName);
-							read += new Double(split[1]);
-							total_count_map.put(fileName, read);
-						} else {
-							double read = 0;
-							read += new Double(split[1]);
-							total_count_map.put(fileName, read);
+							HashMap count = new HashMap();
+							count.put(fileName, new Double(split[1]));
+							map.put(split[0], count);
+							
+							if (total_count_map.containsKey(fileName)) {
+								double read = (Double)total_count_map.get(fileName);
+								read += new Double(split[1]);
+								total_count_map.put(fileName, read);
+							} else {
+								double read = 0;
+								read += new Double(split[1]);
+								total_count_map.put(fileName, read);
+							}
 						}
 					}
-					
 				}
 				in2.close();
 				

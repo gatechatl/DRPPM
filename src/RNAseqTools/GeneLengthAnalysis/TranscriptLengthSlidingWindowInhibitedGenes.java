@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import EnrichmentTool.MapUtilsBig2Small;
-import EnrichmentTool.MapUtilsSmall2Big;
+import functional.pathway.enrichment.MapUtilsBig2Small;
+import functional.pathway.enrichment.MapUtilsSmall2Big;
 import MISC.CommandLine;
 
 /**

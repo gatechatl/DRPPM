@@ -76,7 +76,8 @@ public class RNASEQConfig2MappingScriptGenerator {
 		} else if (organism.equals("hg19")) {
 			fastaPath = "/nfs_exports/genomes/1/Homo_sapiens/GRCh37-lite/STAR/GRCh37p13_GenCode19/";
 		} else if (organism.equals("xenograph")) {
-			fastaPath = "/nfs_exports/apps/internal/rnaseq/tshaw/XenoGraphReference/STAR/star-genome";
+			//fastaPath = "/nfs_exports/apps/internal/rnaseq/tshaw/XenoGraphReference/STAR/star-genome";
+			fastaPath = "/nfs_exports/apps/internal/rnaseq/tshaw/XenoGraphReference/STARwithGTF/star-genome-withRef/";
 		} else if (organism.equals("dm3")) {
 			fastaPath = "/nfs_exports/genomes/1/Drosophila_melanogaster/dm3/STAR/Genome_dm3/";
 		}

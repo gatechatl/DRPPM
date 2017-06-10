@@ -1,5 +1,7 @@
 package Integration.OverRepresentationAnalysis;
 
+import idconversion.cross_species.HumanMouseGeneNameConversion;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -10,7 +12,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import MISC.HumanMouseGeneNameConversion;
 import Statistics.General.MathTools;
 
 public class ORAPathwayEnrichment_ErinSchuetz {

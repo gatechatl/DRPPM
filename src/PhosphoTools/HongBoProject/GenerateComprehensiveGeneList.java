@@ -1,5 +1,7 @@
 package PhosphoTools.HongBoProject;
 
+import idconversion.tools.Uniprot2GeneID;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -8,8 +10,6 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import IDConversion.Uniprot2GeneID;
 
 public class GenerateComprehensiveGeneList {
 

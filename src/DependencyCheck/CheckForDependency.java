@@ -1,4 +1,4 @@
-package DependencyCheck;
+package dependencycheck;
 
 public class CheckForDependency {
 

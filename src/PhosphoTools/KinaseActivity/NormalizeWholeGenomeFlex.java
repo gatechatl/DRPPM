@@ -26,7 +26,7 @@ public class NormalizeWholeGenomeFlex {
 		return "KINASEACTIVITY";
 	}
 	public static String parameter_info() {
-		return "[inputPhosphoFile] [index] [factor] [outputFile]";
+		return "[inputPhosphoFile] [index] [factor] [numSamples] [outputFile]";
 	}
 	public static void execute(String[] args) {
 		

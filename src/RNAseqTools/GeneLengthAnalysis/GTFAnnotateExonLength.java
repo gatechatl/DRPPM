@@ -1,6 +1,8 @@
 package RNAseqTools.GeneLengthAnalysis;
 
 
+import idconversion.tools.GTFFile;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -10,8 +12,6 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
-
-import IDConversion.GTFFile;
 
 /**
  * Summarize GeneLength

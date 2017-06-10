@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import DifferentialExpression.AddAnnotation2DiffFisher;
+import mathtools.expressionanalysis.differentialexpression.AddAnnotation2DiffFisher;
 
 /**
  * Input list of gene and output list of transcription factors

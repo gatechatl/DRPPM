@@ -35,7 +35,10 @@ public class GeneratePCAScatterPlotPython {
 			String sampleMetaInfo = args[1];
 			String outputMatrix = args[2];			
 			String outputPythonScript = args[3];
-			
+			boolean writeNameFlag = false;
+			if (args.length > 4) {
+				writeNameFlag = new Boolean(args[4]);
+			}
 			FileWriter fwriter = new FileWriter(outputMatrix);
 			BufferedWriter out = new BufferedWriter(fwriter);
 
@@ -65,22 +68,22 @@ public class GeneratePCAScatterPlotPython {
 				String sampleName = split[0].replaceAll("\"", "");
 				String value1 = split[1];
 				String value2 = split[2];
+				String value3 = split[3];
 				String groupName = (String)sampleName2groupName.get(sampleName);
-				out.write(sampleName + "\t" + groupName + "\t" + value1 + "\t" + value2 + "\n");
+				out.write(sampleName + "\t" + groupName + "\t" + value1 + "\t" + value2 + "\t" + value3 + "\n");
 			}
 			in.close();									
 			out.close();
 			
-			String pythonScript = generateScatterPlotPythonScript(outputMatrix, outputMatrix + ".pdf", group2color);
+			String pythonScript = generateScatterPlotPythonScript(outputMatrix, outputMatrix + ".pdf", group2color, writeNameFlag);
 			CommandLine.writeFile(outputPythonScript, pythonScript);
 			CommandLine.executeCommand("python " + outputPythonScript);
-			
-			
+						
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public static String generateScatterPlotPythonScript(String inputFile, String outputPDFFile, HashMap groups) {
+	public static String generateScatterPlotPythonScript(String inputFile, String outputPDFFile, HashMap groups, boolean writeName) {
 		String script = "import csv\n";
 		script += "import matplotlib\n";
 		script += "matplotlib.use('Agg')\n";
@@ -109,8 +112,12 @@ public class GeneratePCAScatterPlotPython {
 			String color = (String)groups.get(group);
 			script += "\tif group[i] == '" + group + "':\n";
 			script += "\t\tax.scatter(PC1[i],PC2[i], color='" + color + "', alpha=0.5)\n";
+			
 		}
-		
+		if (writeName) {
+			script += "for i, txt in enumerate(name):\n";
+			script += "\tax.annotate(txt, (PC1[i],PC2[i]), size=4 )\n";
+		}
 		script += "\n";
 		script += "plt.xlabel('PC1')\n";
 		script += "plt.ylabel('PC2')\n";

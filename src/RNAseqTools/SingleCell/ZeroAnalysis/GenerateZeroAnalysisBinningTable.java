@@ -39,6 +39,8 @@ public class GenerateZeroAnalysisBinningTable {
 			HashMap count_bin = new HashMap();
 			HashMap map = new HashMap();
 			HashMap count_zero_map = new HashMap();
+			
+			HashMap countFrequency = new HashMap();
 			int max = 0;
 			FileInputStream fstream = new FileInputStream(inputFile);
 			DataInputStream din = new DataInputStream(fstream);
@@ -149,10 +151,24 @@ public class GenerateZeroAnalysisBinningTable {
 				
 				
 				out.write("Bin_" + binID + "_[" + (bin_id-10) + ":" + (bin_id - 10 + bin_size) + "]\t" + count_zero + "\n");
+				if (countFrequency.containsKey("Bin_" + binID)) {
+					int count = (Integer)(countFrequency.get("Bin_" + binID));
+					count++;
+					countFrequency.put("Bin_" + binID, count);					
+				} else {					
+					countFrequency.put("Bin_" + binID, 1);
+				}
 			}
 			
 			in.close();
 			out.close();
+			
+			Iterator itr = countFrequency.keySet().iterator();
+			while (itr.hasNext()) {
+				String id = (String)itr.next();
+				int count = (Integer)countFrequency.get(id);
+				System.out.println(id + "\t" + count);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

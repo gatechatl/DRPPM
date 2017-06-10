@@ -33,21 +33,46 @@ public class GenerateLIMMAComparisonScript {
 			String keyword2 = split_keywords[1];
 			String fileName = keyword1 + "_vs_" + keyword2;
 			String step1_grabKeyWord = createGrabKeywordScript(inputFile, keywords);
-			CommandLine.writeFile("step1_" + fileName + "_grabKeyWord.sh", step1_grabKeyWord);
+			CommandLine.writeFile("step01_" + fileName + "_grabKeyWord.sh", step1_grabKeyWord);
 			String step2_limma = createLIMMAscript(inputFile, split_keywords[0], split_keywords[1], pvalue, logFC);
-			CommandLine.writeFile("step2_" + fileName + "_limma.sh", step2_limma);		
+			CommandLine.writeFile("step02_" + fileName + "_limma.sh", step2_limma);		
 			String step3_length = createLengthScript(fileName, lengthPath, fpkmcutoff, geneLength);
-			CommandLine.writeFile("step3_" + fileName + "_length.sh", step3_length);
+			CommandLine.writeFile("step03_" + fileName + "_length.sh", step3_length);
 			String step4_slidingwindow = transcriptLengthSlidingWindowScript(fileName);
-			CommandLine.writeFile("step4_" + fileName + "_slidingwindow.sh", step4_slidingwindow);
+			CommandLine.writeFile("step04_" + fileName + "_slidingwindow.sh", step4_slidingwindow);
 			String step5_inhibitedGenes = transcriptLengthSlidingWindowInhibitedGenes(fileName);
-			CommandLine.writeFile("step5_" + fileName + "_inhibitedGenes.sh", step5_inhibitedGenes);
-			
+			CommandLine.writeFile("step05_" + fileName + "_inhibitedGenes.sh", step5_inhibitedGenes);
+			String step6_GenerateLongGeneHTMLPlot = generateLongGeneHTMLPlot(fileName + "_FoldChangeScatter.txt");
+			CommandLine.writeFile("step06_" + fileName + "_length_html.sh", step6_GenerateLongGeneHTMLPlot);
+			String step7_removeQuotation = removeQuotation(fileName + "_all.txt");
+			CommandLine.writeFile("step07_" + fileName + "_removequotation.sh", step7_removeQuotation);
+			String step8_volcanoHTML = createVolcanoHTML(fileName + "_all.txt_removequotation.txt");
+			CommandLine.writeFile("step08_" + fileName + "_volcanoHTML.sh", step8_volcanoHTML);
+			String step9_MAPlotHTML = createMAPlotHTML(fileName + "_all.txt_removequotation.txt");
+			CommandLine.writeFile("step09_" + fileName + "_MAPlotHTML.sh", step9_MAPlotHTML);
+			String step10_MatrixLIMMA = attachMatrixWithLIMMA(inputFile, fileName, fileName + "_all.txt");
+			CommandLine.writeFile("step10_" + fileName + "_attachLIMMA.sh", step10_MatrixLIMMA);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	public static String attachMatrixWithLIMMA(String inputFile, String keyword, String limmaFile) {
+		return "drppm -AppendLIMMAResult2Matrix " + inputFile + " " + limmaFile + " " + keyword + " " + inputFile + "_limma.txt";
+	}
+	public static String createMAPlotHTML(String inputFile) {
+		return "drppm -GenerateMAPlotJavaScriptUserInput " + inputFile + " 0 4 1 1.0 5 0.05 2 true true > MAPlot_" + inputFile + ".html";
+	}
+	public static String createVolcanoHTML(String inputFile) {
+		return "drppm -GenerateVolcanoPlotJavaScriptUserInput " + inputFile + " 0 4 1 1.0 5 0.05 2 true true > Volcano_" + inputFile + ".html";
+	}
+	public static String removeQuotation(String inputFile) {
+		return "drppm -RemoveQuotations " + inputFile + " " + inputFile + "_removequotation.txt";
+	}
+	public static String generateLongGeneHTMLPlot(String inputFile) {
+		String script = "drppm -GenerateFoldchangeGeneLengthPlot " + inputFile + " 1 2 0 true > GeneLength_" + inputFile + ".html";
+		return script;
+	}
 	public static String createGrabKeywordScript(String inputFile, String keywords) {
 		String script = "";
 		String[] split = keywords.split(",");
