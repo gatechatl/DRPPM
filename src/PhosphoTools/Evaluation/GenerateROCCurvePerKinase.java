@@ -11,9 +11,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
+import statistics.general.MathTools;
 import PhosphoTools.MotifTools.AddRelativeQuantificationForPredicted;
 import PhosphoTools.MotifTools.MotifTools;
-import Statistics.General.MathTools;
 
 
 /**

@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 /**
  * Performs fisher exact test to compare whether one group has more variant than the other group.

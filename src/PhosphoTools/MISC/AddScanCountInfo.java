@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import statistics.general.MathTools;
 import PhosphoTools.MotifTools.MotifTools;
-import Statistics.General.MathTools;
 
 public class AddScanCountInfo {
 

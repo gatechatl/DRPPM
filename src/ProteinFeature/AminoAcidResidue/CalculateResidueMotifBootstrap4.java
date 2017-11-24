@@ -13,8 +13,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.UUID;
 
+import statistics.general.MathTools;
 import MISC.CommandLine;
-import Statistics.General.MathTools;
 
 
 /**

@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 public class MatrixZscoreNormalizationWithOriginalValues {
 	public static String description() {

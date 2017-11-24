@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import statistics.general.MathTools;
 import PhosphoTools.SummaryTools;
-import Statistics.General.MathTools;
 
 /**
  * Integration of multiple layer of expression data

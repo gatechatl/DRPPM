@@ -61,11 +61,14 @@ public class ReorderSampleFast {
 			in = new BufferedReader(new InputStreamReader(din));
 			String[] splitTitle = in.readLine().replaceAll("_", ".").replaceAll("-", ".").split("\t");
 			LinkedList order = new LinkedList();
-			
-			for (int i = 1; i < splitTitle.length; i++) {
-				if (refList.contains(splitTitle[i])) {
-					out.write("\t" + splitTitle[i]);
-					order.add(i);
+			itr = refList.iterator();
+			while (itr.hasNext()) {
+				String refListTitle = (String)itr.next();
+				for (int i = 1; i < splitTitle.length; i++) {
+					if (refListTitle.equals(splitTitle[i])) {
+						out.write("\t" + splitTitle[i]);
+						order.add(i);
+					}
 				}
 			}
 			out.write("\n");

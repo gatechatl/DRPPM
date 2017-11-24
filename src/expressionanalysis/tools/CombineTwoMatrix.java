@@ -69,14 +69,18 @@ public class CombineTwoMatrix {
 			Iterator itr = map.keySet().iterator();
 			while (itr.hasNext()) {
 				String gene = (String)itr.next();
-				String file1_line = (String)map.get(gene);
-				String file2_line = (String)map2.get(gene);
-				out.write(file1_line);
-				String[] split2 = file2_line.split("\t");
-				for (int i = 1; i < split2.length; i++) {
-					out.write("\t" + split2[i]);
+				if (map2.containsKey(gene)) {
+					String file1_line = (String)map.get(gene);
+					String file2_line = (String)map2.get(gene);
+					out.write(file1_line);
+					String[] split2 = file2_line.split("\t");
+					for (int i = 1; i < split2.length; i++) {
+						out.write("\t" + split2[i]);
+					}
+					out.write("\n");
+				} else {
+					System.out.println("Missing gene: " + gene);
 				}
-				out.write("\n");
 			}
 			out.close();
 		} catch (Exception e) {

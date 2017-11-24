@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 public class CalculateCorrelationKinaseActivityClusters {
 

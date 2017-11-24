@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import Statistics.General.StatisticsConversion;
+import statistics.general.StatisticsConversion;
 
 
 /**

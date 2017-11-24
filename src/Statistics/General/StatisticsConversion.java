@@ -1,4 +1,4 @@
-package Statistics.General;
+package statistics.general;
 //package com.compomics.icelogo.core.stat;
 
 

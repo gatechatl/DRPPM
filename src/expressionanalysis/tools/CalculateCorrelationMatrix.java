@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 /**
  * Given an input matrix file and a consensus profile generate a correlation matrix

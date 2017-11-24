@@ -11,7 +11,7 @@ public class GenerateLIMMAComparisonScript {
 		return "Generate LIMMA script";
 	}
 	public static String parameter_info() {
-		return "[inputFile] [keywords] [pvalue] [logFC] [lengthPath] [fpkmCutoff] [geneLength]";
+		return "[inputFile] [keywords: NTRK,PDGFRA] [pvalue] [logFC] [lengthPath] [fpkmCutoff] [geneLength]";
 	}
 	public static void execute(String[] args) {
 		

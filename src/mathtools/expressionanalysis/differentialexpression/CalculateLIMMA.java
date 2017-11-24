@@ -331,10 +331,10 @@ public class CalculateLIMMA {
 		script += "rownames(mat)=genenames\n";
 
 		// need to make this a parameter
-		script += "isexpr <- rowSums(mat>1) >= 1\n";
-		script += "mat <- mat[isexpr,]\n";		
+		//script += "isexpr <- rowSums(mat>1) >= 1\n";
+		//script += "mat <- mat[isexpr,]\n";		
 		if (takeLog) {
-			script += "mat = log2(mat + 0.1);\n";
+			script += "mat = log2(mat + 1.0);\n";
 		}
 
 		
@@ -428,11 +428,11 @@ public class CalculateLIMMA {
 
 		// need to make this a parameter
 		if (cutMinExpr) {
-			script += "isexpr <- rowSums(mat>1) >= 1\n";
-			script += "mat <- mat[isexpr,]\n";
+			//script += "isexpr <- rowSums(mat>1) >= 1\n";
+			//script += "mat <- mat[isexpr,]\n";
 		}
 		if (takeLog) {
-			script += "mat = log2(mat + 0.1);\n";
+			script += "mat = log2(mat + 1.0);\n";
 		}
 		
 

@@ -2,6 +2,7 @@ package RNAseqTools.Mapping;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
@@ -50,6 +51,11 @@ public class STARMappingScriptGenerator {
 	}
 	
 	public static String STARScript(String fq1, String fq2, String STARPath, String refPath, String outputFolder) {
-		return STARPath + " --outSAMstrandField intronMotif --genomeDir " + refPath + " --readFilesIn " + fq1 + " " + fq2 + " --genomeLoad NoSharedMemory --runThreadN 8 --chimSegmentMin 20 --chimJunctionOverhangMin 20 --outFileNamePrefix " + outputFolder + " --outSAMunmapped Within --outSAMtype BAM SortedByCoordinate";
+		File f = new File(fq1);
+		String addCompressionTag = ""; 
+		if (f.getName().substring(f.getName().length() - 2, f.getName().length()).equals("gz")) {
+			addCompressionTag = "--readFilesCommand gzip -c";
+		}		
+		return STARPath + " --outSAMstrandField intronMotif --genomeDir " + refPath + " --readFilesIn " + fq1 + " " + fq2 + " --genomeLoad NoSharedMemory --runThreadN 8 --chimSegmentMin 20 --chimJunctionOverhangMin 20 --outFileNamePrefix " + outputFolder + " --outSAMunmapped Within --outSAMtype BAM SortedByCoordinate " + addCompressionTag;
 	}
 }

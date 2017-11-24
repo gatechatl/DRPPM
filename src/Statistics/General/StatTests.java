@@ -1,4 +1,4 @@
-package Statistics.General;
+package statistics.general;
 
 import java.io.DataInputStream;
 import java.io.FileInputStream;

@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 /**
  * Generate a horizontal barplot. Template is based on Juan Cruz-Benito's work.
@@ -26,6 +26,8 @@ public class GenerateHorizontalBarPlotJavaScript {
 	public static String parameter_info() {
 		return "[inputMatrix] [x_index] [text_index] [name_index] [metaInfo_index] [title] [xaxis_label] [SkipHeaderFlag:true/false]";
 	}
+	
+	
 	public static void execute(String[] args) {
 		
 		try {
@@ -238,7 +240,18 @@ public class GenerateHorizontalBarPlotJavaScript {
 		script += "                } else {\n";
 		script += "                    return d.label;}\n";
 		script += "            }).each(function() {\n";
-		script += "        labelWidth = Math.ceil(Math.max(labelWidth, this.getBBox().width));\n";
+		int buffer = 0;
+		if (labels.length < 5) {
+			buffer = 20;
+		}
+		if (labels.length < 8) {
+			buffer = 10;
+		}
+		if (labels.length < 10) {
+			buffer = 5;
+		}
+		
+		script += "        labelWidth = Math.ceil(Math.max(labelWidth, this.getBBox().width)) + " + buffer + ";\n";
 		script += "    });\n";
 
 		script += "    scale = d3.scale.linear()\n";

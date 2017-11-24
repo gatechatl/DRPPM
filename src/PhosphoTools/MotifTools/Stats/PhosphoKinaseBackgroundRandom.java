@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
+import statistics.general.MathTools;
 import PhosphoTools.MotifTools.AddRelativeQuantification;
-import Statistics.General.MathTools;
 
 public class PhosphoKinaseBackgroundRandom {
 

@@ -11,10 +11,25 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import statistics.general.MathTools;
 import MISC.FileTools;
 
+/**
+ * Generate the data file for plotting the histogram for intron retention.
+ * @author tshaw
+ *
+ */
 public class IntronRetentionHistogramData {
 
+	public static String type() {
+		return "INTRONRETENTION";
+	}
+	public static String description() {
+		return "Generate the data file for plotting the histogram for intron retention.";
+	}
+	public static String parameter_info() {
+		return "[listSDFiles] [groupingFile] [summary_outputFile] [summary2_outputFile] [count] [total] [split_str]";
+	}
 	public static void execute(String[] args) {
 		
 		try {
@@ -67,18 +82,20 @@ public class IntronRetentionHistogramData {
 				while (in.ready()) {
 					String str = in.readLine();
 					String[] split = str.split("\t");
-					if (!split[1].equals("NaN") && !split[1].equals("Infinity")) {
-						
-						double sd = new Double(split[1]);
-						if (sd > 0) {
-							for (int i = 0; i < bins.length - 1; i++) {
-								if (bins[i] <= sd && sd <= bins[i + 1]) {
-									if (map.containsKey(i)) {
-										int num = (Integer)map.get(i);
-										num++;
-										map.put(i, num);
-									} else {
-										map.put(i, 1);
+					if (MathTools.isNumeric(split[1])) {
+						if (!split[1].equals("NaN") && !split[1].equals("Infinity")) {
+							
+							double sd = new Double(split[1]);
+							if (sd > 0) {
+								for (int i = 0; i < bins.length - 1; i++) {
+									if (bins[i] <= sd && sd <= bins[i + 1]) {
+										if (map.containsKey(i)) {
+											int num = (Integer)map.get(i);
+											num++;
+											map.put(i, num);
+										} else {
+											map.put(i, 1);
+										}
 									}
 								}
 							}

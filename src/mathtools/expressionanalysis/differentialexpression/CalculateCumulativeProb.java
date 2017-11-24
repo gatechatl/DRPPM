@@ -12,8 +12,8 @@ import java.util.LinkedList;
 import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.commons.math3.stat.inference.TTest;
 
-import Statistics.General.MathTools;
-import Statistics.General.StatTests;
+import statistics.general.MathTools;
+import statistics.general.StatTests;
 
 /**
  * The single sample is the d2

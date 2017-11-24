@@ -12,7 +12,7 @@ import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Random;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 public class CalculateStemness {
 
@@ -27,7 +27,7 @@ public class CalculateStemness {
 		return "Calculate Oligodendrocyte Astrocyte and Stemness Score";
 	}
 	public static String parameter_info() {
-		return "[inputFile] [astrocyteGeneFile] [oligoGeneFile] [stemnessFile] [outputFile]";
+		return "[inputFile] [astrocyteGeneFile] [oligoGeneFile] [stemnessFile] [FPKMcutoff] [outputFile] [outputDebug]";
 	}
 	public static void execute(String[] args) {
 		
@@ -330,7 +330,7 @@ public class CalculateStemness {
 			String line = (String)itr.next();
 			String[] split = line.split("\t");
 			values.add(split[index + 1]);
-			System.out.println("averageList: " + new Double(split[index + 1]));
+			//System.out.println("averageList: " + new Double(split[index + 1]));
 		}
 		double[] subsample_double = MathTools.convertListStr2Double(values);
 		return MathTools.mean(subsample_double);

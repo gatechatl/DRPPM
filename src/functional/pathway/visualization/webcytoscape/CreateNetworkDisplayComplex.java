@@ -23,8 +23,8 @@ public class CreateNetworkDisplayComplex {
 	public static void execute(String[] args) {
 		//String inputFile = "C:\\Users\\tshaw\\Desktop\\INTEGRATION\\GenerateHTMLExamples\\graph.txt";
 		try {
-			String inputFile = args[0];
-			String metaFile = args[1];
+			String metaEdgeFile = args[0];
+			String metaNodeFile = args[1];
 			String networkName = args[2];
 			String networkType = args[3];
 			int fontSize = new Integer(args[4]);
@@ -37,8 +37,8 @@ public class CreateNetworkDisplayComplex {
 			
 			File file = new File(outputFolder);
 			file.mkdir();
-			LinkedList kegg_conn_list = readRelationshipFromFile(inputFile);
-			LinkedList kegg_list = readEntryFromFile(metaFile);
+			LinkedList kegg_conn_list = readRelationshipFromFile(metaEdgeFile);
+			LinkedList kegg_list = readEntryFromFile(metaNodeFile);
 			
 			HashMap expression = new HashMap();
 			HashMap raw_expression = new HashMap();
@@ -57,12 +57,24 @@ public class CreateNetworkDisplayComplex {
 			out.write(NetworkDisplayTool.generateHTML(networkName));
 			out.close();
 			
-			CommandLine.executeCommand("cd " + outputFolder + "; wget 10.4.13.112/js/pic.css");
-			CommandLine.executeCommand("cd " + outputFolder + "; wget 10.4.13.112/js/cytoscape.js-cxtmenu.js");
-			
-			String outputFile2 = outputFolder + "/cytoscape.min.20140901.js";
+			String outputFile2 = outputFolder + "/pic.css";
 			FileWriter fwriter2 = new FileWriter(outputFile2);
 			BufferedWriter out2 = new BufferedWriter(fwriter2);
+			out2.write(CreateWebCytoscapeFile.picCSSFile());
+			out2.close();
+			
+			outputFile2 = outputFolder + "/cytoscape.js-cxtmenu.js";
+			fwriter2 = new FileWriter(outputFile2);
+			out2 = new BufferedWriter(fwriter2);
+			out2.write(CreateWebCytoscapeFile.printCXTMenuJSFile());
+			out2.close();
+			
+			//CommandLine.executeCommand("cd " + outputFolder + "; wget 10.4.13.112/js/pic.css");
+			//CommandLine.executeCommand("cd " + outputFolder + "; wget 10.4.13.112/js/cytoscape.js-cxtmenu.js");
+			
+			outputFile2 = outputFolder + "/cytoscape.min.20140901.js";
+			fwriter2 = new FileWriter(outputFile2);
+			out2 = new BufferedWriter(fwriter2);
 			out2.write(CreateWebCytoscapeFile.printWebCytoscapeJSFile());
 			out2.close();
 			

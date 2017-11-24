@@ -11,10 +11,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.apache.commons.math3.stat.inference.TTest;
-
 import org.apache.commons.math3.distribution.NormalDistribution;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 /**
  * 

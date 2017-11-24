@@ -1,4 +1,4 @@
-package Statistics.Comparison;
+package statistics.comparison;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;

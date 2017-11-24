@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import statistics.general.MathTools;
 import MISC.RunRScript;
-import Statistics.General.MathTools;
 
 public class PhosphositeMetaScoreSensitivitySpecificity {
 
@@ -90,12 +90,18 @@ public class PhosphositeMetaScoreSensitivitySpecificity {
 			while (itr.hasNext()) {
 				String kinase = (String)itr.next();
 				
+				/*
+				String outputFile_all = outputFileFolder + "/" + kinase + "_sensitivity_specificity_nofilter.txt";
+				FileWriter fwriter_all = new FileWriter(outputFile_all);
+				BufferedWriter out_all = new BufferedWriter(fwriter_all);
+				*/
 				String outputFile = outputFileFolder + "/" + kinase + "_sensitivity_specificity.txt";
 				FileWriter fwriter = new FileWriter(outputFile);
 				BufferedWriter out = new BufferedWriter(fwriter);
 				
 
 				out.write("Score\tSensitivity\tSpecificity\tTruePos\tFalseNeg\tFalsePos\tTrueNeg\n");
+				//out_all.write("Score\tSensitivity\tSpecificity\tTruePos\tFalseNeg\tFalsePos\tTrueNeg\n");
 				LinkedList positive_set = new LinkedList();
 				LinkedList negative_set = new LinkedList();
 				if (kinase_result.containsKey(kinase + "_POS")) {
@@ -121,6 +127,7 @@ public class PhosphositeMetaScoreSensitivitySpecificity {
 				double last_tpr = 0;
 				double last_dtpr = 0;
 				out.write("NA" + "\t0.0\t1.0\tNA\tNA\tNA\tNA\n");
+				//out_all.write("NA" + "\t0.0\t1.0\tNA\tNA\tNA\tNA\n");
 				String lines = "";
 				for (int i = positive_set_array.length - 1; i >= 0; i--) {
 					double score = positive_set_array[i];
@@ -134,17 +141,20 @@ public class PhosphositeMetaScoreSensitivitySpecificity {
 					double FPR = (1 - specificity);
 					double TPR = sensitivity;
 					double dFPR = FPR - last_fpr;
-					double dTPR = TPR - last_tpr;
+					double dTPR = TPR - last_tpr;					
+					
 					//last_dtpr = dTPR;
 					//area_under_curve += sensitivity * ((1 - specificity) - prev);
 					area_under_curve += TPR * dFPR - (dFPR * dTPR) / 2;
 					prev = 1 - specificity;
 					//double x_axis = 1.0 - specificity;
 					last_sensitivity = sensitivity;
+					
 					out.write(score + "\t" + sensitivity + "\t" + specificity + "\t" + true_positive + "\t" + false_negative + "\t" + false_positive + "\t" + true_negative + "\n");
 					
 					last_fpr = FPR;
 					last_tpr = TPR;
+					last_dtpr = dTPR;
 				}
 				out.write("NA" + "\t1.0\t0.0\tNA\tNA\tNA\tNA\n");
 				//if (prev < 1) {					

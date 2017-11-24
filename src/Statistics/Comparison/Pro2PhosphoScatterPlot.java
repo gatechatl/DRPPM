@@ -1,4 +1,4 @@
-package Statistics.Comparison;
+package statistics.comparison;
 
 public class Pro2PhosphoScatterPlot {
 

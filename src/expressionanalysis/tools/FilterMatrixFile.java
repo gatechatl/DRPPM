@@ -42,7 +42,7 @@ public class FilterMatrixFile {
 			String header = in.readLine();
 			while (in.ready()) {
 				String str = in.readLine();
-				String geneName = str.split("\t")[0].toUpperCase();
+				String geneName = str.split("\t")[0].toUpperCase().replaceAll("\"", "");
 				map.put(geneName, geneName);
 			}
 			in.close();
@@ -58,6 +58,8 @@ public class FilterMatrixFile {
 				String geneName = split[0].replaceAll("\"", "").toUpperCase();
 				if (map.containsKey(geneName)) {
 					out.write(str + "\n");
+				} else {
+					System.out.println("Missing geneName: " + geneName);
 				}
 			}
 			in.close();

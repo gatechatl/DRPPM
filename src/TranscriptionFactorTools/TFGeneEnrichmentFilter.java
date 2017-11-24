@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import statistics.general.MathTools;
 import mathtools.expressionanalysis.differentialexpression.AddAnnotation2DiffFisher;
-import Statistics.General.MathTools;
 
 
 public class TFGeneEnrichmentFilter {

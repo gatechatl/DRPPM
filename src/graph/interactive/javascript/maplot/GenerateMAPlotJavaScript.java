@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 public class GenerateMAPlotJavaScript {
 
@@ -251,6 +251,7 @@ public class GenerateMAPlotJavaScript {
 		//script.append("      .style(\"opacity\", function(d, i) {if (d.fdr < " + fdr_cutoff + " && Math.abs(d.y) > " + logFC_cutoff + ") {return 0.0;} else {return 0.7;}})\n");
 		if (gene_list.size() > 0) {
 			script.append("      .style(\"opacity\", function(d, i) {\n");
+			//script.append("if (d.fdr < " + fdr_cutoff + " && Math.abs(d.y) > " + logFC_cutoff + ") {\n");
 			script.append("if (d.fdr < " + fdr_cutoff + " && Math.abs(d.y) > " + logFC_cutoff + ") {\n");
 			Iterator itr = gene_list.keySet().iterator();
 			int index = 0;
@@ -389,7 +390,8 @@ public class GenerateMAPlotJavaScript {
 			script.append("      })\n");
 			script.append("      .attr(\"font_family\", \"sans-serif\")\n");
 			script.append("      .attr(\"font-size\", \"8px\")\n");
-			script.append("      .style(\"opacity\", function(d, i) {if (d.fdr < " + fdr_cutoff + " && Math.abs(d.x) > " + logFC_cutoff + ") return 1.0; else return 0;})\n");
+			//script.append("      .style(\"opacity\", function(d, i) {if (d.fdr < " + fdr_cutoff + " && Math.abs(d.x) > " + logFC_cutoff + ") return 1.0; else return 0;})\n");
+			script.append("      .style(\"opacity\", function(d, i) {if (d.fdr < " + fdr_cutoff + " && Math.abs(d.y) > " + logFC_cutoff + ") return 1.0; else return 0;})\n");
 			script.append("      .attr(\"fill\", \"black\");   // Font color\n");
 
 		}

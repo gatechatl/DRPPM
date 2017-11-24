@@ -41,24 +41,26 @@ public class KinaseSubstrateMergeROCResult {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
-				String title = split[0];
-				String path = split[1];
-				
-				FileInputStream fstream2 = new FileInputStream(path);
-				DataInputStream din2 = new DataInputStream(fstream2);
-				BufferedReader in2 = new BufferedReader(new InputStreamReader(din2));
-				String header2 = in2.readLine();
-				while (in2.ready()) {
-					String str2 = in2.readLine();
-					String[] split2 = str2.split("\t");
-					String kinase = split2[0];
-					double roc = new Double(split2[1]);
-					int numPosControl = new Integer(split2[2]);
-					if (numPosControl >= cutoff) {
-						out.write(title + "\t" + kinase + "\t" + roc + "\t" + numPosControl + "\n");
+				if (split.length == 2) {
+					String title = split[0];
+					String path = split[1];
+					
+					FileInputStream fstream2 = new FileInputStream(path);
+					DataInputStream din2 = new DataInputStream(fstream2);
+					BufferedReader in2 = new BufferedReader(new InputStreamReader(din2));
+					String header2 = in2.readLine();
+					while (in2.ready()) {
+						String str2 = in2.readLine();
+						String[] split2 = str2.split("\t");
+						String kinase = split2[0];
+						double roc = new Double(split2[1]);
+						int numPosControl = new Integer(split2[2]);
+						if (numPosControl >= cutoff) {
+							out.write(title + "\t" + kinase + "\t" + roc + "\t" + numPosControl + "\n");
+						}
 					}
+					in2.close();			
 				}
-				in2.close();				
 			}
 			in.close();
 			out.close();

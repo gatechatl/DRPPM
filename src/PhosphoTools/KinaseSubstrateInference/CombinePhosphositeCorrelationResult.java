@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import Statistics.General.MathTools;
-import Statistics.General.StatisticsConversion;
+import statistics.general.MathTools;
+import statistics.general.StatisticsConversion;
 
 /**
  * Combine the phosphosite correlation result and calculate a meta pvalue

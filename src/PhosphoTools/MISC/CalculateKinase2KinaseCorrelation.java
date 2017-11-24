@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import statistics.general.MathTools;
 import PhosphoTools.MotifTools.MotifTools;
-import Statistics.General.MathTools;
 
 /**
  * Use the original peptide information to append the original peptide information

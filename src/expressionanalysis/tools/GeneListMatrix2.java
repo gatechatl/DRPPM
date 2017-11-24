@@ -21,7 +21,7 @@ public class GeneListMatrix2 {
 		return "EXPRESSION";
 	}
 	public static String description() {
-		return "Generate a matrix based on the gene list for generating heatmap";
+		return "Generate a matrix based on the gene list for generating heatmap. Note that it skips the first line in the genelist File";
 	}
 	public static String parameter_info() {
 		return "[matrixFile] [pathwayFile] [outputFile]";

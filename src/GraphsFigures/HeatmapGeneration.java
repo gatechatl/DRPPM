@@ -693,7 +693,7 @@ public class HeatmapGeneration {
 		
 		
 		script += "selection = as.matrix(zselection);\n";
-		script += "rownames(selection) = rownames;\n";
+		//script += "rownames(selection) = rownames;\n";
 		script += "selection[is.na(selection)] = 0;\n";
 		
 		script += geneSet;

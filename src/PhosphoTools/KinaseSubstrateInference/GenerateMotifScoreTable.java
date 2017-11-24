@@ -102,7 +102,7 @@ public class GenerateMotifScoreTable {
 				}
 			}
 			in.close();
-			
+			out.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

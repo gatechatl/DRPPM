@@ -43,7 +43,10 @@ public class RemoveQuotations {
 			out.write("GeneName\t" + header.replaceAll("\"", "") + "\n");
 			while (in.ready()) {
 				String str = in.readLine();
-				out.write(str.replaceAll("\"", "") + "\n");								
+				String[] split = str.split("\t");
+				if (!split[1].equals("NA")) {
+					out.write(str.replaceAll("\"", "") + "\n");
+				}
 			}
 			in.close();
 			out.close();

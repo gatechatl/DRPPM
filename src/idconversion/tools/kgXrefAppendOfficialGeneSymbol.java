@@ -44,7 +44,7 @@ public class kgXrefAppendOfficialGeneSymbol {
 
 			fstream = new FileInputStream(fileName);
 			din = new DataInputStream(fstream);
-			in = new BufferedReader(new InputStreamReader(din));
+			in = new BufferedReader(new InputStreamReader(din));			
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");

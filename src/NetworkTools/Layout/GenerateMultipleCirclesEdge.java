@@ -34,25 +34,12 @@ public class GenerateMultipleCirclesEdge {
 			int size = new Integer(args[3]);
 			double opaque = new Double(args[4]);
 			double opaque2 = new Double(args[5]);
-			FileInputStream fstream = new FileInputStream(fileName);
-			DataInputStream din = new DataInputStream(fstream);
-			BufferedReader in = new BufferedReader(new InputStreamReader(din));
-			String file1Header = in.readLine();
-			while (in.ready()) {
-				String str = in.readLine();
-				String[] split = str.split("\t");
-				if (!split[0].equals(split[2])) {
-					map.put(split[0] + "\t" + split[1] + "\t" + split[2], str);
-				}
-				
-			}
-			in.close();
-			
+			HashMap genes = new HashMap();
 			LinkedList allnode = new LinkedList();
 			HashMap mod = new HashMap();
-			fstream = new FileInputStream(moduleFile);
-			din = new DataInputStream(fstream);
-			in = new BufferedReader(new InputStreamReader(din));			
+			FileInputStream fstream = new FileInputStream(moduleFile);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));			
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
@@ -61,11 +48,14 @@ public class GenerateMultipleCirclesEdge {
 				for (String node: nodes) {
 					list.add(node);
 					allnode.add(node);
+					genes.put(node,  node);
 				}
 				mod.put(split[0], list);
 				
 
 			}
+			in.close();
+			
 			HashMap mod_layout = new HashMap();
 			fstream = new FileInputStream(moduleLayoutFile);
 			din = new DataInputStream(fstream);
@@ -81,6 +71,23 @@ public class GenerateMultipleCirclesEdge {
 				mod_layout.put(split[0], colour);
 
 			}
+			in.close();
+			
+			
+			fstream = new FileInputStream(fileName);
+			din = new DataInputStream(fstream);
+			in = new BufferedReader(new InputStreamReader(din));
+			String file1Header = in.readLine();
+			while (in.ready()) {
+				String str = in.readLine();
+				String[] split = str.split("\t");
+				if (!split[0].equals(split[2])) {
+					if (genes.containsKey(split[0]) || genes.containsKey(split[2])) {
+						map.put(split[0] + "\t" + split[1] + "\t" + split[2], str);
+					}
+				}				
+			}
+			in.close();
 			
 			System.out.println("Node1\tConnection\tNode2\tWidth\tEdgeColor\tArrowShape\tLineStyle\tOpacity");
 			Iterator itr = map.keySet().iterator();
@@ -107,9 +114,9 @@ public class GenerateMultipleCirclesEdge {
 					}
 				}
 				if (found) {					
-					System.out.println(nodes + "\t" + size + "\t" + colour + "\t" + "triangle" + "\t" + "solid" + "\t" + opaque);
+					System.out.println(nodes + "\t" + size + "\t" + colour + "\t" + "none" + "\t" + "solid" + "\t" + opaque);
 				} else if (found_outside_edge) {
-					System.out.println(nodes + "\t" + 2 + "\t" + colour + "\t" + "triangle" + "\t" + "solid" + "\t" + opaque2);
+					System.out.println(nodes + "\t" + 2 + "\t" + colour + "\t" + "none" + "\t" + "solid" + "\t" + opaque2);
 				}
 				
 			}

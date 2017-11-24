@@ -14,7 +14,7 @@ import java.util.TreeMap;
 import org.apache.commons.math3.stat.inference.TTest;
 
 import specialized.algorithm.SpecializedAlgorithms;
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 /**
  * Generate a matrix based on the gene list for generating heatmap

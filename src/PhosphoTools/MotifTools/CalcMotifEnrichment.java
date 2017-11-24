@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 /**
  * Calculates the motif enrichment for phosphorylation

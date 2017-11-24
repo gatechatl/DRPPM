@@ -14,7 +14,7 @@ import java.util.TreeMap;
 import org.apache.commons.math3.stat.inference.TTest;
 
 import specialized.algorithm.SpecializedAlgorithms;
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 public class OrderGeneMatrixBasedOnTTestDist {
 
@@ -88,6 +88,9 @@ public class OrderGeneMatrixBasedOnTTestDist {
 			
 			HashMap map_line = new HashMap();
 			HashMap map = new HashMap();
+			
+			HashMap map_upreg = new HashMap();
+			HashMap map_dnreg = new HashMap();
 			// read the file's matrix again			
 			fstream = new FileInputStream(inputFile);
 			din = new DataInputStream(fstream);
@@ -117,7 +120,13 @@ public class OrderGeneMatrixBasedOnTTestDist {
 						indexB++;
 					}
 				}
+				
 				double tdist = ttest.t(valuesA, valuesB);
+				if (MathTools.mean(valuesA) - MathTools.mean(valuesB) > 0) {
+					map_upreg.put(split[0], tdist);
+				} else {
+					map_dnreg.put(split[0], tdist);
+				}
 				map.put(split[0], tdist);
 			}
 			in.close();

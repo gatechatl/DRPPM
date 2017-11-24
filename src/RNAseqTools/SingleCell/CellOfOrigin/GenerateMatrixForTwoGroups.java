@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 /**
  * For debugging of methodology purpose. 

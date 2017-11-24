@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 /**
  * Take two list of junction count and calculates a fold change

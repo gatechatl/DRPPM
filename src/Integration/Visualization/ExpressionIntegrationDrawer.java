@@ -8,9 +8,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import statistics.general.MathTools;
 import MISC.CommandLine;
 import MISC.RunRScript;
-import Statistics.General.MathTools;
 
 /**
  * Draw gene images with expression boxes on the side

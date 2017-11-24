@@ -11,8 +11,8 @@ import java.util.LinkedList;
 
 import org.apache.commons.math3.stat.inference.TTest;
 
-import Statistics.General.MathTools;
-import Statistics.General.StatTests;
+import statistics.general.MathTools;
+import statistics.general.StatTests;
 
 public class CalculateTTest {
 

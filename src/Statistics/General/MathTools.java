@@ -1,9 +1,12 @@
-package Statistics.General;
+package statistics.general;
 
+import java.text.NumberFormat;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.apache.commons.math3.distribution.TDistribution;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
@@ -66,6 +69,19 @@ public class MathTools {
 		return zscores;
 	}
 	
+	/** 
+	 * Check if str is numeric
+	 * https://stackoverflow.com/questions/1102891/how-to-check-if-a-string-is-nuameric-in-java
+	 * @param str
+	 * @return
+	 */
+	public static boolean isNumeric(String str)
+	{
+	  NumberFormat formatter = NumberFormat.getInstance();
+	  ParsePosition pos = new ParsePosition(0);
+	  formatter.parse(str, pos);
+	  return str.length() == pos.getIndex();
+	}
 	/**
 	 * Convert 2 log2
 	 * @param x
@@ -150,7 +166,29 @@ public class MathTools {
 	}
 	
 	
-	
+    public static Double mad(List<Double> inputList) {
+        Double[] input = inputList.toArray(new Double[inputList.size()]);
+        Double median = median(input);
+        arrayAbsDistance(input, median);
+        return median(input);
+    }
+
+    public static void arrayAbsDistance(Double[] array, Double value) {
+        for (int i=0; i<array.length;i++) {
+            array[i] = Math.abs(array[i] - value);
+        }
+    }
+
+    public static Double median(Double[] input) {
+        if (input.length==0) {
+            throw new IllegalArgumentException("to calculate median we need at least 1 element");
+        }
+        Arrays.sort(input);
+        if (input.length%2==0) {
+            return (input[input.length/2-1] + input[input.length/2])/2;
+        } 
+        return input[input.length/2];
+    }
 	public static double standardDeviation(double[] set) {
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (double val: set) {

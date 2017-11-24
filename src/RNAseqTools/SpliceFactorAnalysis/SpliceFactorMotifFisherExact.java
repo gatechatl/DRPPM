@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import statistics.general.MathTools;
 import functional.pathway.enrichment.MapUtilsBig2Small;
 import functional.pathway.enrichment.MapUtilsSmall2Big;
-import Statistics.General.MathTools;
 
 /**
  * Take output from SpliceFactorMotifScanner and compare two groups

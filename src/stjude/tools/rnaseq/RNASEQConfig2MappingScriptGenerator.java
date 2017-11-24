@@ -32,18 +32,20 @@ public class RNASEQConfig2MappingScriptGenerator {
 			
 			String inputFile = args[0];
 			String organism = args[1];
-			String step1_copy_file_script = copy_file_script(inputFile);
-			CommandLine.writeFile("step1_copy_file_script.sh", step1_copy_file_script);
-			String step2_gunzipFiles = gunzipFiles(inputFile);
-			CommandLine.writeFile("step2_gunzipFiles.sh", step2_gunzipFiles);
+			//String step1_copy_file_script = copy_file_script(inputFile);
+			String step1_softlink_script = softlink_script(inputFile);
+			//CommandLine.writeFile("step1_copy_file_script.sh", step1_copy_file_script);
+			CommandLine.writeFile("step1_softlink_script.sh", step1_softlink_script);
+			//String step2_gunzipFiles = gunzipFiles(inputFile);
+			//CommandLine.writeFile("step2_gunzipFiles.sh", step2_gunzipFiles);
 			String step3_combineFiles = combineFiles();
-			CommandLine.writeFile("step3_combineFiles.sh", step3_combineFiles);
+			CommandLine.writeFile("step2_combineFiles.sh", step3_combineFiles);
 			String step4_submitSTARMappingScript = submitSTARMappingScript(organism);
-			CommandLine.writeFile("step4_submitSTARMappingScript.sh", step4_submitSTARMappingScript);
+			CommandLine.writeFile("step3_submitSTARMappingScript.sh", step4_submitSTARMappingScript);
 			String step5_mergeBamFileScript = mergeBamFileScript();
-			CommandLine.writeFile("step5_mergeBamFileScript.sh", step5_mergeBamFileScript);
+			CommandLine.writeFile("step4_mergeBamFileScript.sh", step5_mergeBamFileScript);
 			String step6_cleanup = cleanUp();
-			CommandLine.writeFile("step6_cleanup.sh", step6_cleanup);
+			CommandLine.writeFile("step5_cleanup.sh", step6_cleanup);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -80,14 +82,18 @@ public class RNASEQConfig2MappingScriptGenerator {
 			fastaPath = "/nfs_exports/apps/internal/rnaseq/tshaw/XenoGraphReference/STARwithGTF/star-genome-withRef/";
 		} else if (organism.equals("dm3")) {
 			fastaPath = "/nfs_exports/genomes/1/Drosophila_melanogaster/dm3/STAR/Genome_dm3/";
+		} else if (organism.equals("/research/rgs01/resgen/prod/tartan/index/reference/Drosophila_melanogaster/BDGPr5/STAR/")) {
+			fastaPath = " /research/rgs01/resgen/prod/tartan/index/reference/Drosophila_melanogaster/BDGPr5/STAR/";
 		}
-		String script = "drppm -STARMappingScriptGenerator input.txt /nfs_exports/apps/internal/rnaseq/tshaw/RNASEQ_Tools/bin/STAR " + fastaPath + " > mapping_script.sh\n";
-		script += "/nfs_exports/apps/internal/rnaseq/tshaw/RNASEQ_Tools/shellscripts/bsub_array_for_cmdfile.sh mapping_script.sh -M 32000\n";
+		//String script = "drppm -STARMappingScriptGenerator input.txt /rgs01/resgen/dev/wc/tshaw/pipeline_examples/RNASEQ/Tools/bin/STAR " + fastaPath + " > mapping_script.sh\n";
+		String script = "drppm -STARMappingScriptGenerator input.txt STAR " + fastaPath + " > mapping_script.sh\n";
+		script += "/rgs01/resgen/dev/wc/tshaw/Tools/bsub_array_for_cmdfile.sh mapping_script.sh -M 32000\n";
 		return script;
 	}
 	public static String combineFiles() {
-		String script = "ls *.fastq > fastq.lst\n";
-		script += "drppm -Fastq2FileList fastq.lst input.txt\n";
+		//String script = "ls *.fastq > fastq.lst\n";
+		String script = "ls *.gz > gz.lst\n";
+		script += "drppm -Fastq2FileList gz.lst input.txt\n";
 		return script;
 	}
 	public static String gunzipFiles(String inputFile) {
@@ -112,7 +118,7 @@ public class RNASEQConfig2MappingScriptGenerator {
 				String file = (String)itr.next();
 				File f = new File(file);
 				
-				script += "gunzip " + f.getName() + "\n";
+				script += "gunzip " + f.getName() + " -c > " + f.getName().substring(0, f.getName().length() - 3) + "\n";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,6 +147,36 @@ public class RNASEQConfig2MappingScriptGenerator {
 			while (itr.hasNext()) {
 				String file = (String)itr.next();
 				script += "cp " + file + " .\n";
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return script;
+	}
+	
+	public static String softlink_script(String inputFile) {
+		String script = "";
+		try {
+			
+			HashMap map = new HashMap();
+			FileInputStream fstream = new FileInputStream(inputFile);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));
+			while (in.ready()) {
+				String str = in.readLine();
+				String[] split = str.split("\t");
+				if (!split[0].equals("file")) {
+					map.put(split[0], split[8]);
+				}
+			}
+			in.close();			
+			
+			Iterator itr = map.keySet().iterator();
+			while (itr.hasNext()) {
+				String file = (String)itr.next();
+				File f = new File(file);
+				String sampleName = (String)map.get(file);
+				script += "ln -s " + file + " " + sampleName + "_" + f.getName() + "\n";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -52,12 +52,25 @@ public class CreateNetworkDisplayExpression {
 			out.write(generateHTML(networkName));
 			out.close();
 			
-			executeCommand("cd " + outputFolder + "; wget 10.4.13.112/js/pic.css");
-			executeCommand("cd " + outputFolder + "; wget 10.4.13.112/js/cytoscape.js-cxtmenu.js");
 			
-			String outputFile2 = outputFolder + "/cytoscape.min.20140901.js";
+			String outputFile2 = outputFolder + "/pic.css";
 			FileWriter fwriter2 = new FileWriter(outputFile2);
 			BufferedWriter out2 = new BufferedWriter(fwriter2);
+			out2.write(CreateWebCytoscapeFile.picCSSFile());
+			out2.close();
+			
+			outputFile2 = outputFolder + "/cytoscape.js-cxtmenu.js";
+			fwriter2 = new FileWriter(outputFile2);
+			out2 = new BufferedWriter(fwriter2);
+			out2.write(CreateWebCytoscapeFile.printCXTMenuJSFile());
+			out2.close();
+			
+			//CommandLine.executeCommand("cd " + outputFolder + "; wget 10.4.13.112/js/pic.css");
+			//CommandLine.executeCommand("cd " + outputFolder + "; wget 10.4.13.112/js/cytoscape.js-cxtmenu.js");
+			
+			outputFile2 = outputFolder + "/cytoscape.min.20140901.js";
+			fwriter2 = new FileWriter(outputFile2);
+			out2 = new BufferedWriter(fwriter2);
 			out2.write(CreateWebCytoscapeFile.printWebCytoscapeJSFile());
 			out2.close();
 			

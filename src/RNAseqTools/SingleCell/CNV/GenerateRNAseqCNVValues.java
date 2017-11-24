@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 /**
  * Calculate the RNAseq CNV similar to what's described in Tirosh et al. Nature 2016.

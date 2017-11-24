@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 /**
  * 
@@ -47,13 +47,13 @@ public class OriginalPSSMMotifFinder {
 				in.close();								
 			}
 				
-			HashMap backFreq = getBackgroundFrequency(allSeq);
+			/*HashMap backFreq = getBackgroundFrequency(allSeq);
 			Iterator itr2  = backFreq.keySet().iterator();
 			while (itr2.hasNext()) {
 				String aa = (String)itr2.next();
 				double p = (Double)backFreq.get(aa);
 				
-			}
+			}*/
 			//File f = new File("C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\Projects\\Kundu\\ULK1_CLASP1-2_Project\\Convert2fasta");
 			//for (File file: f.listFiles()) {
 			for (String file: listFile) {

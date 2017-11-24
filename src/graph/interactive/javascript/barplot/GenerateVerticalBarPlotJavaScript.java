@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 public class GenerateVerticalBarPlotJavaScript {
 
@@ -18,7 +18,7 @@ public class GenerateVerticalBarPlotJavaScript {
 		return "JAVASCRIPT";
 	}
 	public static String parameter_info() {
-		return "[inputMatrix] [geneName] [expr_indices] [group_color] [title] [xaxis_label] [yaxis_label]";
+		return "[inputMatrix] [geneName] [expr_indices] [group_color] [title] [xaxis_label] [yaxis_label] [font_size]";
 	}
 	public static void execute(String[] args) {
 		
@@ -34,6 +34,7 @@ public class GenerateVerticalBarPlotJavaScript {
 			String title = args[4];
 			String xaxis_label = args[5];
 			String yaxis_label = args[6];			
+			String fontSize = args[7];
 			//boolean skipHeader = new Boolean(args[6]);
 			
 			double min_x = Double.MAX_VALUE;
@@ -105,7 +106,7 @@ public class GenerateVerticalBarPlotJavaScript {
 						text[i] = labels[i] + ":" + x[i];
 					}
 					String[] highlight = text;
-					System.out.println(generate_vertical_barplot_javascript(names, x, colors, text, highlight, title, xaxis_label, yaxis_label));
+					System.out.println(generate_vertical_barplot_javascript(names, x, colors, text, highlight, title, xaxis_label, yaxis_label, fontSize));
 					break;
 				}
 				
@@ -122,7 +123,7 @@ public class GenerateVerticalBarPlotJavaScript {
 			e.printStackTrace();
 		}
 	}
-	public static String generate_vertical_barplot_javascript(String[] labels, double[] values, String[] colors, String[] text, String[] highlight, String title, String xaxis_label, String yaxis_label) {
+	public static String generate_vertical_barplot_javascript(String[] labels, double[] values, String[] colors, String[] text, String[] highlight, String title, String xaxis_label, String yaxis_label, String fontSize) {
 		String script = "";
 		script += "<html>\n";
 		script += "<head>\n";
@@ -204,13 +205,13 @@ public class GenerateVerticalBarPlotJavaScript {
 		                //for x axis 
 		script += "                g.append(\"g\")\n";
 		script += "                    .call(d3.axisBottom(x))\n";
-		script += "                    .style(\"font-size\", \"15px\")\n";
+		script += "                    .style(\"font-size\", \"" + fontSize + "px\")\n";
 		script += "                    .attr(\"transform\", \"translate(0,\" + height + \")\");\n";
 
 		                //for y axis 
 		script += "                g.append(\"g\")\n";
 		script += "                    .call(d3.axisLeft(y))\n";
-		script += "                    .style(\"font-size\", \"15px\")\n";
+		script += "                    .style(\"font-size\", \"" + fontSize + "px\")\n";
 		script += "                    .append(\"text\").attr(\"transform\", \"rotate(-90)\").attr(\"text-anchor\", \"end\");\n";
 
 		                  //for rectangles 
@@ -232,6 +233,7 @@ public class GenerateVerticalBarPlotJavaScript {
 		script += "                .attr(\"y\", function(d) { return y(d.value); })\n";
 		script += "                .attr(\"x\", function(d) { return x(d.label); })\n";
 		script += "                .attr(\"text-anchor\", \"middle\")\n";
+		
 		script += "                .text(function(d) { return y(d.label); });\n";
 
 		script += "	       g.selectAll(\".text\")\n";
@@ -241,6 +243,7 @@ public class GenerateVerticalBarPlotJavaScript {
 		script += "                .attr(\"dy\", \"-.75em\")\n";
 		script += "                .attr(\"y\", function(d) { return y(d.value); })\n";
 		script += "                .attr(\"dx\", \"1.5em\")\n";
+		script += "            .style(\"font-size\", \"10px\")\n";
 		script += "		.attr(\"x\", function(d) { return x(d.label); })\n";
 		script += "                .attr(\"text-anchor\", \"middle\")\n";
 		script += "                .text(function(d) { return d.value; });\n";

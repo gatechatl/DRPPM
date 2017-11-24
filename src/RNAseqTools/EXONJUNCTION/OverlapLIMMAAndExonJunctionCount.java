@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 /**
  * Intake two list of samples, calculates a fold change

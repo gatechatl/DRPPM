@@ -1,4 +1,4 @@
-package Statistics.General;
+package statistics.general;
 
 /**
  * Create a histogram to examine the overall distribution of all the genes

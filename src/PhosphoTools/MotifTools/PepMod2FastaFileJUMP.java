@@ -12,7 +12,7 @@ import java.util.LinkedList;
 
 import org.apache.commons.math3.stat.inference.TTest;
 
-import Statistics.General.MathTools;
+import statistics.general.MathTools;
 
 /**
  * Input is of JUMPq's phosphopep_all_prot_quan.txt file

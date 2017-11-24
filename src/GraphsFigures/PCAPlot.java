@@ -49,6 +49,10 @@ public class PCAPlot {
 		script += "isexpr <- rowSums(mat>1) >= 1\n";
 		script += "mat <- mat[isexpr,]\n";
 		script += "mat <- log2(mat + 0.00001);\n";
+		script += "zmat = apply(mat, 1, scale);\n";
+		script += "zmat = apply(zmat, 1, rev)\n";
+		script += "colnames(zmat) = names(mat)\n";
+		script += "mat = as.matrix(zmat);\n";
 		script += "colnames = colnames(mat);\n";
 		script += "rownames = rownames(mat);\n";
 		script += "revmat = apply(mat, 1, rev)\n";
