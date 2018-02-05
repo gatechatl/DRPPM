@@ -1,4 +1,4 @@
-package MISC;
+package misc;
 
 public class StringManipulationTools {
 

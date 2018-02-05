@@ -1,6 +1,6 @@
 package RNAseqTools.pipeline;
 
-import MISC.CommandLine;
+import misc.CommandLine;
 
 public class GenerateLIMMAComparisonScript {
 

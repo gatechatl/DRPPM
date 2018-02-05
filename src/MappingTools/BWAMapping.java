@@ -1,4 +1,4 @@
-package MappingTools;
+package mappingtools;
 
 public class BWAMapping {
 

@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-import MISC.RunRScript;
+import misc.RunRScript;
 
 public class MultipleBarPlotGenerator {
 	public static String type() {

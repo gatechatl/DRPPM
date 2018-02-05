@@ -1,4 +1,4 @@
-package MISC.PROTEINALIGNMENT;
+package misc.proteinalignment;
 
 
 /**

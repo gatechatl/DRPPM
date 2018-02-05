@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import MISC.FileManipulation;
-import MISC.FileTools;
+import misc.FileManipulation;
+import misc.FileTools;
 
 public class PhosphoKinaseCorrelationDistributionAll {
 

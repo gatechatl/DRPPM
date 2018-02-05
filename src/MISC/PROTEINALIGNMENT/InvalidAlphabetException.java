@@ -1,4 +1,4 @@
-package MISC.PROTEINALIGNMENT;
+package misc.proteinalignment;
 
 /** simple alphabet exception class
  * http://www.cs.utexas.edu/~mobios/cs329e/rosetta/src/InvalidAlphabetException.java

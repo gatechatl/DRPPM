@@ -3,7 +3,7 @@ package RNAseqTools.IntronRetention;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import MISC.FileTools;
+import misc.FileTools;
 
 public class CalculateSplicingDeficiencyScript {
 	public static void execute(String[] args) {

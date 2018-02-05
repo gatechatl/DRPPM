@@ -12,7 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.UUID;
 
-import MISC.CommandLine;
+import misc.CommandLine;
 import ProteinFeature.EmbossTools.ReadPepInfo.PEPSTATS;
 
 

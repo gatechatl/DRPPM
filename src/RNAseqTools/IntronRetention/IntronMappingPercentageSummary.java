@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import MISC.FileTools;
+import misc.FileTools;
 
 public class IntronMappingPercentageSummary {
 

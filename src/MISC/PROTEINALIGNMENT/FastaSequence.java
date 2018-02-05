@@ -1,4 +1,4 @@
-package MISC.PROTEINALIGNMENT;
+package misc.proteinalignment;
 import java.lang.*;
 import java.io.*;
 import java.util.*;

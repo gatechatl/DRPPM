@@ -1,7 +1,8 @@
-package MISC;
+package misc;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
@@ -27,5 +28,11 @@ public class FileTools {
 			e.printStackTrace();
 		}
 		return listFile;
+	}
+	public static void deleteFile(String inputFile) {
+		File f = new File(inputFile);
+		if (f.exists()) {
+			f.delete();
+		}
 	}
 }

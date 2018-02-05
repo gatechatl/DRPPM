@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import MISC.CommandLine;
+import misc.CommandLine;
 
 /**
  * Takes in the PCA.r output and generate python's scatter plot

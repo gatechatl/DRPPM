@@ -1,6 +1,6 @@
 package proteomics.phospho.kinaseactivity.pipeline;
 
-import MISC.CommandLine;
+import misc.CommandLine;
 
 public class OptimizeProteomeNormalization {
 

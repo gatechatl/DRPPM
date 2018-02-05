@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import misc.FileTools;
 import statistics.general.MathTools;
-import MISC.FileTools;
 
 /**
  * Generate the data file for plotting the histogram for intron retention.

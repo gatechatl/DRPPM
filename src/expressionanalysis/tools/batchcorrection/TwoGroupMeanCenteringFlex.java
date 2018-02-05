@@ -25,7 +25,7 @@ public class TwoGroupMeanCenteringFlex {
 		return "EXPRESSION";
 	}
 	public static String parameter_info() {
-		return "[inputMatrixFile] [sample_batch_1_file] [sample_batch_2_file] [outputCorrectedMatrixFile]";
+		return "[inputMatrixFile] [sample_batch_1_file] [sample rep for batch1] [sample_batch_2_file] [sample rep for batch2] [outputCorrectedMatrixFile]";
 	}
 	
 	public static void execute(String[] args) {

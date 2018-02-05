@@ -1,11 +1,11 @@
-package MappingTools;
+package mappingtools;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-import MISC.CommandLine;
+import misc.CommandLine;
 
 /**
  * Grabs the bam file and estimate the insert size based on a small proprotion of reads

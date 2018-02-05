@@ -1,4 +1,4 @@
-package MISC.PROTEINALIGNMENT;
+package misc.proteinalignment;
 
 import java.lang.*;
 // downloaded from http://www.cs.utexas.edu/~mobios/cs329e/rosetta/src/Blosum.java

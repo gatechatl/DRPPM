@@ -9,7 +9,7 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-import MISC.CommandLine;
+import misc.CommandLine;
 import PhosphoTools.SummaryTools;
 
 /**

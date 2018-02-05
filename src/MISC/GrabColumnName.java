@@ -1,4 +1,4 @@
-package MISC;
+package misc;
 
 
 import java.io.BufferedReader;

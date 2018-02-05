@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import misc.CommandLine;
 import functional.pathway.enrichment.MapUtilsBig2Small;
 import functional.pathway.enrichment.MapUtilsSmall2Big;
-import MISC.CommandLine;
 
 /**
  * Generate a sliding window from the longest to shortest transcript

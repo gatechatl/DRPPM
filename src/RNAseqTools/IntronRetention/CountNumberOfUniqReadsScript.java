@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import MISC.FileTools;
+import misc.FileTools;
 
 public class CountNumberOfUniqReadsScript {
 	public static void execute(String[] args) {

@@ -66,7 +66,8 @@ public class GenerateScatterPlotJavaScript {
 					max_y = y_value;					
 				}
 				
-				
+				split[x_index] = new Double(new Double(new Double(new Double(split[x_index]) * 10000).intValue()) / 10000).toString();
+				split[y_index] = new Double(new Double(new Double(new Double(split[y_index]) * 10000).intValue()) / 10000).toString();
 				x_list.add(split[x_index]);
 				y_list.add(split[y_index]);
 				name_list.add(split[name_index]);
@@ -97,123 +98,126 @@ public class GenerateScatterPlotJavaScript {
 	
 	public static String generate_scatterplot_javascript(String[] names, double[] x, double[] y, double min_x, double max_x, double min_y, double max_y) {
 		String script = "";
-		script += "<!DOCTYPE html>\n";
-		script += "<html>\n";
+		StringBuffer buffer = new StringBuffer();
+		
+		buffer.append("<!DOCTYPE html>\n");
+		buffer.append("<html>\n");
 
-		script += "<head>\n";
-		script += "  <script src=\"http://d3js.org/d3.v3.min.js\" charset=\"utf-8\"></script>\n";
-		script += "</head>\n";
+		buffer.append("<head>\n");
+		buffer.append("  <script src=\"http://d3js.org/d3.v3.min.js\" charset=\"utf-8\"></script>\n");
+		buffer.append("</head>\n");
 
-		script += "<body>\n";
-		script += "  <script>\n";
+		buffer.append("<body>\n");
+		buffer.append("  <script>\n");
 		    
-		script += "    var data = [\n";
+		buffer.append("    var data = [\n");
 		for (int i = 0; i < names.length - 1; i++) {				
-			script += "      {\n";
-			script += "        x: " + x[i] + ",\n";
-			script += "        y: " + y[i] + ",\n";
-			script += "	name:\"" + names[i] + "\"\n";
-			script += "      },\n";
+			buffer.append("      {\n");
+			buffer.append("        x: " + x[i] + ",\n");
+			buffer.append("        y: " + y[i] + ",\n");
+			buffer.append("	name:\"" + names[i] + "\"\n");
+			buffer.append("      },\n");
 		}
-		script += "      {\n";
-		script += "        x: " + x[names.length - 1] + ",\n";
-		script += "        y: " + y[names.length - 1] + ",\n";
-		script += "	name:\"" + names[names.length - 1] + "\"\n";
-		script += "      },\n";
-		script += "    ];\n";
+		buffer.append("      {\n");
+		buffer.append("        x: " + x[names.length - 1] + ",\n");
+		buffer.append("        y: " + y[names.length - 1] + ",\n");
+		buffer.append("	name:\"" + names[names.length - 1] + "\"\n");
+		buffer.append("      },\n");
+		buffer.append("    ];\n");
 		
 		     // size and margins for the chart
-		script += "    var margin = {\n";
-		script += "      top: 20,\n";
-		script += "      right: 15,\n";
-		script += "      bottom: 60,\n";
-		script += "      left: 60\n";
-		script += "    }, width = 800 - margin.left - margin.right,\n";
-		script += "      height = 600 - margin.top - margin.bottom;\n";
+		buffer.append("    var margin = {\n");
+		buffer.append("      top: 20,\n");
+		buffer.append("      right: 15,\n");
+		buffer.append("      bottom: 60,\n");
+		buffer.append("      left: 60\n");
+		buffer.append("    }, width = 800 - margin.left - margin.right,\n");
+		buffer.append("      height = 600 - margin.top - margin.bottom;\n");
 
-		script += "    var x = d3.scale.linear()\n";
-		script += "      .domain([" + min_x + ", " + max_x + "])\n";
-		script += "      .range([0, width]);\n";
+		buffer.append("    var x = d3.scale.linear()\n");
+		buffer.append("      .domain([" + min_x + ", " + max_x + "])\n");
+		buffer.append("      .range([0, width]);\n");
 
-		script += "    var y = d3.scale.linear()\n";
-		script += "      .domain([" + min_y + ", " + max_y + "])\n";
-		script += "      .range([height, 0]);\n";
+		buffer.append("    var y = d3.scale.linear()\n");
+		buffer.append("      .domain([" + min_y + ", " + max_y + "])\n");
+		buffer.append("      .range([height, 0]);\n");
 
-		script += "    var tip = d3.select('body')\n";
-		script += "      .append('div')\n";
-		script += "      .attr('class', 'tip')\n";
-		script += "      .style('border', '1px solid steelblue')\n";
-		script += "      .style('padding', '5px')\n";
-		script += "      .style('position', 'absolute')\n";
-		script += "      .style('display', 'none')\n";
-		script += "      .on('mouseover', function(d, i) {\n";
-		script += "        tip.transition().duration(1);\n";	
-		script += "      })\n";
-		script += "      .on('mouseout', function(d, i) {\n";
-		script += "        tip.style('display', 'none');\n";
-		script += "      });\n";
+		buffer.append("    var tip = d3.select('body')\n");
+		buffer.append("      .append('div')\n");
+		buffer.append("      .attr('class', 'tip')\n");
+		buffer.append("      .style('border', '1px solid steelblue')\n");
+		buffer.append("      .style('padding', '5px')\n");
+		buffer.append("      .style('position', 'absolute')\n");
+		buffer.append("      .style('display', 'none')\n");
+		buffer.append("      .on('mouseover', function(d, i) {\n");
+		buffer.append("        tip.transition().duration(1);\n");
+		buffer.append("      })\n");
+		buffer.append("      .on('mouseout', function(d, i) {\n");
+		buffer.append("        tip.style('display', 'none');\n");
+		buffer.append("      });\n");
 
-		script += "    var chart = d3.select('body')\n";
-		script += "      .append('svg')\n";
-		script += "      .attr('width', width + margin.right + margin.left)\n";
-		script += "      .attr('height', height + margin.top + margin.bottom)\n";
-		script += "      .attr('class', 'chart')\n";
+		buffer.append("    var chart = d3.select('body')\n");
+		buffer.append("      .append('svg')\n");
+		buffer.append("      .attr('width', width + margin.right + margin.left)\n");
+		buffer.append("      .attr('height', height + margin.top + margin.bottom)\n");
+		buffer.append("      .attr('class', 'chart')\n");
 
-		script += "     var main = chart.append('g')\n";
-		script += "      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')\n";
-		script += "      .attr('width', width)\n";
-		script += "      .attr('height', height)\n";
-		script += "      .attr('class', 'main')\n";
+		buffer.append("     var main = chart.append('g')\n");
+		buffer.append("      .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')\n");
+		buffer.append("      .attr('width', width)\n");
+		buffer.append("      .attr('height', height)\n");
+		buffer.append("      .attr('class', 'main')\n");
 
-		script += "     var xAxis = d3.svg.axis()\n";
-		script += "      .scale(x)\n";
-		script += "      .orient('bottom');\n";
+		buffer.append("     var xAxis = d3.svg.axis()\n");
+		buffer.append("      .scale(x)\n");
+		buffer.append("      .orient('bottom');\n");
 
-		script += "    main.append('g')\n";
-		script += "      .attr('transform', 'translate(0,' + height + ')')\n";
-		script += "      .attr('class', 'main axis date')\n";
-		script += "      .call(xAxis);\n";
+		buffer.append("    main.append('g')\n");
+		buffer.append("      .attr('transform', 'translate(0,' + height + ')')\n");
+		buffer.append("      .attr('class', 'main axis date')\n");
+		buffer.append("      .call(xAxis);\n");
 
-		script += "    var yAxis = d3.svg.axis()\n";
-		script += "      .scale(y)\n";
-		script += "      .orient('left');\n";
+		buffer.append("    var yAxis = d3.svg.axis()\n");
+		buffer.append("      .scale(y)\n");
+		buffer.append("      .orient('left');\n");
 
-		script += "    main.append('g')\n";
-		script += "      .attr('transform', 'translate(0,0)')\n";
-		script += "      .attr('class', 'main axis date')\n";
-		script += "      .call(yAxis);\n";
+		buffer.append("    main.append('g')\n");
+		buffer.append("      .attr('transform', 'translate(0,0)')\n");
+		buffer.append("      .attr('class', 'main axis date')\n");
+		buffer.append("      .call(yAxis);\n");
 
-		script += "    var g = main.append(\"svg:g\");\n";
+		buffer.append("    var g = main.append(\"svg:g\");\n");
 
-		script += "    g.selectAll(\"scatter-dots\")\n";
-		script += "      .data(data)\n";
-		script += "      .enter().append(\"svg:circle\")\n";
-		script += "      .attr(\"cy\", function(d) {\n";
-		script += "        return y(d.y);\n";
-		script += "      })\n";
-		script += "      .attr(\"cx\", function(d, i) {\n";
-		script += "        return x(d.x);\n";
-		script += "      })\n";
-		script += "      .attr(\"r\", 5)\n";
-		script += "      .style(\"opacity\", 1.0)\n";
-		script += "      .style(\"fill\", \"red\")\n";
-		script += "      .on('mouseover', function(d, i) {\n";
-		script += "        tip.transition().duration(0);\n";
-		script += "	tip.html(d.name);\n";
-		script += "        tip.style('top', y(d.y) + 'px');\n";
-		script += "        tip.style('left', x(d.x) + 'px');\n";
-		script += "        tip.style('display', 'block');\n";
-		script += "        tip.style(\"background\",'#BCC5F7');\n";
-		script += "      })\n";
-		script += "      .on('mouseout', function(d, i) {\n";
-		script += "        tip.transition()\n";
-		script += "        .delay(100)\n";
-		script += "        .style('display', 'none');\n";
-		script += "      })\n";
-		script += "  </script>\n";
-		script += "</body>\n";
+		buffer.append("    g.selectAll(\"scatter-dots\")\n");
+		buffer.append("      .data(data)\n");
+		buffer.append("      .enter().append(\"svg:circle\")\n");
+		buffer.append("      .attr(\"cy\", function(d) {\n");
+		buffer.append("        return y(d.y);\n");
+		buffer.append("      })\n");
+		buffer.append("      .attr(\"cx\", function(d, i) {\n");
+		buffer.append("        return x(d.x);\n");
+		buffer.append("      })\n");
+		buffer.append("      .attr(\"r\", 5)\n");
+		buffer.append("      .style(\"opacity\", 1.0)\n");
+		buffer.append("      .style(\"fill\", \"red\")\n");
+		buffer.append("      .on('mouseover', function(d, i) {\n");
+		buffer.append("        tip.transition().duration(0);\n");
+		buffer.append("	tip.html(d.name);\n");
+		buffer.append("        tip.style('top', y(d.y) + 'px');\n");
+		buffer.append("        tip.style('left', x(d.x) + 'px');\n");
+		buffer.append("        tip.style('display', 'block');\n");
+		buffer.append("        tip.style(\"background\",'#BCC5F7');\n");
+		buffer.append("      })\n");
+		buffer.append("      .on('mouseout', function(d, i) {\n");
+		buffer.append("        tip.transition()\n");
+		buffer.append("        .delay(100)\n");
+		buffer.append("        .style('display', 'none');\n");
+		buffer.append("      })\n");
+		buffer.append("  </script>\n");
+		buffer.append("</body>\n");
 
-		script += "</html>\n";
+		buffer.append("</html>\n");
+		script = buffer.toString();
 		return script;
 	}
 }

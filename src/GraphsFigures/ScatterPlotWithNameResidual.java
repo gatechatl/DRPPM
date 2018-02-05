@@ -1,6 +1,6 @@
 package GraphsFigures;
 
-import MISC.CommandLine;
+import misc.CommandLine;
 
 
 /**

@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import misc.CommandLine;
 import statistics.general.MathTools;
-import MISC.CommandLine;
 
 /**
  * Take in a matrix of gene set

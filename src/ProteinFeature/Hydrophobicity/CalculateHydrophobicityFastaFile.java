@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
 
-import MISC.CommandLine;
+import misc.CommandLine;
 import ProteinFeature.Charge.CalculateCharge;
 import ProteinFeature.Charge.GenerateChargeGraphForEachProtein;
 

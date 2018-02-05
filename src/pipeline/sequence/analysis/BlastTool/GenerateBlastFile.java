@@ -1,4 +1,4 @@
-package pipeline.sequence.analysis.BlastTool;
+package pipeline.sequence.analysis.blasttool;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

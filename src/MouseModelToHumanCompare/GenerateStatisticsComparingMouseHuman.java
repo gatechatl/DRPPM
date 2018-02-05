@@ -11,8 +11,8 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import misc.StringManipulationTools;
 import statistics.general.MathTools;
-import MISC.StringManipulationTools;
 
 /**
  * Generate a report comparing mouse and human

@@ -154,6 +154,7 @@ public class LeventakiGrabTopVariableProbes {
 				}
 			}
 			in.close();
+			//LinkedList mad_score_list = new LinkedList();
 			Object[] mad_score_array = mad_score_list.toArray();
 			Arrays.sort(mad_score_array);
 			

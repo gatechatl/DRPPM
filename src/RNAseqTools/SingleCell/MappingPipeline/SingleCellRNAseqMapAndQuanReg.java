@@ -5,7 +5,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-import MISC.CommandLine;
+import misc.CommandLine;
 
 /**
  * Generate the script for Single Cell Sequencing Mapping and Quantification

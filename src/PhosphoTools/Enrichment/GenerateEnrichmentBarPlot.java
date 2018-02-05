@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 
-import MISC.CommandLine;
+import misc.CommandLine;
 
 public class GenerateEnrichmentBarPlot {
 

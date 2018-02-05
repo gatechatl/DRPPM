@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-import MISC.CommandLine;
+import misc.CommandLine;
 
 /**
  * Go through ever single file and generate soft link of the coverage post

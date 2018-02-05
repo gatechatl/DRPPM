@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import MISC.CommandLine;
+import misc.CommandLine;
 
 /**
  * Generate mapping's input file

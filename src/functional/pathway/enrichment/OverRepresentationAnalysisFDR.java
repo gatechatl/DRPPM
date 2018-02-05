@@ -12,7 +12,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.UUID;
 
-import MISC.CommandLine;
+import misc.CommandLine;
+import misc.FileTools;
 
 /**
  * Calculate BH, bonferroni and FDR based on ORA pvalues
@@ -120,9 +121,9 @@ public class OverRepresentationAnalysisFDR {
 					out.write(line + "\n");
 				}
 				
-				deleteFile(buffer);
-				deleteFile(buffer_output);
-				deleteFile(buffer + "pvalue.r");
+				FileTools.deleteFile(buffer);
+				FileTools.deleteFile(buffer_output);
+				FileTools.deleteFile(buffer + "pvalue.r");
 				
 			}
 			out.close();
@@ -130,12 +131,7 @@ public class OverRepresentationAnalysisFDR {
 			e.printStackTrace();
 		}
 	}
-	public static void deleteFile(String inputFile) {
-		File f = new File(inputFile);
-		if (f.exists()) {
-			f.delete();
-		}
-	}
+
 	public static String generateFDRScript(String inputFile, String outputFile) {
 		String script = "";
 		script += "pval = read.table(\"" + inputFile + "\",colClasses='numeric');\n";

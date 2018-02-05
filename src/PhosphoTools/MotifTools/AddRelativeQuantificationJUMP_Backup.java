@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import misc.FileManipulation;
 import statistics.general.MathTools;
-import MISC.FileManipulation;
 
 /**
  * Add relative quantification

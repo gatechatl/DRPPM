@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import misc.RunRScript;
 import statistics.general.MathTools;
-import MISC.RunRScript;
 
 public class PhosphositeMetaScoreSensitivitySpecificity {
 

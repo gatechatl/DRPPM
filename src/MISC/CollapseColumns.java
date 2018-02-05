@@ -1,4 +1,4 @@
-package MISC;
+package misc;
 
 /**
  * Specialized function for collapsing columns 

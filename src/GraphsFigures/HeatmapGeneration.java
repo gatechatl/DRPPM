@@ -537,19 +537,23 @@ public class HeatmapGeneration {
 	}
 	public static String list2strV2(LinkedList list) {
 		LinkedList groupA_list = new LinkedList();
-		String script = "";
+		//String script = "";
+		StringBuffer str_buffer = new StringBuffer();
 		int count = 1;
 		Iterator itr = list.iterator();
 		while (itr.hasNext()) {
 			String str = (String)itr.next();
+			
 			if (count == 1) {
-				script += "geneList = \"" + str + "\";\n";
+				str_buffer.append("geneList = \"" + str + "\";\n");
+				//script += "geneList = \"" + str + "\";\n";
 			} else {
-				script += "geneList = c(geneList, \"" + str + "\");\n";
+				str_buffer.append("geneList = c(geneList, \"" + str + "\");\n");
+				//script += "geneList = c(geneList, \"" + str + "\");\n";
 			}
 			count++;
 		}
-		return script;
+		return str_buffer.toString();
 	}
 	public static String list2str(LinkedList list) {
 		LinkedList groupA_list = new LinkedList();
@@ -938,12 +942,12 @@ public class HeatmapGeneration {
 		script += "labels = sampleNames;\n";
 		script += "colnames(selection) = col_labels;\n";
 		script += "selection = log2(selection[labels] + 0.1);\n";
+		script += "Mad = apply(selection, 1, mad);\n";
 		script += "rows = length(selection[,1]);\n";
 		script += "zselection = apply(selection, 1, scale);\n";
 		script += "zselection = apply(zselection, 1, rev)\n";
 		script += "colnames(zselection) = names(selection)\n";
-		script += "selection = as.matrix(zselection);\n";
-		script += "Mad = apply(selection, 1, mad);\n";
+		script += "selection = as.matrix(zselection);\n";		
 		script += "selection = cbind(selection, Mad)\n";
 		script += "topNMad = head(sort(selection[,\"Mad\"],decreasing=TRUE), n = " + topCount + ")\n";
 		script += "topN_Index = which(selection[,\"Mad\"] > min(topNMad))\n";
@@ -985,12 +989,12 @@ public class HeatmapGeneration {
 		script += "labels = sampleNames;\n";
 		script += "colnames(selection) = col_labels;\n";
 		script += "selection = log2(selection[labels] + 0.1);\n";
+		script += "Mad = apply(selection, 1, mad);\n";
 		script += "rows = length(selection[,1]);\n";
 		script += "zselection = apply(selection, 1, scale);\n";
 		script += "zselection = apply(zselection, 1, rev)\n";
 		script += "colnames(zselection) = names(selection)\n";
-		script += "selection = as.matrix(zselection);\n";
-		script += "Mad = apply(selection, 1, mad);\n";
+		script += "selection = as.matrix(zselection);\n";		
 		script += "selection = cbind(selection, Mad)\n";
 		script += "topNMad = head(sort(selection[,\"Mad\"],decreasing=TRUE), n = " + topCount + ")\n";
 		script += "topN_Index = which(selection[,\"Mad\"] > min(topNMad))\n";

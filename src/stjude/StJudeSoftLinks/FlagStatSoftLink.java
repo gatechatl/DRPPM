@@ -2,7 +2,7 @@ package stjude.StJudeSoftLinks;
 
 import java.io.File;
 
-import MISC.CommandLine;
+import misc.CommandLine;
 
 public class FlagStatSoftLink {
 	public static String parameter_info() {
