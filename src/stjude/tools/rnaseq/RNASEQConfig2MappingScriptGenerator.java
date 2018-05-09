@@ -24,7 +24,7 @@ public class RNASEQConfig2MappingScriptGenerator {
 		return "A temporary emergency mapping pipeline for RNAseq mapping";
 	}
 	public static String parameter_info() {
-		return "[inputFile] [organism (hg19/mm9/xenograph/dm3)]";
+		return "[inputFile] [organism (hg19/hg38/mm9/mm10/xenograft/dm3)]";
 	}
 	public static void execute(String[] args) {
 		
@@ -64,8 +64,8 @@ public class RNASEQConfig2MappingScriptGenerator {
 		try {
 			
 			currentPath = new java.io.File( "." ).getCanonicalPath();
-			script += "drppm -MergeBamFiles " + currentPath + "/ 1,2 > mergeBamFiles.sh\n";
-			script += "/nfs_exports/apps/internal/rnaseq/tshaw/RNASEQ_Tools/shellscripts/bsub_array_for_cmdfile.sh mergeBamFiles.sh -M 32000\n";
+			script += "/rgs01/resgen/dev/wc/tshaw/DRPPM/drppm -MergeBamFiles " + currentPath + "/ 1,2 > mergeBamFiles.sh\n";
+			script += "/research/rgs01/staging/apps/internal/rnaseq/tshaw/RNASEQ_Tools/shellscripts/bsub_array_for_cmdfile.sh mergeBamFiles.sh -M 32000\n";
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -73,27 +73,40 @@ public class RNASEQConfig2MappingScriptGenerator {
 	}
 	public static String submitSTARMappingScript(String organism) {
 		String fastaPath = "";
+		//String gtfFile = "";
 		if (organism.equals("mm9")) {
-			fastaPath = "/nfs_exports/genomes/1/Mus_musculus/mm9/STAR/";
+			fastaPath = "/research/rgs01/staging/reference/Mus_musculus/mm9/STAR/";
+			//gtfFile = "/research/rgs01/staging/reference/Mus_musculus/mm9/STAR/Mus_musculus.NCBIM37.67.gtf";
+			
+		} else if (organism.equals("mm10")) {
+			fastaPath = "/research/rgs01/staging/reference/Mus_musculus/Mm10/STAR";
+			//gtfFile = "/research/rgs01/staging/reference/Mus_musculus/Mm10/STAR/gencode.vM5.primary_assembly.annotation.gtf";
+			
 		} else if (organism.equals("hg19")) {
-			fastaPath = "/nfs_exports/genomes/1/Homo_sapiens/GRCh37-lite/STAR/GRCh37p13_GenCode19/";
-		} else if (organism.equals("xenograph")) {
+			fastaPath = "/research/rgs01/staging/reference/Homo_sapiens/GRCh37-lite/STAR/GRCh37p13_GenCode19/";
+			//gtfFile = "/research/rgs01/staging/reference/Homo_sapiens/GRCh37-lite/STAR/GRCh37p13_GenCode19/gencode.v19.annotation_for_cufflink_ercc.gtf";
+			
+		} else if (organism.equals("hg38")) {
+			fastaPath = "/research/rgs01/staging/reference/Homo_sapiens/GRCh38_no_alt/STAR/";
+			//gtfFile = "/research/rgs01/staging/reference/Homo_sapiens/GRCh38_no_alt/ANNOTATIONS/gencode/gencode.v24.annotation.gtf";
+		} else if (organism.equals("xenograft")) {
 			//fastaPath = "/nfs_exports/apps/internal/rnaseq/tshaw/XenoGraphReference/STAR/star-genome";
-			fastaPath = "/nfs_exports/apps/internal/rnaseq/tshaw/XenoGraphReference/STARwithGTF/star-genome-withRef/";
+			fastaPath = "/research/rgs01/staging/apps/internal/rnaseq/tshaw/XenoGraphReference/STARwithGTF/star-genome-withRef/";
+			//gtfFile = "/research/rgs01/staging/apps/internal/rnaseq/tshaw/XenoGraphReference/STARwithGTF/gencode.v19.annotation_level1and2_withChrMT_withChr_Mus_musculus.NCBIM37.67-novague_withChr.gtf";
 		} else if (organism.equals("dm3")) {
-			fastaPath = "/nfs_exports/genomes/1/Drosophila_melanogaster/dm3/STAR/Genome_dm3/";
-		} else if (organism.equals("/research/rgs01/resgen/prod/tartan/index/reference/Drosophila_melanogaster/BDGPr5/STAR/")) {
+			fastaPath = "/research/rgs01/staging/reference/Drosophila_melanogaster/dm3/STAR/Genome_dm3/";
+		} else if (organism.equals("BDGPr5")) {
 			fastaPath = " /research/rgs01/resgen/prod/tartan/index/reference/Drosophila_melanogaster/BDGPr5/STAR/";
 		}
 		//String script = "drppm -STARMappingScriptGenerator input.txt /rgs01/resgen/dev/wc/tshaw/pipeline_examples/RNASEQ/Tools/bin/STAR " + fastaPath + " > mapping_script.sh\n";
-		String script = "drppm -STARMappingScriptGenerator input.txt STAR " + fastaPath + " > mapping_script.sh\n";
+		String script = "/rgs01/resgen/dev/wc/tshaw/DRPPM/drppm -STARMappingScriptGenerator input.txt STAR " + fastaPath + " > mapping_script.sh\n";
 		script += "/rgs01/resgen/dev/wc/tshaw/Tools/bsub_array_for_cmdfile.sh mapping_script.sh -M 32000\n";
 		return script;
 	}
 	public static String combineFiles() {
 		//String script = "ls *.fastq > fastq.lst\n";
 		String script = "ls *.gz > gz.lst\n";
-		script += "drppm -Fastq2FileList gz.lst input.txt\n";
+		script += "/rgs01/resgen/dev/wc/tshaw/DRPPM/drppm -Fastq2FileList gz.lst input.txt\n";
 		return script;
 	}
 	public static String gunzipFiles(String inputFile) {

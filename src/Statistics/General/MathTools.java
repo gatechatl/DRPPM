@@ -45,6 +45,9 @@ public class MathTools {
 		//System.out.println();
 	}
 	
+	public static double thousandth_dec(double val) {
+		return new Double(new Double(val * 1000).intValue()) / 1000;
+	}
 	public static double[] zscores(double[] values) {
 		double mean = mean(values);
 		double sd = standardDeviation(values);
@@ -131,6 +134,18 @@ public class MathTools {
 		return num;
 	}
 	
+	public static double[] convertListDouble2Double(LinkedList list) {
+		double[] num = new double[list.size()];
+		int i = 0;
+		Iterator itr = list.iterator();
+		while (itr.hasNext()) {
+			double val = (Double)itr.next();
+			double n = val;
+			num[i] = n;
+			i++;
+		}
+		return num;
+	}
 	public static double median(double[] m) {
 		double[] temp = m;
 		Arrays.sort(temp);

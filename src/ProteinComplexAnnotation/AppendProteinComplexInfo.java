@@ -1,4 +1,4 @@
-package ProteinComplexAnnotation;
+package proteincomplexannotation;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,7 +12,7 @@ import java.util.Iterator;
 public class AppendProteinComplexInfo {
 
 	public static String parameter_info() {
-		return "[refFile] [inputFile] [geneIndex] [outputFile_appned] [outputFile_complex]";
+		return "[refFile] [inputFile] [geneIndex] [outputFile_append] [outputFile_complex]";
 	}
 	public static void execute(String[] args) {
 		

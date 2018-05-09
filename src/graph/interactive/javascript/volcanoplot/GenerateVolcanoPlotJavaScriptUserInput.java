@@ -148,16 +148,16 @@ public class GenerateVolcanoPlotJavaScriptUserInput {
 		script.append("    var data = [\n");
 		for (int i = 0; i < names.length - 1; i++) {				
 			script.append("      {\n");
-			script.append("        fdr: " + fdr[i] + ",\n");
-			script.append("        avg_expr: " + avg_expr[i] + ",\n");
+			script.append("        fdr: " + MathTools.thousandth_dec(fdr[i]) + ",\n");
+			script.append("        avg_expr: " + MathTools.thousandth_dec(avg_expr[i]) + ",\n");
 			script.append("        x: " + x[i] + ",\n");
 			script.append("        y: " + y[i] + ",\n");
 			script.append("	name:\"" + names[i] + "\"\n");
 			script.append("      },\n");
 		}
 		script.append("      {\n");
-		script.append("        fdr: " + fdr[names.length - 1] + ",\n");
-		script.append("        avg_expr: " + avg_expr[names.length - 1] + ",\n");
+		script.append("        fdr: " + MathTools.thousandth_dec(fdr[names.length - 1]) + ",\n");
+		script.append("        avg_expr: " + MathTools.thousandth_dec(avg_expr[names.length - 1]) + ",\n");
 		script.append("        x: " + x[names.length - 1] + ",\n");
 		script.append("        y: " + y[names.length - 1] + ",\n");
 		script.append("	name:\"" + names[names.length - 1] + "\"\n");

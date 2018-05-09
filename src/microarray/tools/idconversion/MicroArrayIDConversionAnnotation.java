@@ -27,8 +27,19 @@ public class MicroArrayIDConversionAnnotation {
 			String annotationtFile = args[1];
 			int probe_index = new Integer(args[2]);
 			int geneName_index = new Integer(args[3]);
-			String outputFile = args[4];
-			
+			/*String split_type = args[4];
+			String split_str = ",";
+			if (split_type.toUpperCase().equals("TAB")) {
+				split_str = "\t";
+			} else if (split_type.toUpperCase().equals("COMMA")) {
+				split_str = ",";
+			} else if (split_type.toUpperCase().equals("SEMICOLON")) {
+				split_str = ";";
+			} else {
+				System.out.println("Need to define split type: TAB, COMMA, SEMICOLON");
+				System.exit(0);
+			}*/
+			String outputFile = args[4];			
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			
@@ -39,6 +50,8 @@ public class MicroArrayIDConversionAnnotation {
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
 			while (in.ready()) {
 				String str = in.readLine();
+				
+				
 				String[] split = str.split("\",\"");
 				if (split.length > probe_index && split.length > geneName_index) {
 					String probe = split[probe_index].replaceAll("\"", "");

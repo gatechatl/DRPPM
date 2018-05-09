@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
-import NetworkTools.NetworkTools;
+import network.NetworkTools;
 
 /**
  * For each assigned kinase motif with a network score 1. For each known kinase

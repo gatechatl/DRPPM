@@ -25,14 +25,15 @@ public class MergeRowsMaximizePSM {
 		return "Takes input from peptide and generate a matrix\nAssumes that sample is a 10plex";
 	}
 	public static String parameter_info() {
-		return "[id_uni_prot_quan.txt] [outputMatrix]";
+		return "[id_uni_prot_quan.txt] [minPSM] [outputMatrix]";
 	}
 	public static void execute(String[] args) {
 		
 		try {
 			String inputFile = args[0];
 			//String sampleNames = args[1];
-			String outputFile = args[1];			
+			int min_psm = new Integer(args[1]);
+			String outputFile = args[2];			
 			
 			/*if (sampleNames.split(",").length != 10) {
 				System.out.println("sampleNames must contains 10 different tags");
@@ -64,16 +65,18 @@ public class MergeRowsMaximizePSM {
 					list.add(geneName);
 				}
 				int new_psm = new Integer(split[4]);
-				if (!geneName.equals("NA")) {
-					if (map.containsKey(geneName)) {
-						String line = (String)map.get(geneName);
-						String[] split_line = line.split("\t");
-						int old_psm = new Integer(split_line[4]);
-						if (new_psm > old_psm) {
+				if (new_psm >= min_psm) {
+					if (!geneName.equals("NA")) {
+						if (map.containsKey(geneName)) {
+							String line = (String)map.get(geneName);
+							String[] split_line = line.split("\t");
+							int old_psm = new Integer(split_line[4]);
+							if (new_psm > old_psm) {
+								map.put(geneName, str);
+							}
+						} else {
 							map.put(geneName, str);
 						}
-					} else {
-						map.put(geneName, str);
 					}
 				}
 				/*if (!geneName.equals("NA")) {

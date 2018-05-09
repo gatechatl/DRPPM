@@ -6,23 +6,23 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
 public class ReadConfigFile {
-	public static String STARPATH = "/nfs_exports/apps/internal/rnaseq/tshaw/RNASEQ_Tools/bin/STAR"; // St jude's human path
-	public static String STARINDEX = "/nfs_exports/genomes/1/Homo_sapiens/GRCh37-lite/STAR/GRCh37p13_GenCode19"; // St Jude's human index path
-	public static String STARINDEX_MM9 = "/nfs_exports/genomes/1/Mus_musculus/mm9/STAR"; // St Jude's human index path
-	public static String TRIMMOMATICPATH = "/nfs_exports/apps/internal/rnaseq/tshaw/RNASEQ_Tools/Trimmomatic-0.36/trimmomatic-0.36.jar";
-	public static String ADAPTORPATH = "/nfs_exports/apps/internal/rnaseq/tshaw/RNASEQ_Tools/Trimmomatic-0.36/adapters";
-	public static String BSUBCMDFILE = "/nfs_exports/apps/internal/rnaseq/tshaw/RNASEQ_Tools/shellscripts/bsub_array_for_cmdfile.sh";
+	public static String STARPATH = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/bin/STAR"; // St jude's human path
+	public static String STARINDEX = "/research/rgs01/staging/reference/Homo_sapiens/GRCh37-lite/STAR/GRCh37p13_GenCode19"; // St Jude's human index path
+	public static String STARINDEX_MM9 = "/research/rgs01/staging/reference//Mus_musculus/mm9/STAR"; // St Jude's human index path
+	public static String TRIMMOMATICPATH = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/Trimmomatic-0.36/trimmomatic-0.36.jar";
+	public static String ADAPTORPATH = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/Trimmomatic-0.36/adapters";
+	public static String BSUBCMDFILE = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/shellscripts/bsub_array_for_cmdfile.sh";
 	public static String TRIMMOMATICSCRIPTSHELL = "TRIMMOMATIC_Script.sh";
 	public static String STARSCRIPTSHELL = "STAR_Script.sh";
 	public static String BAMLST = "bam.lst";
-	public static String HTSEQPERL = "/nfs_exports/apps/internal/rnaseq/tshaw/RNASEQ_Tools/perlscript/getSingleCommand.pl";
+	public static String HTSEQPERL = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/perlscript/getSingleCommand.pl";
 	public static String HTSEQRPM = "htseq_rpm.txt";
 	public static String HTSEQFPKM = "htseq_fpkm.txt";
 	public static String HTSEQFPKMGENENAME = "htseq_fpkm_geneName.txt";
 	public static String HTSEQZEROBINNING = "htseq_zero_binning.txt";
 	public static String HTSEQZEROBINNINGPNG = "htseq_zero_binning.txt.png";
 	public static String HTSEQFPKMBINNING = "htseq_binning.txt";	
-	public static String GTFFILE = "/nfs_exports/apps/internal/rnaseq/tshaw/RNASEQ_Tools/GTF/gencode.v19.annotation_for_cufflink.gtf";
+	public static String GTFFILE = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/GTF/gencode.v19.annotation_for_cufflink.gtf";
 	public static String STARSUMMARYFILE = "STARMappingSummaryFile.txt";
 	
 	public static String HTSEQFPKMGENENAMECLEANED = "htseq_fpkm_geneName_cleaned.txt";

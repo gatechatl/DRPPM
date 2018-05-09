@@ -49,7 +49,7 @@ public class Bam2Fastq {
 				out2.write("samtools view -u -f 8 -F 260 " + file + " > " + sampleName + "_map_unmap.bam\n");
 				out2.write("samtools view -u -f 12 -F 256 " + file + " > " + sampleName + "_unmap_unmap.bam\n");
 				out2.write("samtools merge -u " + sampleName + "_unmapped.bam " + sampleName + "_unmap_map.bam " + sampleName + "_map_unmap.bam " + sampleName + "_unmap_unmap.bam\n");
-				out2.write("samtools sort -n " + sampleName + "_map_map.bam " + sampleName + "_G2_mapped.sort\n");
+				out2.write("samtools sort -n " + sampleName + "_map_map.bam " + sampleName + "_mapped.sort\n");
 				out2.write("samtools sort -n " + sampleName + "_unmapped.bam " + sampleName + "_unmapped.sort\n");
 				out2.write("bamToFastq -i " + sampleName + "_mapped.sort.bam " + "-fq " + sampleName + "_mapped.1.fastq -fq2 " + sampleName + "_mapped.2.fastq\n");
 				out2.write("bamToFastq -i " + sampleName + "_unmapped.sort.bam " + "-fq " + sampleName + "_unmapped.1.fastq -fq2 " + sampleName + "_unmapped.2.fastq\n");

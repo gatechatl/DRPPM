@@ -21,7 +21,7 @@ public class STARMappingScriptGenerator {
 		return "Given a file list generate the script for performing STAR mapping";
 	}
 	public static String parameter_info() {
-		return "[inputFile] [STARPath] [refPath]\ninputfile must list the fq1 fq2 outputfolder";
+		return "[inputFile] [STARPath] [refPath] [gtfFile: optional]\ninputfile must list the fq1 fq2 outputfolder";
 	}
 	
 	public static void execute(String[] args) {
@@ -30,7 +30,11 @@ public class STARMappingScriptGenerator {
 			
 			String inputFile = args[0];
 			String STARPath = args[1];
-			String refPath = args[2];			
+			String refPath = args[2];
+			/*String gtfFile = "";
+			if (args.length > 3) {
+				gtfFile = args[3];
+			}*/
 			
 			FileInputStream fstream = new FileInputStream(inputFile);
 			DataInputStream din = new DataInputStream(fstream);
@@ -54,8 +58,12 @@ public class STARMappingScriptGenerator {
 		File f = new File(fq1);
 		String addCompressionTag = ""; 
 		if (f.getName().substring(f.getName().length() - 2, f.getName().length()).equals("gz")) {
-			addCompressionTag = "--readFilesCommand gzip -c";
+			addCompressionTag = "--readFilesCommand zcat -c";
 		}		
+		/*String gtfFileScript = "";
+		if (!gtfFile.equals("")) {
+			gtfFileScript = "--sjdbGTFfile " + gtfFile;
+		}*/
 		return STARPath + " --outSAMstrandField intronMotif --genomeDir " + refPath + " --readFilesIn " + fq1 + " " + fq2 + " --genomeLoad NoSharedMemory --runThreadN 8 --chimSegmentMin 20 --chimJunctionOverhangMin 20 --outFileNamePrefix " + outputFolder + " --outSAMunmapped Within --outSAMtype BAM SortedByCoordinate " + addCompressionTag;
 	}
 }

@@ -37,8 +37,7 @@ public class XiangChenGrabTopVariableGenes {
 			HashMap id2result = new HashMap();
 			FileInputStream fstream = new FileInputStream(metaInformationFile);
 			DataInputStream din = new DataInputStream(fstream);
-			BufferedReader in = new BufferedReader(new InputStreamReader(din));
-			
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));			
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split(",");
@@ -225,7 +224,7 @@ public class XiangChenGrabTopVariableGenes {
 							//if (group1_avg > 0 && group2_avg > 0) {
 								if (avg_mad_score >= topMAD) {
 									if (id2result.containsKey(split[0])) {
-										System.out.println(id2result.get(split[0]));
+										//System.out.println(id2result.get(split[0]));
 									}
 									out_limit.write(line);
 									out_limit.write("\n");

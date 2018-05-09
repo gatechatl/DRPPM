@@ -35,7 +35,14 @@ public class kgXrefAppendOfficialGeneSymbol {
 				String str = in.readLine();
 				String[] split = str.split("\t");
 				split[0] = split[0].split("\\.")[0];
-				kgXref.put(split[0], split[4]);
+				if (kgXref.containsKey(split[0])) {
+					String exist = (String)kgXref.get(split[0]);
+					if (exist.contains("Rik")) {
+						kgXref.put(split[0], split[4]);
+					}
+				} else {
+					kgXref.put(split[0], split[4]);
+				}
 			}
 			in.close();
 			

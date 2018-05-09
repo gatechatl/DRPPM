@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.UUID;
 
+import protein.features.charge.CalculateCharge;
+import protein.features.charge.GenerateChargeGraphForEachProtein;
 import misc.CommandLine;
-import ProteinFeature.Charge.CalculateCharge;
-import ProteinFeature.Charge.GenerateChargeGraphForEachProtein;
 
 public class CalculateHydrophobicityFastaFile {
 

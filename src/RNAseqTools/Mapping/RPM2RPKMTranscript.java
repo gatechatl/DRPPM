@@ -77,15 +77,16 @@ public class RPM2RPKMTranscript {
 				String[] split = str.split("\t");
 				String geneID = split[0];
 				double length = 0;
-				out.write(geneID);
+				
 				if (transcripts.containsKey(geneID)) {
 					length = (Integer)transcripts.get(geneID);
+					out.write(geneID);
+					for (int i = 1; i < split.length; i++) {
+						double value = new Double(split[i]) * 1000/ length;
+						out.write("\t" + value);
+					}
+					out.write("\n");
 				}
-				for (int i = 1; i < split.length; i++) {
-					double value = new Double(split[i]) * 1000/ length;
-					out.write("\t" + value);
-				}
-				out.write("\n");
 			}
 			in.close();
 			out.close();

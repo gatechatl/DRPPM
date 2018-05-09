@@ -14,7 +14,7 @@ import misc.CommandLine;
 public class CompareExonCountDistribution {
 
 	public static String parameter_info() {
-		return "[upRegInputFile] [dnRegInputFile] [reference] [outputFile] [outputFoldChange]";
+		return "[upRegInputFile] [dnRegInputFile] [reference] [x_label] [outputFile] [outputFoldChange]";
 	}
 	public static void execute(String[] args) {
 		

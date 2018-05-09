@@ -153,7 +153,14 @@ public class SingleCellRNAseqMapAndQuanReg {
 		}
 		return BSUBCMDFILE + " " + SHELLSCRIPT + " -M " + memory + " " + hostStr + " -n " + cpuNumber;
 	}
-
+	public static String executeSCRIPTSimple(String BSUBCMDFILE, String SHELLSCRIPT,
+			int memory, boolean limitHost, int cpuNumber) {
+		String hostStr = "";
+		if (limitHost) {
+			hostStr = "-R span[hosts=1]";
+		}
+		return BSUBCMDFILE + " " + SHELLSCRIPT + " -M " + memory;
+	}
 	public static String SummarizeStarMapping(String fastaFileList,
 			String StarSummaryFile) {
 		return "drppm -SummarizeStarMapping " + fastaFileList + " "
