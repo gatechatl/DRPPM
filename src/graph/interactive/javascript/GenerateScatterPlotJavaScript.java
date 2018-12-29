@@ -18,7 +18,7 @@ public class GenerateScatterPlotJavaScript {
 		return "JAVASCRIPT";
 	}
 	public static String parameter_info() {
-		return "[inputMatrix] [x_index] [y_index] [name_index] [SkipHeaderFlag:true/false]";
+		return "[inputMatrix] [x_index] [y_index] [name_index] [SkipHeaderFlag:true/false] [(option) xaxis_label] [(option) yaxis_label]";
 	}
 	public static void execute(String[] args) {
 		
@@ -29,7 +29,13 @@ public class GenerateScatterPlotJavaScript {
 			int y_index = new Integer(args[2]);
 			int name_index = new Integer(args[3]);			
 			boolean skipHeader = new Boolean(args[4]);
+			String y_axis_label = "";
+			String x_axis_label = "";
 			
+			if (args.length > 5) {
+				x_axis_label = args[5];
+				y_axis_label = args[6];
+			}
 			double min_x = Double.MAX_VALUE;
 			double max_x = Double.MIN_VALUE;
 			double min_y = Double.MAX_VALUE;
@@ -89,14 +95,14 @@ public class GenerateScatterPlotJavaScript {
 				index++;
 			}
 			
-			System.out.println(generate_scatterplot_javascript(names, x, y, min_x, max_x, min_y, max_y));
+			System.out.println(generate_scatterplot_javascript(names, x, y, min_x, max_x, min_y, max_y, x_axis_label, y_axis_label));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static String generate_scatterplot_javascript(String[] names, double[] x, double[] y, double min_x, double max_x, double min_y, double max_y) {
+	public static String generate_scatterplot_javascript(String[] names, double[] x, double[] y, double min_x, double max_x, double min_y, double max_y, String x_label, String y_label) {
 		String script = "";
 		StringBuffer buffer = new StringBuffer();
 		
@@ -176,6 +182,20 @@ public class GenerateScatterPlotJavaScript {
 		buffer.append("      .attr('transform', 'translate(0,' + height + ')')\n");
 		buffer.append("      .attr('class', 'main axis date')\n");
 		buffer.append("      .call(xAxis);\n");
+		
+		buffer.append("     main.append(\"text\")\n");
+		//script.append("            .attr(\"text-anchor\", \"middle\")\n");
+		buffer.append("            .attr(\"transform\", \"translate(\"+ (width * 3 / 5) +\",\"+(height + 50)+\")\")\n");
+		buffer.append("            .style(\"font-size\", \"15px\")\n");
+		buffer.append("            .style(\"text-anchor\",\"end\")\n"); 
+		buffer.append("            .attr(\"startOffset\",\"100%\")\n");		
+		buffer.append("            .text(\"" + x_label + "\");\n");
+        
+		buffer.append("     main.append(\"text\")\n");
+		buffer.append("            .attr(\"text-anchor\", \"middle\")\n");
+		buffer.append("            .style(\"font-size\", \"15px\")\n");
+		buffer.append("            .attr(\"transform\", \"translate(\"+ -50 +\",\"+(height/2)+\")rotate(-90)\")\n");
+		buffer.append("            .text(\"" + y_label + "\");\n");
 
 		buffer.append("    var yAxis = d3.svg.axis()\n");
 		buffer.append("      .scale(y)\n");
@@ -199,7 +219,7 @@ public class GenerateScatterPlotJavaScript {
 		buffer.append("      })\n");
 		buffer.append("      .attr(\"r\", 5)\n");
 		buffer.append("      .style(\"opacity\", 1.0)\n");
-		buffer.append("      .style(\"fill\", \"red\")\n");
+		buffer.append("      .style(\"fill\", \"gray\")\n");
 		buffer.append("      .on('mouseover', function(d, i) {\n");
 		buffer.append("        tip.transition().duration(0);\n");
 		buffer.append("	tip.html(d.name);\n");
@@ -213,6 +233,9 @@ public class GenerateScatterPlotJavaScript {
 		buffer.append("        .delay(100)\n");
 		buffer.append("        .style('display', 'none');\n");
 		buffer.append("      })\n");
+		
+		
+		
 		buffer.append("  </script>\n");
 		buffer.append("</body>\n");
 

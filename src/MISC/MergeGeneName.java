@@ -61,6 +61,9 @@ public class MergeGeneName {
 				captureMean(inputFile, outputFile, id);
 			} else if (type.toUpperCase().equals("MAX")) {
 				captureMax(inputFile, outputFile, id);
+			} else {
+				System.out.println("please use the following parameter: " + parameter_info());
+				System.out.println("Please select either: MEDIAN, AVERAGE, MAX");
 			}
 			
 		} catch (Exception e) {

@@ -7,8 +7,9 @@ import java.io.InputStreamReader;
 
 public class ReadConfigFile {
 	public static String STARPATH = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/bin/STAR"; // St jude's human path
-	public static String STARINDEX = "/research/rgs01/staging/reference/Homo_sapiens/GRCh37-lite/STAR/GRCh37p13_GenCode19"; // St Jude's human index path
-	public static String STARINDEX_MM9 = "/research/rgs01/staging/reference//Mus_musculus/mm9/STAR"; // St Jude's human index path
+	public static String STARINDEX = "/research/rgs01/reference/public/genomes/Homo_sapiens/GRCh37-lite/STAR/GRCh37p13_GenCode19"; // St Jude's human index path
+	public static String STARINDEX_MM9 = "/research/rgs01/reference/public/genomes/Mus_musculus/Mm9/STAR/"; // St Jude's human index path
+	public static String STARINDEX_GRCh37ERCC = "/research/rgs01/reference/public/genomes/Homo_sapiens/GRCh37-lite/STAR/GRCh37p13_GenCode19_ERCC/"; // St Jude's human index path 
 	public static String TRIMMOMATICPATH = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/Trimmomatic-0.36/trimmomatic-0.36.jar";
 	public static String ADAPTORPATH = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/Trimmomatic-0.36/adapters";
 	public static String BSUBCMDFILE = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/shellscripts/bsub_array_for_cmdfile.sh";
@@ -57,52 +58,55 @@ public class ReadConfigFile {
 					if (split[0].equals("STARINDEX")) {
 						STARINDEX = split[1];
 					}
+					if (split[0].equals("STARINDEX_GRCh37ERCC")) {
+						STARINDEX_GRCh37ERCC = split[1];
+					}
 					if (split[0].equals("STARSUMMARYFILE")) {
 						STARSUMMARYFILE = split[1];
 					}
-					if (split[1].equals("BSUBCMDFILE")) {
+					if (split[0].equals("BSUBCMDFILE")) {
 						BSUBCMDFILE = split[1];
 					}
-					if (split[1].equals("STARSCRIPTSHELL")) {
+					if (split[0].equals("STARSCRIPTSHELL")) {
 						STARSCRIPTSHELL = split[1];
 					}
-					if (split[1].equals("BAMLST")) {
+					if (split[0].equals("BAMLST")) {
 						BAMLST = split[1];
 					}
-					if (split[1].equals("HTSEQPERL")) {
+					if (split[0].equals("HTSEQPERL")) {
 						HTSEQPERL = split[1];
 					}
-					if (split[1].equals("HTSEQRPM")) {
+					if (split[0].equals("HTSEQRPM")) {
 						HTSEQRPM = split[1];
 					}
-					if (split[1].equals("GTFFILE")) {
+					if (split[0].equals("GTFFILE")) {
 						GTFFILE = split[1];
 					}
-					if (split[1].equals("HTSEQFPKMGENENAME")) {
+					if (split[0].equals("HTSEQFPKMGENENAME")) {
 						HTSEQFPKMGENENAME = split[1];
 					}
-					if (split[1].equals("HTSEQZEROBINNING")) {
+					if (split[0].equals("HTSEQZEROBINNING")) {
 						HTSEQZEROBINNING = split[1];
 					}
-					if (split[1].equals("HTSEQFPKMBINNING")) {
+					if (split[0].equals("HTSEQFPKMBINNING")) {
 						HTSEQFPKMBINNING = split[1];
 					}
-					if (split[1].equals("HTSEQZEROBINNINGPNG")) {
+					if (split[0].equals("HTSEQZEROBINNINGPNG")) {
 						HTSEQZEROBINNINGPNG = split[1];
 					}
-					if (split[1].equals("HTSEQFPKMGENENAMECLEANED")) {
+					if (split[0].equals("HTSEQFPKMGENENAMECLEANED")) {
 						HTSEQFPKMGENENAMECLEANED = split[1];
 					}
-					if (split[1].equals("HTSEQFPKMGENENAMECLEAENDMEDIAN")) {
+					if (split[0].equals("HTSEQFPKMGENENAMECLEAENDMEDIAN")) {
 						HTSEQFPKMGENENAMECLEAENDMEDIAN = split[1];
 					}
-					if (split[1].equals("HTSEQFPKMGENENAMECLEAENDMEDIANPNG")) {
+					if (split[0].equals("HTSEQFPKMGENENAMECLEAENDMEDIANPNG")) {
 						HTSEQFPKMGENENAMECLEAENDMEDIANPNG = split[1];
 					}
-					if (split[1].equals("HEATMAPR")) {
+					if (split[0].equals("HEATMAPR")) {
 						HEATMAPR = split[1];
 					}
-					if (split[1].equals("STARINDEX_MM9")) {
+					if (split[0].equals("STARINDEX_MM9")) {
 						STARINDEX_MM9 = split[1];
 					}
 				} // check split.length size

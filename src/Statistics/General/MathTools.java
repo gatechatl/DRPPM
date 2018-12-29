@@ -4,6 +4,7 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,13 +37,54 @@ public class MathTools {
 		//double[] val2 = {3, 3, 4, 5};
 		//System.out.println(2 - PearsonCorrelPvalue(val1, val2));
 		
-		double[] val3 = {0.619229099, -0.796565867, 1.135480384, 0.420745752, -2.290236978, -1.791960526, -2.934336201, -2.823691462};
-		double[] val3_zscore = zscores(val3);
+		//double[] val3 = {0.619229099, -0.796565867, 1.135480384, 0.420745752, -2.290236978, -1.791960526, -2.934336201, -2.823691462};
+		//double[] val3_zscore = zscores(val3);
 		/*for (double score: val3_zscore) {
 			System.out.println(score);
 		}*/
-		System.out.println(median(vals));
+		//System.out.println(median(vals));
 		//System.out.println();
+		
+		List<Double> list = new ArrayList<Double>();
+		/*list.add(4.0);
+		list.add(5.0);
+		list.add(3.0);
+		list.add(3.0);
+		list.add(4.0);
+		list.add(4.0);*/
+		
+		
+		list.add(8.0);
+		list.add(8.0);
+		list.add(8.0);
+		list.add(6.0);
+		list.add(3.0);
+		list.add(3.0);
+		list.add(5.0);
+		list.add(3.0);
+		list.add(33.0);
+		list.add(6.0);
+		list.add(6.0);
+		list.add(9.0);
+		list.add(3.0);
+		list.add(3.0);
+		list.add(3.0);
+		list.add(6.0);
+		List<Double> out = getOutliers(list);
+		System.out.println(out.size());
+		Iterator itr = out.iterator();
+		while (itr.hasNext()) {
+			double value = (Double)itr.next();
+			System.out.println(value);
+		}
+		/*itr = list.iterator();
+		while (itr.hasNext()) {
+			double value = (Double)itr.next();
+			System.out.println(value);
+		}*/
+		
+		
+		
 	}
 	
 	public static double thousandth_dec(double val) {
@@ -286,4 +328,43 @@ public class MathTools {
 		}
 		return score / Math.sqrt(den);
 	}
+
+    public static List<Double> getOutliers(List<Double> input) {
+    	List<Double> copy_input = new ArrayList<Double>();
+    	Iterator itr = input.iterator();
+    	while (itr.hasNext()) {
+    		double val = (Double)itr.next();
+    		copy_input.add(val);
+    	}
+    	Collections.sort(copy_input);
+        List<Double> output = new ArrayList<Double>();
+        List<Double> data1 = new ArrayList<Double>();
+        List<Double> data2 = new ArrayList<Double>();
+        if (copy_input.size() % 2 == 0) {
+            data1 = copy_input.subList(0, copy_input.size() / 2);
+            data2 = copy_input.subList(copy_input.size() / 2, copy_input.size());
+        } else {
+            data1 = copy_input.subList(0, copy_input.size() / 2);
+            data2 = copy_input.subList(copy_input.size() / 2 + 1, copy_input.size());
+        }
+        double q1 = getMedian(data1);
+        double q3 = getMedian(data2);
+        double iqr = q3 - q1;
+        double lowerFence = q1 - 1.5 * iqr;
+        double upperFence = q3 + 1.5 * iqr;
+        //System.out.println("LowerFence: " + lowerFence);
+        //System.out.println("UpperFence: " + upperFence);
+        for (int i = 0; i < input.size(); i++) {
+            if (copy_input.get(i) < lowerFence || copy_input.get(i) > upperFence)
+                output.add(copy_input.get(i));
+        }
+        return output;
+    }
+
+    private static double getMedian(List<Double> data) {
+        if (data.size() % 2 == 0)
+            return (data.get(data.size() / 2) + data.get(data.size() / 2 - 1)) / 2;
+        else
+            return data.get(data.size() / 2);
+    }
 }

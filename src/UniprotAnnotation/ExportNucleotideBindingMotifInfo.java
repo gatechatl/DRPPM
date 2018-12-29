@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-import GSEATools.GSEATools;
+import expressionanalysis.tools.gsea.GSEATools;
 
 /**
  * Using the uniprot reference, append uniprot info regarding  

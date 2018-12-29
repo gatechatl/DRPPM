@@ -66,6 +66,7 @@ public class AppendLIMMAResult2Matrix {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
+				split[0] = split[0].replaceAll("\"", "");
 				//if (limma[0].containsKey(split[0])) {
 					out.write(str);
 					for (i = 0; i < limma.length; i++) {

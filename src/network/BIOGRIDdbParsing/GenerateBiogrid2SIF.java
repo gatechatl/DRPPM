@@ -35,7 +35,9 @@ public class GenerateBiogrid2SIF {
 				String[] split = str.split("\t");
 				String[] splitGeneA = split[2].split(":");
 				String[] splitGeneB = split[3].split(":");
+				
 				out.write(splitGeneA[splitGeneA.length - 1] + "\tconnections\t" + splitGeneB[splitGeneB.length - 1] + "\n");
+				
 			}
 			in.close();
 			out.close();

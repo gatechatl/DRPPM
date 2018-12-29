@@ -85,7 +85,7 @@ public class GCScanner {
 				C++;
 			}
 		}
-		double CpGobserved = CG;
+		double CpGobserved = (CG + GC) / 2;
 		//double GCobserved = G + C;
 		double expected = (C * G);
 		if (expected == 0) {

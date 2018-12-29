@@ -16,7 +16,7 @@ import java.util.LinkedList;
  *
  */
 public class GenerateConversionTable {
-
+	
 	public static void execute(String[] args) {
 		try {
 			

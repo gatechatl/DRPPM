@@ -1,19 +1,25 @@
 import network.ParseThroughSIF;
 import network.BIOGRIDdbParsing.GenerateBiogrid2SIF;
+import network.BIOGRIDdbParsing.GenerateBiogrid2SIFColocalization;
+import network.BIOGRIDdbParsing.GenerateBiogrid2SIFPhysical;
 import network.Layout.GenerateLayoutForEachHub;
 import network.Layout.GenerateMultipleCircles;
 import network.Layout.GenerateMultipleCirclesEdge;
 import network.Layout.GenerateMultipleCirclesFlex;
 import network.Layout.GenerateMultipleCirclesLabels;
+import network.Layout.NetworkNodeReplaceColor;
 import network.Layout.RemoveRedundantEdges;
 import network.MISC.GenerateGraphStatistics;
 import network.MISC.GenerateSubgraph;
 import network.STRINGdbParsing.CleanBioplexTSVFile;
 import network.STRINGdbParsing.Convert2SJGraphFormat;
 import network.STRINGdbParsing.StringDBFilter;
+import network.db.compass.CompassGenerateSifFile;
+import network.geneset.SIF2Geneset;
 import network.jung.CalculateCentrality;
 import network.jung.CalculateCentralityModifyDistance;
 import network.modules.CalculateDistanceBetweenModules;
+import network.statistics.CalculateGraphStatistics;
 import nextgenerationsequencing.fastq.SplitFastqForwardReverse;
 import bedtools.BedAddRemoveChr;
 import mappingtools.Bam2Fastq;
@@ -34,10 +40,14 @@ import microarray.tools.idconversion.MicroArrayIDConversionFlex;
 import microarray.tools.methylation.EPIC850K.BMIQNormalizationSingleSample;
 import microarray.tools.methylation.EPIC850K.CombineBMIQFiles;
 import microarray.tools.methylation.EPIC850K.EPIC850KAveragedBEDFile;
+import microarray.tools.methylation.EPIC850K.EPIC850KBedGraph2BW;
+import microarray.tools.methylation.EPIC850K.EPIC850KGenerateBEDFile;
 import microarray.tools.methylation.EPIC850K.EPIC850KMostMADVariableProbe;
 import microarray.tools.methylation.EPIC850K.EPIC850KWilcoxonTestMethylation;
+import microarray.tools.methylation.EPIC850K.Epic850KHyperHypoMethylationFilter;
 import microarray.tools.methylation.EPIC850K.Methylation850KAppendGeneInfo;
 import microarray.tools.methylation.EPIC850K.Methylation850KWilcoxonTestAppendGeneInfo;
+import misc.CustomFastaCombiner;
 import misc.ExtractRandomFastaSequence;
 import misc.FilterDuplicate;
 import misc.GenerateGSEADataset;
@@ -55,12 +65,14 @@ import idconversion.cross_species.AppendHuman2Mouse;
 import idconversion.cross_species.AppendMouse2Human;
 import idconversion.cross_species.EnsureUniqGeneNamesHumanMouse;
 import idconversion.cross_species.GMTHuman2Mouse;
+import idconversion.cross_species.GMTMouse2Human;
 import idconversion.ensembl.MicroarrayEnsembl2GeneName;
 import idconversion.protein2genome.FastaRefSeq2Ensembl;
 import idconversion.tools.CleanEnsemblGeneID2GeneName;
 import idconversion.tools.ConvertUniprot2GeneAndAppend;
 import idconversion.tools.EnsemblGeneID2GeneName;
 import idconversion.tools.EnsemblGeneID2GeneNameXenograft;
+import idconversion.tools.EnsemblGeneIDAppendAnnotation;
 import idconversion.tools.GeneName2EnsemblID;
 import idconversion.tools.RefSeq2GeneName;
 import idconversion.tools.SubGeneFromConversionTable;
@@ -80,8 +92,10 @@ import integrate.summarytable.IntegrationAddGeneAnnotation;
 import customScript.AppendChromosomeNumber;
 import customScript.ElenaConvertRefSeq2GeneName;
 import enrichment.tool.go.ParseGeneOntology;
+import expressionanalysis.tools.AppendMADValue;
 import expressionanalysis.tools.CalculateCorrelationMatrix;
 import expressionanalysis.tools.CombineTwoMatrixWithMismatch;
+import expressionanalysis.tools.FilterBasedOnAnnotation;
 import expressionanalysis.tools.FilterMatrixColumnValue;
 import expressionanalysis.tools.FilterMatrixExpression;
 import expressionanalysis.tools.FilterMatrixFile;
@@ -99,11 +113,15 @@ import expressionanalysis.tools.MergeSamples;
 import expressionanalysis.tools.OrderGeneMatrixBasedOnTTestDist;
 import expressionanalysis.tools.QuantileNormalization;
 import expressionanalysis.tools.RemoveColumnsFromMatrix;
+import expressionanalysis.tools.RemoveRowsWithNAs;
 import expressionanalysis.tools.RemoveZeroCountGenes;
+import expressionanalysis.tools.SummarizeMATSGenes;
 import expressionanalysis.tools.TransposeMatrix;
 import expressionanalysis.tools.batchcorrection.TwoGroupMeanCentering;
 import expressionanalysis.tools.batchcorrection.TwoGroupMeanCenteringFlex;
 import expressionanalysis.tools.genename.GeneSymbol2UCSCIDAppend;
+import expressionanalysis.tools.gsea.ConvertGSEAList2AnnotationFile;
+import expressionanalysis.tools.gsea.SummarizeGSEAResult;
 import functional.pathway.enrichment.FilterORAResults;
 import functional.pathway.enrichment.FilterORAResultsFlex;
 import functional.pathway.enrichment.GenerateScriptForORA;
@@ -120,6 +138,26 @@ import functional.pathway.enrichr.ConvertEnrichR2GMTPathwayFolder;
 import functional.pathway.visualization.webcytoscape.DisplayJsonFileNetwork;
 import functional.pathway.visualization.webcytoscape.GenerateNodeMetaDataSize;
 import general.sequence.analysis.GCScanner;
+import genomics.exome.GenerateSNVTableFromMutationTable;
+import genomics.exome.circos.FromSV2CircosInput;
+import genomics.exome.circos.Indel2CircosInput;
+import genomics.exome.circos.SNV2CircosInput;
+import genomics.exome.circos.SV2CircosInput;
+import genomics.exome.indel.FilterDuplicatedHits;
+import genomics.exome.sjsnvindelpipeline.GenerateGRCh37liteSNVIndelScript;
+import genomics.exome.sjsnvindelpipeline.GenerateHg19SNVIndelScript;
+import genomics.exome.sjsnvindelpipeline.GenerateMm9SNVIndelScript;
+import genomics.exome.snppopulationdistribution.SNPrsPopulation;
+import genomics.exome.special.mousegermlineanalysis.SummarizeMouseIndelAnalysis;
+import genomics.exome.summarize.EXCAPSummary;
+import genomics.exome.summarize.EXONCAPBasicStatsPairedFile;
+import genomics.exome.summarize.EXONCAPHumanBasicStats;
+import genomics.exome.unpairedpipeline.GenerateSNVUnpairedScriptSimple;
+import genomics.rnaseq.coverage.bw.NormalizeBedGraph;
+import genomics.rnaseq.expression.transcriptionfactornetwork.ConvertAracneOutput2GMT;
+import genomics.rnaseq.expression.transcriptionfactornetwork.GenerateAracneInputFile;
+import genomics.rnaseq.fusion.cicero.ChromosomeBarPlot;
+import genomics.rnaseq.fusion.cicero.ExtractFusionGenes;
 import graph.figures.BarPlotGenerator;
 import graph.figures.BoxPlotGeneratorThreeGroup;
 import graph.figures.BoxPlotGeneratorTwoColumn;
@@ -129,6 +167,7 @@ import graph.figures.MultipleBarPlotGenerator;
 import graph.figures.SampleExprHistogram;
 import graph.interactive.javascript.GenerateFoldchangeGeneLengthPlot;
 import graph.interactive.javascript.GenerateScatterPlotJavaScript;
+import graph.interactive.javascript.GenerateScatterPlotJavaScriptUserInput;
 import graph.interactive.javascript.barplot.GenerateBatchBarPlotHtmls;
 import graph.interactive.javascript.barplot.GenerateHorizontalBarPlotJavaScript;
 import graph.interactive.javascript.barplot.GenerateVerticalBarPlotJavaScript;
@@ -137,15 +176,16 @@ import graph.interactive.javascript.heatmap.GenerateHeatmapZscoreSSGSEAJavaScrip
 import graph.interactive.javascript.heatmap.GenerateHeatmapZscoreWithOriginalValuesJavaScript;
 import graph.interactive.javascript.maplot.GenerateMAPlotJavaScript;
 import graph.interactive.javascript.maplot.GenerateMAPlotJavaScriptUserInput;
+import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptUserInputCustomColor;
 import graph.interactive.javascript.volcanoplot.GenerateVolcanoPlotJavaScript;
 import graph.interactive.javascript.volcanoplot.GenerateVolcanoPlotJavaScriptUserInput;
-import gtf_manupulation.Filter3PrimeGTFExon;
 import jump.pipeline.tools.ExtractUniqPeptides;
 import jump.pipeline.tools.FilterPSMInformationPeptide;
 import jump.pipeline.tools.FilterPSMInformationProteinName;
 import jump.pipeline.tools.GeneratePhosphoPeptideMatrix;
 import jump.pipeline.tools.GenerateProteomeGeneMatrix;
 import jump.pipeline.tools.MergeRowsMaximizePSM;
+import jump.pipeline.tools.ReplaceUniprotGeneSymbol2NCBIGeneSymbol;
 import pathway.tools.PathwayKappaScore;
 import pipeline.sequence.analysis.blasttool.GenerateBlastFile;
 import protein.features.aminoacidresidue.CalculateResidueFrequencyFastaFile;
@@ -159,8 +199,10 @@ import protein.features.charge.CalculateChargeFastaFile;
 import protein.features.charge.ConvertGene2Uniprot;
 import protein.features.charge.GenerateChargeGraph;
 import protein.features.charge.MatchFasta2Coordinate;
+import protein.features.combineresults.CombineAAFreqProteinFeature;
 import protein.features.lowcomplexitydomain.AppendUbiquitome;
 import protein.features.lowcomplexitydomain.UniprotSEGPostProcessing;
+import protein.features.plots.ProteinFeaturePlots;
 import protein.features.sequenceconservation.AlignSEGSequence;
 import protein.features.sequenceconservation.ConservationSurvey;
 import protein.features.sequenceconservation.GenerateFastaSequenceForEachProtein;
@@ -168,20 +210,85 @@ import proteomics.SimulatedPeptideDigestion;
 import proteomics.apms.saint.CalculateGeneLengthSaintInputFile;
 import proteomics.apms.saint.GenerateInteractionFileForSaint;
 import proteomics.apms.saint.GeneratePreyGeneLength;
+import proteomics.phospho.kinaseactivity.pipeline.AssignKnownKinaseSubstrateRelationship;
+import proteomics.phospho.kinaseactivity.pipeline.AssignKnownKinaseSubstrateRelationshipFlex;
+import proteomics.phospho.kinaseactivity.pipeline.CleanWhlProteome;
+import proteomics.phospho.kinaseactivity.pipeline.FilterSitePhosphoWithPeptidePhospho;
+import proteomics.phospho.kinaseactivity.pipeline.JUMPqPhoProteome2Matrix;
+import proteomics.phospho.kinaseactivity.pipeline.JUMPqWhlProteome2Matrix;
+import proteomics.phospho.kinaseactivity.pipeline.NormalizeMatrix2IKAP;
+import proteomics.phospho.kinaseactivity.pipeline.NormalizeMatrix2IKAPFlex;
+import proteomics.phospho.kinaseactivity.pipeline.NormalizePhosphoAgainstWhole;
+import proteomics.phospho.kinaseactivity.pipeline.NormalizePhosphoAgainstWholeFlex;
+import proteomics.phospho.kinaseactivity.pipeline.NormalizePhosphoAgainstWholeWithOffset;
+import proteomics.phospho.kinaseactivity.pipeline.NormalizeWholeGenome;
+import proteomics.phospho.kinaseactivity.pipeline.NormalizeWholeGenomeFlex;
 import proteomics.phospho.kinaseactivity.pipeline.OptimizeProteomeNormalization;
-import rnaseq.coverage.bw.NormalizeBedGraph;
-import rnaseq.expression.transcriptionfactornetwork.ConvertAracneOutput2GMT;
-import rnaseq.expression.transcriptionfactornetwork.GenerateAracneInputFile;
+import proteomics.phospho.kinaseactivity.pipeline.ReorderIkapColumn;
+import proteomics.phospho.kinaseactivity.pipeline.SummarizeIKAPMatrix;
+import proteomics.phospho.kinaseactivity.sem.GenerateSEMScript;
+import proteomics.phospho.tools.annotation.AppendKinaseMotif2PeptideTable;
+import references.gtf.manipulation.Filter3PrimeGTFExon;
+import references.gtf.manipulation.xenograft.Mouse2GTF;
+import references.gtf.statistics.GTFSummaryStatistics;
+import rnaseq.bed.coverage.circos.GenerateCircosCoverageBed;
+import rnaseq.mapping.tools.flagstat.SummarizeFlagStat;
+import rnaseq.mapping.tools.star.Bam2BW;
+import rnaseq.mapping.tools.star.Bam2FqMouseERCC;
+import rnaseq.mapping.tools.star.CombineHTSEQResult;
+import rnaseq.mapping.tools.star.CombineHTSEQResultRPMChunxuPipeline;
+import rnaseq.mapping.tools.star.CombineHTSEQResultRaw;
+import rnaseq.mapping.tools.star.CombineHTSEQResultRefGeneOnly;
+import rnaseq.mapping.tools.star.CreateBamIndex;
+import rnaseq.mapping.tools.star.CuffLinksScriptGenerator;
+import rnaseq.mapping.tools.star.FastaAddRemoveChr;
+import rnaseq.mapping.tools.star.Fastq2FileList;
+import rnaseq.mapping.tools.star.GTFFileAddRemoveChr;
+import rnaseq.mapping.tools.star.HumanMouseXenograftRawCount2RPM;
+import rnaseq.mapping.tools.star.MergeBamFiles;
+import rnaseq.mapping.tools.star.RPM2FPKMGenCode;
+import rnaseq.mapping.tools.star.RPM2RPKMExon;
+import rnaseq.mapping.tools.star.RPM2RPKMTranscript;
+import rnaseq.mapping.tools.star.RawCount2RPM;
+import rnaseq.mapping.tools.star.RawCount2RPMSkipFirstTwoColumns;
+import rnaseq.mapping.tools.star.STARMappingScriptGenerator;
+import rnaseq.mapping.tools.star.STARMappingScriptGeneratorForTrimFastq;
+import rnaseq.mapping.tools.star.SummarizeStarMapping;
+import rnaseq.mapping.tools.star.TrimmomaticScriptGenerator;
+import rnaseq.mapping.tools.star.UBam2FQ;
+import rnaseq.pcpa.AddChr;
+import rnaseq.pcpa.CombinePCPAResults;
+import rnaseq.pcpa.ExtractPolyAReadsUsePolyALibrarySingleCell;
+import rnaseq.pcpa.GeneratePCPAHumanScriptComplete;
+import rnaseq.pcpa.MatchFq2Bam;
+import rnaseq.pcpa.PCPAAppendMetaDeta;
+import rnaseq.splicing.intronretention.CombineSplicingDeficiencyName;
+import rnaseq.splicing.intronretention.FilterReadsForSDScore;
+import rnaseq.splicing.intronretention.OverlapAllMouseHuman;
+import rnaseq.splicing.intronretention.OverlapMouseHumanGeneName;
+import rnaseq.splicing.mats308.AddGeneName2rMATS401;
+import rnaseq.splicing.mats308.FilterMATSResults;
+import rnaseq.splicing.mats308.SummarizeMATSSummary;
+import rnaseq.splicing.mats308.SummarizeResultsAfterMATSFilterDiffExpr;
+import rnaseq.splicing.mats308.SummarizeResultsAfterMATSFilterDisplayGeneList;
+import rnaseq.splicing.mats308.SummarizeResultsAfterMATSFilterExpr;
+import rnaseq.splicing.mats308.SummarizeResultsAfterMATSFilterGeneMatrix;
+import rnaseq.splicing.mats402.SummarizeRMATS402Result;
 import rnaseq.splicing.summary.AppendExpressionToMATSOutput;
 import sequencing.tools.bedmanupulation.BedGraphFilterChromosomeName;
+import stjude.projects.hongbochi.AppendMTORC1Motif2PeptideTable;
 import stjude.projects.hongbochi.AppendMTORC1Motif2Table;
 import stjude.projects.hongbochi.AppendMetaInformation;
 import stjude.projects.hongbochi.CalculateAUC;
 import stjude.projects.hongbochi.CalculateROCforMTORC1Motif;
 import stjude.projects.hongbochi.HongboAppendSensitivitySpecificity;
 import stjude.projects.hongbochi.HongboAppendSensitivitySpecificityFlex;
+import stjude.projects.hongbochi.HongboFilterPhosphositeLog2FC;
 import stjude.projects.jinghuizhang.GenerateMIXCR;
+import stjude.projects.jinghuizhang.GroupComparisonBoxPlot;
+import stjude.projects.jinghuizhang.JinghuiZhangPatientSummary;
 import stjude.projects.jinghuizhang.SummarizeMIXCRresult;
+import stjude.projects.jinghuizhang.TwoGroupComparisonBoxPlot;
 import stjude.projects.jiyangyu.JiyangYuAppendOtherColumn;
 import stjude.projects.jiyangyu.JiyangYuConvertGeneNames;
 import stjude.projects.jpaultaylor.ChangeFastaIDRefmRNA;
@@ -192,19 +299,30 @@ import stjude.projects.jpaultaylor.ExtractD2P2Sequences;
 import stjude.projects.jpaultaylor.FastaRefSeq2EnsemblNew;
 import stjude.projects.jpaultaylor.FilterDuplicateTranscriptSeq;
 import stjude.projects.jpaultaylor.JPaulTaylorConvertUniprot2UniprotGeneName;
+import stjude.projects.jpaultaylor.JPaulTaylorEstimateCoverage;
+import stjude.projects.jpaultaylor.JPaulTaylorEstimateCoverageID;
+import stjude.projects.jpaultaylor.JPaulTaylorEstimateCoverageSpecial;
 import stjude.projects.jpaultaylor.MatchUniprotGeneName2GeneLCDLength;
 import stjude.projects.jpaultaylor.SplitFastaFile;
 import stjude.projects.leventaki.FilterCNVkitcnrfiles;
 import stjude.projects.leventaki.High20ToTHETA;
+import stjude.projects.leventaki.LeventakiAddChrBW;
+import stjude.projects.leventaki.LeventakiCalculateGeneCoordinate;
+import stjude.projects.leventaki.LeventakiCombineCNSResult;
 import stjude.projects.leventaki.LeventakiExtractProbeCoordinate;
+import stjude.projects.leventaki.LeventakiGenerateVCFPlot;
 import stjude.projects.leventaki.SummarizeLeventakiProject;
 import stjude.projects.leventaki.SummarizeVDJclones;
 import stjude.projects.mckinnon.GenerateMatrixForMutationalSignature;
 import stjude.projects.mckinnon.McKinnonCalculateGCSkew;
+import stjude.projects.mckinnon.McKinnonEnsurePerfectMatch;
 import stjude.projects.mckinnon.McKinnonGCScanner;
 import stjude.projects.mckinnon.McKinnonGCScatterPlot;
 import stjude.projects.mckinnon.McKinnonGCScatterPlotTTS;
+import stjude.projects.mckinnon.McKinnonGenerateBlatBEDFile;
 import stjude.projects.mckinnon.McKinnonGenerateRandomBEDFile;
+import stjude.projects.mckinnon.McKinnonIntronRetentionQuantification;
+import stjude.projects.mckinnon.McKinnonRemoveFastaHits;
 import stjude.projects.mckinnon.McKinnonSummarizeGCScanning;
 import stjude.projects.metabolomics.PlotIsotopicBarPlots;
 import stjude.projects.peng.AppendGeneNameBasedOnKnownCanonical;
@@ -218,12 +336,14 @@ import stjude.projects.peng.FilterMinimumOf5Reads;
 import stjude.projects.peng.GenerateCoreHomologTableMGISummary;
 import stjude.projects.peng.GenerateSolidBowtieMapping;
 import stjude.projects.peng.IncreaseCanonicalGeneIDs;
+import stjude.projects.peng.JunminPengAnnotateProteinFeature;
 import stjude.projects.peng.JunminPengColoriPSDConnections;
 import stjude.projects.peng.JunminPengCombineSplicingAndExpression;
 import stjude.projects.peng.JunminPengRemoveModuleHighlightiPSDConnections;
 import stjude.projects.peng.MergeBamFilesAfterBowtie;
 import stjude.projects.peng.MergeBamFilesAfterSTAR;
 import stjude.projects.peng.MergeIntronRetentionTable;
+import stjude.projects.peng.NormalizeJunctionBEDFile;
 import stjude.projects.peng.PengROSMAPAttachMetaInformation;
 import stjude.projects.peng.SortBamFiles;
 import stjude.projects.potter.PotterGrabTranscriptExonFasta;
@@ -237,7 +357,13 @@ import stjude.projects.singlecellsequencing.DivideByTotalMultiplyByX;
 import stjude.projects.singlecellsequencing.DownSamplingBulkMatrixAsSingleCell;
 import stjude.projects.singlecellsequencing.GenerateMappingInputFile;
 import stjude.projects.suzannebaker.CheckGMTCoverage;
+import stjude.projects.suzannebaker.CreatePythonGSEAInputFile;
+import stjude.projects.suzannebaker.CreateSingleSampleGSEAInputFiles;
 import stjude.projects.suzannebaker.GenerateFastqFromBAM;
+import stjude.projects.suzannebaker.GenerateHeatmapFromGMTPipeline;
+import stjude.projects.suzannebaker.GenerateRNAHGGSampleK27MStatus;
+import stjude.projects.suzannebaker.SummarizeGSEAResultNESFDR;
+import stjude.projects.suzannebaker.SummarizeSingleSampleGSEAResult;
 import stjude.projects.taoshengchen.TaoshengChenVennDiagram;
 import stjude.projects.xiangchen.BMIQNormalization;
 import stjude.projects.xiangchen.CombineBMIQNormalizedFiles;
@@ -249,13 +375,6 @@ import stjude.proteinpaint.tracks.GenerateLowComplexityDomainInfo;
 import stjude.proteinpaint.tracks.OpenReadingFrameFinder;
 import stjude.tools.rnaseq.MergeGeneCountChunxuPipeline;
 import stjude.tools.rnaseq.RNASEQConfig2MappingScriptGenerator;
-import stude.projects.suzannebaker.CreatePythonGSEAInputFile;
-import stude.projects.suzannebaker.CreateSingleSampleGSEAInputFiles;
-import stude.projects.suzannebaker.GenerateHeatmapFromGMTPipeline;
-import stude.projects.suzannebaker.GenerateRNAHGGSampleK27MStatus;
-import stude.projects.suzannebaker.SummarizeGSEAResultNESFDR;
-import stude.projects.suzannebaker.SummarizeSingleSampleGSEAResult;
-import GSEATools.ConvertGSEAList2AnnotationFile;
 import MatrixManipulation.AppendMatrixTogether;
 import PhosphoTools.ARMSERMSProject.AssignKnownKinaseSubstrateRelationshipARMSERMS;
 import PhosphoTools.ARMSERMSProject.NormalizeMatrix2IKAPARMSERMS;
@@ -272,19 +391,6 @@ import PhosphoTools.HongBoProject.HongboAnnotateMotifInformation;
 import PhosphoTools.HongBoProject.HongboAnnotateMotifInformationYuxinFile;
 import PhosphoTools.HongBoProject.KinaseFamilyCluster;
 import PhosphoTools.HongBoProject.PhosphoMotifEnrichment;
-import PhosphoTools.KinaseActivity.AssignKnownKinaseSubstrateRelationship;
-import PhosphoTools.KinaseActivity.AssignKnownKinaseSubstrateRelationshipFlex;
-import PhosphoTools.KinaseActivity.CleanWhlProteome;
-import PhosphoTools.KinaseActivity.JUMPqPhoProteome2Matrix;
-import PhosphoTools.KinaseActivity.JUMPqWhlProteome2Matrix;
-import PhosphoTools.KinaseActivity.NormalizeMatrix2IKAP;
-import PhosphoTools.KinaseActivity.NormalizeMatrix2IKAPFlex;
-import PhosphoTools.KinaseActivity.NormalizePhosphoAgainstWhole;
-import PhosphoTools.KinaseActivity.NormalizePhosphoAgainstWholeFlex;
-import PhosphoTools.KinaseActivity.NormalizePhosphoAgainstWholeWithOffset;
-import PhosphoTools.KinaseActivity.NormalizeWholeGenome;
-import PhosphoTools.KinaseActivity.NormalizeWholeGenomeFlex;
-import PhosphoTools.KinaseActivity.SummarizeIKAPMatrix;
 import PhosphoTools.KinaseCentricReport.DegradationPhosphositeRegForAll;
 import PhosphoTools.KinaseSubstrateInference.AUCFilter;
 import PhosphoTools.KinaseSubstrateInference.AppendFunctionalInformation2Matrix;
@@ -320,49 +426,12 @@ import PhosphoTools.PSSM.ScoreDistribution.RandomSelectionPSSM;
 import PhosphoTools.RarefractionCurve.EstimatingTotalCoverage;
 import ProteinFeature.Hydrophobicity.CalculateHydrophobicityFastaFile;
 import ProteinFeature.MEMEMotif.GenerateUniqFastaFile;
-import RNATools.PCPA.AddChr;
-import RNATools.PCPA.CombinePCPAResults;
-import RNATools.PCPA.ExtractPolyAReadsUsePolyALibrarySingleCell;
-import RNATools.PCPA.GeneratePCPAHumanScriptComplete;
-import RNATools.PCPA.MatchFq2Bam;
-import RNATools.PCPA.PCPAAppendMetaDeta;
-import RNAseqTools.AlternativeSplicing.AddGeneName2rMATS401;
-import RNAseqTools.AlternativeSplicing.SummarizeResultsAfterMATSFilterGeneMatrix;
-import RNAseqTools.CICERO.ChromosomeBarPlot;
-import RNAseqTools.CICERO.ExtractFusionGenes;
 import RNAseqTools.ERCC.GenerateERCCgtffile;
 import RNAseqTools.EXONJUNCTION.JunctionVsGeneJunc;
 import RNAseqTools.EXONJUNCTION.OverlapLIMMAAndExonJunctionCount;
-import RNAseqTools.GTF.Mouse2GTF;
 import RNAseqTools.GeneLengthAnalysis.AppendGeneLength;
 import RNAseqTools.GeneLengthAnalysis.TranscriptLengthSlidingWindow;
 import RNAseqTools.GeneLengthAnalysis.TranscriptLengthSlidingWindowInhibitedGenes;
-import RNAseqTools.IntronRetention.CombineSplicingDeficiencyName;
-import RNAseqTools.IntronRetention.OverlapAllMouseHuman;
-import RNAseqTools.IntronRetention.OverlapMouseHumanGeneName;
-import RNAseqTools.Mapping.Bam2BW;
-import RNAseqTools.Mapping.UBam2FQ;
-import RNAseqTools.Mapping.Bam2FqMouseERCC;
-import RNAseqTools.Mapping.CombineHTSEQResult;
-import RNAseqTools.Mapping.CombineHTSEQResultRPMChunxuPipeline;
-import RNAseqTools.Mapping.CombineHTSEQResultRaw;
-import RNAseqTools.Mapping.CombineHTSEQResultRefGeneOnly;
-import RNAseqTools.Mapping.CreateBamIndex;
-import RNAseqTools.Mapping.CuffLinksScriptGenerator;
-import RNAseqTools.Mapping.FastaAddRemoveChr;
-import RNAseqTools.Mapping.Fastq2FileList;
-import RNAseqTools.Mapping.GTFFileAddRemoveChr;
-import RNAseqTools.Mapping.HumanMouseXenograftRawCount2RPM;
-import RNAseqTools.Mapping.MergeBamFiles;
-import RNAseqTools.Mapping.RPM2FPKMGenCode;
-import RNAseqTools.Mapping.RPM2RPKMExon;
-import RNAseqTools.Mapping.RPM2RPKMTranscript;
-import RNAseqTools.Mapping.RawCount2RPM;
-import RNAseqTools.Mapping.RawCount2RPMSkipFirstTwoColumns;
-import RNAseqTools.Mapping.STARMappingScriptGenerator;
-import RNAseqTools.Mapping.STARMappingScriptGeneratorForTrimFastq;
-import RNAseqTools.Mapping.SummarizeStarMapping;
-import RNAseqTools.Mapping.TrimmomaticScriptGenerator;
 import RNAseqTools.SingleCell.Bootstrap.Filter0PSamples;
 import RNAseqTools.SingleCell.Bootstrap.GenerateTrueFalseMatrix;
 import RNAseqTools.SingleCell.Bootstrap.VariantMatrixBootstrap;
@@ -404,7 +473,6 @@ import RNAseqTools.Summary.GenerateFPKMBinningTable;
 import RNAseqTools.Summary.GenerateRNASEQCoverageStatistics;
 import RNAseqTools.Summary.IntronExonCoverageBED;
 import RNAseqTools.Summary.PlotBinningTable;
-import RNAseqTools.circos.GenerateCircosCoverageBed;
 import RNAseqTools.metadata.AppendMetadataTag2RNAseqMatrixSampleName;
 import RNAseqTools.pipeline.ExpandGeneListAfterLIMMA;
 import RNAseqTools.pipeline.GenerateLIMMAComparisonScript;
@@ -412,22 +480,6 @@ import RNAseqTools.quantification.CalculateExonRPKM;
 import RNAseqTools.quantification.CalculateIntronRPKM;
 import TextMiningSoftwareAnnotation.WebTextMining;
 import UniprotAnnotation.GenerateIDConversionMasterTable;
-import WholeExonTool.Indel.FilterDuplicatedHits;
-import WholeExonTool.SJSNVIndelPipeline.GenerateGRCh37liteSNVIndelScript;
-import WholeExonTool.SJSNVIndelPipeline.GenerateHg19SNVIndelScript;
-import WholeExonTool.SJSNVIndelPipeline.GenerateMm9SNVIndelScript;
-import WholeExonTool.SNPPopulationDistribution.SNPrsPopulation;
-import WholeExonTool.Summarize.EXCAPSummary;
-import WholeExonTool.Summarize.EXONCAPBasicStatsPairedFile;
-import WholeExonTool.Summarize.EXONCAPHumanBasicStats;
-import WholeExonTool.circos.FromSV2CircosInput;
-import WholeExonTool.circos.Indel2CircosInput;
-import WholeExonTool.circos.SNV2CircosInput;
-import WholeExonTool.circos.SV2CircosInput;
-import WholeExonTools.GenerateSNVTableFromMutationTable;
-import WholeExonTools.Special.MouseGermlineAnalysis.SummarizeMouseIndelAnalysis;
-import WholeExonTools.UnpairedPipeline.GenerateSNVUnpairedScriptSimple;
-import Xenograph.CustomFastaCombiner;
 
 /**
  * Using specific keyword to query the program information.
@@ -436,8 +488,6 @@ import Xenograph.CustomFastaCombiner;
  */
 public class ProgramDescriptions {
 
-	public static String VERSION = "20180424";
-	
 	public static String generateProgramInfo(String type) {
 		String result = "#### List of programs in " + type + " ####\n";
 		
@@ -1353,6 +1403,9 @@ public class ProgramDescriptions {
 		if (GMTHuman2Mouse.type().equals(type)) {
 			result += "GMTHuman2Mouse: " + GMTHuman2Mouse.description() + "\n";
 		}
+		if (GMTMouse2Human.type().equals(type)) {
+			result += "GMTMouse2Human: " + GMTMouse2Human.description() + "\n";
+		}
 		if (RemoveZeroCountGenes.type().equals(type)) {
 			result += "RemoveZeroCountGenes: " + RemoveZeroCountGenes.description() + "\n";
 		}
@@ -1638,6 +1691,12 @@ public class ProgramDescriptions {
 		if (GenerateBiogrid2SIF.type().equals(type)) {
 			result += "GenerateBiogrid2SIF: " + GenerateBiogrid2SIF.description() + "\n";
 		}
+		if (GenerateBiogrid2SIFPhysical.type().equals(type)) {
+			result += "GenerateBiogrid2SIFPhysical: " + GenerateBiogrid2SIFPhysical.description() + "\n";
+		}
+		if (GenerateBiogrid2SIFColocalization.type().equals(type)) {
+			result += "GenerateBiogrid2SIFColocalization: " + GenerateBiogrid2SIFColocalization.description() + "\n";
+		}
 		if (FilterMatrixColumnValue.type().equals(type)) {
 			result += "FilterMatrixColumnValue: " + FilterMatrixColumnValue.description() + "\n";
 		}
@@ -1734,6 +1793,157 @@ public class ProgramDescriptions {
 		if (CleanGMTEnrichR.type().equals(type)) {
 			result += "CleanGMTEnrichR: " + CleanGMTEnrichR.description() + "\n";
 		}
+		if (CalculateGraphStatistics.type().equals(type)) {
+			result += "CalculateGraphStatistics: " + CalculateGraphStatistics.description() + "\n";
+		}
+		if (LeventakiCombineCNSResult.type().equals(type)) {
+			result += "LeventakiCombineCNSResult: " + LeventakiCombineCNSResult.description() + "\n";
+		}
+		if (LeventakiGenerateVCFPlot.type().equals(type)) {
+			result += "LeventakiGenerateVCFPlot: " + LeventakiGenerateVCFPlot.description() + "\n";
+		}
+		if (Epic850KHyperHypoMethylationFilter.type().equals(type)) {
+			result += "Epic850KHyperHypoMethylationFilter: " + Epic850KHyperHypoMethylationFilter.description() + "\n";
+		}
+		if (SummarizeGSEAResult.type().equals(type)) {
+			result += "SummarizeGSEAResult: " + SummarizeGSEAResult.description() + "\n";
+		}
+		if (SummarizeResultsAfterMATSFilterExpr.type().equals(type)) {
+			result += "SummarizeResultsAfterMATSFilterExpr: " + SummarizeResultsAfterMATSFilterExpr.description() + "\n";
+		}
+		if (SummarizeResultsAfterMATSFilterDiffExpr.type().equals(type)) {
+			result += "SummarizeResultsAfterMATSFilterDiffExpr: " + SummarizeResultsAfterMATSFilterDiffExpr.description() + "\n";
+		}
+		if (EnsemblGeneIDAppendAnnotation.type().equals(type)) {
+			result += "EnsemblGeneIDAppendAnnotation: " + EnsemblGeneIDAppendAnnotation.description() + "\n";
+		}
+		if (RemoveRowsWithNAs.type().equals(type)) {
+			result += "RemoveRowsWithNAs: " + RemoveRowsWithNAs.description() + "\n";
+		}
+		if (GenerateScatterPlotJavaScriptUserInput.type().equals(type)) {
+			result += "GenerateScatterPlotJavaScriptUserInput: " + GenerateScatterPlotJavaScriptUserInput.description() + "\n";
+		}
+		if (SummarizeFlagStat.type().equals(type)) {
+			result += "SummarizeFlagStat: " + SummarizeFlagStat.description() + "\n";
+		}
+		if (FilterBasedOnAnnotation.type().equals(type)) {
+			result += "FilterBasedOnAnnotation: " + FilterBasedOnAnnotation.description() + "\n";
+		}
+		if (ReorderIkapColumn.type().equals(type)) {
+			result += "ReorderIkapColumn: " + ReorderIkapColumn.description() + "\n";
+		}
+		if (AppendMADValue.type().equals(type)) {
+			result += "AppendMADValue: " + AppendMADValue.description() + "\n";
+		}
+		if (SummarizeMATSGenes.type().equals(type)) {
+			result += "SummarizeMATSGenes: " + SummarizeMATSGenes.description() + "\n";
+		}
+		if (FilterMATSResults.type().equals(type)) {
+			result += "FilterMATSResults: " + FilterMATSResults.description() + "\n";
+		}
+		if (SIF2Geneset.type().equals(type)) {
+			result += "SIF2Geneset: " + SIF2Geneset.description() + "\n";
+		}
+		if (CompassGenerateSifFile.type().equals(type)) {
+			result += "CompassGenerateSifFile: " + CompassGenerateSifFile.description() + "\n";
+		}
+		if (NetworkNodeReplaceColor.type().equals(type)) {
+			result += "NetworkNodeReplaceColor: " + NetworkNodeReplaceColor.description() + "\n";
+		}
+		if (FilterSitePhosphoWithPeptidePhospho.type().equals(type)) {
+			result += "FilterSitePhosphoWithPeptidePhospho: " + FilterSitePhosphoWithPeptidePhospho.description() + "\n";
+		}
+		if (SummarizeResultsAfterMATSFilterDisplayGeneList.type().equals(type)) {
+			result += "SummarizeResultsAfterMATSFilterDisplayGeneList: " + SummarizeResultsAfterMATSFilterDisplayGeneList.description() + "\n";
+		}
+		if (SummarizeMATSSummary.type().equals(type)) {
+			result += "SummarizeMATSSummary: " + SummarizeMATSSummary.description() + "\n";
+		}
+		if (FilterReadsForSDScore.type().equals(type)) {
+			result += "FilterReadsForSDScore: " + FilterReadsForSDScore.description() + "\n";
+		}
+		if (CombineAAFreqProteinFeature.type().equals(type)) {
+			result += "CombineAAFreqProteinFeature: " + CombineAAFreqProteinFeature.description() + "\n";
+		}
+		if (JunminPengAnnotateProteinFeature.type().equals(type)) {
+			result += "JunminPengAnnotateProteinFeature: " + JunminPengAnnotateProteinFeature.description() + "\n";
+		}
+		if (ProteinFeaturePlots.type().equals(type)) {
+			result += "ProteinFeaturePlots: " + ProteinFeaturePlots.description() + "\n";
+		}
+		if (GTFSummaryStatistics.type().equals(type)) {
+			result += "GTFSummaryStatistics: " + GTFSummaryStatistics.description() + "\n";
+		}
+		if (JinghuiZhangPatientSummary.type().equals(type)) {
+			result += "JinghuiZhangPatientSummary: " + JinghuiZhangPatientSummary.description() + "\n";
+		}
+		if (ReplaceUniprotGeneSymbol2NCBIGeneSymbol.type().equals(type)) {
+			result += "ReplaceUniprotGeneSymbol2NCBIGeneSymbol: " + ReplaceUniprotGeneSymbol2NCBIGeneSymbol.description() + "\n";
+		}
+		if (NormalizeJunctionBEDFile.type().equals(type)) {
+			result += "NormalizeJunctionBEDFile: " + NormalizeJunctionBEDFile.description() + "\n";
+		}
+		if (EPIC850KGenerateBEDFile.type().equals(type)) {
+			result += "EPIC850KGenerateBEDFile: " + EPIC850KGenerateBEDFile.description() + "\n";
+		}
+		if (EPIC850KBedGraph2BW.type().equals(type)) {
+			result += "EPIC850KBedGraph2BW: " + EPIC850KBedGraph2BW.description() + "\n";
+		}
+		if (LeventakiCalculateGeneCoordinate.type().equals(type)) {
+			result += "LeventakiCalculateGeneCoordinate: " + LeventakiCalculateGeneCoordinate.description() + "\n";
+		}
+		if (LeventakiAddChrBW.type().equals(type)) {
+			result += "LeventakiAddChrBW: " + LeventakiAddChrBW.description() + "\n";
+		}
+		if (JPaulTaylorEstimateCoverage.type().equals(type)) {
+			result += "JPaulTaylorEstimateCoverage: " + JPaulTaylorEstimateCoverage.description() + "\n";
+		}
+		if (JPaulTaylorEstimateCoverageID.type().equals(type)) {
+			result += "JPaulTaylorEstimateCoverageID: " + JPaulTaylorEstimateCoverageID.description() + "\n";
+		}
+		if (JPaulTaylorEstimateCoverageSpecial.type().equals(type)) {
+			result += "JPaulTaylorEstimateCoverageSpecial: " + JPaulTaylorEstimateCoverageSpecial.description() + "\n";
+		}
+		if (TwoGroupComparisonBoxPlot.type().equals(type)) {
+			result += "TwoGroupComparisonBoxPlot: " + TwoGroupComparisonBoxPlot.description() + "\n";
+		}
+		if (GroupComparisonBoxPlot.type().equals(type)) {
+			result += "GroupComparisonBoxPlot: " + GroupComparisonBoxPlot.description() + "\n";
+		}
+		if (AppendMTORC1Motif2PeptideTable.type().equals(type)) {
+			result += "AppendMTORC1Motif2PeptideTable: " + AppendMTORC1Motif2PeptideTable.description() + "\n";
+		}
+		if (HongboFilterPhosphositeLog2FC.type().equals(type)) {
+			result += "HongboFilterPhosphositeLog2FC: " + HongboFilterPhosphositeLog2FC.description() + "\n";
+		}
+		if (AppendKinaseMotif2PeptideTable.type().equals(type)) {
+			result += "AppendKinaseMotif2PeptideTable: " + AppendKinaseMotif2PeptideTable.description() + "\n";
+		}
+		if (GenerateSEMScript.type().equals(type)) {
+			result += "GenerateSEMScript: " + GenerateSEMScript.description() + "\n";
+		}
+		if (McKinnonEnsurePerfectMatch.type().equals(type)) {
+			result += "McKinnonEnsurePerfectMatch: " + McKinnonEnsurePerfectMatch.description() + "\n";
+		}
+		if (McKinnonRemoveFastaHits.type().equals(type)) {
+			result += "McKinnonRemoveFastaHits: " + McKinnonRemoveFastaHits.description() + "\n";
+		}
+		if (McKinnonGenerateBlatBEDFile.type().equals(type)) {
+			result += "McKinnonGenerateBlatBEDFile: " + McKinnonGenerateBlatBEDFile.description() + "\n";
+		}
+		if (McKinnonIntronRetentionQuantification.type().equals(type)) {
+			result += "McKinnonIntronRetentionQuantification: " + McKinnonIntronRetentionQuantification.description() + "\n";
+		}
+		if (GenerateScatterPlotJavaScriptUserInputCustomColor.type().equals(type)) {
+			result += "GenerateScatterPlotJavaScriptUserInputCustomColor: " + GenerateScatterPlotJavaScriptUserInputCustomColor.description() + "\n";
+		}
+		if (SummarizeRMATS402Result.type().equals(type)) {
+			result += "SummarizeRMATS402Result: " + SummarizeRMATS402Result.description() + "\n";
+		}
 		return result;
 	}
+	
+
+	public static String VERSION = "20181010";
+	
 }

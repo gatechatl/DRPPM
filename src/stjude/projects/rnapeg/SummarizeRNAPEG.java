@@ -21,14 +21,15 @@ public class SummarizeRNAPEG {
 		return "MISC";
 	}
 	public static String parameter_info() {
-		return "[fileList: two column(sample, path to sample)] [outputFile]";
+		return "[fileList: two column(sample, path to sample)] [minCount: 5] [outputFile]";
 	}
 	public static void execute(String[] args) {
 		
 		try {
 			
 			String inputFile = args[0];
-			String outputFile = args[1];
+			double min_count_cutoff = new Double(args[1]);
+			String outputFile = args[2];
 			HashMap value = new HashMap();
 			HashMap junctions = new HashMap();
 			HashMap geneName = new HashMap();
@@ -100,24 +101,50 @@ public class SummarizeRNAPEG {
 				String known = (String)known_novel.get(junction);
 				String transcript = (String)transcripts.get(junction);
 				
-				out.write(junction + "\t" + known + "\t" + gene + "\t" + transcript);
 				
+				boolean skip = false;
+				double average_count = 0.0;
 				itr = sampleName.iterator();
 				while (itr.hasNext()) {
 					String sample = (String)itr.next();
 					double total = (Double)sample_total.get(sample);
 					double median = Double.NaN;
+					
 					if (sample_geneName.containsKey(gene + "\t" + sample)) {
 						median = (Double)sample_geneName.get(gene + "\t" + sample);
+					} else {
+						skip = true;
 					}
 					if (value.containsKey(junction + "\t" + sample)) {
 						double val = (Double)value.get(junction + "\t" + sample);
-						out.write("\t" + median * 100000 / total + "\t" + val * 100000 / total);
-					} else {
-						out.write("\t" + median * 100000 / total + "\t0.0");
-					}
+						average_count += val / sample_total.size();
+					} 
+					
 				}
-				out.write("\n");
+				if (average_count < min_count_cutoff) {
+					skip = true;
+				}
+				// check if all the values satisfy minimum cutoff
+				if (!skip) {
+					out.write(junction + "\t" + known + "\t" + gene + "\t" + transcript);
+					
+					itr = sampleName.iterator();
+					while (itr.hasNext()) {
+						String sample = (String)itr.next();
+						double total = (Double)sample_total.get(sample);
+						double median = Double.NaN;
+						if (sample_geneName.containsKey(gene + "\t" + sample)) {
+							median = (Double)sample_geneName.get(gene + "\t" + sample);
+						}
+						if (value.containsKey(junction + "\t" + sample)) {
+							double val = (Double)value.get(junction + "\t" + sample);
+							out.write("\t" + median * 100000 / total + "\t" + val * 100000 / total);
+						} else {
+							out.write("\t" + median * 100000 / total + "\t0.0");
+						}
+					}
+					out.write("\n");
+				}
 			}
 			out.close();
 			

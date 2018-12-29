@@ -41,9 +41,23 @@ public class GTFFile {
 					String gene_id = grabMeta(meta, "gene_id");
 					String transcript_id = grabMeta(meta, "transcript_id");
 					String exon_number = grabMeta(meta, "exon_number");
-					String gene_biotype = grabMeta(meta, "gene_biotype");
+					String gene_biotype = "";
+					if (meta.contains("gene_biotype")) {
+						gene_biotype = grabMeta(meta, "gene_biotype");
+					} else if (meta.contains("gene_type")) {
+						gene_biotype = grabMeta(meta, "gene_type");
+					} else if (meta.contains("transcript_type")) {
+						gene_biotype = grabMeta(meta, "transcript_type");
+					}
 					String gene_name = grabMeta(meta, "gene_name");
-					String biotype = grabMeta(meta, "gene_biotype");
+					String biotype = ""; //grabMeta(meta, "gene_biotype");
+					if (meta.contains("gene_biotype")) {
+						biotype = grabMeta(meta, "gene_biotype");
+					} else if (meta.contains("gene_type")) {
+						biotype = grabMeta(meta, "gene_type");
+					} else if (meta.contains("transcript_type")) {
+						biotype = grabMeta(meta, "transcript_type");
+					}
 					if (geneid2coord.containsKey(gene_id)) {
 						int length = new Integer(end) - new Integer(start);
 						String stuff = (String)geneid2coord.get(gene_id);
@@ -70,6 +84,7 @@ public class GTFFile {
 						}
 					}
 					geneid2geneName.put(gene_id, gene_name); // convert gene id to gene name
+					
 					geneid2biotype.put(gene_id, biotype);
 					geneName2biotype.put(gene_name, biotype);
 					

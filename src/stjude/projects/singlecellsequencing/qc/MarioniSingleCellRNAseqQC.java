@@ -13,7 +13,5 @@ public class MarioniSingleCellRNAseqQC {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}	
-	
-	
+	}			
 }

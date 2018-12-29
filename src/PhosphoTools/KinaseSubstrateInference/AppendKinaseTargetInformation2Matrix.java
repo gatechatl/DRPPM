@@ -91,6 +91,25 @@ public class AppendKinaseTargetInformation2Matrix {
 				
 				if (kinases.equals("")) {
 					kinases = "NA";
+				} else {
+					
+					// sometimes there are kinases that are duplicated in the list, the following code removes those duplicates
+					String new_kinases = "";
+					HashMap kinase_map = new HashMap();
+					for (String kinase: kinases.split(",")) {
+						if (!kinase.equals("")) {
+							kinase_map.put(kinase, kinase);
+						}
+					}
+					Iterator itr = kinase_map.keySet().iterator();
+					while (itr.hasNext()) {
+						String geneName = (String)itr.next();
+						new_kinases += geneName + ",";
+					}
+					kinases = new_kinases;
+					if (kinases.equals("")) {
+						kinases = "NA";
+					}
 				}
 				if (flag.toUpperCase().equals("YES")) {
 					if (!kinases.equals("NA")) {

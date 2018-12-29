@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * Generate a matrix based on the gene list for generating heatmap
+ * Generate a matrix based on the gmt gene list for generating heatmap
  * @author tshaw
  *
  */

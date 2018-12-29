@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import misc.CommandLine;
-import NucleicAcidTools.NucleicAcidToolBox;
+import misc.nucleicacidtools.NucleicAcidToolBox;
 
 
 /**

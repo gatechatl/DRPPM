@@ -67,8 +67,10 @@ public class KeepProteinCodingGenes {
 				String[] split = str.split("\t");
 				if (split.length > 8) {
 					String gene_type = grabMeta(split[8], "gene_type");
+					String gene_biotype = grabMeta(split[8], "gene_biotype");
 					String gene_name = grabMeta(split[8], "gene_name");
-					if (gene_type.equals("protein_coding")) {
+					
+					if (gene_type.equals("protein_coding") || gene_biotype.equals("protein_coding")) {
 						map.put(gene_name, gene_name);
 					}
 				}								

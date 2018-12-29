@@ -24,7 +24,7 @@ public class SingleCellRNAseqMapAndQuanReg {
 	}
 
 	public static String parameter_info() {
-		return "[configFile] [fileNameLstFile] [organism hg19/mm9] [prefix]";
+		return "[configFile] [fileNameLstFile] [organism hg19/hg19_ercc/mm9] [prefix]";
 	}
 
 	public static void execute(String[] args) {
@@ -38,13 +38,19 @@ public class SingleCellRNAseqMapAndQuanReg {
 			// String StarCombinedExpression = args[3];
 
 			ReadConfigFile.readFile(configFile);
-			if (!(organism.equals("hg19") || organism.equals("mm9"))) {
+			if (!(organism.equals("hg19") || organism.equals("mm9") || organism.equals("hg19_ercc"))) {
 				System.out
 						.println("Your input: "
 								+ organism
 								+ " is an invalid organism name. Please use the following (hg19/mm9)");
 				System.exit(0);
 				;
+			}
+			if (organism.equals("hg19")) {
+				ReadConfigFile.STARINDEX = ReadConfigFile.STARINDEX;
+			}
+			if (organism.equals("hg19_ercc")) {
+				ReadConfigFile.STARINDEX = ReadConfigFile.STARINDEX_GRCh37ERCC;
 			}
 			if (organism.equals("mm9")) {
 				ReadConfigFile.STARINDEX = ReadConfigFile.STARINDEX_MM9;

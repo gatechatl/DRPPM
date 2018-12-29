@@ -666,7 +666,7 @@ public class HeatmapGeneration {
 	public static String generatePHeatmapScript(String inputFile, String outputFile, String listA, String geneSet, String title, boolean log, int size, boolean col_cluster, boolean row_cluster, String width_size, String height_size, String row_font_size, String col_font_size, int colorType) {
 		String script = "";
 		
-		script += "allDat = read.table(\"" + inputFile.replaceAll("\\\\", "/") + "\", header=TRUE, row.names=1 );\n";
+		script += "allDat = read.table(\"" + inputFile.replaceAll("\\\\", "/") + "\", header=TRUE, row.names=1 ,sep=\"\\t\");\n";
 		script += "selection = allDat;\n";
 		script += "rownames = rownames(selection);\n";
 		if (!listA.equals("")) {
@@ -732,8 +732,8 @@ public class HeatmapGeneration {
 		if (!row_cluster) {
 			cluster_row = "F";
 		}
-		
-		script += "result2 = pheatmap(dataset, cluster_col = " + cluster_col + ", cluster_row = " + cluster_row + ", fontsize_row = " + row_font_size + ", fontsize_col = " + col_font_size + ", show_rownames = T, color=hmcols)\n";
+		// 2018/10/18 updated from complete to ward
+		script += "result2 = pheatmap(dataset, cluster_col = " + cluster_col + ", cluster_row = " + cluster_row + ", fontsize_row = " + row_font_size + ", fontsize_col = " + col_font_size + ", show_rownames = T, clustering_method = \"ward\", color=hmcols)\n";
 		script += "dev.off();\n";
 		script += "clust <- cbind(result2, cluster = cutree(result2$tree_row, k = 10))\n";
 		script += "write.table(rownames(clust), file=\"" + outputFile + "._ordered_colnames.txt\")\n";
@@ -745,7 +745,7 @@ public class HeatmapGeneration {
 	public static String generateHeatmapScript(String inputFile, String outputFile, String listA, String geneSet, String title, boolean log, int size, boolean col_cluster, boolean row_cluster) {
 		String script = "";
 		
-		script += "allDat = read.table(\"" + inputFile.replaceAll("\\\\", "/") + "\", header=TRUE, row.names=1 );\n";
+		script += "allDat = read.table(\"" + inputFile.replaceAll("\\\\", "/") + "\", header=TRUE, row.names=1,sep=\"\\t\" );\n";
 		script += "selection = allDat;\n";
 		if (!listA.equals("")) {
 			script += "A = c(" + listA + ")\n";
@@ -930,7 +930,7 @@ public class HeatmapGeneration {
 	public static String generatePHeatmapMAD(String inputFile, String outputFile, String listA, String title, int topCount) {
 		String script = "";
 
-		script += "allDat = read.table(\"" + inputFile + "\", header=TRUE, row.names=1 );\n";
+		script += "allDat = read.table(\"" + inputFile + "\", header=TRUE, row.names=1,sep=\"\\t\" ,);\n";
 		script += "selection = allDat;\n";
 		
 		script += "A = c(" + listA + ")\n";
@@ -978,7 +978,7 @@ public class HeatmapGeneration {
 	 */
 	public static String generateTopMADHeatmapScript(String inputFile, String outputFile, String listA, String title, int topCount, String meta) {
 		String script = "";
-		script += "allDat = read.table(\"" + inputFile + "\", header=TRUE, row.names=1 );\n";
+		script += "allDat = read.table(\"" + inputFile + "\", header=TRUE, row.names=1,sep=\"\\t\" );\n";
 		script += "selection = allDat;\n";
 		
 		script += "A = c(" + listA + ")\n";
