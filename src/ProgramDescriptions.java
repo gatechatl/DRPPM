@@ -95,6 +95,7 @@ import enrichment.tool.go.ParseGeneOntology;
 import expressionanalysis.tools.AppendMADValue;
 import expressionanalysis.tools.CalculateCorrelationMatrix;
 import expressionanalysis.tools.CombineTwoMatrixWithMismatch;
+import expressionanalysis.tools.CorrectMarSeptGeneName;
 import expressionanalysis.tools.FilterBasedOnAnnotation;
 import expressionanalysis.tools.FilterMatrixColumnValue;
 import expressionanalysis.tools.FilterMatrixExpression;
@@ -119,6 +120,7 @@ import expressionanalysis.tools.SummarizeMATSGenes;
 import expressionanalysis.tools.TransposeMatrix;
 import expressionanalysis.tools.batchcorrection.TwoGroupMeanCentering;
 import expressionanalysis.tools.batchcorrection.TwoGroupMeanCenteringFlex;
+import expressionanalysis.tools.boxplot.GenerateExpressionBoxPlot;
 import expressionanalysis.tools.genename.GeneSymbol2UCSCIDAppend;
 import expressionanalysis.tools.gsea.ConvertGSEAList2AnnotationFile;
 import expressionanalysis.tools.gsea.SummarizeGSEAResult;
@@ -177,6 +179,7 @@ import graph.interactive.javascript.heatmap.GenerateHeatmapZscoreWithOriginalVal
 import graph.interactive.javascript.maplot.GenerateMAPlotJavaScript;
 import graph.interactive.javascript.maplot.GenerateMAPlotJavaScriptUserInput;
 import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptUserInputCustomColor;
+import graph.interactive.javascript.scatterplot.UpdateScatterPlotColorBasedOnExpression;
 import graph.interactive.javascript.volcanoplot.GenerateVolcanoPlotJavaScript;
 import graph.interactive.javascript.volcanoplot.GenerateVolcanoPlotJavaScriptUserInput;
 import jump.pipeline.tools.ExtractUniqPeptides;
@@ -188,6 +191,7 @@ import jump.pipeline.tools.MergeRowsMaximizePSM;
 import jump.pipeline.tools.ReplaceUniprotGeneSymbol2NCBIGeneSymbol;
 import pathway.tools.PathwayKappaScore;
 import pipeline.sequence.analysis.blasttool.GenerateBlastFile;
+import pipeline.tools.jump.jumpn.JUMPnProcessCluster2GMT;
 import protein.features.aminoacidresidue.CalculateResidueFrequencyFastaFile;
 import protein.features.aminoacidresidue.CalculateResidueMotif;
 import protein.features.aminoacidresidue.CalculateResidueMotifBootstrap;
@@ -263,6 +267,7 @@ import rnaseq.pcpa.GeneratePCPAHumanScriptComplete;
 import rnaseq.pcpa.MatchFq2Bam;
 import rnaseq.pcpa.PCPAAppendMetaDeta;
 import rnaseq.splicing.intronretention.CombineSplicingDeficiencyName;
+import rnaseq.splicing.intronretention.CombineSplicingDeficiencyNameMeta;
 import rnaseq.splicing.intronretention.FilterReadsForSDScore;
 import rnaseq.splicing.intronretention.OverlapAllMouseHuman;
 import rnaseq.splicing.intronretention.OverlapMouseHumanGeneName;
@@ -273,8 +278,17 @@ import rnaseq.splicing.mats308.SummarizeResultsAfterMATSFilterDiffExpr;
 import rnaseq.splicing.mats308.SummarizeResultsAfterMATSFilterDisplayGeneList;
 import rnaseq.splicing.mats308.SummarizeResultsAfterMATSFilterExpr;
 import rnaseq.splicing.mats308.SummarizeResultsAfterMATSFilterGeneMatrix;
+import rnaseq.splicing.mats402.RMATS402CompareSplicingResults;
+import rnaseq.splicing.mats402.RMATS402CompareSplicingResultsSDWithBlackList;
+import rnaseq.splicing.mats402.SummarizeRMATS402CountGene;
 import rnaseq.splicing.mats402.SummarizeRMATS402Result;
+import rnaseq.splicing.mats402.SummarizeRMATS402ResultBlackList;
+import rnaseq.splicing.mats402.SummarizeRMATS402SDResultWithBlackList;
 import rnaseq.splicing.summary.AppendExpressionToMATSOutput;
+import rnaseq.tools.EXONJUNCTION.JunctionVsGeneJunc;
+import rnaseq.tools.EXONJUNCTION.OverlapLIMMAAndExonJunctionCount;
+import rnaseq.tools.ercc.GenerateERCCgtffile;
+import rnaseq.tools.singlecell.tenxgenomics.TenXGenomics2Matrix;
 import sequencing.tools.bedmanupulation.BedGraphFilterChromosomeName;
 import stjude.projects.hongbochi.AppendMTORC1Motif2PeptideTable;
 import stjude.projects.hongbochi.AppendMTORC1Motif2Table;
@@ -289,6 +303,18 @@ import stjude.projects.jinghuizhang.GroupComparisonBoxPlot;
 import stjude.projects.jinghuizhang.JinghuiZhangPatientSummary;
 import stjude.projects.jinghuizhang.SummarizeMIXCRresult;
 import stjude.projects.jinghuizhang.TwoGroupComparisonBoxPlot;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculateGTExTotalReads;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculatePCGPExonCount;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculatePCGPExonDiseaseType;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculatePCGPExonFPKM;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculatePCGPFPKMTarget;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculatePercentileCutoff;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangWCPCalculatePercentileCutoff;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangWeightedCumulativePercentile;
+import stjude.projects.jinghuizhang.pcgpaltsplice.gtex.JinghuiZhangGTExExonMedianQuan;
+import stjude.projects.jinghuizhang.pcgpaltsplice.gtex.JinghuiZhangGTExGenerateCategoryBarplot;
+import stjude.projects.jinghuizhang.pcgpaltsplice.plots.JinghuiZhangExonBoxplotMatrix;
+import stjude.projects.jinghuizhang.pcgpaltsplice.plots.JinghuiZhangGenerateCategoryBarplot;
 import stjude.projects.jiyangyu.JiyangYuAppendOtherColumn;
 import stjude.projects.jiyangyu.JiyangYuConvertGeneNames;
 import stjude.projects.jpaultaylor.ChangeFastaIDRefmRNA;
@@ -426,9 +452,6 @@ import PhosphoTools.PSSM.ScoreDistribution.RandomSelectionPSSM;
 import PhosphoTools.RarefractionCurve.EstimatingTotalCoverage;
 import ProteinFeature.Hydrophobicity.CalculateHydrophobicityFastaFile;
 import ProteinFeature.MEMEMotif.GenerateUniqFastaFile;
-import RNAseqTools.ERCC.GenerateERCCgtffile;
-import RNAseqTools.EXONJUNCTION.JunctionVsGeneJunc;
-import RNAseqTools.EXONJUNCTION.OverlapLIMMAAndExonJunctionCount;
 import RNAseqTools.GeneLengthAnalysis.AppendGeneLength;
 import RNAseqTools.GeneLengthAnalysis.TranscriptLengthSlidingWindow;
 import RNAseqTools.GeneLengthAnalysis.TranscriptLengthSlidingWindowInhibitedGenes;
@@ -444,9 +467,16 @@ import RNAseqTools.SingleCell.CellOfOrigin.GenerateMatrixForTwoGroups;
 import RNAseqTools.SingleCell.CellOfOrigin.GenerateNodeMetaBasedOnGroups;
 import RNAseqTools.SingleCell.CellOfOrigin.GenerateSIFfromMinimumSpanningTree;
 import RNAseqTools.SingleCell.CellOfOrigin.PostProcessingOfVariantMatrix;
+import RNAseqTools.SingleCell.CellRanger.CalculateMedianForEachCluster;
+import RNAseqTools.SingleCell.CellRanger.RunSeuratAnalysisFromCellRanger;
+import RNAseqTools.SingleCell.CellRanger.SamHeader2CellType;
+import RNAseqTools.SingleCell.CellRanger.SeuratCalculateClusterDistribution;
 import RNAseqTools.SingleCell.CellRanger.SpecialClassForDougGreen;
+import RNAseqTools.SingleCell.CellRanger.SuzanneBakerFilterBarcodeSamples;
+import RNAseqTools.SingleCell.CellRanger.UpdateBarcodeClusterWithAnnotation;
 import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelation;
 import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelationMatrix;
+import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelationMatrixForTwo;
 import RNAseqTools.SingleCell.MappingPipeline.CombineFastqFiles;
 import RNAseqTools.SingleCell.MappingPipeline.GenerateFqFileList;
 import RNAseqTools.SingleCell.MappingPipeline.GenerateFqFileListParallel;
@@ -1940,10 +1970,100 @@ public class ProgramDescriptions {
 		if (SummarizeRMATS402Result.type().equals(type)) {
 			result += "SummarizeRMATS402Result: " + SummarizeRMATS402Result.description() + "\n";
 		}
+		if (SummarizeRMATS402ResultBlackList.type().equals(type)) {
+			result += "SummarizeRMATS402ResultBlackList: " + SummarizeRMATS402ResultBlackList.description() + "\n";
+		}
+		if (GenerateExpressionBoxPlot.type().equals(type)) {
+			result += "GenerateExpressionBoxPlot: " + GenerateExpressionBoxPlot.description() + "\n";
+		}
+		if (JUMPnProcessCluster2GMT.type().equals(type)) {
+			result += "JUMPnProcessCluster2GMT: " + JUMPnProcessCluster2GMT.description() + "\n";
+		}
+		if (RMATS402CompareSplicingResults.type().equals(type)) {
+			result += "RMATS402CompareSplicingResults: " + RMATS402CompareSplicingResults.description() + "\n";
+		}
+		if (JinghuiZhangCalculateGTExTotalReads.type().equals(type)) {
+			result += "JinghuiZhangCalculateGTExTotalReads: " + JinghuiZhangCalculateGTExTotalReads.description() + "\n";
+		}
+		if (JinghuiZhangCalculatePCGPFPKMTarget.type().equals(type)) {
+			result += "JinghuiZhangCalculatePCGPFPKM: " + JinghuiZhangCalculatePCGPFPKMTarget.description() + "\n";
+		}
+		if (SummarizeRMATS402SDResultWithBlackList.type().equals(type)) {
+			result += "SummarizeRMATS402SDResultWithBlackList: " + SummarizeRMATS402SDResultWithBlackList.description() + "\n";
+		}
+		if (RMATS402CompareSplicingResultsSDWithBlackList.type().equals(type)) {
+			result += "RMATS402CompareSplicingResultsSDWithBlackList: " + RMATS402CompareSplicingResultsSDWithBlackList.description() + "\n";
+		}
+		if (SummarizeRMATS402CountGene.type().equals(type)) {
+			result += "SummarizeRMATS402CountGene: " + SummarizeRMATS402CountGene.description() + "\n";
+		}
+		if (SpearmanRankCorrelationMatrixForTwo.type().equals(type)) {
+			result += "SpearmanRankCorrelationMatrixForTwo: " + SpearmanRankCorrelationMatrixForTwo.description() + "\n";
+		}
+		if (CombineSplicingDeficiencyNameMeta.type().equals(type)) {
+			result += "CombineSplicingDeficiencyNameMeta: " + CombineSplicingDeficiencyNameMeta.description() + "\n";
+		}
+		if (JinghuiZhangGTExExonMedianQuan.type().equals(type)) {
+			result += "JinghuiZhangGTExExonMedianQuan: " + JinghuiZhangGTExExonMedianQuan.description() + "\n";
+		}
+		if (JinghuiZhangCalculatePCGPExonCount.type().equals(type)) {
+			result += "JinghuiZhangCalculatePCGPExonCount: " + JinghuiZhangCalculatePCGPExonCount.description() + "\n";
+		}
+		if (JinghuiZhangCalculatePCGPExonFPKM.type().equals(type)) {
+			result += "JinghuiZhangCalculatePCGPExonFPKM: " + JinghuiZhangCalculatePCGPExonFPKM.description() + "\n";
+		}
+		if (JinghuiZhangCalculatePCGPExonDiseaseType.type().equals(type)) {
+			result += "JinghuiZhangCalculatePCGPExonDiseaseType: " + JinghuiZhangCalculatePCGPExonDiseaseType.description() + "\n";
+		}
+		if (JinghuiZhangCalculatePercentileCutoff.type().equals(type)) {
+			result += "JinghuiZhangCalculatePercentileCutoff: " + JinghuiZhangCalculatePercentileCutoff.description() + "\n";
+		}
+		if (CorrectMarSeptGeneName.type().equals(type)) {
+			result += "CorrectMarSeptGeneName: " + CorrectMarSeptGeneName.description() + "\n";
+		}
+		if (JinghuiZhangWeightedCumulativePercentile.type().equals(type)) {
+			result += "JinghuiZhangWeightedCumulativePercentile: " + JinghuiZhangWeightedCumulativePercentile.description() + "\n";
+		}
+		if (JinghuiZhangWCPCalculatePercentileCutoff.type().equals(type)) {
+			result += "JinghuiZhangWCPCalculatePercentileCutoff: " + JinghuiZhangWCPCalculatePercentileCutoff.description() + "\n";
+		}
+		if (JinghuiZhangExonBoxplotMatrix.type().equals(type)) {
+			result += "JinghuiZhangExonBoxplotMatrix: " + JinghuiZhangExonBoxplotMatrix.description() + "\n";
+		}
+		if (JinghuiZhangGenerateCategoryBarplot.type().equals(type)) {
+			result += "JinghuiZhangGenerateCategoryBarplot: " + JinghuiZhangGenerateCategoryBarplot.description() + "\n";
+		}
+		if (JinghuiZhangGTExGenerateCategoryBarplot.type().equals(type)) {
+			result += "JinghuiZhangGTExGenerateCategoryBarplot: " + JinghuiZhangGTExGenerateCategoryBarplot.description() + "\n";
+		}
+		if (UpdateScatterPlotColorBasedOnExpression.type().equals(type)) {
+			result += "UpdateScatterPlotColorBasedOnExpression: " + UpdateScatterPlotColorBasedOnExpression.description() + "\n";
+		}
+		if (TenXGenomics2Matrix.type().equals(type)) {
+			result += "TenXGenomics2Matrix: " + TenXGenomics2Matrix.description() + "\n";
+		}
+		if (RunSeuratAnalysisFromCellRanger.type().equals(type)) {
+			result += "RunSeuratAnalysisFromCellRanger: " + RunSeuratAnalysisFromCellRanger.description() + "\n";
+		}
+		if (SeuratCalculateClusterDistribution.type().equals(type)) {
+			result += "SeuratCalculateClusterDistribution: " + SeuratCalculateClusterDistribution.description() + "\n";
+		}
+		if (SamHeader2CellType.type().equals(type)) {
+			result += "SamHeader2CellType: " + SamHeader2CellType.description() + "\n";
+		}
+		if (UpdateBarcodeClusterWithAnnotation.type().equals(type)) {
+			result += "UpdateBarcodeClusterWithAnnotation: " + UpdateBarcodeClusterWithAnnotation.description() + "\n";
+		}
+		if (CalculateMedianForEachCluster.type().equals(type)) {
+			result += "CalculateMedianForEachCluster: " + CalculateMedianForEachCluster.description() + "\n";
+		}
+		if (SuzanneBakerFilterBarcodeSamples.type().equals(type)) {
+			result += "SuzanneBakerFilterBarcodeSamples: " + SuzanneBakerFilterBarcodeSamples.description() + "\n";
+		}
 		return result;
 	}
 	
 
-	public static String VERSION = "20181010";
+	public static String VERSION = "20190416";
 	
 }

@@ -9,7 +9,8 @@ public class ReadConfigFile {
 	public static String STARPATH = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/bin/STAR"; // St jude's human path
 	public static String STARINDEX = "/research/rgs01/reference/public/genomes/Homo_sapiens/GRCh37-lite/STAR/GRCh37p13_GenCode19"; // St Jude's human index path
 	public static String STARINDEX_MM9 = "/research/rgs01/reference/public/genomes/Mus_musculus/Mm9/STAR/"; // St Jude's human index path
-	public static String STARINDEX_GRCh37ERCC = "/research/rgs01/reference/public/genomes/Homo_sapiens/GRCh37-lite/STAR/GRCh37p13_GenCode19_ERCC/"; // St Jude's human index path 
+	public static String STARINDEX_GRCh37ERCC = "/research/rgs01/reference/public/genomes/Homo_sapiens/GRCh37-lite/STAR/GRCh37p13_GenCode19_ERCC/"; // St Jude's human index path
+	public static String STARINDEX_XENO_MM9_GRCh37 = "/rgs01/resgen/dev/wc/tshaw/xenograft_reference/Xenograft_STAR_Reference/STARwithGTF/star-genome-withRef";
 	public static String TRIMMOMATICPATH = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/Trimmomatic-0.36/trimmomatic-0.36.jar";
 	public static String ADAPTORPATH = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/Trimmomatic-0.36/adapters";
 	public static String BSUBCMDFILE = "/rgs01/resgen/dev/wc/tshaw/RNASEQ_Tools/shellscripts/bsub_array_for_cmdfile.sh";
@@ -60,6 +61,9 @@ public class ReadConfigFile {
 					}
 					if (split[0].equals("STARINDEX_GRCh37ERCC")) {
 						STARINDEX_GRCh37ERCC = split[1];
+					}
+					if (split[0].equals("STARINDEX_XENO_MM9_GRCh37")) {
+						STARINDEX_XENO_MM9_GRCh37 = split[1];
 					}
 					if (split[0].equals("STARSUMMARYFILE")) {
 						STARSUMMARYFILE = split[1];

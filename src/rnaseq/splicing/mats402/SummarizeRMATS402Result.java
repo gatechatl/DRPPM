@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class SummarizeRMATS402Result {
 
@@ -35,6 +36,8 @@ public class SummarizeRMATS402Result {
 			int exon_skipping_count = 0;
 			int exon_inclusion_count = 0;
 			int exon_skipping_count_gene = 0;
+			
+			HashMap exon_skipping_count_gene_map = new HashMap();
 			int exon_inclusion_count_gene = 0;
 			
 			int RI_count = 0;
@@ -80,6 +83,7 @@ public class SummarizeRMATS402Result {
 						exon_skipping_count++;
 						if (!skipping_map.containsKey(gene)) {
 							exon_skipping_count_gene++;
+							exon_skipping_count_gene_map.put(gene, gene);
 							skipping_map.put(gene, gene);
 						}
 					// exon kept
@@ -219,9 +223,38 @@ public class SummarizeRMATS402Result {
 			System.out.println("Total affected gene: " + all_gene.size());
 			System.out.println("Total tested gene: " + all_genes_tested.size());
 			
+			/*
+			StringBuffer str_buf = new StringBuffer();
+			
+			Iterator itr = all_gene.keySet().iterator();
+			while (itr.hasNext()) {
+				String gene_name = (String)itr.next();
+				str_buf.append(gene_name + ",");
+			}*/
+			
+			System.out.println();
+			System.out.println("Affected_Gene List:\t" + map2string(all_gene));//str_buf.toString());			
+			System.out.println("Skipped_Gene List:\t" + map2string(skipping_map));
+			System.out.println("inclusion_Gene List:\t" + map2string(inclusion_map));
+			System.out.println("increased_RI_map List:\t" + map2string(increased_RI_map));
+			System.out.println("decreased_RI_map List:\t" + map2string(decreased_RI_map));
+			System.out.println("MXE_map List:\t" + map2string(MXE_map));
+			System.out.println("A3SS_map List:\t" + map2string(A3SS_map));
+			System.out.println("A5SS_map List:\t" + map2string(A5SS_map));						
+			System.out.println("Tested_Gene List:\t" + map2string(all_genes_tested));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static String map2string(HashMap map) {
+		StringBuffer str_buf = new StringBuffer();		
+		Iterator itr = map.keySet().iterator();
+		while (itr.hasNext()) {
+			String gene_name = (String)itr.next();
+			str_buf.append(gene_name + ",");
+		}
+		return str_buf.toString();
 	}
 }

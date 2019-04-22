@@ -38,7 +38,7 @@ public class RemoveRowsWithNAs {
 				String[] split = str.split("\t");
 				boolean containsNA = false;
 				for (int i = 1; i < split.length; i++) {
-					if (split[i].equals("NA")) {
+					if (split[i].equals("NA") || split[i].equals("Inf")) {
 						containsNA = true;
 					}
 				}

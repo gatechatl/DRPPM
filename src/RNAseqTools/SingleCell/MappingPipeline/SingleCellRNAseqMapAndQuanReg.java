@@ -38,7 +38,7 @@ public class SingleCellRNAseqMapAndQuanReg {
 			// String StarCombinedExpression = args[3];
 
 			ReadConfigFile.readFile(configFile);
-			if (!(organism.equals("hg19") || organism.equals("mm9") || organism.equals("hg19_ercc"))) {
+			if (!(organism.equals("hg19") || organism.equals("mm9") || organism.equals("hg19_ercc") || organism.equals("xeno_mm9_hg19"))) {
 				System.out
 						.println("Your input: "
 								+ organism
@@ -54,6 +54,9 @@ public class SingleCellRNAseqMapAndQuanReg {
 			}
 			if (organism.equals("mm9")) {
 				ReadConfigFile.STARINDEX = ReadConfigFile.STARINDEX_MM9;
+			}
+			if (organism.equals("xeno_mm9_hg19")) {
+				ReadConfigFile.STARINDEX = ReadConfigFile.STARINDEX_XENO_MM9_GRCh37;
 			}
 			/*String step0_script = generateTrimmomaticScript(fileNameListFile,
 					ReadConfigFile.TRIMMOMATICPATH, ReadConfigFile.ADAPTORPATH, prefix

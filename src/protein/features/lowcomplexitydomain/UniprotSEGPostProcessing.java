@@ -27,7 +27,7 @@ public class UniprotSEGPostProcessing {
 			String fastaFile = args[1];
 			boolean sp_only_flag = new Boolean(args[2]);
 			String outputFile = args[3];
-			
+			HashMap accession2geneSymbol = new HashMap();
 			HashMap map = new HashMap();
 			
 			HashMap map_uniprot_geneName = new HashMap();
@@ -39,12 +39,17 @@ public class UniprotSEGPostProcessing {
 				if (str.contains(">")) {
 					String accession = str.split("\\|")[1];
 					String uniprot_geneName = str.split("\\|")[2].split(" ")[0];
+					for (String stuff: str.split(" ")) {
+						if (stuff.contains("GN=")) {
+							accession2geneSymbol.put(accession, stuff.replaceAll("GN=", ""));
+						}
+					}
 					if (sp_only_flag) {
 						if (str.contains(">sp")) {
-							map_uniprot_geneName.put(uniprot_geneName,  accession);
+							map_uniprot_geneName.put(accession,  uniprot_geneName);
 						}
 					} else {
-						map_uniprot_geneName.put(uniprot_geneName,  accession);
+						map_uniprot_geneName.put(accession,  uniprot_geneName);
 					}
 				}
 			}
@@ -61,7 +66,8 @@ public class UniprotSEGPostProcessing {
 				if (str.contains(">")) {
 					String accession = str.split("\\|")[1];
 					String uniprot_geneName = str.split("\\|")[2].split("\\(")[0];
-					//System.out.println(accession);
+					System.out.println(accession + "\t" + uniprot_geneName);
+					
 					
 					String seq = "";
 					while (true) {
@@ -71,14 +77,14 @@ public class UniprotSEGPostProcessing {
 						}
 						seq += line;
 					}
-					if (map.containsKey(uniprot_geneName)) {
-						String line = (String)map.get(uniprot_geneName);
+					if (map.containsKey(accession)) {
+						String line = (String)map.get(accession);
 						String[] split_line = line.split("\t");
 						if (seq.length() > new Integer(split_line[3])) {
-							map.put(uniprot_geneName, accession + "\t" + uniprot_geneName.split("_")[0] + "\t" + uniprot_geneName + "\t" + seq.length() + "\t" + "HumanProteome");
+							map.put(accession, accession + "\t" + accession2geneSymbol.get(accession) + "\t" + map_uniprot_geneName.get(accession) + "\t" + seq.length() + "\t" + "HumanProteome");
 						}
 					} else {
-						//map.put(uniprot_geneName, accession + "\t" + uniprot_geneName.split("_")[0] + "\t" + uniprot_geneName + "\t" + seq.length() + "\t" + "HumanProteome");
+						map.put(accession, accession + "\t" + accession2geneSymbol.get(accession) + "\t" + map_uniprot_geneName.get(accession) + "\t" + seq.length() + "\t" + "HumanProteome");
 					}
 					//out_len.write(accession + "\t" + uniprot_geneName.split("_")[0] + "\t" + uniprot_geneName + "\t" + seq.length() + "\t" + "HumanProteome\n");
 				}
@@ -86,13 +92,13 @@ public class UniprotSEGPostProcessing {
 			in.close();
 			Iterator itr = map_uniprot_geneName.keySet().iterator();
 			while (itr.hasNext()) {
-				String uniprot_geneName = (String)itr.next();
-				if (map.containsKey(uniprot_geneName)) {
-					String line = (String)map.get(uniprot_geneName);
+				String accession = (String)itr.next();
+				if (map.containsKey(accession)) {
+					String line = (String)map.get(accession);
 					out_len.write(line + "\n");
 				} else {
-					String accession = (String)map_uniprot_geneName.get(uniprot_geneName);
-					out_len.write(accession + "\t" + uniprot_geneName.split("_")[0] + "\t" + uniprot_geneName + "\t" + 0.0 + "\t" + "HumanProteome\n");
+					//String accession = (String)map_uniprot_geneName.get(uniprot_geneName);
+					out_len.write(accession + "\t" + accession2geneSymbol.get(accession) + "\t" + map_uniprot_geneName.get(accession) + "\t" + 0.0 + "\t" + "HumanProteome\n");
 				}
 			}
 			out_len.close();

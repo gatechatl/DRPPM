@@ -18,8 +18,6 @@ import statistics.general.MathTools;
 
 public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 
-
-
 	public static String description() {
 		return "Generate html-javascript file with user input (GeneName[space]color) ex: Myc blue";
 	}

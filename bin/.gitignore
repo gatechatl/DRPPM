@@ -1,6 +1,4 @@
 /.DRPPM.java.swp
-/graph
-/idconversion
 /integrate
 /jump
 /mappingtools
@@ -46,7 +44,7 @@
 /UniprotAnnotation
 /UniprotTool
 /WordDocumentGenerator
-/Xenograph
+/Xenograft
 /bedtools
 /constants
 /customScript
@@ -56,5 +54,7 @@
 /functional
 /general
 /genomics
-/SearchProgram.class
+/graph
+/idconversion
 /ProgramDescriptions.class
+/SearchProgram.class

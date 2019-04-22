@@ -89,6 +89,7 @@ import graph.interactive.javascript.heatmap.GenerateHeatmapZscoreWithOriginalVal
 import graph.interactive.javascript.maplot.GenerateMAPlotJavaScript;
 import graph.interactive.javascript.maplot.GenerateMAPlotJavaScriptUserInput;
 import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptUserInputCustomColor;
+import graph.interactive.javascript.scatterplot.UpdateScatterPlotColorBasedOnExpression;
 import graph.interactive.javascript.volcanoplot.GenerateVolcanoPlotJavaScript;
 import graph.interactive.javascript.volcanoplot.GenerateVolcanoPlotJavaScriptUserInput;
 import graph.interactive.javascript.volcanoplot.GenerateVolcanoPlotJavaScriptUserInputPathways;
@@ -239,6 +240,7 @@ import enrichment.tool.go.ParseGeneOntology;
 import expressionanalysis.tools.AppendMADValue;
 import expressionanalysis.tools.CalculateCorrelationMatrix;
 import expressionanalysis.tools.CombineTwoMatrixWithMismatch;
+import expressionanalysis.tools.CorrectMarSeptGeneName;
 import expressionanalysis.tools.FilterBasedOnAnnotation;
 import expressionanalysis.tools.FilterMatrixColumnValue;
 import expressionanalysis.tools.FilterMatrixExpression;
@@ -263,6 +265,7 @@ import expressionanalysis.tools.SummarizeMATSGenes;
 import expressionanalysis.tools.TransposeMatrix;
 import expressionanalysis.tools.batchcorrection.TwoGroupMeanCentering;
 import expressionanalysis.tools.batchcorrection.TwoGroupMeanCenteringFlex;
+import expressionanalysis.tools.boxplot.GenerateExpressionBoxPlot;
 import expressionanalysis.tools.genename.GeneSymbol2UCSCIDAppend;
 import expressionanalysis.tools.gsea.CalculateRank;
 import expressionanalysis.tools.gsea.ConvertGSEAHuman2Mouse;
@@ -282,6 +285,7 @@ import jump.pipeline.tools.MergeRowsMaximizePSM;
 import jump.pipeline.tools.ReplaceUniprotGeneSymbol2NCBIGeneSymbol;
 import pathway.tools.PathwayKappaScore;
 import pipeline.sequence.analysis.blasttool.GenerateBlastFile;
+import pipeline.tools.jump.jumpn.JUMPnProcessCluster2GMT;
 import protein.features.aminoacidresidue.CalculateResidueFrequencyFastaFile;
 import protein.features.aminoacidresidue.CalculateResidueMotif;
 import protein.features.aminoacidresidue.CalculateResidueMotifBootstrap;
@@ -394,6 +398,7 @@ import rnaseq.splicing.intronretention.CalculateCoverageBed;
 import rnaseq.splicing.intronretention.CalculateSplicingDeficiency;
 import rnaseq.splicing.intronretention.CalculateSplicingDeficiencyScript;
 import rnaseq.splicing.intronretention.CombineSplicingDeficiencyName;
+import rnaseq.splicing.intronretention.CombineSplicingDeficiencyNameMeta;
 import rnaseq.splicing.intronretention.CountNumberOfUniqReads;
 import rnaseq.splicing.intronretention.CountNumberOfUniqReadsScript;
 import rnaseq.splicing.intronretention.DetectIntronRetention;
@@ -403,6 +408,7 @@ import rnaseq.splicing.intronretention.FilterReadsForSDScore;
 import rnaseq.splicing.intronretention.IntersectBed;
 import rnaseq.splicing.intronretention.IntronMappingPercentageSummary;
 import rnaseq.splicing.intronretention.IntronRetentionHistogramData;
+import rnaseq.splicing.intronretention.IntronRetentionPipelineWrapper;
 import rnaseq.splicing.intronretention.OverlapAllMouseHuman;
 import rnaseq.splicing.intronretention.OverlapMouseHumanGeneName;
 import rnaseq.splicing.mats308.AddGeneName2MATS;
@@ -418,10 +424,25 @@ import rnaseq.splicing.mats308.SummarizeResultsAfterMATSFilterDiffExpr;
 import rnaseq.splicing.mats308.SummarizeResultsAfterMATSFilterDisplayGeneList;
 import rnaseq.splicing.mats308.SummarizeResultsAfterMATSFilterExpr;
 import rnaseq.splicing.mats308.SummarizeResultsAfterMATSFilterGeneMatrix;
+import rnaseq.splicing.mats402.RMATS402CompareSplicingResults;
+import rnaseq.splicing.mats402.RMATS402CompareSplicingResultsSDWithBlackList;
+import rnaseq.splicing.mats402.SummarizeRMATS402CountGene;
 import rnaseq.splicing.mats402.SummarizeRMATS402Result;
+import rnaseq.splicing.mats402.SummarizeRMATS402ResultBlackList;
+import rnaseq.splicing.mats402.SummarizeRMATS402SDResultWithBlackList;
+import rnaseq.splicing.mats402.SummarizeRMATS402SDResultWithBlackListRelaxed;
 import rnaseq.splicing.misc.CalculateExonDistribution;
 import rnaseq.splicing.misc.GenerateGCContentMatrix;
 import rnaseq.splicing.summary.AppendExpressionToMATSOutput;
+import rnaseq.tools.EXONJUNCTION.CompareDifferentialAnalysis;
+import rnaseq.tools.EXONJUNCTION.ExonJunctionMatrix;
+import rnaseq.tools.EXONJUNCTION.GeneVsJunctionFC;
+import rnaseq.tools.EXONJUNCTION.GrabDifferentiatedJunctions;
+import rnaseq.tools.EXONJUNCTION.JunctionVsGeneJunc;
+import rnaseq.tools.EXONJUNCTION.NormalizeJunctionCount;
+import rnaseq.tools.EXONJUNCTION.OverlapLIMMAAndExonJunctionCount;
+import rnaseq.tools.ercc.GenerateERCCgtffile;
+import rnaseq.tools.singlecell.tenxgenomics.TenXGenomics2Matrix;
 import sequencing.tools.bedmanupulation.BedGraphFilterChromosomeName;
 import statistics.general.EXONCAPStatsReport;
 import statistics.general.MathTools;
@@ -441,6 +462,19 @@ import stjude.projects.jinghuizhang.GroupComparisonBoxPlot;
 import stjude.projects.jinghuizhang.JinghuiZhangPatientSummary;
 import stjude.projects.jinghuizhang.SummarizeMIXCRresult;
 import stjude.projects.jinghuizhang.TwoGroupComparisonBoxPlot;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculateGTExTotalReads;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculatePCGPExonCount;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculatePCGPExonDiseaseType;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculatePCGPExonFPKM;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculatePCGPFPKMTarget;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculatePercentileCutoff;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangWCPCalculatePercentileCutoff;
+import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangWeightedCumulativePercentile;
+import stjude.projects.jinghuizhang.pcgpaltsplice.gtex.JinghuiZhangGTExExonFPKM;
+import stjude.projects.jinghuizhang.pcgpaltsplice.gtex.JinghuiZhangGTExExonMedianQuan;
+import stjude.projects.jinghuizhang.pcgpaltsplice.gtex.JinghuiZhangGTExGenerateCategoryBarplot;
+import stjude.projects.jinghuizhang.pcgpaltsplice.plots.JinghuiZhangExonBoxplotMatrix;
+import stjude.projects.jinghuizhang.pcgpaltsplice.plots.JinghuiZhangGenerateCategoryBarplot;
 import stjude.projects.jiyangyu.JiyangYuAppendOtherColumn;
 import stjude.projects.jiyangyu.JiyangYuConvertGeneNames;
 import stjude.projects.jpaultaylor.ChangeFastaIDRefmRNA;
@@ -671,14 +705,6 @@ import ProteinStructure.ProteinDisorder.CountGeneWithDisorderRegionPlot;
 import ProteinStructure.ProteinDisorder.GenerateD2P2Input;
 import ProteinStructure.ProteinDisorder.ProteinFeatureCombineResults;
 import ProteinStructure.ProteinDisorder.ReadD2P2Database;
-import RNAseqTools.ERCC.GenerateERCCgtffile;
-import RNAseqTools.EXONJUNCTION.CompareDifferentialAnalysis;
-import RNAseqTools.EXONJUNCTION.ExonJunctionMatrix;
-import RNAseqTools.EXONJUNCTION.GeneVsJunctionFC;
-import RNAseqTools.EXONJUNCTION.GrabDifferentiatedJunctions;
-import RNAseqTools.EXONJUNCTION.JunctionVsGeneJunc;
-import RNAseqTools.EXONJUNCTION.NormalizeJunctionCount;
-import RNAseqTools.EXONJUNCTION.OverlapLIMMAAndExonJunctionCount;
 import RNAseqTools.GeneLengthAnalysis.AppendGeneLength;
 import RNAseqTools.GeneLengthAnalysis.CompareExonCountDistribution;
 import RNAseqTools.GeneLengthAnalysis.CompareGeneLengthDistribution;
@@ -701,9 +727,16 @@ import RNAseqTools.SingleCell.CellOfOrigin.GenerateMatrixForTwoGroups;
 import RNAseqTools.SingleCell.CellOfOrigin.GenerateNodeMetaBasedOnGroups;
 import RNAseqTools.SingleCell.CellOfOrigin.GenerateSIFfromMinimumSpanningTree;
 import RNAseqTools.SingleCell.CellOfOrigin.PostProcessingOfVariantMatrix;
+import RNAseqTools.SingleCell.CellRanger.CalculateMedianForEachCluster;
+import RNAseqTools.SingleCell.CellRanger.RunSeuratAnalysisFromCellRanger;
+import RNAseqTools.SingleCell.CellRanger.SamHeader2CellType;
+import RNAseqTools.SingleCell.CellRanger.SeuratCalculateClusterDistribution;
 import RNAseqTools.SingleCell.CellRanger.SpecialClassForDougGreen;
+import RNAseqTools.SingleCell.CellRanger.SuzanneBakerFilterBarcodeSamples;
+import RNAseqTools.SingleCell.CellRanger.UpdateBarcodeClusterWithAnnotation;
 import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelation;
 import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelationMatrix;
+import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelationMatrixForTwo;
 import RNAseqTools.SingleCell.MappingPipeline.CombineFastqFiles;
 import RNAseqTools.SingleCell.MappingPipeline.GenerateFqFileList;
 import RNAseqTools.SingleCell.MappingPipeline.GenerateFqFileListParallel;
@@ -5535,7 +5568,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				SpearmanRankCorrelationMatrix.execute(args_remain);
-				// OpenReadingFrameFinder
+				// SpearmanRankCorrelationMatrixForTwo
+			} else if (type.equalsIgnoreCase("-SpearmanRankCorrelationMatrixForTwo")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SpearmanRankCorrelationMatrixForTwo "
+							+ SpearmanRankCorrelationMatrixForTwo.parameter_info());
+					System.exit(0);
+				}
+				SpearmanRankCorrelationMatrixForTwo.execute(args_remain);
+				// 
 			} else if (type.equalsIgnoreCase("-OpenReadingFrameFinder")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
@@ -8200,12 +8242,299 @@ public class DRPPM {
 					System.exit(0);
 				}
 				SummarizeRMATS402Result.execute(args_remain);
+				// GenerateExpressionBoxPlot
+			} else if (type.equalsIgnoreCase("-GenerateExpressionBoxPlot")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateExpressionBoxPlot "
+							+ GenerateExpressionBoxPlot.parameter_info());
+					System.exit(0);
+				}
+				GenerateExpressionBoxPlot.execute(args_remain);
+				// JUMPnProcessCluster2GMT
+			} else if (type.equalsIgnoreCase("-JUMPnProcessCluster2GMT")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JUMPnProcessCluster2GMT "
+							+ JUMPnProcessCluster2GMT.parameter_info());
+					System.exit(0);
+				}
+				JUMPnProcessCluster2GMT.execute(args_remain);
+				// RMATS402CompareSplicingResults
+			} else if (type.equalsIgnoreCase("-RMATS402CompareSplicingResults")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -RMATS402CompareSplicingResults "
+							+ RMATS402CompareSplicingResults.parameter_info());
+					System.exit(0);
+				}
+				RMATS402CompareSplicingResults.execute(args_remain);
+				// RMATS402CompareSplicingResultsSDWithBlackList
+			} else if (type.equalsIgnoreCase("-RMATS402CompareSplicingResultsSDWithBlackList")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -RMATS402CompareSplicingResultsSDWithBlackList "
+							+ RMATS402CompareSplicingResultsSDWithBlackList.parameter_info());
+					System.exit(0);
+				}
+				RMATS402CompareSplicingResultsSDWithBlackList.execute(args_remain);
+				// 
+			} else if (type.equalsIgnoreCase("-SummarizeRMATS402ResultBlackList")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SummarizeRMATS402ResultBlackList "
+							+ SummarizeRMATS402ResultBlackList.parameter_info());
+					System.exit(0);
+				}
+				SummarizeRMATS402ResultBlackList.execute(args_remain);
+				// JinghuiZhangCalculateGTExTotalReads
+			} else if (type.equalsIgnoreCase("-JinghuiZhangCalculateGTExTotalReads")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JinghuiZhangCalculateGTExTotalReads "
+							+ JinghuiZhangCalculateGTExTotalReads.parameter_info());
+					System.exit(0);
+				}
+				JinghuiZhangCalculateGTExTotalReads.execute(args_remain);
+				// JinghuiZhangCalculatePCGPFPKM
+			} else if (type.equalsIgnoreCase("-JinghuiZhangCalculatePCGPFPKMTarget")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JinghuiZhangCalculatePCGPFPKMTarget "
+							+ JinghuiZhangCalculatePCGPFPKMTarget.parameter_info());
+					System.exit(0);
+				}
+				JinghuiZhangCalculatePCGPFPKMTarget.execute(args_remain);
+				// SummarizeRMATS402SDResultWithBlackList
+			} else if (type.equalsIgnoreCase("-SummarizeRMATS402SDResultWithBlackList")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SummarizeRMATS402SDResultWithBlackList "
+							+ SummarizeRMATS402SDResultWithBlackList.parameter_info());
+					System.exit(0);
+				}
+				SummarizeRMATS402SDResultWithBlackList.execute(args_remain);
+				// SummarizeRMATS402SDResultWithBlackListRelaxed
+			} else if (type.equalsIgnoreCase("-SummarizeRMATS402SDResultWithBlackListRelaxed")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SummarizeRMATS402SDResultWithBlackListRelaxed "
+							+ SummarizeRMATS402SDResultWithBlackListRelaxed.parameter_info());
+					System.exit(0);
+				}
+				SummarizeRMATS402SDResultWithBlackListRelaxed.execute(args_remain);
+				// SummarizeRMATS402CountGene
+			} else if (type.equalsIgnoreCase("-SummarizeRMATS402CountGene")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SummarizeRMATS402CountGene "
+							+ SummarizeRMATS402CountGene.parameter_info());
+					System.exit(0);
+				}
+				SummarizeRMATS402CountGene.execute(args_remain);
+				// CombineSplicingDeficiencyNameMeta
+			} else if (type.equalsIgnoreCase("-CombineSplicingDeficiencyNameMeta")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CombineSplicingDeficiencyNameMeta "
+							+ CombineSplicingDeficiencyNameMeta.parameter_info());
+					System.exit(0);
+				}
+				CombineSplicingDeficiencyNameMeta.execute(args_remain);
+				// IntronRetentionPipelineWrapper
+			} else if (type.equalsIgnoreCase("-IntronRetentionPipelineWrapper")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -IntronRetentionPipelineWrapper "
+							+ IntronRetentionPipelineWrapper.parameter_info());
+					System.exit(0);
+				}
+				IntronRetentionPipelineWrapper.execute(args_remain);
+				// JinghuiZhangGTExExonMedianQuan
+			} else if (type.equalsIgnoreCase("-JinghuiZhangGTExExonMedianQuan")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JinghuiZhangGTExExonMedianQuan "
+							+ JinghuiZhangGTExExonMedianQuan.parameter_info());
+					System.exit(0);
+				}
+				JinghuiZhangGTExExonMedianQuan.execute(args_remain);
+				// JinghuiZhangCalculatePCGPExonCount
+			} else if (type.equalsIgnoreCase("-JinghuiZhangCalculatePCGPExonCount")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JinghuiZhangCalculatePCGPExonCount "
+							+ JinghuiZhangCalculatePCGPExonCount.parameter_info());
+					System.exit(0);
+				}
+				JinghuiZhangCalculatePCGPExonCount.execute(args_remain);
+				// JinghuiZhangCalculatePCGPExonFPKM
+			} else if (type.equalsIgnoreCase("-JinghuiZhangCalculatePCGPExonFPKM")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JinghuiZhangCalculatePCGPExonFPKM "
+							+ JinghuiZhangCalculatePCGPExonFPKM.parameter_info());
+					System.exit(0);
+				}
+				JinghuiZhangCalculatePCGPExonFPKM.execute(args_remain);
+				// JinghuiZhangCalculatePCGPExonDiseaseType
+			} else if (type.equalsIgnoreCase("-JinghuiZhangCalculatePCGPExonDiseaseType")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JinghuiZhangCalculatePCGPExonDiseaseType "
+							+ JinghuiZhangCalculatePCGPExonDiseaseType.parameter_info());
+					System.exit(0);
+				}
+				JinghuiZhangCalculatePCGPExonDiseaseType.execute(args_remain);
+				// JinghuiZhangCalculatePercentileCutoff
+			} else if (type.equalsIgnoreCase("-JinghuiZhangCalculatePercentileCutoff")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JinghuiZhangCalculatePercentileCutoff "
+							+ JinghuiZhangCalculatePercentileCutoff.parameter_info());
+					System.exit(0);
+				}
+				JinghuiZhangCalculatePercentileCutoff.execute(args_remain);
+				// CorrectMarSeptGeneName
+			} else if (type.equalsIgnoreCase("-CorrectMarSeptGeneName")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CorrectMarSeptGeneName "
+							+ CorrectMarSeptGeneName.parameter_info());
+					System.exit(0);
+				}
+				CorrectMarSeptGeneName.execute(args_remain);
+				// JinghuiZhangWeightedCumulativePercentile
+			} else if (type.equalsIgnoreCase("-JinghuiZhangWeightedCumulativePercentile")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JinghuiZhangWeightedCumulativePercentile "
+							+ JinghuiZhangWeightedCumulativePercentile.parameter_info());
+					System.exit(0);
+				}
+				JinghuiZhangWeightedCumulativePercentile.execute(args_remain);
+				// JinghuiZhangWCPCalculatePercentileCutoff
+			} else if (type.equalsIgnoreCase("-JinghuiZhangWCPCalculatePercentileCutoff")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JinghuiZhangWCPCalculatePercentileCutoff "
+							+ JinghuiZhangWCPCalculatePercentileCutoff.parameter_info());
+					System.exit(0);
+				}
+				JinghuiZhangWCPCalculatePercentileCutoff.execute(args_remain);
+				// JinghuiZhangExonBoxplotMatrix
+			} else if (type.equalsIgnoreCase("-JinghuiZhangExonBoxplotMatrix")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JinghuiZhangExonBoxplotMatrix "
+							+ JinghuiZhangExonBoxplotMatrix.parameter_info());
+					System.exit(0);
+				}
+				JinghuiZhangExonBoxplotMatrix.execute(args_remain);
+				// JinghuiZhangGTExExonFPKM
+			} else if (type.equalsIgnoreCase("-JinghuiZhangGTExExonFPKM")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JinghuiZhangGTExExonFPKM "
+							+ JinghuiZhangGTExExonFPKM.parameter_info());
+					System.exit(0);
+				}
+				JinghuiZhangGTExExonFPKM.execute(args_remain);
+				// JinghuiZhangGenerateCategoryBarplot
+			} else if (type.equalsIgnoreCase("-JinghuiZhangGenerateCategoryBarplot")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JinghuiZhangGenerateCategoryBarplot "
+							+ JinghuiZhangGenerateCategoryBarplot.parameter_info());
+					System.exit(0);
+				}
+				JinghuiZhangGenerateCategoryBarplot.execute(args_remain);
+				// JinghuiZhangGTExGenerateCategoryBarplot
+			} else if (type.equalsIgnoreCase("-JinghuiZhangGTExGenerateCategoryBarplot")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JinghuiZhangGTExGenerateCategoryBarplot "
+							+ JinghuiZhangGTExGenerateCategoryBarplot.parameter_info());
+					System.exit(0);
+				}
+				JinghuiZhangGTExGenerateCategoryBarplot.execute(args_remain);
+				// UpdateScatterPlotColorBasedOnExpression
+			} else if (type.equalsIgnoreCase("-UpdateScatterPlotColorBasedOnExpression")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -UpdateScatterPlotColorBasedOnExpression "
+							+ UpdateScatterPlotColorBasedOnExpression.parameter_info());
+					System.exit(0);
+				}
+				UpdateScatterPlotColorBasedOnExpression.execute(args_remain);
+				// TenXGenomics2Matrix
+			} else if (type.equalsIgnoreCase("-TenXGenomics2Matrix")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -TenXGenomics2Matrix "
+							+ TenXGenomics2Matrix.parameter_info());
+					System.exit(0);
+				}
+				TenXGenomics2Matrix.execute(args_remain);
+				// RunSeuratAnalysisFromCellRanger
+			} else if (type.equalsIgnoreCase("-RunSeuratAnalysisFromCellRanger")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -RunSeuratAnalysisFromCellRanger "
+							+ RunSeuratAnalysisFromCellRanger.parameter_info());
+					System.exit(0);
+				}
+				RunSeuratAnalysisFromCellRanger.execute(args_remain);
+				// SeuratCalculateClusterDistribution
+			} else if (type.equalsIgnoreCase("-SeuratCalculateClusterDistribution")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SeuratCalculateClusterDistribution "
+							+ SeuratCalculateClusterDistribution.parameter_info());
+					System.exit(0);
+				}
+				SeuratCalculateClusterDistribution.execute(args_remain);
+				// SamHeader2CellType
+			} else if (type.equalsIgnoreCase("-SamHeader2CellType")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SamHeader2CellType "
+							+ SamHeader2CellType.parameter_info());
+					System.exit(0);
+				}
+				SamHeader2CellType.execute(args_remain);
+				// UpdateBarcodeClusterWithAnnotation
+			} else if (type.equalsIgnoreCase("-UpdateBarcodeClusterWithAnnotation")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -UpdateBarcodeClusterWithAnnotation "
+							+ UpdateBarcodeClusterWithAnnotation.parameter_info());
+					System.exit(0);
+				}
+				UpdateBarcodeClusterWithAnnotation.execute(args_remain);
+				// CalculateMedianForEachCluster
+			} else if (type.equalsIgnoreCase("-CalculateMedianForEachCluster")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CalculateMedianForEachCluster "
+							+ CalculateMedianForEachCluster.parameter_info());
+					System.exit(0);
+				}
+				CalculateMedianForEachCluster.execute(args_remain);
+				// SuzanneBakerFilterBarcodeSamples
+			} else if (type.equalsIgnoreCase("-SuzanneBakerFilterBarcodeSamples")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SuzanneBakerFilterBarcodeSamples "
+							+ SuzanneBakerFilterBarcodeSamples.parameter_info());
+					System.exit(0);
+				}
+				SuzanneBakerFilterBarcodeSamples.execute(args_remain);
 				// 
 			} else {
 				System.out.println("Here are the available programs");
 				printProgramInfo();
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

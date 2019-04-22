@@ -11,7 +11,7 @@ public class SpecialClassForDougGreen {
 		return "SINGLECELL";
 	}
 	public static String description() {
-		return "Generate color the meta data Doug Green's 10X dropseq data";
+		return "Generate color the meta data for Doug Green's 10X dropseq data";
 	}
 	public static String parameter_info() {
 		return "[inputFile1] [inputFile2]";

@@ -14,7 +14,7 @@ import misc.CommandLine;
 public class CompareGeneLengthDistribution {
 
 	public static String parameter_info() {
-		return "[upRegInputFile] [dnRegInputFile] [reference] [x_label] [min_expression] [min_length] [outputFile] [outputFoldChange]";
+		return "[upRegInputFile] [dnRegInputFile] [allRegInputFile] [reference] [x_label] [min_expression] [min_length] [outputFile] [outputFoldChange]";
 	}
 	public static void execute(String[] args) {
 		

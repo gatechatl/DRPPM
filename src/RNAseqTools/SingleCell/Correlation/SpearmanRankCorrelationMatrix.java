@@ -70,15 +70,15 @@ public class SpearmanRankCorrelationMatrix {
 			BufferedWriter out2 = new BufferedWriter(fwriter2);			
 			
 			int n = 0;
-			double[] ref = new double[geneNameMap.size()];
-			Iterator itr = geneNameMap.keySet().iterator();
+			//double[] ref = new double[geneNameMap.size()];
+			/*Iterator itr = geneNameMap.keySet().iterator();
 			while (itr.hasNext()) {
 				String geneName = (String)itr.next();
 				double value = (Double)reference.get(geneName);
 				
-				ref[n] = value;
+				//ref[n] = value;
 				n++;
-			}
+			}*/
 			out2.write("SampleName");
 			Iterator itr2 = map.keySet().iterator();
 			while (itr2.hasNext()) {
@@ -87,7 +87,7 @@ public class SpearmanRankCorrelationMatrix {
 				//out.write(sampleName);
 				double[] sample = new double[geneNameMap.size()];
 				n = 0;
-				HashMap values = (HashMap)map.get(sampleName);
+				/*HashMap values = (HashMap)map.get(sampleName);
 				Iterator itr3 = geneNameMap.keySet().iterator();
 				while (itr3.hasNext()) {
 					String geneName = (String)itr3.next();
@@ -96,7 +96,7 @@ public class SpearmanRankCorrelationMatrix {
 					n++;
 					//System.out.println(sampleName + "\t" + MathTools.SpearmanRank(ref, sample));
 					
-				}
+				}*/
 			}
 			out2.write("\n");
 			
