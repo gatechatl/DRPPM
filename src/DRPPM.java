@@ -82,13 +82,17 @@ import graph.interactive.javascript.GenerateScatterPlotJavaScript;
 import graph.interactive.javascript.GenerateScatterPlotJavaScriptUserInput;
 import graph.interactive.javascript.barplot.GenerateBatchBarPlotHtmls;
 import graph.interactive.javascript.barplot.GenerateHorizontalBarPlotJavaScript;
+import graph.interactive.javascript.barplot.GenerateStackedBarPlotJavaScript;
 import graph.interactive.javascript.barplot.GenerateVerticalBarPlotJavaScript;
 import graph.interactive.javascript.heatmap.GenerateHeatmapJavaScript;
 import graph.interactive.javascript.heatmap.GenerateHeatmapZscoreSSGSEAJavaScript;
 import graph.interactive.javascript.heatmap.GenerateHeatmapZscoreWithOriginalValuesJavaScript;
 import graph.interactive.javascript.maplot.GenerateMAPlotJavaScript;
 import graph.interactive.javascript.maplot.GenerateMAPlotJavaScriptUserInput;
+import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptInputHTMLMeta;
 import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptUserInputCustomColor;
+import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptUserInputCustomColorMeta;
+import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex;
 import graph.interactive.javascript.scatterplot.UpdateScatterPlotColorBasedOnExpression;
 import graph.interactive.javascript.volcanoplot.GenerateVolcanoPlotJavaScript;
 import graph.interactive.javascript.volcanoplot.GenerateVolcanoPlotJavaScriptUserInput;
@@ -107,6 +111,7 @@ import idconversion.tools.ConvertUniprot2GeneAndAppend;
 import idconversion.tools.EnsemblGeneID2GeneName;
 import idconversion.tools.EnsemblGeneID2GeneNameXenograft;
 import idconversion.tools.EnsemblGeneIDAppendAnnotation;
+import idconversion.tools.EnsemblGeneIDAppendGeneName;
 import idconversion.tools.GeneName2EnsemblID;
 import idconversion.tools.GenerateConversionTable;
 import idconversion.tools.MicroarrayAddGeneName;
@@ -378,6 +383,7 @@ import rnaseq.mapping.tools.star.SummarizeStarMapping;
 import rnaseq.mapping.tools.star.SummarizeStarMappingMerge;
 import rnaseq.mapping.tools.star.TrimmomaticScriptGenerator;
 import rnaseq.mapping.tools.star.UBam2FQ;
+import rnaseq.mapping.tools.star.ver2_5_3a.STARMappingScriptGeneratorV253a;
 import rnaseq.pcpa.AddChr;
 import rnaseq.pcpa.CalculatePolyADistribution;
 import rnaseq.pcpa.CalculatePolyADistributionMouse;
@@ -434,15 +440,32 @@ import rnaseq.splicing.mats402.SummarizeRMATS402SDResultWithBlackListRelaxed;
 import rnaseq.splicing.misc.CalculateExonDistribution;
 import rnaseq.splicing.misc.GenerateGCContentMatrix;
 import rnaseq.splicing.summary.AppendExpressionToMATSOutput;
-import rnaseq.tools.EXONJUNCTION.CompareDifferentialAnalysis;
-import rnaseq.tools.EXONJUNCTION.ExonJunctionMatrix;
-import rnaseq.tools.EXONJUNCTION.GeneVsJunctionFC;
-import rnaseq.tools.EXONJUNCTION.GrabDifferentiatedJunctions;
-import rnaseq.tools.EXONJUNCTION.JunctionVsGeneJunc;
-import rnaseq.tools.EXONJUNCTION.NormalizeJunctionCount;
-import rnaseq.tools.EXONJUNCTION.OverlapLIMMAAndExonJunctionCount;
 import rnaseq.tools.ercc.GenerateERCCgtffile;
+import rnaseq.tools.exonjunction.CompareDifferentialAnalysis;
+import rnaseq.tools.exonjunction.ExonJunctionMatrix;
+import rnaseq.tools.exonjunction.GeneVsJunctionFC;
+import rnaseq.tools.exonjunction.GrabDifferentiatedJunctions;
+import rnaseq.tools.exonjunction.JunctionVsGeneJunc;
+import rnaseq.tools.exonjunction.NormalizeJunctionCount;
+import rnaseq.tools.exonjunction.OverlapLIMMAAndExonJunctionCount;
+import rnaseq.tools.genelengthanalysis.AppendGeneLength;
+import rnaseq.tools.genelengthanalysis.CompareExonCountDistribution;
+import rnaseq.tools.genelengthanalysis.CompareGeneLengthDistribution;
+import rnaseq.tools.genelengthanalysis.GTFAnnotateExonLength;
+import rnaseq.tools.genelengthanalysis.GTFAnnotateGeneLength;
+import rnaseq.tools.genelengthanalysis.GTFAnnotateNumExon;
+import rnaseq.tools.genelengthanalysis.GTFAnnotationSimple;
+import rnaseq.tools.genelengthanalysis.TranscriptLengthSlidingWindow;
+import rnaseq.tools.genelengthanalysis.TranscriptLengthSlidingWindowInhibitedGenes;
 import rnaseq.tools.singlecell.tenxgenomics.TenXGenomics2Matrix;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.CalculateMedianForEachCluster;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.ConvertMatrix2CellRangerExpressionOutput;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.RunSeuratAnalysisFromCellRanger;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.SamHeader2CellType;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.SeuratCalculateClusterDistribution;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.SpecialClassForDougGreen;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.SuzanneBakerFilterBarcodeSamples;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.UpdateBarcodeClusterWithAnnotation;
 import sequencing.tools.bedmanupulation.BedGraphFilterChromosomeName;
 import statistics.general.EXONCAPStatsReport;
 import statistics.general.MathTools;
@@ -550,6 +573,7 @@ import stjude.projects.suzannebaker.GenerateHeatmapFromGMTPipeline;
 import stjude.projects.suzannebaker.GenerateRNAHGGSampleK27MStatus;
 import stjude.projects.suzannebaker.SummarizeGSEAResultNESFDR;
 import stjude.projects.suzannebaker.SummarizeSingleSampleGSEAResult;
+import stjude.projects.suzannebaker.stemness_lineage_ac_ol.SuzanneBakerConvertSingleSampleGSEA2LineageScore;
 import stjude.projects.taoshengchen.TaoshengChenVennDiagram;
 import stjude.projects.xiangchen.BMIQNormalization;
 import stjude.projects.xiangchen.CombineBMIQNormalizedFiles;
@@ -705,15 +729,6 @@ import ProteinStructure.ProteinDisorder.CountGeneWithDisorderRegionPlot;
 import ProteinStructure.ProteinDisorder.GenerateD2P2Input;
 import ProteinStructure.ProteinDisorder.ProteinFeatureCombineResults;
 import ProteinStructure.ProteinDisorder.ReadD2P2Database;
-import RNAseqTools.GeneLengthAnalysis.AppendGeneLength;
-import RNAseqTools.GeneLengthAnalysis.CompareExonCountDistribution;
-import RNAseqTools.GeneLengthAnalysis.CompareGeneLengthDistribution;
-import RNAseqTools.GeneLengthAnalysis.GTFAnnotateExonLength;
-import RNAseqTools.GeneLengthAnalysis.GTFAnnotateGeneLength;
-import RNAseqTools.GeneLengthAnalysis.GTFAnnotateNumExon;
-import RNAseqTools.GeneLengthAnalysis.GTFAnnotationSimple;
-import RNAseqTools.GeneLengthAnalysis.TranscriptLengthSlidingWindow;
-import RNAseqTools.GeneLengthAnalysis.TranscriptLengthSlidingWindowInhibitedGenes;
 import RNAseqTools.IntronRetention.Graphs.GenerateIntronRetentionBarPlot;
 import RNAseqTools.SingleCell.Bootstrap.Filter0PSamples;
 import RNAseqTools.SingleCell.Bootstrap.GenerateTrueFalseMatrix;
@@ -727,13 +742,6 @@ import RNAseqTools.SingleCell.CellOfOrigin.GenerateMatrixForTwoGroups;
 import RNAseqTools.SingleCell.CellOfOrigin.GenerateNodeMetaBasedOnGroups;
 import RNAseqTools.SingleCell.CellOfOrigin.GenerateSIFfromMinimumSpanningTree;
 import RNAseqTools.SingleCell.CellOfOrigin.PostProcessingOfVariantMatrix;
-import RNAseqTools.SingleCell.CellRanger.CalculateMedianForEachCluster;
-import RNAseqTools.SingleCell.CellRanger.RunSeuratAnalysisFromCellRanger;
-import RNAseqTools.SingleCell.CellRanger.SamHeader2CellType;
-import RNAseqTools.SingleCell.CellRanger.SeuratCalculateClusterDistribution;
-import RNAseqTools.SingleCell.CellRanger.SpecialClassForDougGreen;
-import RNAseqTools.SingleCell.CellRanger.SuzanneBakerFilterBarcodeSamples;
-import RNAseqTools.SingleCell.CellRanger.UpdateBarcodeClusterWithAnnotation;
 import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelation;
 import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelationMatrix;
 import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelationMatrixForTwo;
@@ -1227,8 +1235,11 @@ public class DRPPM {
 			} else if (type.equalsIgnoreCase("-NormalizeJunctionCount")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
+					
 					System.out.println("drppm -NormalizeJunctionCount "
 							+ NormalizeJunctionCount.parameter_info());
+					System.out.println("Description "
+							+ NormalizeJunctionCount.description());
 
 					System.exit(0);
 				}
@@ -8530,6 +8541,79 @@ public class DRPPM {
 					System.exit(0);
 				}
 				SuzanneBakerFilterBarcodeSamples.execute(args_remain);
+				// GenerateScatterPlotJavaScriptUserInputCustomColorMeta
+			} else if (type.equalsIgnoreCase("-GenerateScatterPlotJavaScriptUserInputCustomColorMeta")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateScatterPlotJavaScriptUserInputCustomColorMeta "
+							+ GenerateScatterPlotJavaScriptUserInputCustomColorMeta.parameter_info());
+					System.exit(0);
+				}
+				GenerateScatterPlotJavaScriptUserInputCustomColorMeta.execute(args_remain);
+				// GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex
+			} else if (type.equalsIgnoreCase("-GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex "
+							+ GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex.parameter_info());
+					System.exit(0);
+				}
+				GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex.execute(args_remain);
+				// ConvertMatrix2CellRangerExpressionOutput
+			} else if (type.equalsIgnoreCase("-ConvertMatrix2CellRangerExpressionOutput")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -ConvertMatrix2CellRangerExpressionOutput "
+							+ ConvertMatrix2CellRangerExpressionOutput.parameter_info());
+					System.exit(0);
+				}
+				ConvertMatrix2CellRangerExpressionOutput.execute(args_remain);
+				// EnsemblGeneIDAppendGeneName
+			} else if (type.equalsIgnoreCase("-EnsemblGeneIDAppendGeneName")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -EnsemblGeneIDAppendGeneName "
+							+ EnsemblGeneIDAppendGeneName.parameter_info());
+					System.exit(0);
+				}
+				EnsemblGeneIDAppendGeneName.execute(args_remain);
+				// GenerateScatterPlotJavaScriptInputHTMLMeta
+			} else if (type.equalsIgnoreCase("-GenerateScatterPlotJavaScriptInputHTMLMeta")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateScatterPlotJavaScriptInputHTMLMeta "
+							+ GenerateScatterPlotJavaScriptInputHTMLMeta.parameter_info());
+					System.exit(0);
+				}
+				GenerateScatterPlotJavaScriptInputHTMLMeta.execute(args_remain);
+				// SuzanneBakerConvertSingleSampleGSEA2LineageScore
+			} else if (type.equalsIgnoreCase("-SuzanneBakerConvertSingleSampleGSEA2LineageScore")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SuzanneBakerConvertSingleSampleGSEA2LineageScore "
+							+ SuzanneBakerConvertSingleSampleGSEA2LineageScore.parameter_info());
+					System.exit(0);
+				}
+				SuzanneBakerConvertSingleSampleGSEA2LineageScore.execute(args_remain);
+				// GenerateStackedBarPlotJavaScript
+			} else if (type.equalsIgnoreCase("-GenerateStackedBarPlotJavaScript")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateStackedBarPlotJavaScript "
+							+ GenerateStackedBarPlotJavaScript.parameter_info());
+					System.exit(0);
+				}
+				GenerateStackedBarPlotJavaScript.execute(args_remain);
+				// STARMappingScriptGeneratorV253a
+			} else if (type.equalsIgnoreCase("-STARMappingScriptGeneratorV253a")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {					
+					System.out.println("drppm -STARMappingScriptGeneratorV253a "
+							+ STARMappingScriptGeneratorV253a.parameter_info());
+					System.out.println("Description: " + STARMappingScriptGeneratorV253a.description());
+					System.exit(0);
+				}
+				STARMappingScriptGeneratorV253a.execute(args_remain);
 				// 
 			} else {
 				System.out.println("Here are the available programs");

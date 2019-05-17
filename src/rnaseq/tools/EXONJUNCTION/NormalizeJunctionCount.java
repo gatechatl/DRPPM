@@ -1,4 +1,4 @@
-package rnaseq.tools.EXONJUNCTION;
+package rnaseq.tools.exonjunction;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -14,6 +14,9 @@ import java.io.InputStreamReader;
  */
 public class NormalizeJunctionCount {
 
+	public static String description() {
+		return "For count based method, this will normalize the result";
+	}
 	public static String parameter_info() {
 		return "[inputFile] [baselineNumeric] [outputFile]";
 	}

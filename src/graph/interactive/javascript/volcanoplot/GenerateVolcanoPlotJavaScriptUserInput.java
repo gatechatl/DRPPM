@@ -221,13 +221,13 @@ public class GenerateVolcanoPlotJavaScriptUserInput {
 
 
 		script.append("     main.append('g')\n");
-	    script.append("      .style(\"font-size\",\"20px\")\n");		
+	    script.append("      .style(\"font-size\",\"35px\")\n");		
 		script.append("      .attr('transform', 'translate(0,' + height + ')')\n");
 		script.append("      .attr('class', 'main axis date')\n");
 		script.append("      .call(xAxis);\n");
 
 		script.append("    main.append('g')\n");
-	    script.append("      .style(\"font-size\",\"20px\")\n");
+	    script.append("      .style(\"font-size\",\"35px\")\n");
 		script.append("      .attr('transform', 'translate(0,0)')\n");
 		script.append("      .attr('class', 'main axis date')\n");
 		script.append("      .call(yAxis);\n");
@@ -253,7 +253,7 @@ public class GenerateVolcanoPlotJavaScriptUserInput {
 		script.append("          for (i = 0; i < split_nodeName.length; i++) {\n");
 		script.append("            if (d.name == split_nodeName[i]) {return 0.0;}\n");
 		script.append("          }\n");
-		script.append("          return 0.2;})\n");
+		script.append("          return 1.0;})\n");
 		
 		//script.append("      .style(\"fill\", \"red\")\n");
 		script.append("          .style(\"fill\", \"lightgray\")\n");
@@ -288,9 +288,9 @@ public class GenerateVolcanoPlotJavaScriptUserInput {
 		script.append("        return x(d.x);\n");
 		script.append("      })\n");
 		script.append("      .attr(\"r\", 5)\n");
-		script.append("      .style(\"opacity\", function(d, i) {if (d.fdr < " + fdr_cutoff + " && Math.abs(d.x) > " + logFC_cutoff + ") {if (d.x > 0) return \"0.3\"; if (d.x < 0) return 0.3; } else {return 0.0;}})\n");		
+		script.append("      .style(\"opacity\", function(d, i) {if (d.fdr < " + fdr_cutoff + " && Math.abs(d.x) > " + logFC_cutoff + ") {if (d.x > 0) return \"1.0\"; if (d.x < 0) return 1.0; } else {return 0.0;}})\n");		
 		//script.append("      .style(\"fill\", \"red\")\n");
-		script.append("      .style(\"fill\", function(d, i) {if (d.fdr < " + fdr_cutoff + " && d.x > " + logFC_cutoff + ") {return \"red\";} else if (d.fdr < " + fdr_cutoff + " && d.x < " + logFC_cutoff + ") {return \"blue\";} else {return \"lightgray\";}})\n");
+		script.append("      .style(\"fill\", function(d, i) {if (d.fdr < " + fdr_cutoff + " && d.x > " + logFC_cutoff + ") {return \"pink\";} else if (d.fdr < " + fdr_cutoff + " && d.x < " + logFC_cutoff + ") {return \"lightblue\";} else {return \"lightgray\";}})\n");
 		
 		script.append("      .on('mouseover', function(d, i) {\n");
 		script.append("        tip.transition().duration(0);\n");
@@ -320,21 +320,21 @@ public class GenerateVolcanoPlotJavaScriptUserInput {
 		
 		script.append("          .style(\"r\", function(d, i) {\n");			
 		script.append("          for (i = 0; i < split_nodeName.length; i++) {\n");
-		script.append("            if (d.name == split_nodeName[i]) {return 6;}\n");
+		script.append("            if (d.name == split_nodeName[i]) {return 12;}\n");
 		script.append("          }\n");
 		script.append("          return 0;})\n");
 		
 		script.append("          .style(\"opacity\", function(d, i) {\n");			
 		script.append("          for (i = 0; i < split_nodeName.length; i++) {\n");
-		script.append("            if (d.name == split_nodeName[i]) {return 0.8;}\n");
+		script.append("            if (d.name == split_nodeName[i]) {return 1.0;}\n");
 		script.append("          }\n");
 		script.append("          return 0.0;})\n");
 		// opacity
-		
+        script.append("          .style(\"fill\", function(d, i) {if (d.fdr < 0.05 && d.x > 0.0) {return \"red\";} else if (d.fdr < 0.05 && d.x < 0.0) {return \"blue\";} else {return \"lightgray\";}})\n");
 		//script.append("      .style(\"fill\", \"red\")\n");
-		script.append("          .style(\"fill\", \"purple\")\n");
+		//script.append("          .style(\"fill\", \"purple\")\n");
 		script.append("          .style(\"stroke\", \"black\")\n");		
-		script.append("          .style(\"stroke-width\", \"1.4\")\n");		
+		script.append("          .style(\"stroke-width\", \"4\")\n");		
 				
 		script.append("      .on('mouseover', function(d, i) {\n");
 		script.append("        tip.transition().duration(0);\n");
@@ -373,7 +373,7 @@ public class GenerateVolcanoPlotJavaScriptUserInput {
 			script.append("      .attr(\"font-size\", \"15px\")\n");
 			script.append("          .style(\"opacity\", function(d, i) {\n");			
 			script.append("          for (i = 0; i < split_nodeName.length; i++) {\n");
-			script.append("            if (d.name == split_nodeName[i]) {return 0.8;}\n");
+			script.append("            if (d.name == split_nodeName[i]) {return 1.0;}\n");
 			script.append("          }\n");
 			script.append("          return 0.0;})\n");
 			script.append("      .attr(\"fill\", \"black\");   // Font color\n");

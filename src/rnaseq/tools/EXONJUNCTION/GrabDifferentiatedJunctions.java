@@ -1,4 +1,4 @@
-package rnaseq.tools.EXONJUNCTION;
+package rnaseq.tools.exonjunction;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;

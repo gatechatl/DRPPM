@@ -43,6 +43,7 @@ public class JinghuiZhangGenerateCategoryBarplot {
 			FileInputStream fstream = new FileInputStream(metaInfoFile);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
+			in.readLine();
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
@@ -115,27 +116,42 @@ public class JinghuiZhangGenerateCategoryBarplot {
 			Iterator itr3 = all_category.keySet().iterator();
 			while (itr3.hasNext()) {
 				String category_type = (String)itr3.next();
-				out.write("\t" + category_type);
+				String rename = category_type;
+				if (category_type.equals("0")) {
+					rename = "LowExpr";
+				}
+				if (category_type.equals("1")) {
+					rename = "MedLowExpr";
+				}
+				if (category_type.equals("2")) {
+					rename = "MedHighExpr";
+				}
+				if (category_type.equals("3")) {
+					rename = "HighExpr";
+				}
+				out.write("\t" + rename);
 			}
 			out.write("\n");
 			
 			Iterator itr = tissue2category.keySet().iterator();
 			while (itr.hasNext()) {
 				String tissue = (String)itr.next();
-				out.write(tissue);
-				HashMap category = (HashMap)tissue2category.get(tissue);
-				double total = 0.0;
-				Iterator itr2 = all_category.keySet().iterator();
-				while (itr2.hasNext()) {
-					String category_type = (String)itr2.next();
-					if (category.containsKey(category_type)) {
-						double count = (Double)category.get(category_type);
-						out.write("\t" + count);
-					} else {
-						out.write("\t" + 0.0);
+				if (!tissue.equals("SJNORM")) {
+					out.write(tissue);
+					HashMap category = (HashMap)tissue2category.get(tissue);
+					double total = 0.0;
+					Iterator itr2 = all_category.keySet().iterator();
+					while (itr2.hasNext()) {
+						String category_type = (String)itr2.next();					
+						if (category.containsKey(category_type)) {
+							double count = (Double)category.get(category_type);
+							out.write("\t" + count);
+						} else {
+							out.write("\t" + 0.0);
+						}
 					}
+					out.write("\n");
 				}
-				out.write("\n");
 			}
 			out.close();
 		} catch (Exception e) {

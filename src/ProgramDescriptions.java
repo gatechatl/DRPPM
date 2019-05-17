@@ -73,6 +73,7 @@ import idconversion.tools.ConvertUniprot2GeneAndAppend;
 import idconversion.tools.EnsemblGeneID2GeneName;
 import idconversion.tools.EnsemblGeneID2GeneNameXenograft;
 import idconversion.tools.EnsemblGeneIDAppendAnnotation;
+import idconversion.tools.EnsemblGeneIDAppendGeneName;
 import idconversion.tools.GeneName2EnsemblID;
 import idconversion.tools.RefSeq2GeneName;
 import idconversion.tools.SubGeneFromConversionTable;
@@ -172,13 +173,17 @@ import graph.interactive.javascript.GenerateScatterPlotJavaScript;
 import graph.interactive.javascript.GenerateScatterPlotJavaScriptUserInput;
 import graph.interactive.javascript.barplot.GenerateBatchBarPlotHtmls;
 import graph.interactive.javascript.barplot.GenerateHorizontalBarPlotJavaScript;
+import graph.interactive.javascript.barplot.GenerateStackedBarPlotJavaScript;
 import graph.interactive.javascript.barplot.GenerateVerticalBarPlotJavaScript;
 import graph.interactive.javascript.heatmap.GenerateHeatmapJavaScript;
 import graph.interactive.javascript.heatmap.GenerateHeatmapZscoreSSGSEAJavaScript;
 import graph.interactive.javascript.heatmap.GenerateHeatmapZscoreWithOriginalValuesJavaScript;
 import graph.interactive.javascript.maplot.GenerateMAPlotJavaScript;
 import graph.interactive.javascript.maplot.GenerateMAPlotJavaScriptUserInput;
+import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptInputHTMLMeta;
 import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptUserInputCustomColor;
+import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptUserInputCustomColorMeta;
+import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex;
 import graph.interactive.javascript.scatterplot.UpdateScatterPlotColorBasedOnExpression;
 import graph.interactive.javascript.volcanoplot.GenerateVolcanoPlotJavaScript;
 import graph.interactive.javascript.volcanoplot.GenerateVolcanoPlotJavaScriptUserInput;
@@ -260,6 +265,7 @@ import rnaseq.mapping.tools.star.STARMappingScriptGeneratorForTrimFastq;
 import rnaseq.mapping.tools.star.SummarizeStarMapping;
 import rnaseq.mapping.tools.star.TrimmomaticScriptGenerator;
 import rnaseq.mapping.tools.star.UBam2FQ;
+import rnaseq.mapping.tools.star.ver2_5_3a.STARMappingScriptGeneratorV253a;
 import rnaseq.pcpa.AddChr;
 import rnaseq.pcpa.CombinePCPAResults;
 import rnaseq.pcpa.ExtractPolyAReadsUsePolyALibrarySingleCell;
@@ -285,10 +291,21 @@ import rnaseq.splicing.mats402.SummarizeRMATS402Result;
 import rnaseq.splicing.mats402.SummarizeRMATS402ResultBlackList;
 import rnaseq.splicing.mats402.SummarizeRMATS402SDResultWithBlackList;
 import rnaseq.splicing.summary.AppendExpressionToMATSOutput;
-import rnaseq.tools.EXONJUNCTION.JunctionVsGeneJunc;
-import rnaseq.tools.EXONJUNCTION.OverlapLIMMAAndExonJunctionCount;
 import rnaseq.tools.ercc.GenerateERCCgtffile;
+import rnaseq.tools.exonjunction.JunctionVsGeneJunc;
+import rnaseq.tools.exonjunction.OverlapLIMMAAndExonJunctionCount;
+import rnaseq.tools.genelengthanalysis.AppendGeneLength;
+import rnaseq.tools.genelengthanalysis.TranscriptLengthSlidingWindow;
+import rnaseq.tools.genelengthanalysis.TranscriptLengthSlidingWindowInhibitedGenes;
 import rnaseq.tools.singlecell.tenxgenomics.TenXGenomics2Matrix;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.CalculateMedianForEachCluster;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.ConvertMatrix2CellRangerExpressionOutput;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.RunSeuratAnalysisFromCellRanger;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.SamHeader2CellType;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.SeuratCalculateClusterDistribution;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.SpecialClassForDougGreen;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.SuzanneBakerFilterBarcodeSamples;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.UpdateBarcodeClusterWithAnnotation;
 import sequencing.tools.bedmanupulation.BedGraphFilterChromosomeName;
 import stjude.projects.hongbochi.AppendMTORC1Motif2PeptideTable;
 import stjude.projects.hongbochi.AppendMTORC1Motif2Table;
@@ -390,6 +407,7 @@ import stjude.projects.suzannebaker.GenerateHeatmapFromGMTPipeline;
 import stjude.projects.suzannebaker.GenerateRNAHGGSampleK27MStatus;
 import stjude.projects.suzannebaker.SummarizeGSEAResultNESFDR;
 import stjude.projects.suzannebaker.SummarizeSingleSampleGSEAResult;
+import stjude.projects.suzannebaker.stemness_lineage_ac_ol.SuzanneBakerConvertSingleSampleGSEA2LineageScore;
 import stjude.projects.taoshengchen.TaoshengChenVennDiagram;
 import stjude.projects.xiangchen.BMIQNormalization;
 import stjude.projects.xiangchen.CombineBMIQNormalizedFiles;
@@ -452,9 +470,6 @@ import PhosphoTools.PSSM.ScoreDistribution.RandomSelectionPSSM;
 import PhosphoTools.RarefractionCurve.EstimatingTotalCoverage;
 import ProteinFeature.Hydrophobicity.CalculateHydrophobicityFastaFile;
 import ProteinFeature.MEMEMotif.GenerateUniqFastaFile;
-import RNAseqTools.GeneLengthAnalysis.AppendGeneLength;
-import RNAseqTools.GeneLengthAnalysis.TranscriptLengthSlidingWindow;
-import RNAseqTools.GeneLengthAnalysis.TranscriptLengthSlidingWindowInhibitedGenes;
 import RNAseqTools.SingleCell.Bootstrap.Filter0PSamples;
 import RNAseqTools.SingleCell.Bootstrap.GenerateTrueFalseMatrix;
 import RNAseqTools.SingleCell.Bootstrap.VariantMatrixBootstrap;
@@ -467,13 +482,6 @@ import RNAseqTools.SingleCell.CellOfOrigin.GenerateMatrixForTwoGroups;
 import RNAseqTools.SingleCell.CellOfOrigin.GenerateNodeMetaBasedOnGroups;
 import RNAseqTools.SingleCell.CellOfOrigin.GenerateSIFfromMinimumSpanningTree;
 import RNAseqTools.SingleCell.CellOfOrigin.PostProcessingOfVariantMatrix;
-import RNAseqTools.SingleCell.CellRanger.CalculateMedianForEachCluster;
-import RNAseqTools.SingleCell.CellRanger.RunSeuratAnalysisFromCellRanger;
-import RNAseqTools.SingleCell.CellRanger.SamHeader2CellType;
-import RNAseqTools.SingleCell.CellRanger.SeuratCalculateClusterDistribution;
-import RNAseqTools.SingleCell.CellRanger.SpecialClassForDougGreen;
-import RNAseqTools.SingleCell.CellRanger.SuzanneBakerFilterBarcodeSamples;
-import RNAseqTools.SingleCell.CellRanger.UpdateBarcodeClusterWithAnnotation;
 import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelation;
 import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelationMatrix;
 import RNAseqTools.SingleCell.Correlation.SpearmanRankCorrelationMatrixForTwo;
@@ -2060,10 +2068,34 @@ public class ProgramDescriptions {
 		if (SuzanneBakerFilterBarcodeSamples.type().equals(type)) {
 			result += "SuzanneBakerFilterBarcodeSamples: " + SuzanneBakerFilterBarcodeSamples.description() + "\n";
 		}
+		if (GenerateScatterPlotJavaScriptUserInputCustomColorMeta.type().equals(type)) {
+			result += "GenerateScatterPlotJavaScriptUserInputCustomColorMeta: " + GenerateScatterPlotJavaScriptUserInputCustomColorMeta.description() + "\n";
+		}
+		if (GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex.type().equals(type)) {
+			result += "GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex: " + GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex.description() + "\n";
+		}
+		if (ConvertMatrix2CellRangerExpressionOutput.type().equals(type)) {
+			result += "ConvertMatrix2CellRangerExpressionOutput: " + ConvertMatrix2CellRangerExpressionOutput.description() + "\n";
+		}
+		if (EnsemblGeneIDAppendGeneName.type().equals(type)) {
+			result += "EnsemblGeneIDAppendGeneName: " + EnsemblGeneIDAppendGeneName.description() + "\n";
+		}		
+		if (GenerateScatterPlotJavaScriptInputHTMLMeta.type().equals(type)) {
+			result += "GenerateScatterPlotJavaScriptInputHTMLMeta: " + GenerateScatterPlotJavaScriptInputHTMLMeta.description() + "\n";
+		}
+		if (SuzanneBakerConvertSingleSampleGSEA2LineageScore.type().equals(type)) {
+			result += "SuzanneBakerConvertSingleSampleGSEA2LineageScore: " + SuzanneBakerConvertSingleSampleGSEA2LineageScore.description() + "\n";
+		}
+		if (GenerateStackedBarPlotJavaScript.type().equals(type)) {
+			result += "GenerateStackedBarPlotJavaScript: " + GenerateStackedBarPlotJavaScript.description() + "\n";
+		}
+		if (STARMappingScriptGeneratorV253a.type().equals(type)) {
+			result += "STARMappingScriptGeneratorV253a: " + STARMappingScriptGeneratorV253a.description() + "\n";
+		}
 		return result;
 	}
 	
 
-	public static String VERSION = "20190416";
+	public static String VERSION = "20190514";
 	
 }

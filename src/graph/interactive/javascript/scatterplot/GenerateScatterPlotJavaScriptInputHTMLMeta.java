@@ -11,12 +11,12 @@ import java.util.LinkedList;
 
 import statistics.general.MathTools;
 /**
- * Generates html-javascript file of scatter plot with user-input that defines color 
+ * Generates html-javascript file of scatter plot with user-input that defines color and ability to jump to other html pages
  * @author tshaw
  *
  */
 
-public class GenerateScatterPlotJavaScriptUserInputCustomColor {
+public class GenerateScatterPlotJavaScriptInputHTMLMeta {
 
 	public static String description() {
 		return "Generate html-javascript file with user input (GeneName[space]color) ex: Myc blue";
@@ -25,7 +25,7 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 		return "JAVASCRIPT";
 	}
 	public static String parameter_info() {
-		return "[inputMatrix] [name_index] [x_axis_index] [y_axis_index] [x_logFC_cutoff] [y_logFC_cutoff] [xaxis_title] [yaxis_title] [SkipHeaderFlag:true/false] [writeNameFlag:true/false";
+		return "[inputMatrix] [name_index] [x_axis_index] [y_axis_index] [meta_index] [html_index] [x_logFC_cutoff] [y_logFC_cutoff] [xaxis_title] [yaxis_title] [meta_title] [SkipHeaderFlag:true/false] [writeNameFlag:true/false";
 	}
 	public static void execute(String[] args) {
 		
@@ -35,15 +35,18 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 			int name_index = new Integer(args[1]);
 			int x_axis_index = new Integer(args[2]);								
 			int y_axis_index = new Integer(args[3]);
-			double x_axis_cutoff = new Double(args[4]);
-			double y_axis_cutoff = new Double(args[5]);
-			String xaxis_title = args[6];
-			String yaxis_title = args[7];
-			boolean skipHeader = new Boolean(args[8]);
-			boolean writeNameFlag = new Boolean(args[9]);
+			String[] meta_index = args[4].split(",");
+			int html_index = new Integer(args[5]);
+			double x_axis_cutoff = new Double(args[6]);
+			double y_axis_cutoff = new Double(args[7]);
+			String xaxis_title = args[8];
+			String yaxis_title = args[9];
+			String[] meta_title = args[10].split(",");
+			boolean skipHeader = new Boolean(args[11]);
+			boolean writeNameFlag = new Boolean(args[12]);
 			HashMap gene_list = new HashMap();
-			if (args.length > 10) {
-				String geneListFile = args[10];
+			if (args.length > 13) {
+				String geneListFile = args[13];
 				FileInputStream fstream = new FileInputStream(geneListFile);
 				DataInputStream din = new DataInputStream(fstream);
 				BufferedReader in = new BufferedReader(new InputStreamReader(din));			
@@ -63,6 +66,11 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 			LinkedList name_list = new LinkedList();			
 			LinkedList x_axis_list = new LinkedList();
 			LinkedList y_axis_list = new LinkedList();
+			LinkedList[] meta_list = new LinkedList[meta_index.length];
+			LinkedList html_list = new LinkedList();
+			for (int i = 0; i < meta_index.length; i++) {
+				meta_list[i] = new LinkedList();
+			}
 			
 			FileInputStream fstream = new FileInputStream(inputFile);
 			DataInputStream din = new DataInputStream(fstream);
@@ -77,7 +85,7 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 				
 				double x_axis_value = new Double(split[x_axis_index]);
 				double y_axis_value = new Double(split[y_axis_index]);
-				
+				String html_link = split[html_index];
 				if (min_x_logFC > x_axis_value) {
 					min_x_logFC = x_axis_value;					
 				}
@@ -109,9 +117,12 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 				
 				x_axis_list.add(x_axis_value + "");
 				y_axis_list.add(y_axis_value + "");
+				html_list.add(html_link + "");
 				name_list.add(split[name_index]);
-				
-				
+				for (int i = 0; i < meta_index.length; i++) {
+					String meta_value = split[new Integer(meta_index[i])];
+					meta_list[i].add(meta_value.replaceAll(",", ";") + "");
+				}								
 			}
 			in.close();
 			min_x_logFC = min_x_logFC - Math.abs(max_x_logFC - min_x_logFC) * 0.1;
@@ -124,6 +135,34 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 			double[] x_axis = MathTools.convertListStr2Double(x_axis_list);
 			double[] y_axis = MathTools.convertListStr2Double(y_axis_list);
 			
+			int itr_count = 0;
+			String[] html_links = new String[html_list.size()];
+			Iterator itr_html = html_list.iterator();
+			while (itr_html.hasNext()) {
+				String link = (String)itr_html.next();
+				html_links[itr_count] = link;
+				itr_count++;
+			}
+			String[] meta = new String[y_axis.length];
+			for (int i = 0; i < meta.length; i++) {
+				meta[i] = "";
+			}
+			
+			for (int i = 0; i < meta_index.length; i++) {
+				Iterator itr = meta_list[i].iterator();
+				int j = 0;
+				while (itr.hasNext()) {					
+					String value = (String)itr.next();
+					if (i == 0) {
+						meta[j] = value;
+					} else {
+						meta[j] += "," + value;
+					}
+					j++;
+				}
+			}
+			
+			
 			
 			String[] names = new String[name_list.size()];
 			int index = 0;
@@ -135,15 +174,15 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 			File f = new File(inputFile);
 			
 			String description = "File was generated based on: " + f.getName() + "<br>";
-			description += "Each node represent a gene. Colored node represent gene that pass FDR < 0.05 and log2FC > 1.<br>";
-			System.out.println(generate_scatterplot_javascript(names, x_axis, y_axis, min_x_logFC, max_x_logFC, min_y_logFC, max_y_logFC, x_axis_cutoff, y_axis_cutoff, xaxis_title, yaxis_title, writeNameFlag, description, gene_list));
+			//description += "Each node represent a gene. Colored node represent gene that pass FDR < 0.05 and log2FC > 1.<br>";
+			System.out.println(generate_scatterplot_meta_complex_html_javascript(names, x_axis, y_axis, meta, min_x_logFC, max_x_logFC, min_y_logFC, max_y_logFC, x_axis_cutoff, y_axis_cutoff, xaxis_title, yaxis_title, meta_title, html_links, writeNameFlag, description, gene_list));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public static String generate_scatterplot_javascript(String[] names, double[] x, double[] y, double min_x, double max_x, double min_y, double max_y, double x_axis_cutoff, double y_axis_cutoff, String xaxis_title, String yaxis_title, boolean writeNameFlag, String description, HashMap gene_list) {
+	public static String generate_scatterplot_meta_complex_html_javascript(String[] names, double[] x, double[] y, String[] meta, double min_x, double max_x, double min_y, double max_y, double x_axis_cutoff, double y_axis_cutoff, String xaxis_title, String yaxis_title, String[] meta_title, String[] html_links, boolean writeNameFlag, String description, HashMap gene_list) {
 		
 		String inital_nodeNames = "";
 		Iterator itr = gene_list.keySet().iterator();
@@ -185,7 +224,13 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 			}*/
 			script.append("        x: " + x[i] + ",\n");
 			script.append("        y: " + y[i] + ",\n");
+			script.append("        html: \"" + html_links[i] + "\",\n");
+			String[] meta_values = meta[i].split(",");
+			for (int j = 0; j < meta_values.length; j++) {
+				script.append(" " + meta_title[j] + ":\"" + meta_values[j] + "\",\n");
+			}
 			script.append("	name:\"" + names[i] + "\"\n");
+			
 			script.append("      },\n");
 		}
 		script.append("      {\n");
@@ -193,6 +238,13 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 
 		script.append("        x: " + x[names.length - 1] + ",\n");
 		script.append("        y: " + y[names.length - 1] + ",\n");
+
+		String[] meta_values = meta[names.length - 1].split(",");
+		for (int j = 0; j < meta_values.length; j++) {
+			script.append(" " + meta_title[j] + ":\"" + meta_values[j] + "\",\n");
+		}
+		
+		//script.append(" meta:\"" + meta[names.length - 1] + "\",\n");
 		script.append("	name:\"" + names[names.length - 1] + "\"\n");
 		script.append("      },\n");
 		script.append("    ];\n");
@@ -221,6 +273,16 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 		script.append("      .style('padding', '5px')\n");
 		script.append("      .style('position', 'absolute')\n");
 		script.append("      .style('display', 'none')\n");
+		
+		
+	   	script.append("          .on('click', function(d){\n");
+		script.append("              console.log(\"click\", d);\n");
+	    script.append("              window.open(\n");
+	    script.append("                  d.html,\n");
+	    script.append("                  '_blank' \n");
+	    script.append("              );\n");
+		script.append("          })\n");
+		
 		script.append("      .on('mouseover', function(d, i) {\n");
 		script.append("        tip.transition().duration(1);\n");	
 		script.append("      })\n");
@@ -351,11 +413,19 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 		script.append("\n");
 		script.append("          .style(\"fill\", \"lightgray\")\n");
 		
+	   	script.append("          .on('click', function(d){\n");
+		script.append("              console.log(\"click\", d);\n");
+	    script.append("              window.open(\n");
+	    script.append("                  d.html,\n");
+	    script.append("                  '_blank' \n");
+	    script.append("              );\n");
+		script.append("          })\n");
+		
 		script.append("          .on('mouseover', function(d, i) {\n");
 		script.append("            tip.transition().duration(0);\n");
 		script.append("	    tip.html(d.name + \"<br>Log2FC: \" + round(d.y,2) + \"<br>adj.pval:\" + d.fdr);\n");		
-		script.append("            tip.style('top', (y(d.y) - 40) + 'px');\n");
-		script.append("            tip.style('left', (x(d.x)) + 'px');\n");
+		script.append("            tip.style('top', (y(d.y) - 100) + 'px');\n");
+		script.append("            tip.style('left', (x(d.x) + 100) + 'px');\n");
 		script.append("            tip.style('display', 'block');\n");
 		script.append("            tip.style(\"background\",'#BCC5F7');\n");
 		script.append("          })\n");
@@ -377,6 +447,15 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 		script.append("      })\n");
 		script.append("      .attr(\"r\", 5)\n");
 		script.append("      .style(\"fill\", \"lightgray\")\n");
+		
+	   	script.append("          .on('click', function(d){\n");
+		script.append("              console.log(\"click\", d);\n");
+	    script.append("              window.open(\n");
+	    script.append("                  d.html,\n");
+	    script.append("                  '_blank' \n");
+	    script.append("              );\n");
+		script.append("          })\n");
+		
 		//script.append("      .style(\"fill\", function(d, i) {if (Math.abs(d.x) > " + x_axis_cutoff + ") {if (d.x > 0) return \"red\"; if (d.x < 0) return \"red\"; } else {return \"lightgray\";}})\n");
 		//script.append("      .style(\"fill\", function(d, i) {if (Math.abs(d.y) > " + y_axis_cutoff + ") {if (d.y > 0) return \"blue\"; if (d.y < 0) return \"blue\"; } else {return \"lightgray\";}})\n");
 		//script.append("      .style(\"fill\", function(d, i) {if (Math.abs(d.y) > " + y_axis_cutoff + " && Math.abs(d.x) > " + x_axis_cutoff + ") {return \"purple\";} else if (Math.abs(d.x) > " + x_axis_cutoff + ") {return \"red\"} else if (Math.abs(d.y) > " + y_axis_cutoff + ") {return \"blue\"} else {return \"lightgray\";}})\n");
@@ -385,9 +464,17 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 		//script.append("      .style(\"opacity\", function(d, i) {if (Math.abs(d.y) > " + logFC_cutoff + ") {if (d.y > 0) return \"1.0\"; if (d.y < 0) return 1.0; } else {return 0.0;}})\n");
 		script.append("          .on('mouseover', function(d, i) {\n");
 		script.append("            tip.transition().duration(0);\n");
-		script.append("	    tip.html(d.name + \"<br>Log2FC: \" + round(d.y,2) + \"<br>adj.pval:\" + d.fdr);\n");		
-		script.append("            tip.style('top', (y(d.y) - 40) + 'px');\n");
-		script.append("            tip.style('left', (x(d.x)) + 'px');\n");
+		//script.append("	    tip.html(d.name + \"<br>Log2FC: \" + round(d.y,2) + \"<br>adj.pval:\" + d.fdr);\n");
+		script.append("	    tip.html(d.name + \"<br>");
+		for (int j = 0; j < meta_values.length; j++) {
+			//script.append(" " + meta_title[j] + ":\"" + meta_values[j] + "\",\n");
+			 script.append(meta_title[j] + ": \" + d." + meta_title[j] + " + \"<br>");
+		}
+		script.append("\");\n");
+		
+		//script.append("	    tip.html(d.name + \"<br>meta: \" + d.meta<br>);\n");
+		script.append("            tip.style('top', (y(d.y) - 100) + 'px');\n");
+		script.append("            tip.style('left', (x(d.x) + 100) + 'px');\n");
 		script.append("            tip.style('display', 'block');\n");
 		script.append("            tip.style(\"background\",'#BCC5F7');\n");
 		script.append("          })\n");
@@ -431,9 +518,25 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColor {
 		script.append("          return 0.0;})\n");
 		// opacity
 		
+	   	script.append("          .on('click', function(d){\n");
+		script.append("              console.log(\"click\", d);\n");
+	    script.append("              window.open(\n");
+	    script.append("                  d.html,\n");
+	    script.append("                  '_blank' \n");
+	    script.append("              );\n");
+		script.append("          })\n");
+				
 		script.append("          .on('mouseover', function(d, i) {\n");
 		script.append("            tip.transition().duration(0);\n");
-		script.append("	    tip.html(d.name + \"<br>Log2FC: \" + round(d.y,2) + \"<br>adj.pval:\" + d.fdr);\n");		
+		
+		script.append("	    tip.html(d.name + \"<br>");
+		for (int j = 0; j < meta_values.length; j++) {
+			//script.append(" " + meta_title[j] + ":\"" + meta_values[j] + "\",\n");
+			 script.append(meta_title[j] + ": \" + d." + meta_title[j] + " + \"<br>");
+		}
+		script.append("\");\n");
+		
+		//script.append("	    tip.html(d.name + \"<br>" + meta_title + ": \" + d.meta);\n");		
 		script.append("            tip.style('top', (y(d.y) - 40) + 'px');\n");
 		script.append("            tip.style('left', (x(d.x)) + 'px');\n");
 		script.append("            tip.style('display', 'block');\n");
