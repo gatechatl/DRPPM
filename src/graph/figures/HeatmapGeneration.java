@@ -665,7 +665,7 @@ public class HeatmapGeneration {
 	 */
 	public static String generatePHeatmapScript(String inputFile, String outputFile, String listA, String geneSet, String title, boolean log, int size, boolean col_cluster, boolean row_cluster, String width_size, String height_size, String row_font_size, String col_font_size, int colorType) {
 		String script = "";
-		
+		script += "options(bitmapType='cairo')\n";
 		script += "allDat = read.table(\"" + inputFile.replaceAll("\\\\", "/") + "\", header=TRUE, row.names=1 ,sep=\"\\t\");\n";
 		script += "selection = allDat;\n";
 		script += "rownames = rownames(selection);\n";
@@ -744,7 +744,7 @@ public class HeatmapGeneration {
 	 */
 	public static String generateHeatmapScript(String inputFile, String outputFile, String listA, String geneSet, String title, boolean log, int size, boolean col_cluster, boolean row_cluster) {
 		String script = "";
-		
+		script += "options(bitmapType='cairo')\n";
 		script += "allDat = read.table(\"" + inputFile.replaceAll("\\\\", "/") + "\", header=TRUE, row.names=1,sep=\"\\t\" );\n";
 		script += "selection = allDat;\n";
 		if (!listA.equals("")) {
@@ -929,7 +929,7 @@ public class HeatmapGeneration {
 	
 	public static String generatePHeatmapMAD(String inputFile, String outputFile, String listA, String title, int topCount) {
 		String script = "";
-
+		script += "options(bitmapType='cairo')\n";
 		script += "allDat = read.table(\"" + inputFile + "\", header=TRUE, row.names=1,sep=\"\\t\" ,);\n";
 		script += "selection = allDat;\n";
 		
@@ -978,6 +978,7 @@ public class HeatmapGeneration {
 	 */
 	public static String generateTopMADHeatmapScript(String inputFile, String outputFile, String listA, String title, int topCount, String meta) {
 		String script = "";
+		script += "options(bitmapType='cairo')\n";
 		script += "allDat = read.table(\"" + inputFile + "\", header=TRUE, row.names=1,sep=\"\\t\" );\n";
 		script += "selection = allDat;\n";
 		

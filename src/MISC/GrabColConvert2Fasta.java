@@ -9,7 +9,7 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import PhosphoTools.MotifTools.MotifTools;
+import proteomics.phospho.tools.motifs.MotifTools;
 
 public class GrabColConvert2Fasta {
 

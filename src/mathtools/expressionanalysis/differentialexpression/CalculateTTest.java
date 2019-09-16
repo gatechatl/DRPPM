@@ -37,7 +37,12 @@ public class CalculateTTest {
 			e.printStackTrace();
 		}		
 	}
-	
+	public static String type() {
+		return "DIFFERENTIAL.";
+	}
+	public static String description() {
+		return "T-TEst between two groups.";
+	}
 	public static String parameter_info() {
 		return "[inputFile] [groupAFile] [groupBFile] [outputUpRegFile] [outputDnRegFile] [outputAllFile] [filterType] [takeLog]";
 	}
@@ -153,7 +158,7 @@ public class CalculateTTest {
 					//System.out.println(i + "\t" + split[i]);
 					double val = new Double(split[i]);
 					if (takeLog) {
-						val = MathTools.log2(val + 0.01);
+						val = MathTools.log2(val + 0.00001);
 					}
 					d1[count] = val;
 					count++;
@@ -165,7 +170,7 @@ public class CalculateTTest {
 				for (int i: index2) {
 					double val = new Double(split[i]);
 					if (takeLog) {
-						val = MathTools.log2(val + 0.01);
+						val = MathTools.log2(val + 0.00001);
 					}
 					d2[count] = val;
 					count++;
@@ -180,7 +185,11 @@ public class CalculateTTest {
 				//out.write(split[0] + "\t" + group1 + "\t" + group2 + "\t" + (group1 - group2) + "\t" + test.tTest(d1, d2) + "\n");
 				
 				//System.out.println(split[0] + "\t" + (group1 - group2) + "\t" + all_mean + "\t" + test.tTest(d1, d2));
-				list.add(split[0] + "\t" + (group1 - group2) + "\t" + all_mean + "\t" + test.tTest(d1, d2));
+				if (group1 == group2) {
+					list.add(split[0] + "\t" + (group1 - group2) + "\t" + all_mean + "\t" + 1.0);
+				} else {
+					list.add(split[0] + "\t" + (group1 - group2) + "\t" + all_mean + "\t" + test.tTest(d1, d2));
+				}
 				
 			}
 			
@@ -191,9 +200,10 @@ public class CalculateTTest {
 			Iterator itr = list.iterator();
 			while (itr.hasNext()) {
 				String str = (String)itr.next();
+				
 				String[] split = str.split("\t");				
 				pvals[count] = new Double(split[3]);
-				
+				System.out.println(str + "\t" + pvals[count]);
 				count++;
 			}
 			count = 0;

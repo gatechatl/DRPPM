@@ -24,6 +24,7 @@ public class SingleScatterPlot {
 	
 	public static String createScript(String inputFile, String outputFile, String xlab, String ylab, int xindex, int yindex) {
 		String script = "library(ggplot2);\n";
+		script += "options(bitmapType='cairo')\n";
 		script += "data=read.csv(\"" + inputFile + "\", sep=\"\\t\", header=F);\n";
 		script += "data1 = cbind(data.frame(as.numeric(as.matrix(data[," + xindex + "]))), data.frame(as.numeric(as.matrix(data[," + yindex + "]))));\n";
 		//script += "data1 = cbind(data.frame(data[,3]), data.frame(data[,6]));\n";

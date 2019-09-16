@@ -40,6 +40,7 @@ public class ScatterPlotWithNameResidual {
 	public static String print_residual_script(String inputFile, String xlabel, String ylabel, String outputFile) {
 		String script = "";
 		script += "library(ggplot2);\n";
+		script += "options(bitmapType='cairo')\n";
 		script += "data=read.csv(\"" + inputFile + "\", sep=\"\\t\", header=T);\n";
 		script += "m1 <- lm(data$" + ylabel + "~data$" + xlabel + ")\n";
 		script += "sd = sd(resid(m1)) * 1.5\n";

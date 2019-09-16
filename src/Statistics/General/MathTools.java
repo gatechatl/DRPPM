@@ -361,10 +361,40 @@ public class MathTools {
         return output;
     }
 
+    /**
+     * This doesn't get the median unless the data is sorted.
+     * @param data
+     * @return
+     */
     private static double getMedian(List<Double> data) {
         if (data.size() % 2 == 0)
             return (data.get(data.size() / 2) + data.get(data.size() / 2 - 1)) / 2;
         else
             return data.get(data.size() / 2);
+    }
+    /**
+     * Originally from http://www.java2s.com/Code/Java/Collections-Data-Structure/Retrivethequartilevaluefromanarray.htm
+     * Retrive the quartile value from an array
+     * .
+     * @param values THe array of data
+     * @param lowerPercent The percent cut off. For the lower quartile use 25,
+     *      for the upper-quartile use 75
+     * @return
+     */
+    public static double quartile(double[] values, double lowerPercent) {
+
+        if (values == null || values.length == 0) {
+            throw new IllegalArgumentException("The data array either is null or does not contain any data.");
+        }
+
+        // Rank order the values
+        double[] v = new double[values.length];
+        System.arraycopy(values, 0, v, 0, values.length);
+        Arrays.sort(v);
+
+        int n = (int) Math.round(v.length * lowerPercent / 100);
+        
+        return v[n];
+
     }
 }

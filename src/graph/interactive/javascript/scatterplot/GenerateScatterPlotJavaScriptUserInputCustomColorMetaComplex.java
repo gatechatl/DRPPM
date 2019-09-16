@@ -394,8 +394,8 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex {
 		script.append("          .on('mouseover', function(d, i) {\n");
 		script.append("            tip.transition().duration(0);\n");
 		script.append("	    tip.html(d.name + \"<br>Log2FC: \" + round(d.y,2) + \"<br>adj.pval:\" + d.fdr);\n");		
-		script.append("            tip.style('top', (y(d.y) - 40) + 'px');\n");
-		script.append("            tip.style('left', (x(d.x)) + 'px');\n");
+		script.append("            tip.style('top', (y(d.y) + 150) + 'px');\n");
+		script.append("            tip.style('left', (x(d.x) + 50) + 'px');\n");
 		script.append("            tip.style('display', 'block');\n");
 		script.append("            tip.style(\"background\",'#BCC5F7');\n");
 		script.append("          })\n");
@@ -434,8 +434,8 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex {
 		script.append("\");\n");
 		
 		//script.append("	    tip.html(d.name + \"<br>meta: \" + d.meta<br>);\n");
-		script.append("            tip.style('top', (y(d.y) - 100) + 'px');\n");
-		script.append("            tip.style('left', (x(d.x) + 100) + 'px');\n");
+		script.append("            tip.style('top', (y(d.y) + 150) + 'px');\n");
+		script.append("            tip.style('left', (x(d.x) + 50) + 'px');\n");
 		script.append("            tip.style('display', 'block');\n");
 		script.append("            tip.style(\"background\",'#BCC5F7');\n");
 		script.append("          })\n");
@@ -490,8 +490,8 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex {
 		script.append("\");\n");
 		
 		//script.append("	    tip.html(d.name + \"<br>" + meta_title + ": \" + d.meta);\n");		
-		script.append("            tip.style('top', (y(d.y) - 40) + 'px');\n");
-		script.append("            tip.style('left', (x(d.x)) + 'px');\n");
+		script.append("            tip.style('top', (y(d.y) + 150) + 'px');\n");
+		script.append("            tip.style('left', (x(d.x) + 50) + 'px');\n");
 		script.append("            tip.style('display', 'block');\n");
 		script.append("            tip.style(\"background\",'#BCC5F7');\n");
 		script.append("          })\n");

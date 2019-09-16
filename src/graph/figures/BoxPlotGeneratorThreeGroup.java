@@ -29,6 +29,7 @@ public class BoxPlotGeneratorThreeGroup {
 	}
 	public static String generateViolinPlot(String inputFile, String outputFile, String type, String value, String group1, String group2, String group3) {
 		String script = "library(ggplot2);\n";
+		script += "options(bitmapType='cairo')\n";
 		script += "data = read.table(\"" + inputFile + "\", sep=\"\\t\",header=T);\n";
 		script += group1 + " = data[which(data$Type==\"" + group1 + "\"),\"" + value + "\"]\n";
 		script += group2 + " = data[which(data$Type==\"" + group2 + "\"),\"" + value + "\"]\n";

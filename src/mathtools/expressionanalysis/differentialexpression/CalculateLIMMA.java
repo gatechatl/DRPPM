@@ -129,6 +129,12 @@ public class CalculateLIMMA {
 			e.printStackTrace();
 		}
 	}
+	public static String type() {
+		return "DIFFERENTIAL.";
+	}
+	public static String description() {
+		return "Perform moderated T-Test using LIMMA.";
+	}
 	public static String parameter_info_compare_three_group_flex() {
 		return "[inputFile] [group1File] [group2File] [group3File] [outputFileFilter] [outputFileAll] [pvalue_cutoff] [foldChange_cutoff] [takeLog] [quanNorm] [fdr_cutoff]";
 	}
@@ -315,6 +321,7 @@ public class CalculateLIMMA {
 		String script = "";
 		script += "library(limma);\n";
 		script += "#library(edgeR)\n";
+		script += "options(bitmapType='cairo')\n";
 		script += "data=read.csv(\"" + inputFile + "\", sep=\"\\t\", header=T, as.is=T);\n";
 		script += "gene=data[,1]\n";
 		script += "allDat = data;\n";
@@ -410,6 +417,7 @@ public class CalculateLIMMA {
 		String script = "";
 		script += "library(limma);\n";
 		script += "#library(edgeR)\n";
+		script += "options(bitmapType='cairo')\n";
 		script += "data=read.csv(\"" + inputFile + "\", sep=\"\\t\", header=T, as.is=T);\n";
 		script += "gene=data[,1]\n";
 		script += "allDat = data;\n";

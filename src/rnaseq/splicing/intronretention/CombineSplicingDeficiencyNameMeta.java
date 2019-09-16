@@ -30,7 +30,8 @@ public class CombineSplicingDeficiencyNameMeta {
 			HashMap id2geneName = new HashMap();
 			HashMap filteredGene = new HashMap();
 			
-			
+			HashMap filtered_intron_count = new HashMap();
+			HashMap filtered_exon_count = new HashMap();
 			LinkedList sampleList = new LinkedList();
 			
 			HashMap sampleFiles = new HashMap();
@@ -78,12 +79,29 @@ public class CombineSplicingDeficiencyNameMeta {
 					id2geneName.put(split[1], split[0]);
 					int num_intron_read = new Integer(split[3]);
 					int num_exon_read = new Integer(split[5]);
+					if (filtered_intron_count.containsKey(split[1])) {
+						int count = (Integer)filtered_intron_count.get(split[1]);
+						count += num_intron_read;
+						filtered_intron_count.put(split[1],  count);
+					} else {
+						filtered_intron_count.put(split[1],  num_intron_read);
+					}
+					
 					if (num_intron_read < 5) {
-						filteredGene.put(split[1], split[1]);						
+						//filteredGene.put(split[1], split[1]);						
 					}
 					if (num_exon_read < 5) {
-						filteredGene.put(split[1], split[1]);						
+						//filteredGene.put(split[1], split[1]);						
 					}
+					
+					if (filtered_exon_count.containsKey(split[1])) {
+						int count = (Integer)filtered_exon_count.get(split[1]);
+						count += num_exon_read;
+						filtered_exon_count.put(split[1],  count);
+					} else {
+						filtered_exon_count.put(split[1],  num_exon_read);
+					}
+					
 					//String values = split[1];
 					/*for (int j = 2; j < split.length; j++) {
 						values += "\t" + split[j];
@@ -107,7 +125,11 @@ public class CombineSplicingDeficiencyNameMeta {
 			itr = geneList.keySet().iterator();
 			while (itr.hasNext()) {
 				String geneID = (String)itr.next();
-				if (!filteredGene.containsKey(geneID)) {
+				int intron_count = (Integer)filtered_intron_count.get(geneID);
+				int exon_count = (Integer)filtered_exon_count.get(geneID);
+				
+				//if (!filteredGene.containsKey(geneID)) {
+				if (intron_count >= 5 && exon_count >= 5) {
 					String geneName = (String)id2geneName.get(geneID);
 					//System.out.print(geneID + "\t" + geneName);
 					
@@ -122,8 +144,8 @@ public class CombineSplicingDeficiencyNameMeta {
 							values += "\t" + value;
 						} else {
 							//for (int k = 0; k < sampleLists[j].size(); k++) {
-							skip = true;
-							values += "\t" + "NA";
+							//skip = true;
+							values += "\t" + "0.0";
 							//}
 						}										
 					}	

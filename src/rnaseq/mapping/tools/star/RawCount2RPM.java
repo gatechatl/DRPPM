@@ -33,10 +33,6 @@ public class RawCount2RPM {
 			String outputFile = args[1];
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);			
-			
-			HashMap transcripts = new HashMap();
-			HashMap transcriptID2geneID = new HashMap();
-			HashMap geneID2transcriptID = new HashMap();
 
 			FileInputStream fstream = new FileInputStream(inputFile);
 			DataInputStream din = new DataInputStream(fstream);

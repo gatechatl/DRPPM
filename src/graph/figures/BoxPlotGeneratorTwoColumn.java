@@ -41,6 +41,7 @@ public class BoxPlotGeneratorTwoColumn {
 	public static String create_script(String inputFile, String outputFile, String columnX, String columnY) {
 		String script = "data = read.csv(\"" + inputFile + "\", sep=\"\\t\")\n";
 		script += "library(ggplot2)\n";
+		script += "options(bitmapType='cairo')\n";
 		script += "png(file=\"" + outputFile + "\",width=700, height=500)\n";
 		script += "p1 = ggplot(data, aes(x=" + columnX + ",y=" + columnY + ")) + geom_boxplot() + theme(axis.text.x=theme_text(angle=-90))\n";
 		script += "p1\n";

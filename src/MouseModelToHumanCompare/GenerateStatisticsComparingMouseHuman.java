@@ -15,7 +15,7 @@ import misc.StringManipulationTools;
 import statistics.general.MathTools;
 
 /**
- * Generate a report comparing mouse and human
+ * Generate a report comparing mouse and human for suzanne baker's project
  * @author tshaw
  *
  */

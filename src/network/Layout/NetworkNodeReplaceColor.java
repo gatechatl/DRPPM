@@ -1,4 +1,4 @@
-package network.Layout;
+package network.layout;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

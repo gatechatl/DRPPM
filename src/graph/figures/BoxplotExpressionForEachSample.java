@@ -80,6 +80,7 @@ public class BoxplotExpressionForEachSample {
 	public static String generateViolinPlot(String inputFile, String outputPNGFile) {
 		String script = " \n";
 		script += "library(ggplot2)\n";
+		script += "options(bitmapType='cairo')\n";
 		script += "data = read.table(\"" + inputFile + "\", sep=\"\\t\",header=T);\n";
 		//script += "p1 = ggplot(data, aes(SampleName, Value)) + geom_violin() + geom_boxplot(width=0.1) + theme(plot.title=element_text(size=12), axis.text.x = element_text(size=12), axis.text.y = element_text(size=12), axis.title = element_text(size=12), legend.text = element_text(size=12), legend.title = element_text(size=12)) + geom_jitter(width = 0.2) + theme(axis.text.x = element_text(angle = 90, hjust = 1));\n";
 		script += "p1 = ggplot(data, aes(SampleName, Value)) + geom_violin() + geom_boxplot(width=0.1) + theme(plot.title=element_text(size=35), axis.text.x = element_text(size=10), axis.text.y = element_text(size=10), axis.title = element_text(size=35), legend.text = element_text(size=35), legend.title = element_text(size=35)) + theme(axis.text.x = element_text(angle = 90, hjust = 1));\n";

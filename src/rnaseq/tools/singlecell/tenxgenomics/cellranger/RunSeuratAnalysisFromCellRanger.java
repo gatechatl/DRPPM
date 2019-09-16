@@ -15,6 +15,7 @@ import java.io.File;
  * biocLite(c("DDRTree", "pheatmap"))
  * install.packages('Seurat') 
  * library(Seurat)
+ * which version was Seurat? Seurat_3.0.1
  * @author tshaw
  * 
  */
@@ -59,40 +60,146 @@ public class RunSeuratAnalysisFromCellRanger {
 		script += "library(dplyr)\n";
 		script += "library(Matrix)\n";
 		 
+		String[] split_folder_path = folderPath.split(",");
+		for (int i = 0; i < split_folder_path.length; i++) {
+			script += "single.data" + i + " <- Read10X(data.dir = \"" + split_folder_path[i] + "\")\n";							
+			
+			script += "at_least_one" + i + " <- apply(single.data" + i + ", 2, function(x) sum(x>0))\n";
+			
+			script += "pdf(\"" + outputFolder + "/1_" + prefix + "_single.data" + i + "_Histogram_At_Least_One.pdf\")\n";
+			script += "hist(at_least_one" + i + ", breaks = 100,\n";
+				script += "main = \"Distribution of detected genes\",\n";
+				script += "xlab = \"Genes with at least one tag\")\n";
+	 
+			script += "dev.off()\n";
+			
+			script += "\n";
+			script += "pdf(\"" + outputFolder + "/2_" + prefix + "_Single.Data" + i + "_Histogram_Expr_Sum_per_Cell.pdf\")\n";
+			script += "hist(colSums(single.data" + i + "),\n";
+				script += "breaks = 100, main = \"Expression sum per cell\",\n";
+				script += "xlab = \"Sum expression\")\n";
+			
+			script += "dev.off()\n";
+			
+			script += "\n";
+			script += "tmp <- apply(single.data" + i + ", 1, function(x) sum(x>0))\n";
+			script += "table(tmp>=3)\n";
+			
+			script += "\n";
+			script += "keep <- tmp>=3\n";
+			script += "tmp <- single.data" + i + "[keep,]\n";
+			script += "at_least_one" + i + " <- apply(tmp, 2, function(x) sum(x>0))\n";
+			script += "summary(at_least_one" + i + ")\n"; 
+			script += "\n";
+			
+			script += "dim(tmp)\n";
+			script += "\n";
+						
+			script += "single.data" + i + " <- CreateSeuratObject(counts = single.data" + i + ", min.cells = 3, min.features = 200)\n";
+
+	        script += "pdf(\"" + outputFolder + "/4_" + prefix + "_data" + i + "Total_Expr_Before_Norm.pdf\")\n";
+	        script += "hist(colSums(single.data" + i + "$RNA@data),\n";
+	        script += "breaks = 100,\n";
+	        script += "main = \"Total expression before normalisation\",\n";
+	        script += "xlab = \"Sum of expression\")\n";
+	        script += "dev.off();\n";
+
+			script += "single.data" + i + " <- NormalizeData(object = single.data" + i + ", normalization.method = \"LogNormalize\", scale.factor = 1e4)\n";
+
+	        script += "pdf(\"" + outputFolder + "/5_" + prefix + "_data" + i + "_Total_Expr_After_Norm.pdf\")\n";
+	        script += "hist(colSums(single.data" + i + "$RNA@data),\n";
+	        script += "breaks = 100,\n";
+	        script += "main = \"Total expression after normalisation\",\n";
+	        script += "xlab = \"Sum of expression\")\n";
+	        script += "dev.off();\n";
+	        script += "single.data" + i + " <- FindVariableFeatures(object = single.data" + i + ", selection.method = \"vst\")\n";
+			/*if (i == 1) {
+				script += "single <- MergeSeurat(object1 = single0, object2 = single1, add.cell.id1 = \"" + prefix + "\", add.cell.id2 = \"" + prefix + i + "\", project = \"" + prefix + "\")\n";
+			} else if (i > 1) {
+				script += "single <- MergeSeurat(object1 = single, object2 = single" + i + ", add.cell.id1 = \"" + prefix + "\", add.cell.id2 = \"" + prefix + i + "\", project = \"" + prefix + "\")\n";
+			}*/
+		}
+		if (split_folder_path.length > 1) {
+			String list_str = "";
+			for (int i = 1; i < split_folder_path.length; i++) {
+				if (i == 1) {
+					list_str = "single.data" + i;
+				} else {
+					list_str += ",single.data" + i;
+				}
+			}
+			
+
+			script += "single <- merge(x = single.data0, y = list(" + list_str + "))\n";
+		} else {
+			script += "single = single.data0\n";
+			
+	        script += "pdf(\"" + outputFolder + "/4_" + prefix + "_Total_Expr_Before_Norm.pdf\")\n";
+	        script += "hist(colSums(single$RNA@data),\n";
+	        script += "breaks = 100,\n";
+	        script += "main = \"Total expression before normalisation\",\n";
+	        script += "xlab = \"Sum of expression\")\n";
+	        script += "dev.off();\n";
+
+			script += "single <- NormalizeData(object = single, normalization.method = \"LogNormalize\", scale.factor = 1e4)\n";
+
+	        script += "pdf(\"" + outputFolder + "/5_" + prefix + "_Total_Expr_After_Norm.pdf\")\n";
+	        script += "hist(colSums(single$RNA@data),\n";
+	        script += "breaks = 100,\n";
+	        script += "main = \"Total expression after normalisation\",\n";
+	        script += "xlab = \"Sum of expression\")\n";
+	        script += "dev.off();\n";
+	        //script += "single <- FindVariableFeatures(object = single, mean.function = \"FastExpMean\", dispersion.function = \"FastLogVMR\", mean.cutoff=c(0.0125, 3), dispersion.cutoff = c(0, 0.5))\n";
+		}
+
+		script += "single <- FindVariableFeatures(object = single, mean.function = \"FastExpMean\", dispersion.function = \"FastLogVMR\", mean.cutoff=c(0.0125, 3), dispersion.cutoff = c(0, 0.5))\n";		
+		script += "single <- ScaleData(object = single)\n";
+		script += "single <- RunPCA(object = single, pc.genes = single@var.genes)\n";
+		script += "single <- FindNeighbors(object = single)\n";
 		
-		script += "single.data <- Read10X(data.dir = \"" + folderPath + "\")\n";
+		script += "single <- FindClusters(object = single, reduction.type = \"pca\",dims.use = 1:10, resolution = 0.6)\n";
 		
-		script += "at_least_one <- apply(single.data, 2, function(x) sum(x>0))\n";
+		script += "single <- RunTSNE(object = single, check_duplicates = FALSE, dims.use = 1:10)\n";
 		
-		script += "pdf(\"" + outputFolder + "/1_" + prefix + "_Histogram_At_Least_One.pdf\")\n";
-		script += "hist(at_least_one, breaks = 100,\n";
-			script += "main = \"Distribution of detected genes\",\n";
-			script += "xlab = \"Genes with at least one tag\")\n";
- 
-		script += "dev.off()\n";
+
+        script += "write.table(single@active.ident, file = \"" + outputFolder + "/" + prefix + "_CellsIdentity_Res.txt\",sep=\"\\t\")\n";
+        
+        script += "write.table(single$tsne@cell.embeddings, file = \"" + outputFolder + "/" + prefix + "_TSNE_Res.txt\",sep=\"\\t\")\n";
+        script += "\n";
+		script += "pdf(\"" + outputFolder + "/6_" + prefix + "_PCAPlot.pdf\")\n";
+        script += "DimPlot(object = single, reduction = \"pca\")\n";
+        script += "dev.off();\n";
+        script += "\n";
+
+        script += "pdf(\"" + outputFolder + "/8_" + prefix + "_TSNEPlot.pdf\")\n";
+        script += "DimPlot(object = single, reduction = \"tsne\")\n";
+        script += "dev.off();\n";
+        
+		int[] perplexities = {30, 50, 100, 10, 20, 40};
+		double[] resolutions = {0.6, 0.4, 0.9, 0.1, 0.2, 0.3, 0.5, 0.7, 0.8, 1.0};
+		for (double resolution: resolutions) {
+			for (int perplexity: perplexities) {
+				script += "single <- FindClusters(object = single, dims.use = 1:10, resolution = " + resolution + ")\n";
+				
+				script += "single <- RunTSNE(object = single, dims.use = 1:10, check_duplicates = FALSE, perplexity = " + perplexity + ")\n";
+				
 		
-		script += "\n";
-		script += "pdf(\"" + outputFolder + "/2_" + prefix + "_Histogram_Expr_Sum_per_Cell.pdf\")\n";
-		script += "hist(colSums(single.data),\n";
-			script += "breaks = 100, main = \"Expression sum per cell\",\n";
-			script += "xlab = \"Sum expression\")\n";
+		        script += "write.table(single@active.ident, file = \"" + outputFolder + "/" + prefix + "_CellsIdentity_Res" + resolution + "_Per" + perplexity + ".txt\",sep=\"\\t\")\n";
+		        
+		        script += "write.table(single$tsne@cell.embeddings, file = \"" + outputFolder + "/" + prefix + "_TSNE_Res" + resolution + "_Per" + perplexity + ".txt\",sep=\"\\t\")\n";
+		        script += "\n";
+				script += "pdf(\"" + outputFolder + "/6_" + prefix + "_PCAPlot.pdf\")\n";
+		        script += "DimPlot(object = single, reduction = \"pca\")\n";
+		        script += "dev.off();\n";
+		        script += "\n";
 		
-		script += "dev.off()\n";
-		
-		script += "\n";
-		script += "tmp <- apply(single.data, 1, function(x) sum(x>0))\n";
-		script += "table(tmp>=3)\n";
-		
-		script += "\n";
-		script += "keep <- tmp>=3\n";
-		script += "tmp <- single.data[keep,]\n";
-		script += "at_least_one <- apply(tmp, 2, function(x) sum(x>0))\n";
-		script += "summary(at_least_one)\n"; 
-		script += "\n";
-		
-		script += "dim(tmp)\n";
-		script += "\n";
-		
+		        script += "pdf(\"" + outputFolder + "/8_" + prefix + "_TSNEPlot_Res" + resolution + "_Per" + perplexity + ".pdf\")\n";
+		        script += "DimPlot(object = single, reduction = \"tsne\")\n";
+		        script += "dev.off();\n";
+			}
+		}
+
+		/*
 		script += "single <- CreateSeuratObject(raw.data = single.data,\n";
         script += "min.cells = 3,\n";
         script += "min.genes = 200,\n";
@@ -237,6 +344,9 @@ public class RunSeuratAnalysisFromCellRanger {
         script += "\n";
         
         script += "write.table(single@ident, file = \"" + outputFolder + "/" + prefix + "_CellsIdentity.txt\",sep=\"\\t\")\n";
+        
+        script += "write.table(single@dr$tsne@cell.embeddings, file = \"" + outputFolder + "/" + prefix + "_TSNE.txt\",sep=\"\\t\")\n";
+
         script += "\n";        
         script += "single.markers %>%\n";
         script += "group_by(cluster) %>%\n";
@@ -300,7 +410,7 @@ public class RunSeuratAnalysisFromCellRanger {
         script += "#reduction.use = \"tsne\")\n";
         script += "#dev.off();\n";
         script += "\n";
-        
+        */
         
 		return script;
 	}

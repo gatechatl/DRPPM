@@ -12,6 +12,7 @@ import java.util.LinkedList;
 public class GTFFile {
 
 	public static HashMap geneid2geneName = new HashMap();
+	public static HashMap geneid_clean2geneName = new HashMap();
 	public static HashMap gene2transcript = new HashMap();
 	public static HashMap exon2transcript = new HashMap();
 	public static HashMap transcript2gene = new HashMap();
@@ -83,8 +84,10 @@ public class GTFFile {
 							geneName2geneID.put(gene_name, geneID);
 						}
 					}
-					geneid2geneName.put(gene_id, gene_name); // convert gene id to gene name
+				
 					
+					geneid2geneName.put(gene_id, gene_name); // convert gene id to gene name
+					geneid_clean2geneName.put(gene_id.split("\\.")[0], gene_name);
 					geneid2biotype.put(gene_id, biotype);
 					geneName2biotype.put(gene_name, biotype);
 					

@@ -9,8 +9,8 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
+import proteomics.phospho.tools.SummaryTools;
 import misc.CommandLine;
-import PhosphoTools.SummaryTools;
 
 /**
  * Based on the phosphosite annotation of gene activity

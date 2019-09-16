@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import proteomics.phospho.tools.SummaryTools;
 import statistics.general.MathTools;
-import PhosphoTools.SummaryTools;
 
 /**
  * Integration of multiple layer of expression data

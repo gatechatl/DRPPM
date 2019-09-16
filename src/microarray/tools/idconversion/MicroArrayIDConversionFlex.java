@@ -50,8 +50,7 @@ public class MicroArrayIDConversionFlex {
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
 			while (in.ready()) {
-				String str = in.readLine();
-				
+				String str = in.readLine();				
 				
 				String[] split = str.split(split_str);
 				if (split.length > probe_index && split.length > geneName_index) {

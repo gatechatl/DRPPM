@@ -88,6 +88,7 @@ public class GenerateExpressionBoxPlot {
 			FileWriter fwriter_R = new FileWriter(outputRscript);
 			BufferedWriter out_R = new BufferedWriter(fwriter_R);
 			out_R.write("library(ggplot2);\n");
+			out_R.write("options(bitmapType='cairo')\n");
 			out_R.write("data = read.table(\"" + outputFile + "\", sep=\"\\t\",header=T);\n");			
 			out_R.write("p1 = ggplot(data, aes(factor(Type), " + unit + ")) + geom_boxplot() + theme(plot.title=element_text(size=20), axis.text.x = element_text(angle = 70, size=20), axis.text.y = element_text(size=20), axis.title = element_text(size=20), legend.text = element_text(size=20), legend.title = element_text(size=20)) + geom_dotplot(binaxis='y', stackdir='center', stackratio=1.0, dotsize=0.2) + theme_bw() + ggtitle(\"" + geneName + "\");\n");
 			out_R.write("png(file = \"" + outputFile + ".boxplot.png\", width=800,height=750)\n");

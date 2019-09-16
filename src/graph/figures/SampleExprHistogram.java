@@ -78,6 +78,7 @@ public class SampleExprHistogram {
 		}
 		String script = "";
 		script += "library(ggplot2);\n";
+		script += "options(bitmapType='cairo')\n";
 		script += "data=read.csv(\"" + inputFile + "\", sep=\"\\t\", header=T, row.names=1);\n";
 		
 		Iterator itr = sampleNames.iterator();

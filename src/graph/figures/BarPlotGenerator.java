@@ -60,6 +60,7 @@ public class BarPlotGenerator {
 	}
 	public static String generateBarPlot(double[] values, String[] samples, String outputFile, String title) {
 		String script = "library(ggplot2)\n";
+		script += "options(bitmapType='cairo')\n";
 		script += "data = c(";
 		for (int i = 0; i < values.length; i++) {
 			if (i == 0) {

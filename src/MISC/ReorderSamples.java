@@ -60,7 +60,7 @@ public class ReorderSamples {
 					String[] split = str.split("\t");
 					for (int j = 1; j < splitTitle.length; j++) {
 						if (!reflist.contains(splitTitle[j].replaceAll("-", "."))) {
-							System.out.println(splitTitle[j].replaceAll("-", "."));
+							//System.out.println(splitTitle[j].replaceAll("-", "."));
 						}
 						map.put(splitTitle[j].trim().replaceAll("_", ".").replaceAll("-", ".") + "_" + split[0], split[j]);
 					}

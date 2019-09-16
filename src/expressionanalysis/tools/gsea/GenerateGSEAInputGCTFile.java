@@ -82,7 +82,7 @@ public class GenerateGSEAInputGCTFile {
 			while (in.ready()) {
 				String str = in.readLine();
 				split = str.split("\t");
-				String line = split[0] + "\t" + split[0];
+				String line = split[0].replaceAll("\"", "") + "\t" + split[0].replaceAll("\"", "");
 				for (int i = 1; i < split.length; i++) {
 					line += "\t" + split[i];
 				}

@@ -117,15 +117,18 @@ public class RPM2RPKMExon {
 				String[] split = str.split("\t");
 				String geneID = split[0];
 				double length = 0;
-				out.write(geneID);
+				
 				if (gene_length.containsKey(geneID)) {
 					length = (Integer)gene_length.get(geneID);
 				}
-				for (int i = 1; i < split.length; i++) {
-					double value = new Double(split[i]) * 1000 / length;
-					out.write("\t" + value);
+				if (length > 0) {
+					out.write(geneID);
+					for (int i = 1; i < split.length; i++) {
+						double value = new Double(split[i]) * 1000 / length;
+						out.write("\t" + value);
+					}
+					out.write("\n");
 				}
-				out.write("\n");
 			}
 			in.close();
 			out.close();

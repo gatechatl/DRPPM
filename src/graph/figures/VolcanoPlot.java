@@ -94,6 +94,7 @@ public class VolcanoPlot {
 		String rownames = hideLabelList(inputFile, tag);
 		String script = "";
 		script += "library(ggplot2);\n";
+		script += "options(bitmapType='cairo')\n";
 		script += "data=read.csv(\"" + inputFile + "\", sep=\"\\t\", header=T, row.names=1);\n";
 
 		script += "logFold = abs(data[,1]);\n";
@@ -121,6 +122,7 @@ public class VolcanoPlot {
 	public static String createLIMMAVolcanoPlot(String inputFile, String outputFile) {
 		String script = "";
 		script += "library(ggplot2);\n";
+		script += "options(bitmapType='cairo')\n";
 		script += "data=read.csv(\"" + inputFile + "\", sep=\"\\t\", header=T, row.names=1);\n";
 
 		//script += "logFold = data[,1];\n";

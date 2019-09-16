@@ -20,7 +20,7 @@ public class SummarizeFlagStat {
 		return "Summarize the reads statistics from the samtools flagstat result.";
 	}
 	public static String parameter_info() {
-		return "[inputBamList] [outputFile]";
+		return "[inputFlagStatList] [outputFile]";
 	}
 	public static void execute(String[] args) {
 		

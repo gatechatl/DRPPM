@@ -19,7 +19,7 @@ public class ConvertMatrix2CellRangerExpressionOutput {
 		return "Convert the matrix into three file similar to what's presented in cell ranger";
 	}
 	public static String parameter_info() {
-		return "[inputFileMatrix] [outputGeneFile] [outputSampleFile] [outputMatrixFile]";
+		return "[inputFileMatrix] [gtfFile] [outputGeneFile] [outputSampleFile] [outputMatrixFile]";
 	}
 	public static void execute(String[] args) {
 		

@@ -101,42 +101,42 @@ public class JinghuiZhangConvertNucleotide2Protein {
 							String fasta = (String)uniprot2fasta.get(uniprotID);
 							for (int i = 0; i < fasta.length() - frame1.length(); i++) {
 								if (frame1.equals(fasta.substring(i, i + frame1.length()))) {
-									out.write(query_name + "\tframe1" + "\t" + uniprotID + "\t" + i + "\t" + i + frame1.length() + "\n");
+									out.write(query_name + "\tframe1" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame1.length()) + "\t" + frame1 + "\n");
 									count_total_hit++;
 									hit = true;
 								}
 							}
 							for (int i = 0; i < fasta.length() - frame2.length(); i++) {
 								if (frame2.equals(fasta.substring(i, i + frame2.length()))) {
-									out.write(query_name + "\tframe2" + "\t" + uniprotID + "\t" + i + "\t" + i + frame2.length() + "\n");
+									out.write(query_name + "\tframe2" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame2.length()) + "\t" + frame2 +  "\n");
 									count_total_hit++;
 									hit = true;
 								}
 							}
 							for (int i = 0; i < fasta.length() - frame3.length(); i++) {
 								if (frame3.equals(fasta.substring(i, i + frame3.length()))) {
-									out.write(query_name + "\tframe3" + "\t" + uniprotID + "\t" + i + "\t" + i + frame3.length() + "\n");
+									out.write(query_name + "\tframe3" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame3.length()) + "\t" + frame3 + "\n");
 									count_total_hit++;
 									hit = true;
 								}
 							}
 							for (int i = 0; i < fasta.length() - frame_rev1.length(); i++) {
 								if (frame_rev1.equals(fasta.substring(i, i + frame_rev1.length()))) {
-									out.write(query_name + "\tframe_rev1" + "\t" + uniprotID + "\t" + i + "\t" + i + frame_rev1.length() + "\n");
+									out.write(query_name + "\tframe_rev1" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame_rev1.length()) + "\t" + frame_rev1 + "\n");
 									count_total_hit++;
 									hit = true;
 								}
 							}
 							for (int i = 0; i < fasta.length() - frame_rev2.length(); i++) {
 								if (frame_rev2.equals(fasta.substring(i, i + frame_rev2.length()))) {
-									out.write(query_name + "\tframe_rev2" + "\t" + uniprotID + "\t" + i + "\t" + i + frame_rev2.length() + "\n");
+									out.write(query_name + "\tframe_rev2" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame_rev2.length()) + "\t" + frame_rev2 + "\n");
 									count_total_hit++;
 									hit = true;
 								}
 							}
 							for (int i = 0; i < fasta.length() - frame_rev3.length(); i++) {
 								if (frame_rev3.equals(fasta.substring(i, i + frame_rev3.length()))) {
-									out.write(query_name + "\tframe_rev3" + "\t" + uniprotID + "\t" + i + "\t" + i + frame_rev3.length() + "\n");
+									out.write(query_name + "\tframe_rev3" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame_rev3.length()) + "\t" + frame_rev3 + "\n");
 									count_total_hit++;
 									hit = true;
 								}
