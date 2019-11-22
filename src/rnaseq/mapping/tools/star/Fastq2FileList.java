@@ -17,13 +17,13 @@ import java.util.Iterator;
 public class Fastq2FileList {
 
 	public static String description() {
-		return "Generate mapping's input file";
+		return "Generate mapping's input file. Assumes that the second ";
 	}
 	public static String type() {
 		return "RNASEQ";
 	}
 	public static String parameter_info() {
-		return "[inputFile] [index of R1 or R2 split by \"_\"] [outputFile]";
+		return "[inputFile] [outputFile]";
 	}
 	public static void execute(String[] args) {
 		

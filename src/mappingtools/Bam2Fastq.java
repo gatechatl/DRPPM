@@ -21,7 +21,7 @@ public class Bam2Fastq {
 		return "Convert bam file to fastq file. Input file should contain two column with the first column being the sample name and the second column is the file path. The ouput shell script contains the list shell script per sample.";
 	}
 	public static String parameter_info() {
-		return "[inputFile: sampleName [tab] filepath] [summary_outputFile]";
+		return "[inputFile: sampleName [tab\t] filepath] [summary_outputFile]";
 	}
 	
 	public static void execute(String[] args) {

@@ -15,7 +15,7 @@ public class GSEAHeatmap {
 	}
 	public static String generateGSEAHeatmap(String inputFile, String outputFile) {
 		String script = "";
-
+		script += "options(bitmapType='cairo')\n";
 		script += "allDat = read.table(\"" + inputFile + "\", header=TRUE, row.names=1 );\n";
 		script += "scaled = apply(allDat, 2, scale);\n";
 		script += "all = apply(scaled, 1, rev)\n";

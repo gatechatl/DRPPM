@@ -387,6 +387,9 @@ public class MathTools {
             throw new IllegalArgumentException("The data array either is null or does not contain any data.");
         }
 
+        if (lowerPercent > 99) {
+        	lowerPercent = 99;
+        }
         // Rank order the values
         double[] v = new double[values.length];
         System.arraycopy(values, 0, v, 0, values.length);

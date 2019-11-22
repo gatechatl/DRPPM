@@ -22,7 +22,7 @@ public class GenerateStackedBarPlotJavaScript {
 		return "JAVASCRIPT";
 	}
 	public static String parameter_info() {
-		return "[inputMatrix]";
+		return "[inputMatrix] [title html]";
 	}
 	
 	public static void execute(String[] args) {

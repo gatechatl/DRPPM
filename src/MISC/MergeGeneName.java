@@ -28,7 +28,7 @@ public class MergeGeneName {
 			//String outputFile = "C:\\Users\\tshaw\\Desktop\\RNASEQ\\PCGP_MB\\David_MB_11_7_14_GeneSymbol_Collapsed.txt";
 			String outputFile = "C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\phospho_peptide_raw_data_GBM_Name_Collapse.txt";
 			
-			captureMean(inputFile, outputFile, 0);
+			captureMean(inputFile, outputFile, 0, true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -40,7 +40,7 @@ public class MergeGeneName {
 		return "For genes with multiple expression value, take the mean or median expression value";
 	}
 	public static String parameter_info() {
-		return "[InputFile] [MEDIAN/AVERAGE/MAX][OutputFile]";
+		return "[InputFile] [MEDIAN/AVERAGE/MAX][OutputFile] [boolean: true/false quotation or no quoatation]";
 	}
 	public static void execute(String[] args) {
 		
@@ -54,13 +54,17 @@ public class MergeGeneName {
 			//int id = new Integer(args[2]) - 1;
 			String outputFile = args[2]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\phospho_peptide_raw_data_GBM_Name_Collapse.txt";
 			
+			boolean quotation = true;
+			if (args.length > 3) {
+				quotation = new Boolean(args[3]);
+			}
 			int id = 0;
 			if (type.toUpperCase().equals("MEDIAN")) {
-				captureMedian(inputFile, outputFile, id);
+				captureMedian(inputFile, outputFile, id, quotation);
 			} else if (type.toUpperCase().equals("AVERAGE")) {
-				captureMean(inputFile, outputFile, id);
+				captureMean(inputFile, outputFile, id, quotation);
 			} else if (type.toUpperCase().equals("MAX")) {
-				captureMax(inputFile, outputFile, id);
+				captureMax(inputFile, outputFile, id, quotation);
 			} else {
 				System.out.println("please use the following parameter: " + parameter_info());
 				System.out.println("Please select either: MEDIAN, AVERAGE, MAX");
@@ -78,12 +82,12 @@ public class MergeGeneName {
 			String inputFile = "C:\\Users\\tshaw\\Desktop\\RNASEQ\\PCGP_MB\\David_MB_11_7_14_GeneSymbol.txt";
 			//String outputFile = "C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\COMPLETE_FINAL_ANALYSIS\\HGG_EXAMPLE\\raw\\total\\Total_Proteome_GeneName_Collapse.txt";
 			String outputFile = "C:\\Users\\tshaw\\Desktop\\RNASEQ\\PCGP_MB\\David_MB_11_7_14_GeneSymbol_Collapsed.txt";
-			captureMean(inputFile, outputFile, 0);
+			captureMean(inputFile, outputFile, 0, true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public static HashMap captureMean(String inputFile, String outputFile, int tagIndex) {
+	public static HashMap captureMean(String inputFile, String outputFile, int tagIndex, boolean quotation) {
 		HashMap result = new HashMap();
 		try {
 			
@@ -131,7 +135,13 @@ public class MergeGeneName {
 					String str = (String)map.get(key);
 					String[] split = str.split("\t");
 					if (!str.contains("Infinity") && !str.contains("null")) {
-						String newStr = "\"" + key + "\"";
+						String newStr = "";
+						if (quotation) {
+							newStr = "\"" + key + "\"";	
+						} else {
+							newStr = key;
+						}
+						
 						for (int i = 1; i < split.length; i++) {
 							
 							String[] split2 = split[i].split(",");
@@ -154,7 +164,7 @@ public class MergeGeneName {
 		}
 		return result;
 	}
-	public static HashMap captureMax(String inputFile, String outputFile, int tagIndex) {
+	public static HashMap captureMax(String inputFile, String outputFile, int tagIndex, boolean quotation) {
 		HashMap result = new HashMap();
 		try {
 			
@@ -202,7 +212,12 @@ public class MergeGeneName {
 					String str = (String)map.get(key);
 					String[] split = str.split("\t");
 					//String newStr = "\"" + key + "\"";
-					String newStr = "\"" + key + "\"";
+					String newStr = "";
+					if (quotation) {
+						newStr = "\"" + key + "\"";
+					} else {
+						newStr = key;
+					}
 					if (!str.contains("Infinity") && !str.contains("null")) {
 						for (int i = 1; i < split.length; i++) {
 							
@@ -227,7 +242,7 @@ public class MergeGeneName {
 		}
 		return result;
 	}
-	public static HashMap captureMedian(String inputFile, String outputFile, int tagIndex) {
+	public static HashMap captureMedian(String inputFile, String outputFile, int tagIndex, boolean quotation) {
 		HashMap result = new HashMap();
 		try {
 			
@@ -268,7 +283,12 @@ public class MergeGeneName {
 				if (!key.equals("")) {
 					String str = (String)map.get(key);
 					String[] split = str.split("\t");
-					String newStr = split[tagIndex];
+					String newStr = "";
+					if (quotation) {
+						newStr = "\"" + split[tagIndex] + "\""; 
+					} else {
+						newStr = split[tagIndex];
+					}
 					if (!str.contains("Infinity") && !str.contains("null")) {
 						for (int i = 1; i < split.length; i++) {
 							

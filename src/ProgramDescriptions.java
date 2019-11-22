@@ -64,6 +64,8 @@ import misc.OverlapTwoFiles;
 import misc.RemoveQuotations;
 import misc.SplitFilesCols;
 import misc.SplitFilesRows;
+import misc.stjude.fileprocessing.CleanupStJudeSampleName;
+import misc.textmining.software.annotation.WebTextMining;
 import idconversion.cross_species.AppendHuman2Mouse;
 import idconversion.cross_species.AppendMouse2Human;
 import idconversion.cross_species.EnsureUniqGeneNamesHumanMouse;
@@ -97,45 +99,63 @@ import integrate.summarytable.IntegrationAddGeneAnnotation;
 import customScript.AppendChromosomeNumber;
 import customScript.ElenaConvertRefSeq2GeneName;
 import enrichment.tool.go.ParseGeneOntology;
+import expression.matrix.summary.CalculateMatrixSampleSummary;
+import expression.matrix.summary.CheckIntegrityOfMatrix;
+import expression.matrix.summary.ConvertMatrix2BinnedValue;
+import expression.matrix.tools.AppendMADValue;
 import expression.matrix.tools.AppendMatrixTogether;
-import expressionanalysis.tools.AppendMADValue;
-import expressionanalysis.tools.CalculateCorrelationMatrix;
-import expressionanalysis.tools.CombineTwoMatrixWithMismatch;
-import expressionanalysis.tools.CombineTwoMatrixWithMismatchDoubleGene;
-import expressionanalysis.tools.CorrectMarSeptGeneName;
-import expressionanalysis.tools.FilterBasedOnAnnotation;
-import expressionanalysis.tools.FilterMatrixColumnValue;
-import expressionanalysis.tools.FilterMatrixExpression;
-import expressionanalysis.tools.FilterMatrixFile;
-import expressionanalysis.tools.FilterMatrixFileFlex;
-import expressionanalysis.tools.GeneListMatrix;
-import expressionanalysis.tools.GeneListMatrix2;
-import expressionanalysis.tools.GenerateSpearmanRankMatrix;
-import expressionanalysis.tools.GenerateTrendPlot;
-import expressionanalysis.tools.HumanMouseSpearmanRankCorrel;
-import expressionanalysis.tools.KeepColumnsFromMatrix;
-import expressionanalysis.tools.ListOfFiles2Matrix;
-import expressionanalysis.tools.MatrixLog2ZscoreNormalization;
-import expressionanalysis.tools.MatrixZscoreNormalization;
-import expressionanalysis.tools.MatrixZscoreNormalizationWithOriginalValues;
-import expressionanalysis.tools.MergeSamples;
-import expressionanalysis.tools.MultiplyMatrixValuesWithFactor;
-import expressionanalysis.tools.OrderGeneMatrixBasedOnTTestDist;
-import expressionanalysis.tools.QuantileNormalization;
-import expressionanalysis.tools.RemoveColumnsFromMatrix;
-import expressionanalysis.tools.RemoveDuplicatedSampleName;
-import expressionanalysis.tools.RemoveRowsWithNAs;
-import expressionanalysis.tools.RemoveZeroCountGenes;
-import expressionanalysis.tools.ReplaceNAwithZero;
-import expressionanalysis.tools.ReplaceNegWithZero;
-import expressionanalysis.tools.SummarizeMATSGenes;
-import expressionanalysis.tools.TransposeMatrix;
+import expression.matrix.tools.AppendNumberToDuplicateRowNames;
+import expression.matrix.tools.CalculateCorrelationMatrix;
+import expression.matrix.tools.CombineMultipleMatrixTogether;
+import expression.matrix.tools.CombineMultipleMatrixTogetherByRow;
+import expression.matrix.tools.CombineTwoMatrixWithMismatch;
+import expression.matrix.tools.CombineTwoMatrixWithMismatchDoubleGene;
+import expression.matrix.tools.CorrectMarSeptGeneName;
+import expression.matrix.tools.ExtractGMTGeneNameMatrix;
+import expression.matrix.tools.FilterBasedOnAnnotation;
+import expression.matrix.tools.FilterMatrixColumnValue;
+import expression.matrix.tools.FilterMatrixExpression;
+import expression.matrix.tools.FilterMatrixFile;
+import expression.matrix.tools.FilterMatrixFileFlex;
+import expression.matrix.tools.FilterTopMADScores;
+import expression.matrix.tools.GeneListMatrix;
+import expression.matrix.tools.GeneListMatrix2;
+import expression.matrix.tools.GenerateSpearmanRankMatrix;
+import expression.matrix.tools.GenerateTrendPlot;
+import expression.matrix.tools.HumanMouseSpearmanRankCorrel;
+import expression.matrix.tools.KeepColumnsFromMatrix;
+import expression.matrix.tools.ListOfFiles2Matrix;
+import expression.matrix.tools.MatrixConcatinateRows;
+import expression.matrix.tools.MatrixLog2ZscoreNormalization;
+import expression.matrix.tools.MatrixZscoreNormalization;
+import expression.matrix.tools.MatrixZscoreNormalizationWithOriginalValues;
+import expression.matrix.tools.MergeSamples;
+import expression.matrix.tools.MultiplyMatrixValuesWithFactor;
+import expression.matrix.tools.OrderGeneMatrixBasedOnTTestDist;
+import expression.matrix.tools.QuantileNormalization;
+import expression.matrix.tools.RemoveColumnWithNulls;
+import expression.matrix.tools.RemoveColumnsFromMatrix;
+import expression.matrix.tools.RemoveDuplicatedSampleName;
+import expression.matrix.tools.RemoveRowsWithNAs;
+import expression.matrix.tools.RemoveRowsWithNulls;
+import expression.matrix.tools.RemoveZeroCountGenes;
+import expression.matrix.tools.ReplaceNAwithZero;
+import expression.matrix.tools.ReplaceNegWithZero;
+import expression.matrix.tools.SummarizeMATSGenes;
+import expression.matrix.tools.TransposeMatrix;
 import expressionanalysis.tools.batchcorrection.TwoGroupMeanCentering;
 import expressionanalysis.tools.batchcorrection.TwoGroupMeanCenteringFlex;
 import expressionanalysis.tools.boxplot.GenerateExpressionBoxPlot;
 import expressionanalysis.tools.genename.GeneSymbol2UCSCIDAppend;
+import expressionanalysis.tools.geneset.activity.CalculateGeneActivityUnweightedZScore;
 import expressionanalysis.tools.gsea.ConvertGSEAList2AnnotationFile;
+import expressionanalysis.tools.gsea.GSEAHeatmapFlex;
 import expressionanalysis.tools.gsea.SummarizeGSEAResult;
+import expressionanalysis.tools.headermod.ModifyHeaderOfMatrix;
+import expressionanalysis.tools.unsupervised.GenerateRScriptForCalculatingMADScores;
+import expressionanalysis.tools.unsupervised.GenerateRScriptForCalculatingVARScores;
+import expressionanalysis.tools.unsupervised.GenerateRScriptForLIMMALogNormalize;
+import expressionanalysis.tools.unsupervised.GenerateRScriptForPVClust;
 import functional.pathway.enrichment.FilterORAResults;
 import functional.pathway.enrichment.FilterORAResultsFlex;
 import functional.pathway.enrichment.GenerateScriptForORA;
@@ -294,6 +314,7 @@ import references.gtf.manipulation.Filter3PrimeGTFExon;
 import references.gtf.manipulation.xenograft.Mouse2GTF;
 import references.gtf.statistics.GTFSummaryStatistics;
 import rnaseq.bed.coverage.circos.GenerateCircosCoverageBed;
+import rnaseq.exon.quantification.GenerateGTFFileWithExonID;
 import rnaseq.mapping.tools.bw.Bam2BW;
 import rnaseq.mapping.tools.bw.Bam2StrandedBW;
 import rnaseq.mapping.tools.flagstat.SummarizeFlagStat;
@@ -306,6 +327,7 @@ import rnaseq.mapping.tools.star.CreateBamIndex;
 import rnaseq.mapping.tools.star.CuffLinksScriptGenerator;
 import rnaseq.mapping.tools.star.FastaAddRemoveChr;
 import rnaseq.mapping.tools.star.Fastq2FileList;
+import rnaseq.mapping.tools.star.Fastq2FileListFlex;
 import rnaseq.mapping.tools.star.GTFFileAddRemoveChr;
 import rnaseq.mapping.tools.star.HumanMouseXenograftRawCount2RPM;
 import rnaseq.mapping.tools.star.MergeBamFiles;
@@ -349,8 +371,10 @@ import rnaseq.splicing.rnapeg.GeneratePseudoReverseReferenceForRNAPeg;
 import rnaseq.splicing.rnapeg.GenerateReverseReference;
 import rnaseq.splicing.rnapeg.RNApegDefineExonBasedoOnBW;
 import rnaseq.splicing.rnapeg.RNApegPostProcessingExons;
-import rnaseq.splicing.rnapeg.SummarizeNovelExonAltStartSiteMatrix;
+import rnaseq.splicing.rnapeg.juncsalvager.GenerateCombinedBEDFileFromJuncSalvagerSummary;
 import rnaseq.splicing.rnapeg.juncsalvager.JuncSalvagerPipeline;
+import rnaseq.splicing.rnapeg.juncsalvager.SummarizeNovelExonAltStartSiteMatrix;
+import rnaseq.splicing.rnapeg.juncsalvager.SummarizeNovelExonSiteMatrix;
 import rnaseq.splicing.spladder.CustomFilterSpladderHardFilter;
 import rnaseq.splicing.spladder.CustomFilterSpladderSingleType;
 import rnaseq.splicing.spladder.SpladderScriptGenerator;
@@ -439,8 +463,24 @@ import stjude.projects.hongbochi.phosphoanalysis.PhosphoMotifEnrichment;
 import stjude.projects.jinghuizhang.GenerateMIXCR;
 import stjude.projects.jinghuizhang.GroupComparisonBoxPlot;
 import stjude.projects.jinghuizhang.JinghuiZhangPatientSummary;
+import stjude.projects.jinghuizhang.JinghuiZhangSummarizeMatrixValues;
 import stjude.projects.jinghuizhang.SummarizeMIXCRresult;
 import stjude.projects.jinghuizhang.TwoGroupComparisonBoxPlot;
+import stjude.projects.jinghuizhang.alexgout.cloudproject.AlexGoutAppendMutations;
+import stjude.projects.jinghuizhang.dexseq.exon.annotation.gtex.JinghuiZhangGenerateSampleInformationForGTEx;
+import stjude.projects.jinghuizhang.dexseq.exon.annotation.pcgptarget.JinghuiZhangCalculateSampleTypeExonExpressionMax;
+import stjude.projects.jinghuizhang.dexseq.exon.annotation.pcgptarget.JinghuiZhangCalculateSampleTypeExonExpressionMedian;
+import stjude.projects.jinghuizhang.dexseq.exon.annotation.pcgptarget.JinghuiZhangFilterLiqingDEXSeqExons;
+import stjude.projects.jinghuizhang.dexseq.exon.annotation.pcgptarget.JinghuiZhangRemoveTextFromHeader;
+import stjude.projects.jinghuizhang.hg38mapping.star.JinghuiZhangSTARMappingFromYawei;
+import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangAppendTCGAClusterInformation;
+import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangStatisticalTestForEnrichedImmuneSignatures;
+import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangStatisticalTestForEnrichedImmuneSignaturesOfMutSig;
+import stjude.projects.jinghuizhang.mutations.JinghuiZhangAppendMutationInformationToMetaInfo;
+import stjude.projects.jinghuizhang.mutations.JinghuiZhangCustomBoxplotForImmuneSignatures;
+import stjude.projects.jinghuizhang.mutations.JinghuiZhangExtractFusionFromXinZhouCNVSVFile;
+import stjude.projects.jinghuizhang.mutations.JinghuiZhangExtractSCNAFromXinZhouCNVSVFile;
+import stjude.projects.jinghuizhang.mutations.JinghuiZhangExtractingMutationsFromXinZhouSNVFile;
 import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculateGTExTotalReads;
 import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculatePCGPExonCount;
 import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculatePCGPExonDiseaseType;
@@ -453,8 +493,11 @@ import stjude.projects.jinghuizhang.pcgpaltsplice.gtex.JinghuiZhangGTExExonMedia
 import stjude.projects.jinghuizhang.pcgpaltsplice.gtex.JinghuiZhangGTExGenerateCategoryBarplot;
 import stjude.projects.jinghuizhang.pcgpaltsplice.plots.JinghuiZhangExonBoxplotMatrix;
 import stjude.projects.jinghuizhang.pcgpaltsplice.plots.JinghuiZhangGenerateCategoryBarplot;
+import stjude.projects.jinghuizhang.target.JinghuiZhangCheckFileSize;
 import stjude.projects.jinghuizhang.tcga.JinghuiZhangGenerateTCGAMatrix;
+import stjude.projects.jinghuizhang.tcga.JinghuiZhangGenerateTCGAMatrixSampleID;
 import stjude.projects.jinghuizhang.tcga.JinghuiZhangRenameTCGAMatrix;
+import stjude.projects.jinghuizhang.tcga.reference.JinghuiZhangTCGAOrganizeData;
 import stjude.projects.jiyangyu.JiyangYuAppendOtherColumn;
 import stjude.projects.jiyangyu.JiyangYuConvertGeneNames;
 import stjude.projects.jpaultaylor.ChangeFastaIDRefmRNA;
@@ -539,6 +582,8 @@ import stjude.projects.suzannebaker.GenerateRNAHGGSampleK27MStatus;
 import stjude.projects.suzannebaker.SummarizeGSEAResultNESFDR;
 import stjude.projects.suzannebaker.SummarizeSingleSampleGSEAResult;
 import stjude.projects.suzannebaker.stemness_lineage_ac_ol.SuzanneBakerConvertSingleSampleGSEA2LineageScore;
+import stjude.projects.suzannebaker.stemness_lineage_ac_ol.SuzanneBakerSingleSampleGSEALineageScore;
+import stjude.projects.suzannebaker.stemness_lineage_ac_ol.SuzanneBakerSingleSampleGSEAWishboneLineageScore;
 import stjude.projects.taoshengchen.TaoshengChenVennDiagram;
 import stjude.projects.xiangchen.BMIQNormalization;
 import stjude.projects.xiangchen.CombineBMIQNormalizedFiles;
@@ -546,11 +591,11 @@ import stjude.projects.xiangchen.CombineBMIQNormalizedFilesRscript;
 import stjude.projects.xiangchen.XiangChenExtractMetaData;
 import stjude.projects.xiangchen.XiangChenGrabTopVariableGenes;
 import stjude.projects.xiangchen.XiangChenGrabTopVariableGenesFilterSNPXY;
+import stjude.projects.xiaotuma.aml.download.XiaotuMaDownloadAMLFiles;
 import stjude.proteinpaint.tracks.GenerateLowComplexityDomainInfo;
 import stjude.proteinpaint.tracks.OpenReadingFrameFinder;
 import stjude.tools.rnaseq.MergeGeneCountChunxuPipeline;
 import stjude.tools.rnaseq.RNASEQConfig2MappingScriptGenerator;
-import TextMiningSoftwareAnnotation.WebTextMining;
 
 /**
  * Using specific keyword to query the program information.
@@ -2224,10 +2269,146 @@ public class ProgramDescriptions {
 		if (CalculateMedianForEachClusterSimple.type().equals(type)) {
 			result += "CalculateMedianForEachClusterSimple: " + CalculateMedianForEachClusterSimple.description() + "\n";
 		}
+		if (GenerateGTFFileWithExonID.type().equals(type)) {
+			result += "GenerateGTFFileWithExonID: " + GenerateGTFFileWithExonID.description() + "\n";
+		}
+		if (MatrixConcatinateRows.type().equals(type)) {
+			result += "MatrixConcatinateRows: " + MatrixConcatinateRows.description() + "\n";
+		}
+		if (ModifyHeaderOfMatrix.type().equals(type)) {
+			result += "ModifyHeaderOfMatrix: " + ModifyHeaderOfMatrix.description() + "\n";
+		}
+		if (JinghuiZhangExtractingMutationsFromXinZhouSNVFile.type().equals(type)) {
+			result += "JinghuiZhangExtractingMutationsFromXinZhouSNVFile: " + JinghuiZhangExtractingMutationsFromXinZhouSNVFile.description() + "\n";
+		}
+		if (JinghuiZhangExtractFusionFromXinZhouCNVSVFile.type().equals(type)) {
+			result += "JinghuiZhangExtractFusionFromXinZhouCNVSVFile: " + JinghuiZhangExtractFusionFromXinZhouCNVSVFile.description() + "\n";
+		}
+		if (AppendNumberToDuplicateRowNames.type().equals(type)) {
+			result += "AppendNumberToDuplicateRowNames: " + AppendNumberToDuplicateRowNames.description() + "\n";
+		}
+		if (JinghuiZhangStatisticalTestForEnrichedImmuneSignatures.type().equals(type)) {
+			result += "JinghuiZhangStatisticalTestForEnrichedImmuneSignatures: " + JinghuiZhangStatisticalTestForEnrichedImmuneSignatures.description() + "\n";
+		}
+		if (JinghuiZhangCustomBoxplotForImmuneSignatures.type().equals(type)) {
+			result += "JinghuiZhangCustomBoxplotForImmuneSignatures: " + JinghuiZhangCustomBoxplotForImmuneSignatures.description() + "\n";
+		}
+		if (JinghuiZhangExtractSCNAFromXinZhouCNVSVFile.type().equals(type)) {
+			result += "JinghuiZhangExtractSCNAFromXinZhouCNVSVFile: " + JinghuiZhangExtractSCNAFromXinZhouCNVSVFile.description() + "\n";
+		}
+		if (JinghuiZhangTCGAOrganizeData.type().equals(type)) {
+			result += "JinghuiZhangTCGAOrganizeData: " + JinghuiZhangTCGAOrganizeData.description() + "\n";
+		}
+		if (FilterTopMADScores.type().equals(type)) {
+			result += "FilterTopMADScores: " + FilterTopMADScores.description() + "\n";
+		}
+		if (CalculateMatrixSampleSummary.type().equals(type)) {
+			result += "CalculateMatrixSampleSummary: " + CalculateMatrixSampleSummary.description() + "\n";
+		}
+		if (ConvertMatrix2BinnedValue.type().equals(type)) {
+			result += "ConvertMatrix2BinnedValue: " + ConvertMatrix2BinnedValue.description() + "\n";
+		}
+		if (CleanupStJudeSampleName.type().equals(type)) {
+			result += "CleanupStJudeSampleName: " + CleanupStJudeSampleName.description() + "\n";
+		}
+		if (JinghuiZhangAppendMutationInformationToMetaInfo.type().equals(type)) {
+			result += "JinghuiZhangAppendMutationInformationToMetaInfo: " + JinghuiZhangAppendMutationInformationToMetaInfo.description() + "\n";
+		}
+		if (ExtractGMTGeneNameMatrix.type().equals(type)) {
+			result += "ExtractGMTGeneNameMatrix: " + ExtractGMTGeneNameMatrix.description() + "\n";
+		}
+		if (CombineMultipleMatrixTogether.type().equals(type)) {
+			result += "CombineMultipleMatrixTogether: " + CombineMultipleMatrixTogether.description() + "\n";
+		}
+		
+		if (Fastq2FileListFlex.type().equals(type)) {
+			result += "Fastq2FileListFlex: " + Fastq2FileListFlex.description() + "\n";
+		}
+		if (JinghuiZhangSTARMappingFromYawei.type().equals(type)) {
+			result += "JinghuiZhangSTARMappingFromYawei: " + JinghuiZhangSTARMappingFromYawei.description() + "\n";
+		}
+		if (SummarizeNovelExonSiteMatrix.type().equals(type)) {
+			result += "SummarizeNovelExonSiteMatrix: " + SummarizeNovelExonSiteMatrix.description() + "\n";
+		}
+		if (JinghuiZhangStatisticalTestForEnrichedImmuneSignaturesOfMutSig.type().equals(type)) {
+			result += "JinghuiZhangStatisticalTestForEnrichedImmuneSignaturesOfMutSig: " + JinghuiZhangStatisticalTestForEnrichedImmuneSignaturesOfMutSig.description() + "\n";
+		}
+		if (JinghuiZhangAppendTCGAClusterInformation.type().equals(type)) {
+			result += "JinghuiZhangAppendTCGAClusterInformation: " + JinghuiZhangAppendTCGAClusterInformation.description() + "\n";
+		}
+		if (GSEAHeatmapFlex.type().equals(type)) {
+			result += "GSEAHeatmapFlex: " + GSEAHeatmapFlex.description() + "\n";
+		}
+		if (CombineMultipleMatrixTogetherByRow.type().equals(type)) {
+			result += "CombineMultipleMatrixTogetherByRow: " + CombineMultipleMatrixTogetherByRow.description() + "\n";
+		}
+		if (RemoveRowsWithNulls.type().equals(type)) {
+			result += "RemoveRowsWithNulls: " + RemoveRowsWithNulls.description() + "\n";
+		}
+		if (RemoveColumnWithNulls.type().equals(type)) {
+			result += "RemoveColumnWithNulls: " + RemoveColumnWithNulls.description() + "\n";
+		}
+		if (JinghuiZhangCheckFileSize.type().equals(type)) {
+			result += "JinghuiZhangCheckFileSize: " + JinghuiZhangCheckFileSize.description() + "\n";
+		}
+		if (JinghuiZhangSummarizeMatrixValues.type().equals(type)) {
+			result += "JinghuiZhangSummarizeMatrixValues: " + JinghuiZhangSummarizeMatrixValues.description() + "\n";
+		}
+		if (CalculateGeneActivityUnweightedZScore.type().equals(type)) {
+			result += "CalculateGeneActivityUnweightedZScore: " + CalculateGeneActivityUnweightedZScore.description() + "\n";
+		}
+		if (JinghuiZhangGenerateTCGAMatrixSampleID.type().equals(type)) {
+			result += "JinghuiZhangGenerateTCGAMatrixSampleID: " + JinghuiZhangGenerateTCGAMatrixSampleID.description() + "\n";
+		}
+		if (SuzanneBakerSingleSampleGSEALineageScore.type().equals(type)) {
+			result += "SuzanneBakerSingleSampleGSEALineageScore: " + SuzanneBakerSingleSampleGSEALineageScore.description() + "\n";
+		}
+		if (SuzanneBakerSingleSampleGSEAWishboneLineageScore.type().equals(type)) {
+			result += "SuzanneBakerSingleSampleGSEAWishboneLineageScore: " + SuzanneBakerSingleSampleGSEAWishboneLineageScore.description() + "\n";
+		}
+		if (XiaotuMaDownloadAMLFiles.type().equals(type)) {
+			result += "XiaotuMaDownloadAMLFiles: " + XiaotuMaDownloadAMLFiles.description() + "\n";
+		}
+		if (GenerateCombinedBEDFileFromJuncSalvagerSummary.type().equals(type)) {
+			result += "GenerateCombinedBEDFileFromJuncSalvagerSummary: " + GenerateCombinedBEDFileFromJuncSalvagerSummary.description() + "\n";
+		}
+		if (GenerateRScriptForLIMMALogNormalize.type().equals(type)) {
+			result += "GenerateRScriptForLIMMALogNormalize: " + GenerateRScriptForLIMMALogNormalize.description() + "\n";
+		}
+		if (GenerateRScriptForCalculatingMADScores.type().equals(type)) {
+			result += "GenerateRScriptForCalculatingMADScores: " + GenerateRScriptForCalculatingMADScores.description() + "\n";
+		}
+		if (GenerateRScriptForCalculatingVARScores.type().equals(type)) {
+			result += "GenerateRScriptForCalculatingVARScores: " + GenerateRScriptForCalculatingVARScores.description() + "\n";
+		}
+		if (GenerateRScriptForPVClust.type().equals(type)) {
+			result += "GenerateRScriptForPVClust: " + GenerateRScriptForPVClust.description() + "\n";
+		}
+		if (AlexGoutAppendMutations.type().equals(type)) {
+			result += "AlexGoutAppendMutations: " + AlexGoutAppendMutations.description() + "\n";
+		}
+		if (JinghuiZhangGenerateSampleInformationForGTEx.type().equals(type)) {
+			result += "JinghuiZhangGenerateSampleInformationForGTEx: " + JinghuiZhangGenerateSampleInformationForGTEx.description() + "\n";
+		}
+		if (JinghuiZhangCalculateSampleTypeExonExpressionMedian.type().equals(type)) {
+			result += "JinghuiZhangCalculateSampleTypeExonExpressionMedian: " + JinghuiZhangCalculateSampleTypeExonExpressionMedian.description() + "\n";
+		}
+		if (JinghuiZhangRemoveTextFromHeader.type().equals(type)) {
+			result += "JinghuiZhangRemoveTextFromHeader: " + JinghuiZhangRemoveTextFromHeader.description() + "\n";
+		}
+		if (CheckIntegrityOfMatrix.type().equals(type)) {
+			result += "CheckIntegrityOfMatrix: " + CheckIntegrityOfMatrix.description() + "\n";
+		}
+		if (JinghuiZhangCalculateSampleTypeExonExpressionMax.type().equals(type)) {
+			result += "JinghuiZhangCalculateSampleTypeExonExpressionMax: " + JinghuiZhangCalculateSampleTypeExonExpressionMax.description() + "\n";
+		}
+		if (JinghuiZhangFilterLiqingDEXSeqExons.type().equals(type)) {
+			result += "JinghuiZhangFilterLiqingDEXSeqExons: " + JinghuiZhangFilterLiqingDEXSeqExons.description() + "\n";
+		}
 		return result;
 	}
 	
 
-	public static String VERSION = "20190826";
+	public static String VERSION = "20191112";
 	
 }

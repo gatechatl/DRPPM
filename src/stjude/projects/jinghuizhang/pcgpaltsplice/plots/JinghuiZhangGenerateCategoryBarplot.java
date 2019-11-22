@@ -117,16 +117,16 @@ public class JinghuiZhangGenerateCategoryBarplot {
 			while (itr3.hasNext()) {
 				String category_type = (String)itr3.next();
 				String rename = category_type;
-				if (category_type.equals("0")) {
+				if (category_type.equals("0") || category_type.equals("0.0")) {
 					rename = "LowExpr";
 				}
-				if (category_type.equals("1")) {
+				if (category_type.equals("1") || category_type.equals("1.0")) {
 					rename = "MedLowExpr";
 				}
-				if (category_type.equals("2")) {
+				if (category_type.equals("2") || category_type.equals("2.0")) {
 					rename = "MedHighExpr";
 				}
-				if (category_type.equals("3")) {
+				if (category_type.equals("3") || category_type.equals("3.0")) {
 					rename = "HighExpr";
 				}
 				out.write("\t" + rename);

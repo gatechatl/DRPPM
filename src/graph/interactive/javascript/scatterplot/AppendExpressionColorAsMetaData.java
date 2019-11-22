@@ -30,7 +30,7 @@ public class AppendExpressionColorAsMetaData {
 		return "JAVASCRIPT";
 	}
 	public static String parameter_info() {
-		return "[htmlPage] [geneExpressionMatrix] [geneName] [normalization_factor 0 to 100; recommend 75 or 90] [outputHTML]";
+		return "[matrixFile] [geneExpressionMatrix] [geneName] [normalization_factor 0 to 100; recommend 75 or 90] [takeLog boolean] [outputMatrixWithColor]";
 	}
 	public static void execute(String[] args) {
 		
@@ -39,7 +39,8 @@ public class AppendExpressionColorAsMetaData {
 			String geneExpressionMatrix = args[1];
 			String geneName = args[2];
 			double normalization_factor = new Double(args[3]); // from 1 to 100 previously I used 75
-			String outputFile = args[4];
+			boolean take_log = new Boolean(args[4]);
+			String outputFile = args[5];
 			
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
@@ -50,8 +51,8 @@ public class AppendExpressionColorAsMetaData {
 			HashMap sample2norm = new HashMap();
 			
 			LinkedList values_list = new LinkedList();
-			double max = -1;
-			double min = 99999999999.0;
+			double max = -9999999999.0;
+			double min = 9999999999.0;
 			double unnorm_max = 0.0;
 			double unnorm_min = 0.0;
 			
@@ -73,8 +74,11 @@ public class AppendExpressionColorAsMetaData {
 						}
 						
 						sample2unnorm_expr.put(split_header[i], new Double(split[i]));
+						
+						if (take_log) {
+							split[i] = MathTools.log2(new Double(split[i]) + 0.001) + "";
+						}
 						values_list.add(new Double(split[i]));
-						split[i] = MathTools.log2(new Double(split[i]) + 0.001) + "";
 						if (max < new Double(split[i])) {
 							max = new Double(split[i]);
 						}
@@ -96,8 +100,8 @@ public class AppendExpressionColorAsMetaData {
 			Iterator itr = sample2expr.keySet().iterator();
 			while (itr.hasNext()) {
 				String sampleName = (String)itr.next();
-				double unnorm_expr = (Double)sample2unnorm_expr.get(sampleName);
-				double norm_score = ((unnorm_expr - unnorm_min) / (upper_quartile - unnorm_min)) * 0.9 + 0.1;
+				double expr = (Double)sample2expr.get(sampleName);
+				double norm_score = ((expr - min) / (upper_quartile - min)) * 0.9 + 0.1;
 				if (norm_score > 1.0) {
 					norm_score = 1.0;
 				}
@@ -106,12 +110,12 @@ public class AppendExpressionColorAsMetaData {
 				}
 				sample2norm.put(sampleName, norm_score);
 				
-				if (unnorm_min == unnorm_max) {
+				if (min == max) {
 					String hex = String.format("#%02x%02x%02x", 0, 0, 0);
 					sample2color.put(sampleName, hex);
 				} else {
 					
-					int val = 255 - new Double((unnorm_expr - unnorm_min) / (upper_quartile - unnorm_min) * 255).intValue();
+					int val = 255 - new Double((expr - min) / (upper_quartile - min) * 255).intValue();
 					if (val < 0) {
 						val = 0;
 					}

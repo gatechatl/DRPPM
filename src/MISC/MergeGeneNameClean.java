@@ -98,11 +98,11 @@ public class MergeGeneNameClean {
 				if (!str.contains("Infinity") && !str.contains("null")) {
 					String[] split = str.split("\t");
 					String[] tags = split[tagIndex].split(" ");
-					System.out.println(split[tagIndex] + "\t" + tags.length);
+					//System.out.println(split[tagIndex] + "\t" + tags.length);
 					
 					for (int j = 0; j < tags.length; j = j + 2) {
 						String tag = tags[j];
-						System.out.println(tag);
+						//System.out.println(tag);
 						if (map.containsKey(tag)) {
 							String[] split2 = ((String)map.get(tag)).split("\t");
 							String newStr = tag;
@@ -169,11 +169,11 @@ public class MergeGeneNameClean {
 				if (!str.contains("Infinity") && !str.contains("null")) {
 					String[] split = str.split("\t");
 					String[] tags = split[tagIndex].split(" ");
-					System.out.println(split[tagIndex] + "\t" + tags.length);
+					//System.out.println(split[tagIndex] + "\t" + tags.length);
 					
 					for (int j = 0; j < tags.length; j = j + 2) {
 						String tag = tags[j];
-						System.out.println(tag);
+						//System.out.println(tag);
 						if (map.containsKey(tag)) {
 							String[] split2 = ((String)map.get(tag)).split("\t");
 							String newStr = tag;

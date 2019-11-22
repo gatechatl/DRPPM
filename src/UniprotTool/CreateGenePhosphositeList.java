@@ -9,8 +9,8 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import PhosphoPainter.KinaseSubstratePainter.Domain;
-import PhosphoPainter.KinaseSubstratePainter.UniprotGFF;
+import proteomics.phospho.tools.painter.KinaseSubstratePainter.Domain;
+import proteomics.phospho.tools.painter.KinaseSubstratePainter.UniprotGFF;
 
 /**
  * Based on the uniprot gff file create a output file showing the gene and phosphosite list

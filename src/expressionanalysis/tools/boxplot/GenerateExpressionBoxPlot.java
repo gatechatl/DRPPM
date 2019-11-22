@@ -19,7 +19,7 @@ public class GenerateExpressionBoxPlot {
 		return "EXPRESSION";
 	}
 	public static String parameter_info() {
-		return "[inputAnnotationFile] [type_index] [matrixFile] [geneName] [outputFile] [outputRscript]";
+		return "[inputAnnotationFile] [type_index] [matrixFile] [geneName] [unit] [outputFile] [outputRscript]";
 	}
 	
 	public static void execute(String[] args) {

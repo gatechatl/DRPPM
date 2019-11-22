@@ -24,14 +24,16 @@ public class JinghuiZhangExtractLegacyTCGARPKM {
 			
 			String keyWord = "chr2:216257654-216257926:-";
 			
-			String outputFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\TCGA_Reference\\RPKM\\legacy\\TCGA_FN1_ED-B_RPKM.20190201.txt";
+			String outputFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\TCGA_Reference\\RPKM\\legacy\\TCGA_FN1_ED-B_RPKM.20191009.txt";
+			//String outputFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\TCGA_Reference\\RPKM\\legacy\\TCGA_FN1_ED-B_RPKM.20190201.txt";
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			out.write("Name\tRPKM\tType\n");
 			
 
 			LinkedList prev_skip_list = new LinkedList();
-			String outputSkipFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\TCGA_Reference\\RPKM\\legacy\\DontHave_FN1_ED-B_RPKM.20190201.txt";
+			//String outputSkipFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\TCGA_Reference\\RPKM\\legacy\\DontHave_FN1_ED-B_RPKM.20191009.txt";
+			String outputSkipFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\TCGA_Reference\\RPKM\\legacy\\DontHave_FN1_ED-B_RPKM.20190201.txt";
 			FileInputStream fstream = new FileInputStream(outputSkipFile);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
@@ -51,9 +53,10 @@ public class JinghuiZhangExtractLegacyTCGARPKM {
 			String[] folders = {"TCGA_BRCA_200", "TCGA_GBM", "TCGA_HNSC_200", "TCGA_KIRC_200", "TCGA_LGG_200", 
 					"TCGA_LUAD_200", "TCGA_THCA_200", "TCGA_THYM", "TCGA_UCEC_200", "TCGA_LUSC_200", "TCGA_PRAD_200", 
 					"TCGA_SKCM_200", "TCGA_COAD_200", "TCGA_OV_200", "TCGA_LIHC_200", "TCGA_STAD_200", "TCGA_BLCA_200", 
-					"TCGA_KIRP_200", "TCGA_CESC_200"};
+					"TCGA_KIRP_200", "TCGA_CESC_200", "TCGA_DLBC", "TCGA_LAML", "TCGA_UCS", "TCGA_THYM", "TCGA_CHOL", 
+					"TCGA_UVM", "TCGA_ACC", "TCGA_READ", "TCGA_TGCT", "TCGA_MESO", "TCGA_PCPG", "TCGA_PAAD", "TCGA_ESCA", "TCGA_SARC"};
 			//String[] folders = {"TCGA_GBM"};
-			String inputFolder = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\TCGA_Reference\\RPKM\\legacy\\";
+			String inputFolder = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\TCGA_Reference\\RPKM\\legacy\\";
 			for (String folder: folders) {
 				File f = new File(inputFolder + "\\" + folder);
 				for (File possibleFolder: f.listFiles()) {
