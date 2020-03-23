@@ -25,7 +25,7 @@ public class JinghuiZhangSTARMappingFromYawei {
 		return "JinghuiZhang";
 	}
 	public static String parameter_info() {
-		return "[inputLstFile] [star_index_dir] [num_thread] [outputFile]";
+		return "[inputLstFile] [star_index_dir] [num_thread] [outputFile] [gzip true false]";
 	}
 	public static void execute(String[] args) {
 		try {
@@ -33,6 +33,10 @@ public class JinghuiZhangSTARMappingFromYawei {
 			String star_index_dir = args[1];
 			String num_thread = args[2];
 			String outputScript = args[3];
+			boolean gzip_flag = false;
+			if (args.length > 4) {
+				gzip_flag = new Boolean(args[4]);
+			} 
 			FileWriter fwriter = new FileWriter(outputScript);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			FileInputStream fstream = new FileInputStream(inputLstFile);
@@ -41,7 +45,7 @@ public class JinghuiZhangSTARMappingFromYawei {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
-				String script = generate_star_script(star_index_dir, split[0], split[1], split[2], num_thread);
+				String script = generate_star_script(star_index_dir, split[0], split[1], split[2], num_thread, gzip_flag);
 				CommandLine.writeFile(split[2] + ".sh", script);
 				out.write("sh " + split[2] + ".sh\n");
 			}
@@ -52,7 +56,7 @@ public class JinghuiZhangSTARMappingFromYawei {
 			e.printStackTrace();
 		}
 	}
-	public static String generate_star_script(String genomeDir, String inputR1, String inputR2, String prefix, String thread) {
+	public static String generate_star_script(String genomeDir, String inputR1, String inputR2, String prefix, String thread, boolean gzip_flag) {
 		String line = "";
 		line += "mkdir " + prefix + " \n";
 		line += "cd " + prefix + " \n";
@@ -79,6 +83,7 @@ public class JinghuiZhangSTARMappingFromYawei {
 		line += "     --outSAMtype BAM SortedByCoordinate \\\n";
 		line += "     --outReadsUnmapped None \\\n";
 		line += "     --outSAMattrRGline ID:${RG_ID} LB:${RG_LB} PL:${RG_PL} SM:${RG_SM} PU:${RG_PU} \\\n";
+		line += "     --outSAMattributes NH HI AS nM MD \\\n";
 		line += "     --chimSegmentMin 12 \\\n";
 		line += "     --chimJunctionOverhangMin 12 \\\n";
 		line += "     --chimSegmentReadGapMax 3 \\\n";
@@ -94,6 +99,9 @@ public class JinghuiZhangSTARMappingFromYawei {
 		line += "     --outWigStrand Stranded \\\n";
 		line += "     --outWigNorm RPM \\\n";
 		line += "     --limitBAMsortRAM 100672447591\\\n";
+		if (gzip_flag) {
+			line += "     --readFilesCommand zcat\\\n";
+		}
 		return line;
 	}
 }

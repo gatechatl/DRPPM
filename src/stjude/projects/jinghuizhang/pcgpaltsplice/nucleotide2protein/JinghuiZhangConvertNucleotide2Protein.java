@@ -17,12 +17,8 @@ public class JinghuiZhangConvertNucleotide2Protein {
 	
 	public static void main(String[] args) {
 		
-		try {
-			
-			//String inputUniprotFasta = args[0];
-			//String inputUniprotFasta = "Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\PCGP_RNAseq\\processed_from_old_bam\\QC\\RNAseQC\\candidates\\homo_sapien_sp_dup.fasta";
-			//String inputUniprotFasta = "Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\PCGP_RNAseq\\processed_from_old_bam\\QC\\RNAseQC\\candidates\\uniprot_download_20190514\\Homo_sapiens_uniprot_sprot.fasta";
-			//String inputUniprotFasta = "Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\PCGP_RNAseq\\processed_from_old_bam\\QC\\RNAseQC\\candidates\\HUMAN.fasta";
+		try {			
+
 			String inputUniprotFasta = "Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\PCGP_RNAseq\\processed_from_old_bam\\QC\\RNAseQC\\candidates\\uniprot_download_20190514\\Homo_sapiens_uniprot_sprot_combined.fasta";
 			String inputQueryFasta = "Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\PCGP_RNAseq\\processed_from_old_bam\\QC\\RNAseQC\\candidates\\candidate_geneName.fasta";
 			String outputPeptideFile = "Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\PCGP_RNAseq\\processed_from_old_bam\\QC\\RNAseQC\\candidates\\candidate_peptide.txt";
@@ -63,7 +59,7 @@ public class JinghuiZhangConvertNucleotide2Protein {
 						prev_seq += str;
 						uniprot2fasta.put(uniprotID, prev_seq);
 					} else {
-						uniprot2fasta.put(uniprotID, "");
+						uniprot2fasta.put(uniprotID, str);
 					}
 				}
 			}
@@ -92,72 +88,188 @@ public class JinghuiZhangConvertNucleotide2Protein {
 					String frame_rev1 = Nucleotide2Protein.nucleotide2protein(nucleotide_seq, -1, false);
 					String frame_rev2 = Nucleotide2Protein.nucleotide2protein(nucleotide_seq, -2, false);
 					String frame_rev3 = Nucleotide2Protein.nucleotide2protein(nucleotide_seq, -3, false);
-					if (geneName2uniprot.containsKey(query_gene_name)) {
+					if (geneName2uniprot.containsKey(query_gene_name)) { 
 						boolean hit = false;
 						LinkedList list = (LinkedList)geneName2uniprot.get(query_gene_name);
 						Iterator itr = list.iterator();
-						while (itr.hasNext()) {
+						while (itr.hasNext()) { 
 							uniprotID = (String)itr.next();
 							String fasta = (String)uniprot2fasta.get(uniprotID);
-							for (int i = 0; i < fasta.length() - frame1.length(); i++) {
-								if (frame1.equals(fasta.substring(i, i + frame1.length()))) {
-									out.write(query_name + "\tframe1" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame1.length()) + "\t" + frame1 + "\n");
-									count_total_hit++;
-									hit = true;
+							if (frame1.contains("\\_")) {
+								String stop_codon_frame1 = frame1.split("\\_")[0];		
+								if (stop_codon_frame1.length() >= 8) {
+									for (int i = 0; i < fasta.length() - stop_codon_frame1.length(); i++) {
+										if (stop_codon_frame1.equals(fasta.substring(i, i + stop_codon_frame1.length()))) {
+											out.write(query_name + "\tframe1" + "\t" + uniprotID + "\t" + i + "\t" + (i + stop_codon_frame1.length()) + "\t" + stop_codon_frame1 + "\n");
+											count_total_hit++;
+											hit = true;
+										}
+									}
+								}
+							} else {
+								for (int i = 0; i < fasta.length() - frame1.length(); i++) {
+									if (frame1.equals(fasta.substring(i, i + frame1.length()))) {
+										out.write(query_name + "\tframe1" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame1.length()) + "\t" + frame1 + "\n");
+										count_total_hit++;
+										hit = true;
+									}
 								}
 							}
-							for (int i = 0; i < fasta.length() - frame2.length(); i++) {
-								if (frame2.equals(fasta.substring(i, i + frame2.length()))) {
-									out.write(query_name + "\tframe2" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame2.length()) + "\t" + frame2 +  "\n");
-									count_total_hit++;
-									hit = true;
+							if (frame2.contains("\\_")) {
+								String stop_codon_frame2 = frame2.split("\\_")[0];
+								if (stop_codon_frame2.length() >= 8) {
+									for (int i = 0; i < fasta.length() - stop_codon_frame2.length(); i++) {
+										if (stop_codon_frame2.equals(fasta.substring(i, i + stop_codon_frame2.length()))) {
+											out.write(query_name + "\tframe2" + "\t" + uniprotID + "\t" + i + "\t" + (i + stop_codon_frame2.length()) + "\t" + stop_codon_frame2 +  "\n");
+											count_total_hit++;
+											hit = true;
+										}
+									}
+								}
+							} else {
+								for (int i = 0; i < fasta.length() - frame2.length(); i++) {
+									if (frame2.equals(fasta.substring(i, i + frame2.length()))) {
+										out.write(query_name + "\tframe2" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame2.length()) + "\t" + frame2 +  "\n");
+										count_total_hit++;
+										hit = true;
+									}
 								}
 							}
-							for (int i = 0; i < fasta.length() - frame3.length(); i++) {
-								if (frame3.equals(fasta.substring(i, i + frame3.length()))) {
-									out.write(query_name + "\tframe3" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame3.length()) + "\t" + frame3 + "\n");
-									count_total_hit++;
-									hit = true;
+							if (frame3.contains("\\_")) {
+								String stop_codon_frame3 = frame3.split("\\_")[0];		
+								if (stop_codon_frame3.length() >= 8) {									
+									for (int i = 0; i < fasta.length() - stop_codon_frame3.length(); i++) {
+										if (stop_codon_frame3.equals(fasta.substring(i, i + stop_codon_frame3.length()))) {
+											out.write(query_name + "\tframe3" + "\t" + uniprotID + "\t" + i + "\t" + (i + stop_codon_frame3.length()) + "\t" + stop_codon_frame3 +  "\n");
+											count_total_hit++;
+											hit = true;
+										}
+									}
+								}
+							} else {
+								for (int i = 0; i < fasta.length() - frame3.length(); i++) {
+									if (frame3.equals(fasta.substring(i, i + frame3.length()))) {
+										out.write(query_name + "\tframe3" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame3.length()) + "\t" + frame3 + "\n");
+										count_total_hit++;
+										hit = true;
+									}
 								}
 							}
-							for (int i = 0; i < fasta.length() - frame_rev1.length(); i++) {
-								if (frame_rev1.equals(fasta.substring(i, i + frame_rev1.length()))) {
-									out.write(query_name + "\tframe_rev1" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame_rev1.length()) + "\t" + frame_rev1 + "\n");
-									count_total_hit++;
-									hit = true;
+							if (frame_rev1.contains("\\_")) {								
+								String stop_codon_frame_rev1 = frame_rev1.split("\\_")[0];
+								if (stop_codon_frame_rev1.length() >= 8) {
+									for (int i = 0; i < fasta.length() - stop_codon_frame_rev1.length(); i++) {
+										if (stop_codon_frame_rev1.equals(fasta.substring(i, i + stop_codon_frame_rev1.length()))) {
+											out.write(query_name + "\tframe_rev1" + "\t" + uniprotID + "\t" + i + "\t" + (i + stop_codon_frame_rev1.length()) + "\t" + stop_codon_frame_rev1 + "\n");
+											count_total_hit++;
+											hit = true;
+										}
+									}
+								}
+							} else {
+								for (int i = 0; i < fasta.length() - frame_rev1.length(); i++) {
+									if (frame_rev1.equals(fasta.substring(i, i + frame_rev1.length()))) {
+										out.write(query_name + "\tframe_rev1" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame_rev1.length()) + "\t" + frame_rev1 + "\n");
+										count_total_hit++;
+										hit = true;
+									}
 								}
 							}
-							for (int i = 0; i < fasta.length() - frame_rev2.length(); i++) {
-								if (frame_rev2.equals(fasta.substring(i, i + frame_rev2.length()))) {
-									out.write(query_name + "\tframe_rev2" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame_rev2.length()) + "\t" + frame_rev2 + "\n");
-									count_total_hit++;
-									hit = true;
+							if (frame_rev2.contains("\\_")) {
+								String stop_codon_frame_rev2 = frame_rev2.split("\\_")[0];	
+								if (stop_codon_frame_rev2.length() >= 8) {
+									for (int i = 0; i < fasta.length() - stop_codon_frame_rev2.length(); i++) {
+										if (stop_codon_frame_rev2.equals(fasta.substring(i, i + stop_codon_frame_rev2.length()))) {
+											out.write(query_name + "\tframe_rev2" + "\t" + uniprotID + "\t" + i + "\t" + (i + stop_codon_frame_rev2.length()) + "\t" + stop_codon_frame_rev2 + "\n");
+											count_total_hit++;
+											hit = true;
+										}
+									}
+								}
+							} else {
+								for (int i = 0; i < fasta.length() - frame_rev2.length(); i++) {
+									if (frame_rev2.equals(fasta.substring(i, i + frame_rev2.length()))) {
+										out.write(query_name + "\tframe_rev2" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame_rev2.length()) + "\t" + frame_rev2 + "\n");
+										count_total_hit++;
+										hit = true;
+									}
 								}
 							}
-							for (int i = 0; i < fasta.length() - frame_rev3.length(); i++) {
-								if (frame_rev3.equals(fasta.substring(i, i + frame_rev3.length()))) {
-									out.write(query_name + "\tframe_rev3" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame_rev3.length()) + "\t" + frame_rev3 + "\n");
-									count_total_hit++;
-									hit = true;
+							if (frame_rev3.contains("\\_")) {
+								String stop_codon_frame_rev3 = frame_rev3.split("\\_")[0];	
+								if (stop_codon_frame_rev3.length() >= 8) {
+									for (int i = 0; i < fasta.length() - stop_codon_frame_rev3.length(); i++) {
+										if (stop_codon_frame_rev3.equals(fasta.substring(i, i + stop_codon_frame_rev3.length()))) {
+											out.write(query_name + "\tframe_rev3" + "\t" + uniprotID + "\t" + i + "\t" + (i + stop_codon_frame_rev3.length()) + "\t" + stop_codon_frame_rev3 + "\n");
+											count_total_hit++;
+											hit = true;
+										}
+									}
+								}
+							} else {
+								for (int i = 0; i < fasta.length() - frame_rev3.length(); i++) {
+									if (frame_rev3.equals(fasta.substring(i, i + frame_rev3.length()))) {
+										out.write(query_name + "\tframe_rev3" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame_rev3.length()) + "\t" + frame_rev3 + "\n");
+										count_total_hit++;
+										hit = true;
+									}
 								}
 							}
-						}
+								/*
+								for (int i = 0; i < fasta.length() - frame2.length(); i++) {
+									if (frame2.equals(fasta.substring(i, i + frame2.length()))) {
+										out.write(query_name + "\tframe2" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame2.length()) + "\t" + frame2 +  "\n");
+										count_total_hit++;
+										hit = true;
+									}
+								}
+								for (int i = 0; i < fasta.length() - frame3.length(); i++) {
+									if (frame3.equals(fasta.substring(i, i + frame3.length()))) {
+										out.write(query_name + "\tframe3" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame3.length()) + "\t" + frame3 + "\n");
+										count_total_hit++;
+										hit = true;
+									}
+								}
+								for (int i = 0; i < fasta.length() - frame_rev1.length(); i++) {
+									if (frame_rev1.equals(fasta.substring(i, i + frame_rev1.length()))) {
+										out.write(query_name + "\tframe_rev1" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame_rev1.length()) + "\t" + frame_rev1 + "\n");
+										count_total_hit++;
+										hit = true;
+									}
+								}
+								for (int i = 0; i < fasta.length() - frame_rev2.length(); i++) {
+									if (frame_rev2.equals(fasta.substring(i, i + frame_rev2.length()))) {
+										out.write(query_name + "\tframe_rev2" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame_rev2.length()) + "\t" + frame_rev2 + "\n");
+										count_total_hit++;
+										hit = true;
+									}
+								}
+								for (int i = 0; i < fasta.length() - frame_rev3.length(); i++) {
+									if (frame_rev3.equals(fasta.substring(i, i + frame_rev3.length()))) {
+										out.write(query_name + "\tframe_rev3" + "\t" + uniprotID + "\t" + i + "\t" + (i + frame_rev3.length()) + "\t" + frame_rev3 + "\n");
+										count_total_hit++;
+										hit = true;
+									}
+								}
+								*/
+
+						} // while (itr.hasNext()) { 
 						if (hit) {
 							count_query_hit++;
 						}
-					}
+					} // if (geneName2uniprot.containsKey(query_gene_name)) { 
 					
-				}
-				
-			}
+				} // if (str.contains(">")) {
+			} // while (in.ready()) {
 			in.close();
 			out.close();
 			System.out.println("Uniprot Size: " + uniprot2fasta.size());
 			System.out.println("Total Queries: " + count_query);
 			System.out.println("Total Hits: " + count_total_hit);
-			System.out.println("Num Query with Hits: " + count_query_hit);
+			System.out.println("Num Query with Hits: " + count_query_hit);			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+		}		
 }

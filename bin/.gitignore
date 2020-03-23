@@ -1,15 +1,5 @@
 /.DRPPM.java.swp
-/stjude
 /MouseModelToHumanCompare
-/PeptideMap
-/PeptidePeaksIonDrawerPipeline
-/PhosphoGPS
-/PhosphoPainter
-/PhosphoTools
-/PhosphositePlusTools
-/PreprocessForPCA
-/Preprocessing
-/SNVTools
 /UniprotTool
 /WordDocumentGenerator
 /bedtools
@@ -44,6 +34,4 @@
 /sequencing
 /specialized
 /statistics
-/unsorted
-/ProgramDescriptions.class
-/SearchProgram.class
+/stjude

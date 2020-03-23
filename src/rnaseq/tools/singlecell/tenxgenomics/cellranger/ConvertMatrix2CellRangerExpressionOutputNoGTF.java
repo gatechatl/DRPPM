@@ -57,18 +57,20 @@ public class ConvertMatrix2CellRangerExpressionOutputNoGTF {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
-				//if (gtf.geneid2geneName.containsKey(split[0])) {
-				gene_idx++;
-				gene2index.put(split[0], gene_idx);
-				index2gene.put(gene_idx, split[0]);				
-				
-				out_gene.write(split[0] + "\t" + split[0] + "\n");
-				for (int j = 1; j < split.length; j++) {
-					double round = new Double(Math.round(new Double(split[j]) * 100)) / 100;
-					total += round;
-					//out_matrix.write(gene_idx + " " + j + " " + round + "\n");
+				if (!(split[0].equals("NA") || split[0].replaceAll("\"", "").equals("NA"))) {
+					//if (gtf.geneid2geneName.containsKey(split[0])) {
+					gene_idx++;
+					gene2index.put(split[0], gene_idx);
+					index2gene.put(gene_idx, split[0]);				
+					
+					out_gene.write(split[0] + "\t" + split[0] + "\n");
+					for (int j = 1; j < split.length; j++) {
+						double round = new Double(Math.round(new Double(split[j]) * 100)) / 100;
+						total += round;
+						//out_matrix.write(gene_idx + " " + j + " " + round + "\n");
+					}
+					//}
 				}
-				//}
 			}
 			in.close();
 			
@@ -88,15 +90,17 @@ public class ConvertMatrix2CellRangerExpressionOutputNoGTF {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");		
-				//if (gtf.geneid2geneName.containsKey(split[0])) {
-				gene_idx++;
-				for (int j = 1; j < split.length; j++) {
-					int round = (new Double(Math.round(new Double(split[j]) * 100))).intValue();
-					if (round > 0) {
-						out_matrix.write(gene_idx + " " + j + " " + round + "\n");
+				if (!(split[0].equals("NA") || split[0].replaceAll("\"", "").equals("NA"))) {
+					//if (gtf.geneid2geneName.containsKey(split[0])) {
+					gene_idx++;
+					for (int j = 1; j < split.length; j++) {
+						int round = (new Double(Math.round(new Double(split[j]) * 100))).intValue();
+						if (round > 0) {
+							out_matrix.write(gene_idx + " " + j + " " + round + "\n");
+						}
 					}
+					//}
 				}
-				//}
 			}
 			in.close();
 			

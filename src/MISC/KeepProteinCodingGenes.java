@@ -17,7 +17,7 @@ public class KeepProteinCodingGenes {
 		return "MISC";
 	}
 	public static String parameter_info() {
-		return "[inputMatrixFile] [gtf File] [outputFileredMatrixFile]";
+		return "[inputMatrixFile] [gtf File] [meta_info: gene_id] [outputFileredMatrixFile]";
 	}
 	public static void execute(String[] args) {
 		
@@ -25,11 +25,12 @@ public class KeepProteinCodingGenes {
 		try {
 			
 			String noncodingFile = args[1];
-			HashMap proteinCodingGenes = proteincoding_genelist(noncodingFile);
+			String type = args[2];
+			HashMap proteinCodingGenes = proteincoding_genelist(noncodingFile, type);
 			
 			HashMap SJMMHGG = new HashMap();
 			
-			String outputFile = args[2]; //"C:\\Users\\tshaw\\Desktop\\RNASEQ\\Mckinnon\\FPKM_07282014\\SJMMHGG\\SJMMHGG_RNAseq_Exon_Read_Count_gene_fpkm_uniq_NRremove.txt";;
+			String outputFile = args[3]; //"C:\\Users\\tshaw\\Desktop\\RNASEQ\\Mckinnon\\FPKM_07282014\\SJMMHGG\\SJMMHGG_RNAseq_Exon_Read_Count_gene_fpkm_uniq_NRremove.txt";;
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			
@@ -56,7 +57,7 @@ public class KeepProteinCodingGenes {
 		}
 	}
 	
-	public static HashMap proteincoding_genelist(String gtfFile) {
+	public static HashMap proteincoding_genelist(String gtfFile, String meta_type) {
 		HashMap map = new HashMap();
 		try {						
 			FileInputStream fstream = new FileInputStream(gtfFile);
@@ -68,7 +69,7 @@ public class KeepProteinCodingGenes {
 				if (split.length > 8) {
 					String gene_type = grabMeta(split[8], "gene_type");
 					String gene_biotype = grabMeta(split[8], "gene_biotype");
-					String gene_name = grabMeta(split[8], "gene_name");
+					String gene_name = grabMeta(split[8], meta_type);
 					
 					if (gene_type.equals("protein_coding") || gene_biotype.equals("protein_coding")) {
 						map.put(gene_name, gene_name);

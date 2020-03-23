@@ -27,7 +27,7 @@ public class Bam2BW {
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
 			while (in.ready()) {
 				String str = in.readLine();
-				System.out.println("bamCoverage -b " + str + " -o " + str + ".bw");
+				System.out.println("bamCoverage -b " + str + " --normalizeUsing CPM -o " + str + ".bw");
 				
 			}
 			in.close();			

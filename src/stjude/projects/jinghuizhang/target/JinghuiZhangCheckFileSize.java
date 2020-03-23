@@ -28,8 +28,7 @@ public class JinghuiZhangCheckFileSize {
 			boolean greater_or_less_than = new Boolean(args[1]);
 			FileInputStream fstream = new FileInputStream(inputFileLst);
 			DataInputStream din = new DataInputStream(fstream);
-			BufferedReader in = new BufferedReader(new InputStreamReader(din));
-			
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));			
 			while (in.ready()) {
 				String str = in.readLine();
 				if (greater_or_less_than) {

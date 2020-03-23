@@ -735,8 +735,9 @@ public class HeatmapGeneration {
 		// 2018/10/18 updated from complete to ward
 		script += "result2 = pheatmap(dataset, cluster_col = " + cluster_col + ", cluster_row = " + cluster_row + ", fontsize_row = " + row_font_size + ", fontsize_col = " + col_font_size + ", show_rownames = T, clustering_method = \"ward\", color=hmcols)\n";
 		script += "dev.off();\n";
-		script += "clust <- cbind(result2, cluster = cutree(result2$tree_row, k = 10))\n";
-		script += "write.table(rownames(clust), file=\"" + outputFile + "._ordered_colnames.txt\")\n";
+		//script += "clust <- cbind(result2, cluster = cutree(result2$tree_row, k = 10))\n";
+		script += "write.table(result2$tree_col$labels[result2$tree_col$order], file=\"" + outputFile + "._ordered_colnames.txt\")\n";
+		script += "write.table(result2$tree_row$labels[result2$tree_row$order], file=\"" + outputFile + "._ordered_row.txt\")\n";
 		return script;
 	}
 	/**

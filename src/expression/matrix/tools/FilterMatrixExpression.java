@@ -23,8 +23,7 @@ public class FilterMatrixExpression {
 			String matrixFile = args[0];
 			double minCutoff = new Double(args[1]);
 			double zeroFrequency = new Double(args[2]);
-			String outputFile = args[3];
-			
+			String outputFile = args[3];			
 
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);

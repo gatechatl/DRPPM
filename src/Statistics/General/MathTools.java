@@ -205,6 +205,20 @@ public class MathTools {
 	    }
 	    return sum / m.length;
 	}
+	public static double average(double[] m) {
+	    double sum = 0;
+	    for (int i = 0; i < m.length; i++) {
+	        sum += m[i];
+	    }
+	    return sum / m.length;
+	}
+	public static double sum(double[] m) {
+	    double sum = 0;
+	    for (int i = 0; i < m.length; i++) {
+	        sum += m[i];
+	    }
+	    return sum;
+	}
 	public static double max(double[] m) {
 	    double max = m[0];
 	    for (int i = 0; i < m.length; i++) {

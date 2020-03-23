@@ -39,6 +39,7 @@ public class SummarizeRNAPEG {
 			HashMap sample_total = new HashMap();
 			LinkedList sampleName = new LinkedList(); 
 
+			
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			

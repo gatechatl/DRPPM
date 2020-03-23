@@ -60,6 +60,21 @@ public class JinghuiZhangFilterLiqingDEXSeqExons {
 						found = true;
 					} 
 				}
+				for (String more_than_one_geneName: geneName.split("_")) {
+					if (ecm_gene_list.containsKey(more_than_one_geneName)) {						
+						found = true;
+					} 
+				}
+				for (String more_than_one_geneName: geneName.split(",")) {
+					if (ecm_gene_list.containsKey(more_than_one_geneName)) {						
+						found = true;
+					} 
+				}
+				for (String more_than_one_geneName: geneName.split(";")) {
+					if (ecm_gene_list.containsKey(more_than_one_geneName)) {						
+						found = true;
+					} 
+				}
 				if (found) {
 					out.write(str + "\tKnownECM\n");
 				} else if (geneName.split("_").length > 1) {

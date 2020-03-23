@@ -61,6 +61,7 @@ import misc.Matrix2Exponent;
 import misc.MergeGeneName;
 import misc.MergeGeneNameClean;
 import misc.OverlapTwoFiles;
+import misc.RemoveChrYGenesBasedOnGTF;
 import misc.RemoveQuotations;
 import misc.SplitFilesCols;
 import misc.SplitFilesRows;
@@ -114,6 +115,7 @@ import expression.matrix.tools.CorrectMarSeptGeneName;
 import expression.matrix.tools.ExtractGMTGeneNameMatrix;
 import expression.matrix.tools.FilterBasedOnAnnotation;
 import expression.matrix.tools.FilterMatrixColumnValue;
+import expression.matrix.tools.FilterMatrixColumnValueText;
 import expression.matrix.tools.FilterMatrixExpression;
 import expression.matrix.tools.FilterMatrixFile;
 import expression.matrix.tools.FilterMatrixFileFlex;
@@ -133,6 +135,7 @@ import expression.matrix.tools.MergeSamples;
 import expression.matrix.tools.MultiplyMatrixValuesWithFactor;
 import expression.matrix.tools.OrderGeneMatrixBasedOnTTestDist;
 import expression.matrix.tools.QuantileNormalization;
+import expression.matrix.tools.RemoveColumnWithNAs;
 import expression.matrix.tools.RemoveColumnWithNulls;
 import expression.matrix.tools.RemoveColumnsFromMatrix;
 import expression.matrix.tools.RemoveDuplicatedSampleName;
@@ -192,6 +195,7 @@ import genomics.rnaseq.expression.transcriptionfactornetwork.ConvertAracneOutput
 import genomics.rnaseq.expression.transcriptionfactornetwork.GenerateAracneInputFile;
 import genomics.rnaseq.fusion.cicero.ChromosomeBarPlot;
 import genomics.rnaseq.fusion.cicero.ExtractFusionGenes;
+import genomics.tools.bedfasta2peptide.ConvertBedDNA2Peptide;
 import graph.figures.BarPlotGenerator;
 import graph.figures.BoxPlotGeneratorThreeGroup;
 import graph.figures.BoxPlotGeneratorTwoColumn;
@@ -214,6 +218,7 @@ import graph.interactive.javascript.maplot.GenerateMAPlotJavaScript;
 import graph.interactive.javascript.maplot.GenerateMAPlotJavaScriptUserInput;
 import graph.interactive.javascript.scatterplot.AppendColorAsMetaInfo;
 import graph.interactive.javascript.scatterplot.AppendExpressionColorAsMetaData;
+import graph.interactive.javascript.scatterplot.AppendExpressionCutoffToColorAsMetaData;
 import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptInputHTMLMeta;
 import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptUserInputCustomColor;
 import graph.interactive.javascript.scatterplot.GenerateScatterPlotJavaScriptUserInputCustomColorMeta;
@@ -323,6 +328,7 @@ import rnaseq.mapping.tools.star.CombineHTSEQResult;
 import rnaseq.mapping.tools.star.CombineHTSEQResultRPMChunxuPipeline;
 import rnaseq.mapping.tools.star.CombineHTSEQResultRaw;
 import rnaseq.mapping.tools.star.CombineHTSEQResultRefGeneOnly;
+import rnaseq.mapping.tools.star.CombineHTSEQResultTotalFeatures;
 import rnaseq.mapping.tools.star.CreateBamIndex;
 import rnaseq.mapping.tools.star.CuffLinksScriptGenerator;
 import rnaseq.mapping.tools.star.FastaAddRemoveChr;
@@ -429,6 +435,7 @@ import rnaseq.tools.singlecell.tenxgenomics.cellranger.ConvertMatrix2CellRangerE
 import rnaseq.tools.singlecell.tenxgenomics.cellranger.ConvertMatrix2CellRangerExpressionOutput;
 import rnaseq.tools.singlecell.tenxgenomics.cellranger.ConvertMatrix2CellRangerExpressionOutputGene2Ensembl;
 import rnaseq.tools.singlecell.tenxgenomics.cellranger.ConvertMatrix2CellRangerExpressionOutputNoGTF;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.ConvertMatrix2CellRangerExpressionOutputNoGTFNoManip;
 import rnaseq.tools.singlecell.tenxgenomics.cellranger.RunSeuratAnalysisFromCellRanger;
 import rnaseq.tools.singlecell.tenxgenomics.cellranger.SamHeader2CellType;
 import rnaseq.tools.singlecell.tenxgenomics.cellranger.SeuratCalculateClusterDistribution;
@@ -447,6 +454,7 @@ import rnaseq.tools.summary.GenerateRNASEQCoverageStatistics;
 import rnaseq.tools.summary.IntronExonCoverageBED;
 import rnaseq.tools.summary.PlotBinningTable;
 import sequencing.tools.bedmanupulation.BedGraphFilterChromosomeName;
+import stjude.pipelines.strongarm.mappingstats.StJudeStrongARMMappingStats;
 import stjude.projects.hongbochi.AppendMTORC1Motif2PeptideTable;
 import stjude.projects.hongbochi.AppendMTORC1Motif2Table;
 import stjude.projects.hongbochi.AppendMetaInformation;
@@ -472,7 +480,17 @@ import stjude.projects.jinghuizhang.dexseq.exon.annotation.pcgptarget.JinghuiZha
 import stjude.projects.jinghuizhang.dexseq.exon.annotation.pcgptarget.JinghuiZhangCalculateSampleTypeExonExpressionMedian;
 import stjude.projects.jinghuizhang.dexseq.exon.annotation.pcgptarget.JinghuiZhangFilterLiqingDEXSeqExons;
 import stjude.projects.jinghuizhang.dexseq.exon.annotation.pcgptarget.JinghuiZhangRemoveTextFromHeader;
+import stjude.projects.jinghuizhang.dexseq.exon.cart.candidate.JinghuiZhangBedFasta2Peptide;
+import stjude.projects.jinghuizhang.dexseq.exon.cart.candidate.JinghuiZhangFilteringThePrioritizedExonList;
+import stjude.projects.jinghuizhang.dexseq.exon.cart.candidate.JinghuiZhangOverlapCandidateWithProteomicsID;
+import stjude.projects.jinghuizhang.dexseq.exon.cart.candidate.JinghuiZhangOverlapExonWithOriginalExonAnnotation;
+import stjude.projects.jinghuizhang.dexseq.exon.cart.candidate.JinghuiZhangPrioritizeExonCandidates;
+import stjude.projects.jinghuizhang.dexseq.exon.cart.candidate.JinghuiZhangRenameExonCreateBED;
+import stjude.projects.jinghuizhang.dexseq.exon.multimap.manuscript.JinghuiZhangRemovePanCanECMExon;
+import stjude.projects.jinghuizhang.dexseq.exon.multimap.manuscript.JinghuiZhangSummarizeNumberOfExonWithMultimapping;
 import stjude.projects.jinghuizhang.hg38mapping.star.JinghuiZhangSTARMappingFromYawei;
+import stjude.projects.jinghuizhang.hg38mapping.star.JinghuiZhangSTARMappingFromYaweiSingleEnd;
+import stjude.projects.jinghuizhang.hg38mapping.star.JinghuiZhangSTARMappingFromYaweiUpdated;
 import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangAppendTCGAClusterInformation;
 import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangStatisticalTestForEnrichedImmuneSignatures;
 import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangStatisticalTestForEnrichedImmuneSignaturesOfMutSig;
@@ -592,6 +610,9 @@ import stjude.projects.xiangchen.XiangChenExtractMetaData;
 import stjude.projects.xiangchen.XiangChenGrabTopVariableGenes;
 import stjude.projects.xiangchen.XiangChenGrabTopVariableGenesFilterSNPXY;
 import stjude.projects.xiaotuma.aml.download.XiaotuMaDownloadAMLFiles;
+import stjude.projects.xiaotuma.aml.rnaseq.rnaindel.XiaotuMaGenerateRNAindelScript;
+import stjude.projects.xiaotuma.fredhutch.amlproject.fusion.XiaotuAppendTimAnnotationBamViewerLinksUpdate;
+import stjude.projects.xiaotuma.fredhutch.amlproject.fusion.XiaotuMaCompileFusionListHQFebUpdate;
 import stjude.proteinpaint.tracks.GenerateLowComplexityDomainInfo;
 import stjude.proteinpaint.tracks.OpenReadingFrameFinder;
 import stjude.tools.rnaseq.MergeGeneCountChunxuPipeline;
@@ -846,6 +867,9 @@ public class ProgramDescriptions {
 		}
 		if (CombineHTSEQResult.type().equals(type)) {
 			result += " -CombineHTSEQResult: " + CombineHTSEQResult.description() + "\n";
+		}
+		if (CombineHTSEQResultTotalFeatures.type().equals(type)) {
+			result += " -CombineHTSEQResultTotalFeatures: " + CombineHTSEQResultTotalFeatures.description() + "\n";
 		}
 		if (EnsemblGeneID2GeneName.type().equals(type)) {
 			result += " -EnsemblGeneID2GeneName: " + EnsemblGeneID2GeneName.description() + "\n";
@@ -1816,6 +1840,10 @@ public class ProgramDescriptions {
 		if (FilterMatrixColumnValue.type().equals(type)) {
 			result += "FilterMatrixColumnValue: " + FilterMatrixColumnValue.description() + "\n";
 		}
+		if (FilterMatrixColumnValueText.type().equals(type)) {
+			result += "FilterMatrixColumnValueText: " + FilterMatrixColumnValueText.description() + "\n";
+		} 
+		// 
 		if (PotterIdentifyExonBeingSkippedThroughCufflinks.type().equals(type)) {
 			result += "PotterIdentifyExonBeingSkippedThroughCufflinks: " + PotterIdentifyExonBeingSkippedThroughCufflinks.description() + "\n";
 		}
@@ -2266,6 +2294,9 @@ public class ProgramDescriptions {
 		if (AppendExpressionColorAsMetaData.type().equals(type)) {
 			result += "AppendExpressionColorAsMetaData: " + AppendExpressionColorAsMetaData.description() + "\n";
 		}
+		if (AppendExpressionCutoffToColorAsMetaData.type().equals(type)) {
+			result += "AppendExpressionCutoffToColorAsMetaData: " + AppendExpressionCutoffToColorAsMetaData.description() + "\n";
+		}
 		if (CalculateMedianForEachClusterSimple.type().equals(type)) {
 			result += "CalculateMedianForEachClusterSimple: " + CalculateMedianForEachClusterSimple.description() + "\n";
 		}
@@ -2405,10 +2436,63 @@ public class ProgramDescriptions {
 		if (JinghuiZhangFilterLiqingDEXSeqExons.type().equals(type)) {
 			result += "JinghuiZhangFilterLiqingDEXSeqExons: " + JinghuiZhangFilterLiqingDEXSeqExons.description() + "\n";
 		}
+		if (RemoveColumnWithNAs.type().equals(type)) {
+			result += "RemoveColumnWithNAs: " + RemoveColumnWithNAs.description() + "\n";
+		}
+		if (JinghuiZhangSTARMappingFromYaweiSingleEnd.type().equals(type)) {
+			result += "JinghuiZhangSTARMappingFromYaweiSingleEnd: " + JinghuiZhangSTARMappingFromYaweiSingleEnd.description() + "\n";
+		}
+		if (JinghuiZhangRemovePanCanECMExon.type().equals(type)) {
+			result += "JinghuiZhangRemovePanCanECMExon: " + JinghuiZhangRemovePanCanECMExon.description() + "\n";
+		}
+		if (JinghuiZhangSummarizeNumberOfExonWithMultimapping.type().equals(type)) {
+			result += "JinghuiZhangSummarizeNumberOfExonWithMultimapping: " + JinghuiZhangSummarizeNumberOfExonWithMultimapping.description() + "\n";
+		}
+		if (StJudeStrongARMMappingStats.type().equals(type)) {
+			result += "StJudeStrongARMMappingStats: " + StJudeStrongARMMappingStats.description() + "\n";
+		}
+		if (ConvertBedDNA2Peptide.type().equals(type)) {
+			result += "ConvertBedDNA2Peptide: " + ConvertBedDNA2Peptide.description() + "\n";
+		}
+		if (JinghuiZhangPrioritizeExonCandidates.type().equals(type)) {
+			result += "JinghuiZhangPrioritizeExonCandidates: " + JinghuiZhangPrioritizeExonCandidates.description() + "\n";
+		}
+		if (JinghuiZhangFilteringThePrioritizedExonList.type().equals(type)) {
+			result += "JinghuiZhangFilteringThePrioritizedExonList: " + JinghuiZhangFilteringThePrioritizedExonList.description() + "\n";
+		}
+		if (JinghuiZhangOverlapExonWithOriginalExonAnnotation.type().equals(type)) {
+			result += "JinghuiZhangOverlapExonWithOriginalExonAnnotation: " + JinghuiZhangOverlapExonWithOriginalExonAnnotation.description() + "\n";
+		}
+		if (JinghuiZhangRenameExonCreateBED.type().equals(type)) {
+			result += "JinghuiZhangRenameExonCreateBED: " + JinghuiZhangRenameExonCreateBED.description() + "\n";
+		}
+		if (JinghuiZhangOverlapCandidateWithProteomicsID.type().equals(type)) {
+			result += "JinghuiZhangOverlapCandidateWithProteomicsID: " + JinghuiZhangOverlapCandidateWithProteomicsID.description() + "\n";
+		}
+		if (JinghuiZhangBedFasta2Peptide.type().equals(type)) {
+			result += "JinghuiZhangBedFasta2Peptide: " + JinghuiZhangBedFasta2Peptide.description() + "\n";
+		}
+		if (XiaotuMaCompileFusionListHQFebUpdate.type().equals(type)) {
+			result += "XiaotuMaCompileFusionListHQFebUpdate: " + XiaotuMaCompileFusionListHQFebUpdate.description() + "\n";
+		}
+		if (XiaotuAppendTimAnnotationBamViewerLinksUpdate.type().equals(type)) {
+			result += "XiaotuAppendTimAnnotationBamViewerLinksUpdate: " + XiaotuAppendTimAnnotationBamViewerLinksUpdate.description() + "\n";
+		}
+		if (XiaotuMaGenerateRNAindelScript.type().equals(type)) {
+			result += "XiaotuMaGenerateRNAindelScript: " + XiaotuMaGenerateRNAindelScript.description() + "\n";
+		}
+		if (ConvertMatrix2CellRangerExpressionOutputNoGTFNoManip.type().equals(type)) {
+			result += "ConvertMatrix2CellRangerExpressionOutputNoGTFNoManip: " + ConvertMatrix2CellRangerExpressionOutputNoGTFNoManip.description() + "\n";
+		}
+		if (JinghuiZhangSTARMappingFromYaweiUpdated.type().equals(type)) {
+			result += "JinghuiZhangSTARMappingFromYaweiUpdated: " + JinghuiZhangSTARMappingFromYaweiUpdated.description() + "\n";
+		}
+		if (RemoveChrYGenesBasedOnGTF.type().equals(type)) {
+			result += "RemoveChrYGenesBasedOnGTF: " + RemoveChrYGenesBasedOnGTF.description() + "\n";
+		}
 		return result;
-	}
-	
+	}	
 
-	public static String VERSION = "20191112";
+	public static String VERSION = "20200313";
 	
 }

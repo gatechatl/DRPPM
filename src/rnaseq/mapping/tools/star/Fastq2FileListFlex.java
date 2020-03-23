@@ -51,9 +51,9 @@ public class Fastq2FileListFlex {
 					String name = "";
 					if (split.length >= 2) {
 						name = split[0] + "_" + split[1].split("\\.")[0];						
-						if (str.contains("R1.fastq") || str.contains("R1.fq")) {
+						if (str.contains("R1.fastq") || str.contains("R1.fq") || str.contains("R1.fastq.gz") || str.contains("R1.fq.gz") || str.contains("r1.fastq") || str.contains("r1.fq") || str.contains("r1.fastq.gz") || str.contains("r1.fq.gz")) {
 							mapR1.put(name, str);
-						} else if (str.contains("R2.fastq") || str.contains("R2.fq")) {
+						} else if (str.contains("R2.fastq") || str.contains("R2.fq") || str.contains("R2.fastq.gz") || str.contains("R2.fq.gz") || str.contains("r2.fastq") || str.contains("r2.fq") || str.contains("r2.fastq.gz") || str.contains("r2.fq.gz")) {
 							mapR2.put(name, str);
 						}
 					}

@@ -17,7 +17,9 @@ public class JinghuiZhangPCGPTARGETAppendClusterInformation {
 			
 			HashMap map = new HashMap();
 			
-			String inputFile = "Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\Predict_Pediatric_Cancer_ImmuneSubtype\\SJ_predicted_6Type_15features_batch_corrected.txt";
+			//String inputFile = "Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\Predict_Pediatric_Cancer_ImmuneSubtype\\SJ_predicted_6Type_15features_batch_corrected.txt";
+			//
+			String inputFile = "Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\Predict_Pediatric_Cancer_ImmuneSubtype\\SJ_predicted_6Type_6features_batch_corrected.txt";
 			FileInputStream fstream = new FileInputStream(inputFile);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
