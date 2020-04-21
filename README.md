@@ -3,8 +3,8 @@ DNA RNA Proteome Phosphoproteome Metabolomics Library Tools
 
 DRPPM is a library collection of scripts for analyzing DNA/RNA/Protein/Post-translation/Metabolites. The purpose of the program is primarily used to document the steps applied in the analysis and figure generation related to my publication. Some of the pipeline has been repurposed by other individuals for other pipelines. The library contains scripts and software pipelines for analyzing somatic lesions, transcription regulation, proteome, and metabolome. As part of the package, tools were developed for gene/protein network analysis and interactive visualizations. 
 
-## Wiki page for additional details
-* Here you can access additional details about the program [wiki](https://github.com/gatechatl/DRPPM/wiki/)
+## Details are documented in the Wiki page 
+* Access additional details about the program [wiki](https://github.com/gatechatl/DRPPM/wiki/)
 
 ## Git Checkout
 ```git clone git@github.com:gatechatl/DRPPM.git  # Clone the repo```
