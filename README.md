@@ -8,7 +8,7 @@ Scripts and software pipelines for analyzing somatic lesions, transcription regu
 
 
 ## Prerequisites
-* [Java version J2SE-1.5](https://www.python.org/downloads/)
+* [Java version J2SE-1.5](https://www.oracle.com/technetwork/java/javase/)
 Certain R script require additional libraries... Need to update this...
 
 ## Executable Jar pacakge
