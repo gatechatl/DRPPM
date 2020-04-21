@@ -1,7 +1,7 @@
 # DRPPM
-DNA RNA Proteome Phosphoproteome Metabolomics Library Tools
+DNA RNA Proteome Post-translational Modifications 
 
-DRPPM is a library collection of scripts for analyzing DNA/RNA/Protein/Post-translation/Metabolites. The purpose of the program is primarily used to document the steps applied in the analysis and figure generation related to my publication. Some of the pipeline has been repurposed by other individuals for other pipelines. The library contains scripts and software pipelines for analyzing somatic lesions, transcription regulation, proteome, and metabolome. As part of the package, tools were developed for gene/protein network analysis and interactive visualizations. 
+DRPPM is a library collection of scripts for analyzing DNA/RNA/Proteome/Post-translational Modifications. The purpose of the program is primarily used to document the steps applied in the analysis and figure generation related to my publication. Some of the pipeline has been repurposed by other individuals for other pipelines. The library contains scripts and software pipelines for analyzing somatic lesions, transcription regulation, proteome, and metabolome. As part of the package, tools were developed for gene/protein network analysis and interactive visualizations. 
 
 ## Details are documented in the Wiki page 
 * Access additional details about the program [wiki](https://github.com/gatechatl/DRPPM/wiki/)
@@ -32,7 +32,7 @@ The outputs for DRPPM are also defined in the parameter. See list of program in 
 
 ```
 ## Reference
-Timothy I. Shaw. DRPPM: an integrated software tool for all.
+Timothy I. Shaw. DRPPM: an integrated library for DNA/RNA/Proteome/Post-translational Modifications. 2020.
 
 ## Example Publications
 KH Lee, P Zhang, HJ Kim et al. C9orf72 Dipeptide Repeats Impair the Assembly, Dynamics, and Function of Membrane-Less Organelles. Cell 167 (3), 774-788. e17
