@@ -4,7 +4,7 @@ DNA RNA Proteome Phosphoproteome Metabolomics Library Tools
 Scripts and software pipelines for analyzing somatic lesions, transcription regulation, and proteome. As part of the package, I've developed tools for gene/protein network analysis and interactive visualizations.
 
 ## Program Overview
-* [Layout of all the programs](https://github.com/gatechatl/DRPPM/wiki/DRPPM-Program-Overview)
+* [link](https://github.com/gatechatl/DRPPM/wiki/DRPPM-Program-Overview)
 
 ## Download
 ```git clone git@github.com:gatechatl/DRPPM.git  # Clone the repo```
