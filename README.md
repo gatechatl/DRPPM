@@ -6,14 +6,14 @@ DRPPM is a library collection of scripts for analyzing DNA/RNA/Protein/Post-tran
 ## Wiki page for additional details
 * Here you can access additional details about the program [wiki](https://github.com/gatechatl/DRPPM/wiki/)
 
-## Download
+## Git Checkout
 ```git clone git@github.com:gatechatl/DRPPM.git  # Clone the repo```
 
 ## Prerequisites
 * [Java version J2SE-1.5](https://www.oracle.com/technetwork/java/javase/)
 Certain R script require additional libraries... Need to update this...
 
-## Executable Jar pacakge
+## Download an executable Jar pacakge
 * [jar package] (https://github.com/gatechatl/DRPPM/blob/master/export/DRPPM_20190829_newmachine.jar)
 
 ## Usage
