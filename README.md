@@ -1,5 +1,5 @@
 # DRPPM
-DNA RNA Proteome Post-translational Modifications 
+## DNA RNA Proteome Post-translational Modifications 
 
 DRPPM is a library collection of scripts for analyzing DNA/RNA/Proteome/Post-translational Modifications. The purpose of the program is primarily used to document the steps applied in the analysis and figure generation related to my publication. Some of the pipeline has been repurposed by other individuals for other pipelines. The library contains scripts and software pipelines for analyzing somatic lesions, transcription regulation, proteome, and metabolome. As part of the package, tools were developed for gene/protein network analysis and interactive visualizations. 
 
