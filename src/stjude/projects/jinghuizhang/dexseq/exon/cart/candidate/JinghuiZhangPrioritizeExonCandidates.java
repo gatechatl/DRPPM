@@ -21,7 +21,7 @@ public class JinghuiZhangPrioritizeExonCandidates {
 		return "JinghuiZhang";
 	}
 	public static String parameter_info() {
-		return "[pcgp_inputFile] [target_inputFile] [gtex_inputFile_0] [outputFile_all] [outputFile_candidate]";
+		return "[pcgp_inputFile] [target_inputFile] [gtex_inputFile_0] [outputFile_all] [outputFile_candidate] [outputFile_bed]";
 	}
 	public static void execute(String[] args) {
 		
@@ -34,7 +34,10 @@ public class JinghuiZhangPrioritizeExonCandidates {
 			String outputFile = args[3]; //"Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\Comprehensive_CAR-T_Analysis\\hg38_analysis\\AfterLiqingsExonCounting\\Summary\\PCGP_TARGET_GTEx_Candidates.txt";
 			String outputFile_candidate = args[4];
 			String outputFile_bed = args[5]; 
-			
+			int chr_index = -1;
+			int start_index = -1;
+			int end_index = -1;
+			int direction_index = -1;
 			FileInputStream fstream = new FileInputStream(pcgp_inputFile);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
@@ -42,8 +45,20 @@ public class JinghuiZhangPrioritizeExonCandidates {
 			String[] split_header = header.split("\t");
 			HashMap pcgp_index2name = new HashMap();
 			for (int i = 1; i < split_header.length; i++) {
-				if (!(split_header[i].equals("diagnosis_short") || split_header[i].equals("geneID") || split_header[i].equals("geneName") || split_header[i].equals("type") || split_header[i].equals("status") || split_header[i].equals("chr") || split_header[i].equals("start") || split_header[i].equals("end")  || split_header[i].equals("direction")   || split_header[i].equals("Annotation"))) {
+				if (!(split_header[i].equals("diagnosis_short") || split_header[i].equals("geneID") || split_header[i].equals("geneName") || split_header[i].equals("type") || split_header[i].equals("status") || split_header[i].equals("chr") || split_header[i].equals("start") || split_header[i].equals("end")  || split_header[i].equals("direction")   || split_header[i].equals("Annotation")  || split_header[i].equals("ExonID") || split_header[i].equals("ExonName") || split_header[i].equals("Type") || split_header[i].equals("Chr") || split_header[i].equals("Start") || split_header[i].equals("End") || split_header[i].equals("Strand"))) {
 					pcgp_index2name.put(i, split_header[i]);
+				}
+				if (split_header[i].equals("Chr") || split_header[i].equals("chr")) {
+					chr_index = i;
+				}
+				if (split_header[i].equals("Start") || split_header[i].equals("start")) {
+					start_index = i;
+				}
+				if (split_header[i].equals("End") || split_header[i].equals("end")) {
+					end_index = i;
+				}
+				if (split_header[i].equals("Strand") || split_header[i].equals("strand")) {
+					direction_index = i;
 				}
 			}
 			while (in.ready()) {
@@ -101,7 +116,8 @@ public class JinghuiZhangPrioritizeExonCandidates {
 			split_header = header.split("\t");
 			HashMap target_index2name = new HashMap();
 			for (int i = 1; i < split_header.length; i++) {
-				if (!(split_header[i].equals("diagnosis_short") || split_header[i].equals("geneID") || split_header[i].equals("geneName") || split_header[i].equals("type") || split_header[i].equals("status") || split_header[i].equals("chr") || split_header[i].equals("start") || split_header[i].equals("end")  || split_header[i].equals("direction")   || split_header[i].equals("Annotation"))) {
+				//if (!(split_header[i].equals("diagnosis_short") || split_header[i].equals("geneID") || split_header[i].equals("geneName") || split_header[i].equals("type") || split_header[i].equals("status") || split_header[i].equals("chr") || split_header[i].equals("start") || split_header[i].equals("end")  || split_header[i].equals("direction")   || split_header[i].equals("Annotation"))) {
+				if (!(split_header[i].equals("diagnosis_short") || split_header[i].equals("geneID") || split_header[i].equals("geneName") || split_header[i].equals("type") || split_header[i].equals("status") || split_header[i].equals("chr") || split_header[i].equals("start") || split_header[i].equals("end")  || split_header[i].equals("direction")   || split_header[i].equals("Annotation")  || split_header[i].equals("ExonID") || split_header[i].equals("ExonName") || split_header[i].equals("Type") || split_header[i].equals("Chr") || split_header[i].equals("Start") || split_header[i].equals("End") || split_header[i].equals("Strand"))) {
 					target_index2name.put(i, split_header[i]);
 				}
 			}
@@ -187,7 +203,8 @@ public class JinghuiZhangPrioritizeExonCandidates {
 			split_header = header.split("\t");
 			HashMap gtex_index2name = new HashMap();
 			for (int i = 1; i < split_header.length; i++) {
-				if (!(split_header[i].equals("diagnosis_short") || split_header[i].equals("histology") || split_header[i].equals("geneID") || split_header[i].equals("geneName") || split_header[i].equals("type") || split_header[i].equals("status") || split_header[i].equals("chr") || split_header[i].equals("start") || split_header[i].equals("end")  || split_header[i].equals("direction")   || split_header[i].equals("Annotation") || split_header[i].equals("geneID") || split_header[i].equals("geneName"))) {
+				//if (!(split_header[i].equals("diagnosis_short") || split_header[i].equals("histology") || split_header[i].equals("geneID") || split_header[i].equals("geneName") || split_header[i].equals("type") || split_header[i].equals("status") || split_header[i].equals("chr") || split_header[i].equals("start") || split_header[i].equals("end")  || split_header[i].equals("direction")   || split_header[i].equals("Annotation") || split_header[i].equals("geneID") || split_header[i].equals("geneName"))) {
+				if (!(split_header[i].equals("diagnosis_short") || split_header[i].equals("geneID") || split_header[i].equals("geneName") || split_header[i].equals("type") || split_header[i].equals("status") || split_header[i].equals("chr") || split_header[i].equals("start") || split_header[i].equals("end")  || split_header[i].equals("direction")   || split_header[i].equals("Annotation")  || split_header[i].equals("ExonID") || split_header[i].equals("ExonName") || split_header[i].equals("Type") || split_header[i].equals("Chr") || split_header[i].equals("Start") || split_header[i].equals("End") || split_header[i].equals("Strand"))) {
 					gtex_index2name.put(i, split_header[i]);
 				}
 			}
@@ -275,10 +292,38 @@ public class JinghuiZhangPrioritizeExonCandidates {
 				if (candidate) {
 					out_candidate.write(str + "\t" + candidate + "\t" + target_data.get(split[0]) + "\t" + avg + "\t" + pcgp_high_expr + "\t" + target_avg_result.get(split[0]) + "\t" + target_high_expr + "\t" +  gtex_avg_0.get(split[0]) + "\t" + gtex_low_expr_0 + "\t" +  gtex_data_0.get(split[0]) + "\n");
 					String tag = split[0];
-					String chr = tag.split("\\|")[1];
+					
+					String chr = "NA"; 
+					if (chr_index == -1) {
+						chr = tag.split("\\|")[1];
+					} else {
+						chr = split[chr_index];
+					}
+					String start = "NA";
+					if (start_index == -1) {
+						start = tag.split("\\|")[2];
+					} else {
+						start = split[start_index];
+					}
+					String end = "NA";
+					if (end_index == -1) {
+						end = tag.split("\\|")[3];
+					} else {
+						end = split[end_index];
+					}
+					
+					String direction = "NA";
+					if (direction_index == -1) {
+						direction = tag.split("\\|")[4];
+					} else {
+						direction = split[direction_index];
+					}
+					
+					
+					/*String chr = tag.split("\\|")[1];
 					String start = tag.split("\\|")[2];
 					String end = tag.split("\\|")[3];
-					String direction = tag.split("\\|")[5];
+					String direction = tag.split("\\|")[5];*/
 					if (direction.equals("F")) {
 						direction = "+";
 					}

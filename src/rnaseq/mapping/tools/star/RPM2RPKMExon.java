@@ -46,39 +46,41 @@ public class RPM2RPKMExon {
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
 			while (in.ready()) {
 				String str = in.readLine();
-				total++;
-				String[] split = str.split("\t");
-				if (split.length > 8) {
-					String type = split[2];
-					String geneID = grabMeta(split[8], "gene_id");
-					String direction = split[6];
-					String transcriptID = grabMeta(split[8], "transcript_id");
-					if (type.equals("exon")) {
-						if (geneID2transcriptID.containsKey(geneID)) {
-							LinkedList list = (LinkedList)geneID2transcriptID.get(geneID);
-							if (!list.contains(transcriptID)) {
+				if (!str.substring(0, 2).equals("##")) {
+					total++;
+					String[] split = str.split("\t");
+					if (split.length > 8) {
+						String type = split[2];
+						String geneID = grabMeta(split[8], "gene_id");
+						String direction = split[6];
+						String transcriptID = grabMeta(split[8], "transcript_id");
+						if (type.equals("exon")) {
+							if (geneID2transcriptID.containsKey(geneID)) {
+								LinkedList list = (LinkedList)geneID2transcriptID.get(geneID);
+								if (!list.contains(transcriptID)) {
+									list.add(transcriptID);
+									geneID2transcriptID.put(geneID, list);
+								}
+							} else {
+								LinkedList list = new LinkedList();
 								list.add(transcriptID);
 								geneID2transcriptID.put(geneID, list);
 							}
-						} else {
-							LinkedList list = new LinkedList();
-							list.add(transcriptID);
-							geneID2transcriptID.put(geneID, list);
 						}
-					}
-					transcriptID2geneID.put(transcriptID, geneID);
-					int start = new Integer(split[3]);
-					int end = new Integer(split[4]);
-					if (type.equals("exon")) {
-						int length = end - start + 1;
-						if (transcripts.containsKey(transcriptID)) {
-							int orig_length = (Integer)transcripts.get(transcriptID);
-							length += orig_length ;
-							//if (orig_length < length) {
-							transcripts.put(transcriptID, length);
-							//}
-						} else {
-							transcripts.put(transcriptID, length);
+						transcriptID2geneID.put(transcriptID, geneID);
+						int start = new Integer(split[3]);
+						int end = new Integer(split[4]);
+						if (type.equals("exon")) {
+							int length = end - start + 1;
+							if (transcripts.containsKey(transcriptID)) {
+								int orig_length = (Integer)transcripts.get(transcriptID);
+								length += orig_length ;
+								//if (orig_length < length) {
+								transcripts.put(transcriptID, length);
+								//}
+							} else {
+								transcripts.put(transcriptID, length);
+							}
 						}
 					}
 				}
@@ -145,10 +147,12 @@ public class RPM2RPKMExon {
 	public static String grabMeta(String text, String id) {
 		String returnval = "";
 		if (text.contains(id)) {
-			String val = text.split(id)[1].split(";")[0].trim();
-			val = val.replaceAll("\"", "");
-			val.trim();
-			returnval = val;
+			if (text.split(id).length > 1) {
+				String val = text.split(id)[1].split(";")[0].trim();
+				val = val.replaceAll("\"", "");
+				val.trim();
+				returnval = val;
+			}
 		}
 		return returnval;
 	}

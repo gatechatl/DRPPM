@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 /**
  * Perform check whether the files have the same gene order.
- * If satisfy the condidtion, then merge files into a single matrix
+ * If contain same gene order, then merge files into a single matrix
  * @author tshaw
  *
  */

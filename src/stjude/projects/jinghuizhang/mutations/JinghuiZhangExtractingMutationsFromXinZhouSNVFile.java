@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Iterator;
 
 
 /**
@@ -24,7 +25,7 @@ public class JinghuiZhangExtractingMutationsFromXinZhouSNVFile {
 		return "JinghuiZhang";
 	}
 	public static String parameter_info() {
-		return "[cancer_driver gene list file] [vcf file] [outputRaw] [outputResult]";
+		return "[cancer_driver gene list file] [vcf file] [outputRaw] [outputResult] [outputFile_mutcount]";
 	}
 	public static void execute(String[] args) {
 		
@@ -51,6 +52,13 @@ public class JinghuiZhangExtractingMutationsFromXinZhouSNVFile {
 			String outputFileGeneRaw = args[2]; //"Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\PCGP_References\\PanCancer230_Sample_Raw.txt";
 			FileWriter fwriterGeneRaw = new FileWriter(outputFileGeneRaw);
 			BufferedWriter outGeneRaw = new BufferedWriter(fwriterGeneRaw);
+			
+			String outputFile_mutcount = args[4];
+			FileWriter fwriter_mutcount = new FileWriter(outputFile_mutcount);
+			BufferedWriter out_mutcount = new BufferedWriter(fwriter_mutcount);
+			out_mutcount.write("Sample\tPlatform\tCount");
+			
+			HashMap mutcount = new HashMap();
 			
 			String input_vcf_file = args[1]; //"Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\PCGP_References\\pediatric.hg19.vcf";
 			fstream = new FileInputStream(input_vcf_file);
@@ -83,6 +91,34 @@ public class JinghuiZhangExtractingMutationsFromXinZhouSNVFile {
 									if (split[i].contains("somatic")) {
 										System.out.println(sample_info[i] + "\t" + split[i]);
 										out.write(sample_info[i] + "\t" + split[i] + "\n");
+										String platform = "NA";
+										if (split[i].contains(":wgs:")) {
+											platform = "WGS";
+										} else if (split[i].contains(":cgi:")) {
+											platform = "CGI";
+										} else if (split[i].contains(":wes:")) {
+											platform = "WES";
+										} else if (split[i].contains(":cc:")) {
+											platform = "CC";
+										} else {
+											platform = "OTHER";
+										}
+										if (mutcount.containsKey(sample_info[i])) {
+											HashMap platforms = (HashMap)mutcount.get(sample_info[i]);
+											if (platforms.containsKey(platform)) {
+												int count = (Integer)platforms.get(platform);
+												count++;
+												platforms.put(platform, count);
+												mutcount.put(sample_info[i], platforms);
+											} else {												
+												platforms.put(platform, 1);
+												mutcount.put(sample_info[i], platforms);	
+											}
+										} else {
+											HashMap platforms = new HashMap();
+											platforms.put(platform, 1);
+											mutcount.put(sample_info[i], platforms);
+										}
 									}
 								}
 							}
@@ -100,6 +136,26 @@ public class JinghuiZhangExtractingMutationsFromXinZhouSNVFile {
 			in.close();
 			out.close();
 			outGeneRaw.close();
+			
+			Iterator itr = mutcount.keySet().iterator();
+			while (itr.hasNext()) {
+				String sampleName = (String)itr.next();
+				HashMap platforms = (HashMap)mutcount.get(sampleName);
+				
+				int max = 0;
+				String max_platform = "";
+				Iterator itr2 = platforms.keySet().iterator();
+				while (itr2.hasNext()) {
+					String platform = (String)itr2.next();
+					int count = (Integer)platforms.get(platform);
+					if (count > max) {
+						max = count;
+						max_platform = platform;
+					}
+				}
+				out_mutcount.write(sampleName + "\t" + max_platform + "\t" + max + "\n");								
+			}
+			out_mutcount.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -16,11 +16,16 @@ public class GTFFile {
 	public static HashMap gene2transcript = new HashMap();
 	public static HashMap exon2transcript = new HashMap();
 	public static HashMap transcript2gene = new HashMap();
+	public static HashMap transcript_clean2gene_clean = new HashMap();
+	public static HashMap transcript_clean2gene = new HashMap();
+	
 	public static HashMap transcript2exon = new HashMap();
 	public static HashMap geneid2biotype = new HashMap();
 	public static HashMap geneName2biotype = new HashMap();
 	public static HashMap geneName2geneID = new HashMap();
 	public static HashMap geneid2coord = new HashMap();
+	public static HashMap coord2geneid = new HashMap();
+	public static HashMap coord2transcriptid = new HashMap();
 	public static void initialize(String fileName) {
 		
 		try {
@@ -39,10 +44,20 @@ public class GTFFile {
 					String meta = split[8];
 					
 					// grab all the meta data information from the GTF file
-					String gene_id = grabMeta(meta, "gene_id");
-					String transcript_id = grabMeta(meta, "transcript_id");
-					String exon_number = grabMeta(meta, "exon_number");
+					String gene_id = "";
+					String transcript_id = ""; 
+					String exon_number = ""; 
 					String gene_biotype = "";
+					
+					if (meta.contains("gene_id")) {
+						gene_id = grabMeta(meta, "gene_id");
+					}
+					if (meta.contains("transcript_id")) {
+						transcript_id = grabMeta(meta, "transcript_id");
+					}
+					if (meta.contains("exon_number")) {
+						exon_number = grabMeta(meta, "exon_number");
+					}
 					if (meta.contains("gene_biotype")) {
 						gene_biotype = grabMeta(meta, "gene_biotype");
 					} else if (meta.contains("gene_type")) {
@@ -58,6 +73,34 @@ public class GTFFile {
 						biotype = grabMeta(meta, "gene_type");
 					} else if (meta.contains("transcript_type")) {
 						biotype = grabMeta(meta, "transcript_type");
+					}
+					
+					if (!gene_id.equals("")) {
+						if (coord2geneid.containsKey(chr + "\t" + start + "\t" + end)) {
+							LinkedList list = (LinkedList)coord2geneid.get(chr + "\t" + start + "\t" + end);
+							if (!list.contains(gene_id)) {
+								list.add(gene_id);
+							}
+							coord2geneid.put(chr + "\t" + start + "\t" + end, list);
+						} else {
+							LinkedList list = new LinkedList();						
+							list.add(gene_id);
+							coord2geneid.put(chr + "\t" + start + "\t" + end, list);
+						}
+					}
+					
+					if (!transcript_id.equals("")) {
+						if (coord2transcriptid.containsKey(chr + "\t" + start + "\t" + end)) {
+							LinkedList list = (LinkedList)coord2transcriptid.get(chr + "\t" + start + "\t" + end);
+							if (!list.contains(transcript_id)) {
+								list.add(transcript_id);
+							}
+							coord2transcriptid.put(chr + "\t" + start + "\t" + end, list);
+						} else {
+							LinkedList list = new LinkedList();						
+							list.add(transcript_id);
+							coord2transcriptid.put(chr + "\t" + start + "\t" + end, list);
+						}
 					}
 					if (geneid2coord.containsKey(gene_id)) {
 						int length = new Integer(end) - new Integer(start);
@@ -99,7 +142,8 @@ public class GTFFile {
 						gene2transcript.put(gene_id, transcript_id);
 					}
 					transcript2gene.put(transcript_id, gene_id);
-					
+					transcript_clean2gene_clean.put(transcript_id.split("\\.")[0], gene_id.split("\\.")[0]);
+					transcript_clean2gene.put(transcript_id.split("\\.")[0], gene_id);
 					// the tag for the exon
 					String new_exon = "CHR" + chr + ":" + start + "-" + end + ":" + direct + ":" + exon_number;
 					
@@ -135,10 +179,12 @@ public class GTFFile {
 	public static String grabMeta(String text, String id) {
 		String returnval = "";
 		if (text.contains(id)) {
-			String val = text.split(id)[1].split(";")[0].trim();
-			val = val.replaceAll("\"", "");
-			val.trim();
-			returnval = val;
+			if (text.split(id).length > 1) {
+				String val = text.split(id)[1].split(";")[0].trim();
+				val = val.replaceAll("\"", "");
+				val.trim();
+				returnval = val;
+			}
 		}
 		return returnval;
 	}

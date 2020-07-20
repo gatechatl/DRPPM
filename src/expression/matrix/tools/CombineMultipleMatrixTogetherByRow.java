@@ -9,15 +9,15 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
- * Perform check whether the files have the same gene order.
- * If satisfy the condidtion, then merge files into a single matrix
+ * Perform check whether the files have the same sample order.
+ * If contain same sample order, then merge files into a single matrix
  * @author tshaw
  *
  */
 public class CombineMultipleMatrixTogetherByRow {
 	
 	public static String description() {
-		return "Perform check whether the files have the same gene order. If satisfy the condidtion, then merge files into a single matrix";
+		return "Perform check whether the files have the same sampleName order. If satisfy the condidtion, then merge files into a single matrix";
 	}
 	public static String type() {
 		return "EXPRESSION";

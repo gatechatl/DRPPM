@@ -79,7 +79,11 @@ import idconversion.tools.ConvertUniprot2GeneAndAppend;
 import idconversion.tools.EnsemblGeneID2GeneName;
 import idconversion.tools.EnsemblGeneID2GeneNameXenograft;
 import idconversion.tools.EnsemblGeneIDAppendAnnotation;
+import idconversion.tools.EnsemblGeneIDAppendAnnotationCoord;
 import idconversion.tools.EnsemblGeneIDAppendGeneName;
+import idconversion.tools.EnsemblTranscriptID2GeneNameAppendCoord;
+import idconversion.tools.EnsemblTranscriptID2GeneNameAppened;
+import idconversion.tools.EnsembleGeneIDRemoveGeneVersion;
 import idconversion.tools.GeneName2EnsemblID;
 import idconversion.tools.GeneralIDConversion;
 import idconversion.tools.RefSeq2GeneName;
@@ -107,6 +111,8 @@ import expression.matrix.tools.AppendMADValue;
 import expression.matrix.tools.AppendMatrixTogether;
 import expression.matrix.tools.AppendNumberToDuplicateRowNames;
 import expression.matrix.tools.CalculateCorrelationMatrix;
+import expression.matrix.tools.CalculateSTATOfMatrixRow;
+import expression.matrix.tools.CombineMatrixPreCheckGeneOrderTheSame;
 import expression.matrix.tools.CombineMultipleMatrixTogether;
 import expression.matrix.tools.CombineMultipleMatrixTogetherByRow;
 import expression.matrix.tools.CombineTwoMatrixWithMismatch;
@@ -136,6 +142,7 @@ import expression.matrix.tools.MultiplyMatrixValuesWithFactor;
 import expression.matrix.tools.OrderGeneMatrixBasedOnTTestDist;
 import expression.matrix.tools.QuantileNormalization;
 import expression.matrix.tools.RemoveColumnWithNAs;
+import expression.matrix.tools.RemoveColumnWithNaN;
 import expression.matrix.tools.RemoveColumnWithNulls;
 import expression.matrix.tools.RemoveColumnsFromMatrix;
 import expression.matrix.tools.RemoveDuplicatedSampleName;
@@ -146,11 +153,14 @@ import expression.matrix.tools.ReplaceNAwithZero;
 import expression.matrix.tools.ReplaceNegWithZero;
 import expression.matrix.tools.SummarizeMATSGenes;
 import expression.matrix.tools.TransposeMatrix;
+import expression.matrix.tools.TransposeMatrixPython;
+import expression.matrix.tools.TransposeMatrixSplit;
 import expressionanalysis.tools.batchcorrection.TwoGroupMeanCentering;
 import expressionanalysis.tools.batchcorrection.TwoGroupMeanCenteringFlex;
 import expressionanalysis.tools.boxplot.GenerateExpressionBoxPlot;
 import expressionanalysis.tools.genename.GeneSymbol2UCSCIDAppend;
 import expressionanalysis.tools.geneset.activity.CalculateGeneActivityUnweightedZScore;
+import expressionanalysis.tools.grn.aracne.GenerateARACNESubNetwork;
 import expressionanalysis.tools.gsea.ConvertGSEAList2AnnotationFile;
 import expressionanalysis.tools.gsea.GSEAHeatmapFlex;
 import expressionanalysis.tools.gsea.SummarizeGSEAResult;
@@ -159,6 +169,7 @@ import expressionanalysis.tools.unsupervised.GenerateRScriptForCalculatingMADSco
 import expressionanalysis.tools.unsupervised.GenerateRScriptForCalculatingVARScores;
 import expressionanalysis.tools.unsupervised.GenerateRScriptForLIMMALogNormalize;
 import expressionanalysis.tools.unsupervised.GenerateRScriptForPVClust;
+import functional.pathway.enrichment.CombinePathwayResult;
 import functional.pathway.enrichment.FilterORAResults;
 import functional.pathway.enrichment.FilterORAResultsFlex;
 import functional.pathway.enrichment.GenerateScriptForORA;
@@ -317,6 +328,7 @@ import proteomics.phospho.tools.pssm.distribution.RandomSelectionPSSM;
 import proteomics.phospho.tools.rarefractioncurve.EstimatingTotalCoverage;
 import references.gtf.manipulation.Filter3PrimeGTFExon;
 import references.gtf.manipulation.xenograft.Mouse2GTF;
+import references.gtf.qc.GTFFileGeneName;
 import references.gtf.statistics.GTFSummaryStatistics;
 import rnaseq.bed.coverage.circos.GenerateCircosCoverageBed;
 import rnaseq.exon.quantification.GenerateGTFFileWithExonID;
@@ -342,6 +354,7 @@ import rnaseq.mapping.tools.star.RPM2RPKMExon;
 import rnaseq.mapping.tools.star.RPM2RPKMExonRelaxedGeneID;
 import rnaseq.mapping.tools.star.RPM2RPKMTranscript;
 import rnaseq.mapping.tools.star.RawCount2RPM;
+import rnaseq.mapping.tools.star.RawCount2RPMProteinFeatures;
 import rnaseq.mapping.tools.star.RawCount2RPMSkipFirstTwoColumns;
 import rnaseq.mapping.tools.star.STARMappingScriptGenerator;
 import rnaseq.mapping.tools.star.STARMappingScriptGeneratorForTrimFastq;
@@ -355,11 +368,22 @@ import rnaseq.pcpa.ExtractPolyAReadsUsePolyALibrarySingleCell;
 import rnaseq.pcpa.GeneratePCPAHumanScriptComplete;
 import rnaseq.pcpa.MatchFq2Bam;
 import rnaseq.pcpa.PCPAAppendMetaDeta;
+import rnaseq.quantification.kallisto.EvaluateExonExpressionKallisto;
+import rnaseq.quantification.kallisto.GenerateScriptForKallisto;
+import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrix;
+import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrixSampleCol;
 import rnaseq.splicing.intronretention.CombineSplicingDeficiencyName;
 import rnaseq.splicing.intronretention.CombineSplicingDeficiencyNameMeta;
+import rnaseq.splicing.intronretention.CombineSplicingDeficiencyNameMetaHG38;
 import rnaseq.splicing.intronretention.FilterReadsForSDScore;
 import rnaseq.splicing.intronretention.OverlapAllMouseHuman;
 import rnaseq.splicing.intronretention.OverlapMouseHumanGeneName;
+import rnaseq.splicing.juncsalvager.GenerateCombinedBEDFileFromJuncSalvagerSummary;
+import rnaseq.splicing.juncsalvager.JuncSalvagerPipeline;
+import rnaseq.splicing.juncsalvager.JuncSalvagerSplitMatrixCandidates;
+import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxonTestRank;
+import rnaseq.splicing.juncsalvager.SummarizeNovelExonAltStartSiteMatrix;
+import rnaseq.splicing.juncsalvager.SummarizeNovelExonSiteMatrix;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
 import rnaseq.splicing.mats308.SummarizeMATSSummary;
@@ -376,11 +400,8 @@ import rnaseq.splicing.mats402.SummarizeRMATS402SDResultWithBlackList;
 import rnaseq.splicing.rnapeg.GeneratePseudoReverseReferenceForRNAPeg;
 import rnaseq.splicing.rnapeg.GenerateReverseReference;
 import rnaseq.splicing.rnapeg.RNApegDefineExonBasedoOnBW;
+import rnaseq.splicing.rnapeg.RNApegPSIExonSkipping;
 import rnaseq.splicing.rnapeg.RNApegPostProcessingExons;
-import rnaseq.splicing.rnapeg.juncsalvager.GenerateCombinedBEDFileFromJuncSalvagerSummary;
-import rnaseq.splicing.rnapeg.juncsalvager.JuncSalvagerPipeline;
-import rnaseq.splicing.rnapeg.juncsalvager.SummarizeNovelExonAltStartSiteMatrix;
-import rnaseq.splicing.rnapeg.juncsalvager.SummarizeNovelExonSiteMatrix;
 import rnaseq.splicing.spladder.CustomFilterSpladderHardFilter;
 import rnaseq.splicing.spladder.CustomFilterSpladderSingleType;
 import rnaseq.splicing.spladder.SpladderScriptGenerator;
@@ -395,6 +416,8 @@ import rnaseq.tools.genelengthanalysis.TranscriptLengthSlidingWindowInhibitedGen
 import rnaseq.tools.metadata.AppendMetadataTag2RNAseqMatrixSampleName;
 import rnaseq.tools.pipeline.ExpandGeneListAfterLIMMA;
 import rnaseq.tools.pipeline.GenerateLIMMAComparisonScript;
+import rnaseq.tools.qc.SetupInferExperimentPipeline;
+import rnaseq.tools.qc.star_2_7_1a.ExtractQCMetricsSTAR271a;
 import rnaseq.tools.quantification.CalculateExonRPKM;
 import rnaseq.tools.quantification.CalculateIntronRPKM;
 import rnaseq.tools.singlecell.bootstrap.Filter0PSamples;
@@ -437,6 +460,7 @@ import rnaseq.tools.singlecell.tenxgenomics.cellranger.ConvertMatrix2CellRangerE
 import rnaseq.tools.singlecell.tenxgenomics.cellranger.ConvertMatrix2CellRangerExpressionOutputNoGTF;
 import rnaseq.tools.singlecell.tenxgenomics.cellranger.ConvertMatrix2CellRangerExpressionOutputNoGTFNoManip;
 import rnaseq.tools.singlecell.tenxgenomics.cellranger.RunSeuratAnalysisFromCellRanger;
+import rnaseq.tools.singlecell.tenxgenomics.cellranger.RunSeuratFindMarkerFromCellRanger;
 import rnaseq.tools.singlecell.tenxgenomics.cellranger.SamHeader2CellType;
 import rnaseq.tools.singlecell.tenxgenomics.cellranger.SeuratCalculateClusterDistribution;
 import rnaseq.tools.singlecell.tenxgenomics.cellranger.SpecialClassForDougGreen;
@@ -478,26 +502,39 @@ import stjude.projects.jinghuizhang.alexgout.cloudproject.AlexGoutAppendMutation
 import stjude.projects.jinghuizhang.dexseq.exon.annotation.gtex.JinghuiZhangGenerateSampleInformationForGTEx;
 import stjude.projects.jinghuizhang.dexseq.exon.annotation.pcgptarget.JinghuiZhangCalculateSampleTypeExonExpressionMax;
 import stjude.projects.jinghuizhang.dexseq.exon.annotation.pcgptarget.JinghuiZhangCalculateSampleTypeExonExpressionMedian;
+import stjude.projects.jinghuizhang.dexseq.exon.annotation.pcgptarget.JinghuiZhangCalculateSampleTypeExonExpressionMedianNewAnnot;
 import stjude.projects.jinghuizhang.dexseq.exon.annotation.pcgptarget.JinghuiZhangFilterLiqingDEXSeqExons;
 import stjude.projects.jinghuizhang.dexseq.exon.annotation.pcgptarget.JinghuiZhangRemoveTextFromHeader;
 import stjude.projects.jinghuizhang.dexseq.exon.cart.candidate.JinghuiZhangBedFasta2Peptide;
 import stjude.projects.jinghuizhang.dexseq.exon.cart.candidate.JinghuiZhangFilteringThePrioritizedExonList;
+import stjude.projects.jinghuizhang.dexseq.exon.cart.candidate.JinghuiZhangHarmonizeCandidatesFinal;
 import stjude.projects.jinghuizhang.dexseq.exon.cart.candidate.JinghuiZhangOverlapCandidateWithProteomicsID;
 import stjude.projects.jinghuizhang.dexseq.exon.cart.candidate.JinghuiZhangOverlapExonWithOriginalExonAnnotation;
 import stjude.projects.jinghuizhang.dexseq.exon.cart.candidate.JinghuiZhangPrioritizeExonCandidates;
 import stjude.projects.jinghuizhang.dexseq.exon.cart.candidate.JinghuiZhangRenameExonCreateBED;
+import stjude.projects.jinghuizhang.dexseq.exon.estimategenelevel.JinghuiZhangDEXseq2GeneLevel;
 import stjude.projects.jinghuizhang.dexseq.exon.multimap.manuscript.JinghuiZhangRemovePanCanECMExon;
 import stjude.projects.jinghuizhang.dexseq.exon.multimap.manuscript.JinghuiZhangSummarizeNumberOfExonWithMultimapping;
+import stjude.projects.jinghuizhang.expressionsummary.JinghuiZhangGenerateExpressionSummary;
 import stjude.projects.jinghuizhang.hg38mapping.star.JinghuiZhangSTARMappingFromYawei;
 import stjude.projects.jinghuizhang.hg38mapping.star.JinghuiZhangSTARMappingFromYaweiSingleEnd;
 import stjude.projects.jinghuizhang.hg38mapping.star.JinghuiZhangSTARMappingFromYaweiUpdated;
-import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangAppendTCGAClusterInformation;
+import stjude.projects.jinghuizhang.hla.trust4.ConvertSTARBamLstTo2CoFileLst;
+import stjude.projects.jinghuizhang.hla.trust4.EstimateSomaticMutationRateIGHFromTRUST4;
+import stjude.projects.jinghuizhang.hla.trust4.GenerateScriptForTRUST4;
+import stjude.projects.jinghuizhang.hla.trust4.JinghuiZhangAppendSJDiseaseType;
+import stjude.projects.jinghuizhang.hla.trust4.JinghuiZhangHLAJiccardDistanceMatrix;
+import stjude.projects.jinghuizhang.hla.trust4.TRUST4PostProcess2MatrixSummary;
+import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangAppendTCGAImmuneClusterInformation;
 import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangStatisticalTestForEnrichedImmuneSignatures;
 import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangStatisticalTestForEnrichedImmuneSignaturesOfMutSig;
+import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangStatisticalTestForEnrichedMutationImmuneSignature;
 import stjude.projects.jinghuizhang.mutations.JinghuiZhangAppendMutationInformationToMetaInfo;
 import stjude.projects.jinghuizhang.mutations.JinghuiZhangCustomBoxplotForImmuneSignatures;
+import stjude.projects.jinghuizhang.mutations.JinghuiZhangCustomBoxplotForImmuneSignaturesCleaner;
 import stjude.projects.jinghuizhang.mutations.JinghuiZhangExtractFusionFromXinZhouCNVSVFile;
 import stjude.projects.jinghuizhang.mutations.JinghuiZhangExtractSCNAFromXinZhouCNVSVFile;
+import stjude.projects.jinghuizhang.mutations.JinghuiZhangExtractingMutCountFromXinZhouSNVFile;
 import stjude.projects.jinghuizhang.mutations.JinghuiZhangExtractingMutationsFromXinZhouSNVFile;
 import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculateGTExTotalReads;
 import stjude.projects.jinghuizhang.pcgpaltsplice.JinghuiZhangCalculatePCGPExonCount;
@@ -531,6 +568,7 @@ import stjude.projects.jpaultaylor.JPaulTaylorEstimateCoverageID;
 import stjude.projects.jpaultaylor.JPaulTaylorEstimateCoverageSpecial;
 import stjude.projects.jpaultaylor.MatchUniprotGeneName2GeneLCDLength;
 import stjude.projects.jpaultaylor.SplitFastaFile;
+import stjude.projects.junminpeng.excretome.phospho.JunminPengCheckFAM20CPhosphoScore;
 import stjude.projects.leventaki.FilterCNVkitcnrfiles;
 import stjude.projects.leventaki.High20ToTHETA;
 import stjude.projects.leventaki.LeventakiAddChrBW;
@@ -610,6 +648,7 @@ import stjude.projects.xiangchen.XiangChenExtractMetaData;
 import stjude.projects.xiangchen.XiangChenGrabTopVariableGenes;
 import stjude.projects.xiangchen.XiangChenGrabTopVariableGenesFilterSNPXY;
 import stjude.projects.xiaotuma.aml.download.XiaotuMaDownloadAMLFiles;
+import stjude.projects.xiaotuma.aml.rnaseq.checkexpression.XiaotuMaCheckGTExExpression;
 import stjude.projects.xiaotuma.aml.rnaseq.rnaindel.XiaotuMaGenerateRNAindelScript;
 import stjude.projects.xiaotuma.fredhutch.amlproject.fusion.XiaotuAppendTimAnnotationBamViewerLinksUpdate;
 import stjude.projects.xiaotuma.fredhutch.amlproject.fusion.XiaotuMaCompileFusionListHQFebUpdate;
@@ -630,6 +669,9 @@ public class ProgramDescriptions {
 		
 		if (CalculateIntersectingGenes.type().equals(type)) {
 			result += " -CalculateIntersectingGenes: " + CalculateIntersectingGenes.description() + "\n";
+		}
+		if (GTFFileGeneName.type().equals(type)) {
+			result += " -GTFFileGeneName: " + GTFFileGeneName.description() + "\n";
 		}
 		if (CombineEnrichmentPathwayPvalues.type().equals(type)) {
 			result += " -CombineEnrichmentPathwayPvalues: " + CombineEnrichmentPathwayPvalues.description() + "\n";
@@ -2162,6 +2204,9 @@ public class ProgramDescriptions {
 		if (SeuratCalculateClusterDistribution.type().equals(type)) {
 			result += "SeuratCalculateClusterDistribution: " + SeuratCalculateClusterDistribution.description() + "\n";
 		}
+		if (RunSeuratFindMarkerFromCellRanger.type().equals(type)) {
+			result += "RunSeuratFindMarkerFromCellRanger: " + RunSeuratFindMarkerFromCellRanger.description() + "\n";
+		}
 		if (SamHeader2CellType.type().equals(type)) {
 			result += "SamHeader2CellType: " + SamHeader2CellType.description() + "\n";
 		}
@@ -2364,8 +2409,8 @@ public class ProgramDescriptions {
 		if (JinghuiZhangStatisticalTestForEnrichedImmuneSignaturesOfMutSig.type().equals(type)) {
 			result += "JinghuiZhangStatisticalTestForEnrichedImmuneSignaturesOfMutSig: " + JinghuiZhangStatisticalTestForEnrichedImmuneSignaturesOfMutSig.description() + "\n";
 		}
-		if (JinghuiZhangAppendTCGAClusterInformation.type().equals(type)) {
-			result += "JinghuiZhangAppendTCGAClusterInformation: " + JinghuiZhangAppendTCGAClusterInformation.description() + "\n";
+		if (JinghuiZhangAppendTCGAImmuneClusterInformation.type().equals(type)) {
+			result += "JinghuiZhangAppendTCGAClusterInformation: " + JinghuiZhangAppendTCGAImmuneClusterInformation.description() + "\n";
 		}
 		if (GSEAHeatmapFlex.type().equals(type)) {
 			result += "GSEAHeatmapFlex: " + GSEAHeatmapFlex.description() + "\n";
@@ -2423,6 +2468,9 @@ public class ProgramDescriptions {
 		}
 		if (JinghuiZhangCalculateSampleTypeExonExpressionMedian.type().equals(type)) {
 			result += "JinghuiZhangCalculateSampleTypeExonExpressionMedian: " + JinghuiZhangCalculateSampleTypeExonExpressionMedian.description() + "\n";
+		}
+		if (JinghuiZhangCalculateSampleTypeExonExpressionMedianNewAnnot.type().equals(type)) {
+			result += "JinghuiZhangCalculateSampleTypeExonExpressionMedianNewAnnot: " + JinghuiZhangCalculateSampleTypeExonExpressionMedianNewAnnot.description() + "\n";
 		}
 		if (JinghuiZhangRemoveTextFromHeader.type().equals(type)) {
 			result += "JinghuiZhangRemoveTextFromHeader: " + JinghuiZhangRemoveTextFromHeader.description() + "\n";
@@ -2490,9 +2538,118 @@ public class ProgramDescriptions {
 		if (RemoveChrYGenesBasedOnGTF.type().equals(type)) {
 			result += "RemoveChrYGenesBasedOnGTF: " + RemoveChrYGenesBasedOnGTF.description() + "\n";
 		}
+		if (JinghuiZhangHarmonizeCandidatesFinal.type().equals(type)) {
+			result += "JinghuiZhangHarmonizeCandidatesFinal: " + JinghuiZhangHarmonizeCandidatesFinal.description() + "\n";
+		}
+		if (JinghuiZhangGenerateExpressionSummary.type().equals(type)) {
+			result += "JinghuiZhangGenerateExpressionSummary: " + JinghuiZhangGenerateExpressionSummary.description() + "\n";
+		}
+		if (JinghuiZhangStatisticalTestForEnrichedMutationImmuneSignature.type().equals(type)) {
+			result += "JinghuiZhangStatisticalTestForEnrichedMutationImmuneSignature: " + JinghuiZhangStatisticalTestForEnrichedMutationImmuneSignature.description() + "\n";
+		}
+		if (CombinePathwayResult.type().equals(type)) {
+			result += "CombinePathwayResult: " + CombinePathwayResult.description() + "\n";
+		}
+		if (GenerateARACNESubNetwork.type().equals(type)) {
+			result += "GenerateARACNESubNetwork: " + GenerateARACNESubNetwork.description() + "\n";
+		}
+		if (GenerateScriptForTRUST4.type().equals(type)) {
+			result += "GenerateScriptForTRUST4: " + GenerateScriptForTRUST4.description() + "\n";
+		}
+		if (ConvertSTARBamLstTo2CoFileLst.type().equals(type)) {
+			result += "ConvertSTARBamLstTo2CoFileLst: " + ConvertSTARBamLstTo2CoFileLst.description() + "\n";
+		}
+		if (JinghuiZhangDEXseq2GeneLevel.type().equals(type)) {
+			result += "JinghuiZhangDEXseq2GeneLevel: " + JinghuiZhangDEXseq2GeneLevel.description() + "\n";
+		}
+		if (SetupInferExperimentPipeline.type().equals(type)) {
+			result += "SetupInferExperimentPipeline: " + SetupInferExperimentPipeline.description() + "\n";
+		}
+		if (TRUST4PostProcess2MatrixSummary.type().equals(type)) {
+			result += "TRUST4PostProcess2MatrixSummary: " + TRUST4PostProcess2MatrixSummary.description() + "\n";
+		}
+		if (EstimateSomaticMutationRateIGHFromTRUST4.type().equals(type)) {
+			result += "EstimateSomaticMutationRateIGHFromTRUST4: " + EstimateSomaticMutationRateIGHFromTRUST4.description() + "\n";
+		}
+		if (JinghuiZhangExtractingMutCountFromXinZhouSNVFile.type().equals(type)) {
+			result += "JinghuiZhangExtractingMutCountFromXinZhouSNVFile: " + JinghuiZhangExtractingMutCountFromXinZhouSNVFile.description() + "\n";
+		}
+		if (EnsemblTranscriptID2GeneNameAppened.type().equals(type)) {
+			result += "EnsemblTranscriptID2GeneNameAppened: " + EnsemblTranscriptID2GeneNameAppened.description() + "\n";
+		}
+		if (EnsemblTranscriptID2GeneNameAppendCoord.type().equals(type)) {
+			result += "EnsemblTranscriptID2GeneNameAppendCoord: " + EnsemblTranscriptID2GeneNameAppendCoord.description() + "\n";
+		}
+		if (CombineSplicingDeficiencyNameMetaHG38.type().equals(type)) {
+			result += "CombineSplicingDeficiencyNameMetaHG38: " + CombineSplicingDeficiencyNameMetaHG38.description() + "\n";
+		}
+		
+		if (JinghuiZhangHLAJiccardDistanceMatrix.type().equals(type)) {
+			result += "JinghuiZhangHLAJiccardDistanceMatrix: " + JinghuiZhangHLAJiccardDistanceMatrix.description() + "\n";
+		}
+		if (JinghuiZhangAppendSJDiseaseType.type().equals(type)) {
+			result += "JinghuiZhangAppendSJDiseaseType: " + JinghuiZhangAppendSJDiseaseType.description() + "\n";
+		}
+		if (JinghuiZhangCustomBoxplotForImmuneSignaturesCleaner.type().equals(type)) {
+			result += "JinghuiZhangCustomBoxplotForImmuneSignaturesCleaner: " + JinghuiZhangCustomBoxplotForImmuneSignaturesCleaner.description() + "\n";
+		}
+		if (RawCount2RPMProteinFeatures.type().equals(type)) {
+			result += "RawCount2RPMProteinFeatures: " + RawCount2RPMProteinFeatures.description() + "\n";
+		}
+		if (GenerateScriptForKallisto.type().equals(type)) {
+			result += "GenerateScriptForKallisto: " + GenerateScriptForKallisto.description() + "\n";
+		}
+		if (SummarizeKallistoAbundanceMatrix.type().equals(type)) {
+			result += "SummarizeKallistoAbundanceMatrix: " + SummarizeKallistoAbundanceMatrix.description() + "\n";
+		}
+		if (TransposeMatrixSplit.type().equals(type)) {
+			result += "TransposeMatrixSplit: " + TransposeMatrixSplit.description() + "\n";
+		}
+		if (SummarizeKallistoAbundanceMatrixSampleCol.type().equals(type)) {
+			result += "SummarizeKallistoAbundanceMatrixSampleCol: " + SummarizeKallistoAbundanceMatrixSampleCol.description() + "\n";
+		}
+		if (TransposeMatrixPython.type().equals(type)) {
+			result += "TransposeMatrixPython: " + TransposeMatrixPython.description() + "\n";
+		}
+		if (EvaluateExonExpressionKallisto.type().equals(type)) {
+			result += "EvaluateExonExpressionKallisto: " + EvaluateExonExpressionKallisto.description() + "\n";
+		}
+		if (RNApegPSIExonSkipping.type().equals(type)) {
+			result += "RNApegPSIExonSkipping: " + RNApegPSIExonSkipping.description() + "\n";
+		}
+		if (JunminPengCheckFAM20CPhosphoScore.type().equals(type)) {
+			result += "JunminPengCheckFAM20CPhosphoScore: " + JunminPengCheckFAM20CPhosphoScore.description() + "\n";
+		}
+		if (XiaotuMaCheckGTExExpression.type().equals(type)) {
+			result += "XiaotuMaCheckGTExExpression: " + XiaotuMaCheckGTExExpression.description() + "\n";
+		}
+		if (ExtractQCMetricsSTAR271a.type().equals(type)) {
+			result += "ExtractQCMetricsSTAR271a: " + ExtractQCMetricsSTAR271a.description() + "\n";
+		}
+		if (RemoveColumnWithNaN.type().equals(type)) {
+			result += "RemoveColumnWithNaN: " + RemoveColumnWithNaN.description() + "\n";
+		}
+		if (CalculateSTATOfMatrixRow.type().equals(type)) {
+			result += "CalculateSTATOfMatrixRow: " + CalculateSTATOfMatrixRow.description() + "\n";
+		}
+		if (EnsembleGeneIDRemoveGeneVersion.type().equals(type)) {
+			result += "EnsembleGeneIDRemoveGeneVersion: " + EnsembleGeneIDRemoveGeneVersion.description() + "\n";
+		}
+		if (EnsemblGeneIDAppendAnnotationCoord.type().equals(type)) {
+			result += "EnsemblGeneIDAppendAnnotationCoord: " + EnsemblGeneIDAppendAnnotationCoord.description() + "\n";
+		}
+		if (JuncSalvagerSplitMatrixCandidates.type().equals(type)) {
+			result += "JuncSalvagerSplitMatrixCandidates: " + JuncSalvagerSplitMatrixCandidates.description() + "\n";
+		}
+		if (CombineMatrixPreCheckGeneOrderTheSame.type().equals(type)) {
+			result += "CombineMatrixPreCheckGeneOrderTheSame: " + CombineMatrixPreCheckGeneOrderTheSame.description() + "\n";
+		}
+		if (JuncSalvagerWilcoxonTestRank.type().equals(type)) {
+			result += "JuncSalvagerWilcoxonTestRank: " + JuncSalvagerWilcoxonTestRank.description() + "\n";
+		}
 		return result;
 	}	
 
-	public static String VERSION = "20200313";
+	public static String VERSION = "20200618";
 	
 }

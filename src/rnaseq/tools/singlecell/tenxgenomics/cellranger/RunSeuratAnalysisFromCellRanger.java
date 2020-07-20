@@ -15,7 +15,7 @@ import java.io.File;
  * biocLite(c("DDRTree", "pheatmap"))
  * install.packages('Seurat') 
  * library(Seurat)
- * which version was Seurat? Seurat_3.0.1
+ * which version was Seurat? Seurat_v3.1.1
  * @author tshaw
  * 
  */

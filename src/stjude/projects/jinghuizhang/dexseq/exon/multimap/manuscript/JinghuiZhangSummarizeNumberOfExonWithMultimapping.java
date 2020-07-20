@@ -152,6 +152,8 @@ public class JinghuiZhangSummarizeNumberOfExonWithMultimapping {
 				String gene = (String)itr.next();
 				out_gene.write(gene + "\n");
 			}
+			
+	
 			out_gene.close();
 		} catch (Exception e) {
 			e.printStackTrace();

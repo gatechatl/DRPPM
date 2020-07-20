@@ -36,6 +36,7 @@ public class IntronRetentionPipelineWrapper {
 			String exon_bed = "NA";
 			String gene_bed = "NA";			
 			String kgXref = "NA"; ///rgs01/resgen/dev/wc/tshaw/REFERENCE/IDCONVERSION/UCSC/hg19/kgXref.txt
+			String hg38gtf = "NA";
 			FileInputStream fstream = new FileInputStream(config_file);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
@@ -53,6 +54,9 @@ public class IntronRetentionPipelineWrapper {
 				}				
 				if (split[0].trim().toUpperCase().equals("KGXREF")) {
 					kgXref = split[1];
+				}
+				if (split[0].trim().toUpperCase().equals("HG38GTF")) {
+					hg38gtf = split[1];
 				}
 				
 			}
@@ -94,14 +98,23 @@ public class IntronRetentionPipelineWrapper {
 				out.write("drppm -FilterBEDReadsScript " + sample_bam + " " + readLength + " >> " + sample_script + "\n");
 				out.write("drppm -CalculateCoverageBed " + sample_bam + " " + intron_only_bed + " " + exon_bed + " >> " + sample_script + "\n");				
 				out.write("drppm -CalculateSplicingDeficiencyScript " + sample_bam + " " + intron_only_bed + " " + exon_bed + " >> " + sample_script + "\n");
-				out_summary.write("drppm -kgXrefConversion " + f.getName() + ".bed_SD.txt " + kgXref + " " + f.getName() + ".bed_SD_geneName.txt\n");
+				
+				if (!hg38gtf.equals("NA")) {
+					out_summary.write("drppm -EnsemblTranscriptID2GeneNameAppened " + f.getName() + ".bed_SD.txt " + hg38gtf + " " + f.getName() + ".bed_SD_geneName.txt\n");
+				} else {
+					out_summary.write("drppm -kgXrefConversion " + f.getName() + ".bed_SD.txt " + kgXref + " " + f.getName() + ".bed_SD_geneName.txt\n");
+				}
 				out.write("\n");
 				
 				out2.write(sampleName + "\t" + f.getName() + ".bed_SD_geneName.txt\n");
 				out_shell.write("sh " + sample_script + "\n");
 			}			
 			in.close();	
-			out_summary.write("drppm -CombineSplicingDeficiencyNameMeta " + output_SD_meta + " " + prefix + ".summary.txt");
+			if (!hg38gtf.equals("NA")) {
+				out_summary.write("drppm -CombineSplicingDeficiencyNameMetaHG38 " + output_SD_meta + " " + prefix + ".summary.txt");
+			} else {
+				out_summary.write("drppm -CombineSplicingDeficiencyNameMeta " + output_SD_meta + " " + prefix + ".summary.txt");
+			}
 			out_summary.close();
 			out.close();
 			out2.close();

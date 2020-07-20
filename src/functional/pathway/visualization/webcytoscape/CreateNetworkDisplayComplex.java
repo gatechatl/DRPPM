@@ -785,7 +785,8 @@ public class CreateNetworkDisplayComplex {
 		str += "<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js\"></script>\n";
 		str += "<meta charset=utf-8 />\n";
 		str += "<title>Cytoscape.js images</title>\n";
-		str += "<script src=\"http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js\"></script>\n";
+		//str += "<script src=\"http://cytoscape.github.io/cytoscape.js/api/cytoscape.js-latest/cytoscape.min.js\"></script>\n";
+		str += "<script src=\"https://github.com/cytoscape/cytoscape.js/tree/master/dist/cytoscape.min.js\"></script>\n";
 		str += "</head>\n";
 		str += "<body>\n";
 		str += "<div id=\"cy\"></div>\n";

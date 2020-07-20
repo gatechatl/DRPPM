@@ -31,7 +31,8 @@ public class PDB2SecondaryStructure {
 
                         Map<String,String> sec = aa.getSecStruc();
 
-                        System.out.println(c.getChainID() + " " + g.getResidueNumber() + " " + g.getPDBName() + " " + " " +sec);
+                        
+                        //System.out.println(c.getChainID() + " " + g.getResidueNumber() + " " + g.getPDBName() + " " + " " +sec);
                     }
                 }
             }

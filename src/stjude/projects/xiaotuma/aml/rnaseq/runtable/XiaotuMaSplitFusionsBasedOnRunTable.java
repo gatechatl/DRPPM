@@ -10,7 +10,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-
+/**
+ * First iteration I left out relapse cases
+ * @author tshaw
+ *
+ */
 public class XiaotuMaSplitFusionsBasedOnRunTable {
 
 	
@@ -37,10 +41,10 @@ public class XiaotuMaSplitFusionsBasedOnRunTable {
 						samples.add(sjid1);
 					}
 					if (!sjid2.equals("NA")) {
-						samples.add(sjid1);
+						samples.add(sjid2);
 					}
 					if (!sjid3.equals("NA")) {
-						samples.add(sjid1);
+						samples.add(sjid3);
 					}
 					patient_sjid.put(split[0], samples);
 				} else {
@@ -52,10 +56,10 @@ public class XiaotuMaSplitFusionsBasedOnRunTable {
 						samples.add(sjid1);
 					}
 					if (!sjid2.equals("NA")) {
-						samples.add(sjid1);
+						samples.add(sjid2);
 					}
 					if (!sjid3.equals("NA")) {
-						samples.add(sjid1);
+						samples.add(sjid3);
 					}
 					patient_sjid.put(split[0], samples);
 				}

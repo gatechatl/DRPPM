@@ -136,7 +136,7 @@ public class PathwayKappaScore {
 			while (itr2.hasNext()) {
 				String pathway2 = (String)itr2.next();
 				
-				if (!pathway1.equals(pathway2)) {
+				//if (!pathway1.equals(pathway2)) {
 					LinkedList list1 = (LinkedList)pathways.get(pathway1);
 					LinkedList list2 = (LinkedList)pathways.get(pathway2);
 					double kappa_score = kappa_score_matrix(list1, list2, genes);
@@ -144,7 +144,7 @@ public class PathwayKappaScore {
 						kappa_scores.put(pathway1 + "\t" + pathway2, kappa_score);
 					}
 					result.append("\t" + kappa_score);					
-				}				
+				//}				
 			}
 			result.append("\n");
 		}		

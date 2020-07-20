@@ -46,9 +46,15 @@ public class JinghuiZhangStatisticalTestForEnrichedImmuneSignatures {
 			String cnvFile = args[3];
 			String outputFile = args[4]; // "Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\immune_signature_enriched_in_particular_mutations\\PanCancerImmuneSignature_Enrichment.txt";
 			//String outputMatrix = args[5]; // generate a matrix of -log2(pvalues) for all the comparisons
+			
+			String outputMatrixFile = args[5];
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			out.write("ImmuneSignature\tDiseaseType\tGeneWithMut\tT-Test_pval\tWilcox_pval\tMutAvgScore\tNonMutAvgScore\tdiff(MutScore-NonMutScore)\t#MutSamples\t#NonMutSamples\tMutValues\tNonMutValues\n");
+			
+			FileWriter fwriter2 = new FileWriter(outputMatrixFile);
+			BufferedWriter out2 = new BufferedWriter(fwriter2);
+			out2.write("ImmuneSignature\tDiseaseType_GeneWithMut\tWilcox_pval\tTissueType\n");
 			
 			FileInputStream fstream = new FileInputStream(fusionFile);
 			DataInputStream din = new DataInputStream(fstream);
@@ -329,6 +335,14 @@ public class JinghuiZhangStatisticalTestForEnrichedImmuneSignatures {
 									System.out.println(feature + "\t" + type + "\t" + geneName + "\t" + pval + "\t" + wilcox_pval + "\t" + MathTools.mean(mutation_hit_values) + "\t" + MathTools.mean(mutation_miss_values) + "\t" + mutation_hit_values.length + "\t" + mutation_miss_values.length);
 									out.write(feature + "\t" + type + "\t" + geneName + "\t" + pval + "\t" + wilcox_pval + "\t" + MathTools.mean(mutation_hit_values) + "\t" + MathTools.mean(mutation_miss_values) + "\t" + (MathTools.mean(mutation_hit_values) - MathTools.mean(mutation_miss_values)) + "\t" + mutation_hit_values.length + "\t" + mutation_miss_values.length + "\t" + mutation_hit_values_str + "\t" + mutation_absent_values_str + "\n");
 								}
+								
+								if (MathTools.mean(mutation_hit_values) > MathTools.mean(mutation_miss_values)) {
+									double score = -1 * MathTools.log2(wilcox_pval) / MathTools.log2(10);
+									out2.write(feature + "\t" + type + "_" + geneName + "\t" + score + "\t" + test_tissue_type(type) + "\n");
+								} else {
+									double score = MathTools.log2(wilcox_pval) / MathTools.log2(10);
+									out2.write(feature + "\t" + type + "_" + geneName + "\t" + score + "\t" +  test_tissue_type(type) + "\n");
+								}
 							}
 						}
 					}
@@ -336,9 +350,88 @@ public class JinghuiZhangStatisticalTestForEnrichedImmuneSignatures {
 			}
 			in.close();
 			out.close();
+			out2.close();
 			System.out.println(count);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public static String test_tissue_type(String type) {
+		String tissue_type = "OTHER";
+		if (type.contains("SJACT")) {
+			tissue_type = "SOLID";
+		}
+		if (type.contains("SJOS")) {
+			tissue_type = "SOLID";
+		}
+		if (type.contains("SJWLM")) {
+			tissue_type = "SOLID";
+		}
+		if (type.contains("SJNBL")) {
+			tissue_type = "SOLID";
+		}
+		if (type.contains("SJRHB")) {
+			tissue_type = "SOLID";
+		}
+		if (type.contains("SJEPD")) {
+			tissue_type = "BRAIN";
+		}
+		
+		if (type.contains("SJMB")) {
+			tissue_type = "BRAIN";
+		}
+		if (type.contains("SJHGG")) {
+			tissue_type = "BRAIN";
+		}
+		if (type.contains("SJLGG")) {
+			tissue_type = "BRAIN";
+		}
+		
+		if (type.contains("SJBALL")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJALL")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJTALL")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJAML")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJAMLM")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJCBF")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJCOGALL")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJCOGALL")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJERG")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJERG")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJMLL")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJHYPO")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJETV")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJINF")) {
+			tissue_type = "BLOOD";
+		}
+		if (type.contains("SJPHALL")) {
+			tissue_type = "BLOOD";
+		}
+		return tissue_type;
 	}
 }

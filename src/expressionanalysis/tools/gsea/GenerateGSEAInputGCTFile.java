@@ -79,6 +79,23 @@ public class GenerateGSEAInputGCTFile {
 				first_row += "\t" + split[i];
 				
 			}
+			int count_line = 0;
+			while (in.ready()) {
+				String str = in.readLine();	
+				count_line++;
+			}
+			in.close();
+			out.write("#1.2\n");
+			out.write(count_line + "\t" + num_samples + "\n");
+			out.write(first_row + "\n");
+			
+			fstream = new FileInputStream(inputFile);
+			din = new DataInputStream(fstream);
+			in = new BufferedReader(new InputStreamReader(din));			
+			header = in.readLine();
+			split = header.split("\t");
+			num_samples = split.length - 1;
+			
 			while (in.ready()) {
 				String str = in.readLine();
 				split = str.split("\t");
@@ -86,17 +103,9 @@ public class GenerateGSEAInputGCTFile {
 				for (int i = 1; i < split.length; i++) {
 					line += "\t" + split[i];
 				}
-				list.add(line);				
+				out.write(line + "\n");				
 			}
-			in.close();
-			out.write("#1.2\n");
-			out.write(list.size() + "\t" + num_samples + "\n");
-			out.write(first_row + "\n");
-			Iterator itr = list.iterator();
-			while (itr.hasNext()) {
-				String line = (String)itr.next();
-				out.write(line + "\n");
-			}
+			in.close();			
 			out.close();
 		} catch (Exception e) {
 			e.printStackTrace();

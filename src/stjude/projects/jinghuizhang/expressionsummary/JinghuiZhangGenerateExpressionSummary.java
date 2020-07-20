@@ -14,17 +14,27 @@ import statistics.general.MathTools;
 
 public class JinghuiZhangGenerateExpressionSummary {
 
-	
-	public static void main(String[] args) {
+
+
+	public static String type() {
+		return "Immune";
+	}
+	public static String description() {
+		return "Generate a summarized expression matrix.";
+	}
+	public static String parameter_info() {
+		return "[inputFileMatrix] [outputSummarizedMatrix]";
+	}
+	public static void execute(String[] args) {
 		
 		try {
 			
 
-			String outputFile = "Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\updated_pcgp_fpkm_zero_chemokine_sjid.txt";
+			String outputFile = args[1]; //"Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\updated_pcgp_fpkm_zero_chemokine_sjid.txt";
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			out.write("Name");
-			String inputConversionFile = "Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\updated_pcgp_fpkm_zero_chemokine.txt";
+			String inputConversionFile = args[0]; //"Z:\\ResearchHome\\ProjectSpace\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\updated_pcgp_fpkm_zero_chemokine.txt";
 			FileInputStream fstream = new FileInputStream(inputConversionFile);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));

@@ -20,6 +20,7 @@ public class JinghuiZhangGenerateImmuneSignatureSummaryPerSample {
 			
 			HashMap map = new HashMap();
 			String inputSubtype = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\pcgp_target_annotation_immunesubtype.txt";
+			//String inputSubtype = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis_Updated_Matrix_20200518\\Uncorrected\\Solid_Brain_pcgp_target_annotation_immunesubtype.txt";
 			FileInputStream fstream = new FileInputStream(inputSubtype );
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
@@ -32,6 +33,7 @@ public class JinghuiZhangGenerateImmuneSignatureSummaryPerSample {
 			
 
 			String outputCibersortFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\PCGP_Comprehensive_Cibersort_Result_immunesubtype_20200315.txt";
+			//String outputCibersortFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis_Updated_Matrix_20200518\\Uncorrected\\Solid_Brain_Comprehensive_Cibersort_Result_immunesubtype_20200606.txt";
 			FileWriter fwriter = new FileWriter(outputCibersortFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			
@@ -176,6 +178,56 @@ public class JinghuiZhangGenerateImmuneSignatureSummaryPerSample {
 			}
 			in.close();
 			out_immune.close();
+			
+			// add T cell annotation
+			String outputTcellFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\pcgp_tcell_immune_ssGSEA_subgroup_annotation.txt";
+			FileWriter fwriter_Tcell = new FileWriter(outputTcellFile);
+			BufferedWriter out_Tcell = new BufferedWriter(fwriter_Tcell);
+
+			String t_cell_immuneFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\pcgp_tcell_immune_ssGSEA.txt";
+			fstream = new FileInputStream(t_cell_immuneFile );
+			din = new DataInputStream(fstream);
+			in = new BufferedReader(new InputStreamReader(din));
+			header = in.readLine();
+			out_Tcell.write(header + "\tImmuneSubtype\n");
+			while (in.ready()) {
+				String str = in.readLine();
+				String[] split = str.split("\t");
+				split[0] = split[0].replaceAll("-", ".");
+				if (map.containsKey(split[0])) {
+					String subgroup = (String)map.get(split[0]);
+					out_Tcell.write(str + "\t" + subgroup + "\n");
+				}
+			}
+			in.close();
+			out_Tcell.close();
+			
+			
+
+			// add estimate annotation
+			String outputEstimateFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\Estimate\\updated_pcgp_fpkm_zero.common.affy.estimate.cleanDesc.T.annot.txt";
+			FileWriter fwriter_Estimate = new FileWriter(outputEstimateFile);
+			BufferedWriter out_Estimate = new BufferedWriter(fwriter_Estimate);
+
+			String estimate_immuneFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\ImmuneSignatureAnalysis\\Estimate\\updated_pcgp_fpkm_zero.common.affy.estimate.cleanDesc.T.txt";
+			fstream = new FileInputStream(estimate_immuneFile );
+			din = new DataInputStream(fstream);
+			in = new BufferedReader(new InputStreamReader(din));
+			header = in.readLine();
+			out_Estimate.write(header + "\tImmuneSubtype\tDisease\n");
+			while (in.ready()) {
+				String str = in.readLine();
+				String[] split = str.split("\t");
+				
+				String disease = split[0].split("\\.")[0].replaceAll("0", "").replaceAll("1", "").replaceAll("2", "").replaceAll("3", "").replaceAll("4", "").replaceAll("5", "").replaceAll("6", "").replaceAll("7", "").replaceAll("8", "").replaceAll("9", "");
+				split[0] = split[0].replaceAll("-", ".");
+				if (map.containsKey(split[0])) {
+					String subgroup = (String)map.get(split[0]);					
+					out_Estimate.write(str + "\t" + subgroup + "\t" + disease + "\n");
+				}
+			}
+			in.close();
+			out_Estimate.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

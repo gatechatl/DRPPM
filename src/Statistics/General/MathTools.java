@@ -13,7 +13,9 @@ import org.apache.commons.math3.distribution.TDistribution;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import org.apache.commons.math3.stat.correlation.SpearmansCorrelation;
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
+import org.apache.commons.math3.stat.inference.MannWhitneyUTest;
 import org.apache.commons.math3.stat.inference.TTest;
+import org.apache.commons.math3.stat.inference.WilcoxonSignedRankTest;
 import org.apache.commons.math3.special.Erf;
 
 
@@ -83,7 +85,8 @@ public class MathTools {
 			System.out.println(value);
 		}*/
 		
-		
+		System.out.println(embedded(1, 5, 3, 4));
+		System.out.println(embedded(5, 1, 3, 4));
 		
 	}
 	
@@ -228,14 +231,127 @@ public class MathTools {
 	    }
 	    return max;
 	}
+	public static double min(double[] m) {
+	    double min = m[0];
+	    for (int i = 0; i < m.length; i++) {
+	        if (m[i] < min) {
+	        	min = m[i];
+	        }
+	    }
+	    return min;
+	}
 	public static double PopulationVariance(double[] set) {
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (double val: set) {
 			stats.addValue(val);
 		}
 		return stats.getPopulationVariance();
+		
+	}
+	public static double SampleVariance(double[] set) {
+		DescriptiveStatistics stats = new DescriptiveStatistics();
+		for (double val: set) {
+			stats.addValue(val);
+		}
+		return stats.getVariance();		
+	}
+	public static double getGeometricMean(double[] set) {
+		DescriptiveStatistics stats = new DescriptiveStatistics();
+		for (double val: set) {
+			stats.addValue(val);
+		}
+		return stats.getGeometricMean();		
+	}
+	/**
+	 * Check if b1-b2 is embedded inside a1-a2
+	 * @param a1
+	 * @param a2
+	 * @param b1
+	 * @param b2
+	 * @return
+	 */
+	public static boolean embedded(int a1, int a2, int b1, int b2) {
+		if (a1 <= b1 && b1 <= a2 && a1 <= b2 && b2 <= a2) {
+			return true;
+		}
+		if (a2 <= b1 && b1 <= a1 && a2 <= b2 && b2 <= a1) {
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * Check if a1-a2 intersect with b1-b2
+	 * @param a1
+	 * @param a2
+	 * @param b1
+	 * @param b2
+	 * @return
+	 */
+	public static boolean overlap(int a1, int a2, int b1, int b2) {
+		if (a1 <= b1 && b1 <= a2) {
+			return true;
+		}
+		if (a1 <= b2 && b2 <= a2) {
+			return true;
+		}
+		if (a2 <= b1 && b1 <= a1) {
+			return true;
+		}
+		if (a2 <= b2 && b2 <= a1) {
+			return true;
+		}
+		
+		if (b1 <= a1 && a1 <= b2) {
+			return true;
+		}
+		if (b1 <= a2 && a2 <= b2) {
+			return true;
+		}
+		if (b2 <= a1 && a1 <= b1) {
+			return true;
+		}
+		if (b2 <= a2 && a2 <= b1) {
+			return true;
+		}
+		return false;
 	}
 	
+	/**
+	 * Check if a1-a2 intersect with b1-b2
+	 * @param a1
+	 * @param a2
+	 * @param b1
+	 * @param b2
+	 * @return
+	 */
+	public static boolean intersect(int a1, int a2, int b1, int b2) {
+		if (a1 <= b1 && b1 <= a2) {
+			return true;
+		}
+		if (a1 <= b2 && b2 <= a2) {
+			return true;
+		}
+		if (a2 <= b1 && b1 <= a1) {
+			return true;
+		}
+		if (a2 <= b2 && b2 <= a1) {
+			return true;
+		}
+		
+		if (b1 <= a1 && a1 <= b2) {
+			return true;
+		}
+		if (b1 <= a2 && a2 <= b2) {
+			return true;
+		}
+		if (b2 <= a1 && a1 <= b1) {
+			return true;
+		}
+		if (b2 <= a2 && a2 <= b1) {
+			return true;
+		}
+		return false;
+	}
 	
     public static Double mad(List<Double> inputList) {
         Double[] input = inputList.toArray(new Double[inputList.size()]);
@@ -243,8 +359,18 @@ public class MathTools {
         arrayAbsDistance(input, median);
         return median(input);
     }
+    public static Double mad(double[] input) {        
+        Double median = median(input);        
+        arrayAbsDistance(input, median);
+        return median(input);
+    }
 
     public static void arrayAbsDistance(Double[] array, Double value) {
+        for (int i=0; i<array.length;i++) {
+            array[i] = Math.abs(array[i] - value);
+        }
+    }
+    public static void arrayAbsDistance(double[] array, double value) {
         for (int i=0; i<array.length;i++) {
             array[i] = Math.abs(array[i] - value);
         }
@@ -260,6 +386,18 @@ public class MathTools {
         } 
         return input[input.length/2];
     }
+    public static Double median(LinkedList list) {
+    	double[] input = MathTools.convertListDouble2Double(list);
+        if (input.length==0) {
+            throw new IllegalArgumentException("to calculate median we need at least 1 element");
+        }
+        Arrays.sort(input);
+        if (input.length%2==0) {
+            return (input[input.length/2-1] + input[input.length/2])/2;
+        } 
+        return input[input.length/2];
+    }
+    
 	public static double standardDeviation(double[] set) {
 		DescriptiveStatistics stats = new DescriptiveStatistics();
 		for (double val: set) {
@@ -280,6 +418,18 @@ public class MathTools {
 		SpearmansCorrelation sc = new SpearmansCorrelation();		
 		
 		return sc.correlation(set1, set2);
+	}
+	public static double MannWhitneyUTest(double[] set1, double[] set2) {
+		//WilcoxonSignedRankTest wilcoxTest = new WilcoxonSignedRankTest();
+		MannWhitneyUTest mannWhitney = new MannWhitneyUTest();
+		double pval = mannWhitney.mannWhitneyUTest(set1, set2);
+		return pval;
+	}
+	public static double WilcoxRankSumTest(double[] set1, double[] set2) {
+		//WilcoxonSignedRankTest wilcoxTest = new WilcoxonSignedRankTest();
+		MannWhitneyUTest mannWhitney = new MannWhitneyUTest();
+		double pval = mannWhitney.mannWhitneyUTest(set1, set2);
+		return pval;
 	}
 	public static double SpearmanRankPvalue(double[] set1, double[] set2) {
 		SpearmansCorrelation sc = new SpearmansCorrelation();	
@@ -414,4 +564,56 @@ public class MathTools {
         return v[n];
 
     }
+	/** * @(#)qnorm.js * * Copyright (c) 2000 by Sundar Dorai-Raj
+	  * * @author Sundar Dorai-Raj
+	  * * Email: sdoraira@vt.edu
+	  * * This program is free software; you can redistribute it and/or
+	  * * modify it under the terms of the GNU General Public License 
+	  * * as published by the Free Software Foundation; either version 2 
+	  * * of the License, or (at your option) any later version, 
+	  * * provided that any use properly credits the author. 
+	  * * This program is distributed in the hope that it will be useful,
+	  * * but WITHOUT ANY WARRANTY; without even the implied warranty of
+	  * * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	  * * GNU General Public License for more details at http://www.gnu.org * * */
+
+	public static double qnorm(double p) {
+		
+		// ALGORITHM AS 111, APPL.STATIST., VOL.26, 118-121, 1977.
+		    // Computes z=invNorm(p)
+		   double r = Double.NaN;
+		   double ppnd = Double.NaN;
+		   double split=0.42;
+		   double  a0=  2.50662823884;
+		   double  a1=-18.61500062529;
+		   double  a2= 41.39119773534;
+		   double  a3=-25.44106049637;
+		   double  b1= -8.47351093090;
+		   double  b2= 23.08336743743;
+		   double  b3=-21.06224101826;
+		   double  b4=  3.13082909833;
+		   double  c0= -2.78718931138;
+		   double  c1= -2.29796479134;
+		   double  c2=  4.85014127135;
+		   double  c3=  2.32121276858;
+		   double  d1=  3.54388924762;
+		   double  d2=  1.63706781897;
+		   double  q=p-0.5;
+		   if (Math.abs(q)<=split) {
+		      r=q*q;
+		      ppnd=q*(((a3*r+a2)*r+a1)*r+a0)/((((b4*r+b3)*r+b2)*r+b1)*r+1);
+		   } else {
+		      r=p;
+		      if(q>0) r=1-p;
+		      if(r>0) {
+		        r=Math.sqrt(-Math.log(r));
+		        ppnd=(((c3*r+c2)*r+c1)*r+c0)/((d2*r+d1)*r+1);
+		        if(q<0) ppnd=-ppnd;
+		      }
+		      else {
+		        ppnd=0;
+		      }
+		    }
+		    return(ppnd);
+	}	
 }

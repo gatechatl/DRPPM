@@ -37,7 +37,7 @@ public class EnsemblGeneIDAppendGeneName {
 			String[] split_header = header.split("\t");
 			out.write(split_header[0] + "\tGeneSymbol");
 			for (int i = 1; i < split_header.length; i++) {
-			out.write("\t" + header);
+				out.write("\t" + split_header[i]);
 			}
 			out.write("\n");
 			while (in.ready()) {
