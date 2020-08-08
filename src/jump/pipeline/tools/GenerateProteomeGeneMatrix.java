@@ -22,7 +22,7 @@ public class GenerateProteomeGeneMatrix {
 		return "Takes input from peptide and generate a matrix\nAssumes that sample is a 10plex";
 	}
 	public static String parameter_info() {
-		return "[id_uni_prot_quan.txt] [sampleNames sample1,sample2,...,sample10] [outputMatrix]";
+		return "[id_uni_prot_quan.txt] [sampleNames sample1,sample2,...,sample10] [minPSM] [outputMatrix]";
 	}
 	public static void execute(String[] args) {
 		

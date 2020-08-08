@@ -1,5 +1,7 @@
 package MouseModelToHumanCompare;
 
+import idconversion.cross_species.HumanMouseGeneNameConversion;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
@@ -9,12 +11,11 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import MISC.HumanMouseGeneNameConversion;
-import MISC.StringManipulationTools;
-import Statistics.General.MathTools;
+import misc.StringManipulationTools;
+import statistics.general.MathTools;
 
 /**
- * Generate a report comparing mouse and human
+ * Generate a report comparing mouse and human for suzanne baker's project
  * @author tshaw
  *
  */
