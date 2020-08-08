@@ -296,7 +296,6 @@ public class HeatmapGeneration {
 			
 		}		
 	}
-<<<<<<< HEAD
 	
 	public static String PHeat_Annotation_Parameter_Info() {
 		return "[inputFile] [sampleName] [geneSetFile] [outputPng] [title] [rowclust] [colClust] [TakeLog] [width] [height] [rowFontSize] [colFontSize] [colorType]";
@@ -399,8 +398,6 @@ public class HeatmapGeneration {
 	}
 	
 	
-=======
->>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 	public static void execute(String[] args) {
 		try {
 
@@ -766,11 +763,7 @@ public class HeatmapGeneration {
 		return script;
 	}
 	/**
-<<<<<<< HEAD
 	 * Generate pheatmap plots
-=======
-	 * Generate Heatmap3 plots
->>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 	 */
 	public static String generatePHeatmapScript(String inputFile, String outputFile, String listA, String geneSet, String title, boolean log, int size, boolean col_cluster, boolean row_cluster, String width_size, String height_size, String row_font_size, String col_font_size, int colorType) {
 		String script = "";
@@ -842,7 +835,6 @@ public class HeatmapGeneration {
 			cluster_row = "F";
 		}
 		// 2018/10/18 updated from complete to ward
-<<<<<<< HEAD
 		
 		String append_show_row = "show_rownames = T";
 		String append_show_col = "show_colnames = T";
@@ -949,9 +941,6 @@ public class HeatmapGeneration {
 			append_show_col = "show_colnames = F";
 		}
 		script += "result2 = pheatmap(dataset, cluster_col = " + cluster_col + ", cluster_row = " + cluster_row + ", fontsize_row = " + row_font_size + ", fontsize_col = " + col_font_size + ", " + append_show_row + " , " + append_show_col + " , clustering_method = \"ward\", color=hmcols, annotation_col=annotation)\n";
-=======
-		script += "result2 = pheatmap(dataset, cluster_col = " + cluster_col + ", cluster_row = " + cluster_row + ", fontsize_row = " + row_font_size + ", fontsize_col = " + col_font_size + ", show_rownames = T, clustering_method = \"ward\", color=hmcols)\n";
->>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 		script += "dev.off();\n";
 		//script += "clust <- cbind(result2, cluster = cutree(result2$tree_row, k = 10))\n";
 		script += "write.table(result2$tree_col$labels[result2$tree_col$order], file=\"" + outputFile + "._ordered_colnames.txt\")\n";

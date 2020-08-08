@@ -24,11 +24,7 @@ public class GenerateScriptForKallisto {
 			
 			String fastq_lst = args[0];
 			String index = args[1];
-<<<<<<< HEAD
 
-=======
-			
->>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 			String outputScript = args[2];
 								
 			FileWriter fwriter = new FileWriter(outputScript);

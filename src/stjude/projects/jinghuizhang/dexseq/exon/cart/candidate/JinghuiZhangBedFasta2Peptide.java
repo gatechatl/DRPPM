@@ -90,11 +90,7 @@ public class JinghuiZhangBedFasta2Peptide {
 				if (str.contains(">")) {
 					String[] split = str.split("\\|");
 					query_gene_names = split[0].replaceAll(">", "").split("_")[0];
-<<<<<<< HEAD
 					//System.out.println(query_gene_names);
-=======
-					
->>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 					query_name = str;
 					count_query++;
 				} else {
@@ -110,16 +106,12 @@ public class JinghuiZhangBedFasta2Peptide {
 						String frame_rev2 = Nucleotide2Protein.nucleotide2protein(nucleotide_seq, -2, false);
 						String frame_rev3 = Nucleotide2Protein.nucleotide2protein(nucleotide_seq, -3, false);
 						if (geneName2uniprot.containsKey(query_gene_name)) {
-<<<<<<< HEAD
 							/*System.out.println("Checking: " + query_gene_name + "\t" + frame1);
 							System.out.println("Checking: " + query_gene_name + "\t" + frame2);
 							System.out.println("Checking: " + query_gene_name + "\t" + frame3);
 							System.out.println("Checking: " + query_gene_name + "\t" + frame_rev1);
 							System.out.println("Checking: " + query_gene_name + "\t" + frame_rev2);
 							System.out.println("Checking: " + query_gene_name + "\t" + frame_rev3);*/
-=======
-							//System.out.println(query_gene_name);
->>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 							
 							LinkedList list = (LinkedList)geneName2uniprot.get(query_gene_name);
 							Iterator itr = list.iterator();

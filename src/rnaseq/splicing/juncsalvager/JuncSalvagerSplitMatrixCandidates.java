@@ -11,10 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-<<<<<<< HEAD
 import expression.matrix.tools.FilterMatrixExpression;
-=======
->>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 import misc.CommandLine;
 import misc.RemoveQuotations;
 
@@ -133,7 +130,6 @@ public class JuncSalvagerSplitMatrixCandidates {
 				RemoveQuotations.execute(arguments);
 				File f = new File(outputFolderPCGP + "/" + disease + "_rank_tmp.txt");
 				f.delete();
-<<<<<<< HEAD
 				
 				String[] arguments2 = {(outputFolderPCGP + "/" + disease + ".txt"), "1.0", "0.1", (outputFolderPCGP + "/" + disease + "_1FPKM.txt")};
 				FilterMatrixExpression.execute(arguments2);
@@ -155,10 +151,6 @@ public class JuncSalvagerSplitMatrixCandidates {
 			
 			
 			
-=======
-			}
-			
->>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 			/*
 			itr = gtex_annotation.keySet().iterator();
 			while (itr.hasNext()) {
@@ -231,7 +223,6 @@ public class JuncSalvagerSplitMatrixCandidates {
 			e.printStackTrace();
 		}
 	}
-<<<<<<< HEAD
 	
 	public static void rank_norm(String inputFile, String outputFile, String outputMedianFile) {
 		
@@ -266,6 +257,4 @@ public class JuncSalvagerSplitMatrixCandidates {
 			e.printStackTrace();
 		}
 	}
-=======
->>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 }
