@@ -6,9 +6,12 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+<<<<<<< HEAD
 import java.util.LinkedList;
 
 import statistics.general.MathTools;
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 
 /**
  * Read in the annotation and parse through the individual output summary folder
@@ -37,7 +40,11 @@ public class TRUST4PostProcess2MatrixSummary {
 			
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
+<<<<<<< HEAD
 			out.write("SampleName\tTCR_CPK\tBCR_CPK\tTCR_to_BCR_ratio\tTotalTCR\tTotalBCR\tTCR_Membership\tBCR_Membership\tTCR_Entropy\tBCR_Entropy\tTotal_TRA\tTRA_Membership\tTRA_Entropy\tTRA_Frac\tTRA_CPK\tTotal_TRB\tTRB_Membership\tTRB_Entropy\tTRB_Frac\tTRB_CPK\tTotal_TRD\tTRD_Membership\tTRD_Entropy\tTRD_Frac\tTRD_CPK\tTotal_TRG\tTRG_Membership\tTRG_Entropy\tTRG_Frac\tTRG_CPK\tTRAB_Frac\tTRDG_Frac\tTotal_IGHG\tIGHG_Membership\tIGHG_Entropy\tIGHG_Frac\tIGHG_CPK\tTotal_IGHA\tIGHA_Membership\tIGHA_Entropy\tIGHA_Frac\tIGHA_CPK\tTotal_IGHE\tIGHE_Membership\tIGHE_Entropy\tIGHE_Frac\tIGHE_CPK\tTotal_IGHD\tIGHD_Membership\tIGHD_Entropy\tIGHD_Frac\tIGHD_CPK\tTotal_IGHM\tIGHM_Membership\tIGHM_Entropy\tIGHM_Frac\tIGHM_CPK\n");
+=======
+			out.write("SampleName\tTCR_CPK\tBCR_CPK\tTCR_to_BCR_ratio\tTotalTCR\tTotalBCR\tTCR_Membership\tBCR_Membership\tTRA_Frac\tTRA_CPK\tTRB_Frac\tTRB_CPK\tTRD_Frac\tTRD_CPK\tTRG_Frac\tTRG_CPK\tTRAB_Frac\tTRDG_Frac\tIGHG_Frac\tIGHG_CPK\tIGHA_Frac\tIGHA_CPK\tIGHE_Frac\tIGHE_CPK\n");
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 			FileInputStream fstream = new FileInputStream(inputFile);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
@@ -62,12 +69,16 @@ public class TRUST4PostProcess2MatrixSummary {
 				double IGHG_membership = 0.0;
 				double IGHA_membership = 0.0;
 				double IGHE_membership = 0.0;
+<<<<<<< HEAD
 				double IGHD_membership = 0.0;
 				double IGHM_membership = 0.0;
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 				
 				double total_IGHG = 0.0;
 				double total_IGHA = 0.0;
 				double total_IGHE = 0.0;
+<<<<<<< HEAD
 				double total_IGHD = 0.0;
 				double total_IGHM = 0.0;
 				
@@ -86,6 +97,11 @@ public class TRUST4PostProcess2MatrixSummary {
 				LinkedList IGHD_values = new LinkedList();
 				LinkedList IGHM_values = new LinkedList();
 				
+=======
+				
+				double tcr_membership = 0;
+				double bcr_membership = 0;
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 				FileInputStream fstream2 = new FileInputStream(report_tsv);
 				DataInputStream din2 = new DataInputStream(fstream2);
 				BufferedReader in2 = new BufferedReader(new InputStreamReader(din2));
@@ -107,9 +123,12 @@ public class TRUST4PostProcess2MatrixSummary {
 					boolean IGHG = false;
 					boolean IGHE = false;
 					boolean IGHA = false;
+<<<<<<< HEAD
 					boolean IGHD = false;
 					boolean IGHM = false;
 					
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 					if (v_region.equals("*")) {
 						v_region = "*****";
 					}
@@ -149,12 +168,15 @@ public class TRUST4PostProcess2MatrixSummary {
 					if (v_region.substring(0, 4).equals("IGHE") || d_region.substring(0, 4).equals("IGHE") || j_region.substring(0, 4).equals("IGHE") || c_region.substring(0, 4).equals("IGHE")) {
 						IGHE = true;
 					}
+<<<<<<< HEAD
 					if (v_region.substring(0, 4).equals("IGHD") || d_region.substring(0, 4).equals("IGHD") || j_region.substring(0, 4).equals("IGHD") || c_region.substring(0, 4).equals("IGHD")) {
 						IGHD = true;
 					}
 					if (v_region.substring(0, 4).equals("IGHM") || d_region.substring(0, 4).equals("IGHM") || j_region.substring(0, 4).equals("IGHM") || c_region.substring(0, 4).equals("IGHM")) {
 						IGHM = true;
 					}
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 
 					
 					if (TCR && BCR) {
@@ -163,46 +185,71 @@ public class TRUST4PostProcess2MatrixSummary {
 					if (TCR) {
 						tcr_membership++;
 						total_count_of_tcr += count;
+<<<<<<< HEAD
 						TCR_values.add(new Double(count));
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 					}
 					if (BCR) {
 						bcr_membership++;
 						total_count_of_bcr += count;
+<<<<<<< HEAD
 						BCR_values.add(new Double(count));
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 					}
 					if (TRA) {
 						TRA_membership++;
 						total_TRA += count;
+<<<<<<< HEAD
 						TRA_values.add(new Double(count));
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 					}
 					if (TRB) {
 						TRB_membership++;
 						total_TRB += count;
+<<<<<<< HEAD
 						TRB_values.add(new Double(count));
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 					}
 					if (TRG) {
 						TRG_membership++;
 						total_TRG += count;
+<<<<<<< HEAD
 						TRG_values.add(new Double(count));
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 					}
 					if (TRD) {
 						TRD_membership++;
 						total_TRD += count;
+<<<<<<< HEAD
 						TRD_values.add(new Double(count));
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 					}
 					if (IGHG) {
 						IGHG_membership++;
 						total_IGHG += count;
+<<<<<<< HEAD
 						IGHG_values.add(new Double(count));
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 					}
 					if (IGHA) {
 						IGHA_membership++;
 						total_IGHA += count;
+<<<<<<< HEAD
 						IGHA_values.add(new Double(count));
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 					}
 					if (IGHE) {
 						IGHE_membership++;
 						total_IGHE += count;
+<<<<<<< HEAD
 						IGHE_values.add(new Double(count));
 					}
 					if (IGHD) {
@@ -219,6 +266,16 @@ public class TRUST4PostProcess2MatrixSummary {
 				in2.close();
 				
 				double TCR_CPK = tcr_membership * 1000 / total_count_of_tcr;								
+=======
+					}
+
+				}
+				in2.close();
+				
+				double TCR_CPK = tcr_membership * 1000 / total_count_of_tcr;
+				
+				
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 				double TRA_CPK = TRA_membership * 1000 / total_count_of_tcr;
 				double TRB_CPK = TRB_membership * 1000 / total_count_of_tcr;
 				double TRD_CPK = TRD_membership * 1000 / total_count_of_tcr;
@@ -235,13 +292,17 @@ public class TRUST4PostProcess2MatrixSummary {
 				double IGHG_Frac = IGHG_membership / bcr_membership;
 				double IGHA_Frac = IGHA_membership / bcr_membership;
 				double IGHE_Frac = IGHE_membership / bcr_membership;
+<<<<<<< HEAD
 				double IGHD_Frac = IGHD_membership / bcr_membership;
 				double IGHM_Frac = IGHM_membership / bcr_membership;
 				
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 				
 				double IGHG_CPK = IGHG_membership * 1000 / total_count_of_bcr;
 				double IGHA_CPK = IGHA_membership * 1000 / total_count_of_bcr;
 				double IGHE_CPK = IGHE_membership * 1000 / total_count_of_bcr;
+<<<<<<< HEAD
 				double IGHD_CPK = IGHD_membership * 1000 / total_count_of_bcr;
 				double IGHM_CPK = IGHM_membership * 1000 / total_count_of_bcr;
 
@@ -259,12 +320,18 @@ public class TRUST4PostProcess2MatrixSummary {
 				double IGHD_entropy = MathTools.shannon_entropy(IGHD_values);
 				double IGHM_entropy = MathTools.shannon_entropy(IGHM_values);
 				
+=======
+
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 				if (total_count_of_bcr == 0) {
 					IGHG_CPK = 0.0;
 					IGHA_CPK = 0.0;
 					IGHE_CPK = 0.0;
+<<<<<<< HEAD
 					IGHM_CPK = 0.0;
 					IGHD_CPK = 0.0;
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 					BCR_CPK = 0.0;
 				}
 				if (total_count_of_tcr == 0) {
@@ -278,8 +345,11 @@ public class TRUST4PostProcess2MatrixSummary {
 					IGHG_Frac = 0.0;
 					IGHA_Frac = 0.0;
 					IGHE_Frac = 0.0;
+<<<<<<< HEAD
 					IGHM_Frac = 0.0;
 					IGHD_Frac = 0.0;
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 				}
 				if (tcr_membership == 0) {
 					TRA_Frac = 0.0;
@@ -298,8 +368,12 @@ public class TRUST4PostProcess2MatrixSummary {
 				double T2B_ratio = (TCR_CPK) / (BCR_CPK);
 				if (total_count_of_tcr >= 1 && total_count_of_bcr >= 1) {
 				// out.write("SampleName\t     TCR_CPK\       BCR_CPK\t         TotalTCR\t                  TotalBCR\t                   TCR_Membership\t       BCR_Membership\t         TRA_Frac\tTRA_CPK\tTRB_Frac\tTRB_CPK\tTRD_Frac\tTRD_CPK\tTRG_Frac\tTRG_CPK\tTRAB_Frac\tTRGD_FRAC\n");
+<<<<<<< HEAD
 					// out.write("SampleName\tTCR_CPK\tBCR_CPK\tTCR_to_BCR_ratio\tTotalTCR\tTotalBCR\tTCR_Membership\tBCR_Membership\tTotal_TRA\tTRA_Frac\tTRA_CPK\tTotal_TRB\tTRB_Frac\tTRB_CPK\tTotal_TRD\tTRD_Frac\tTRD_CPK\tTotal_TRG\tTRG_Frac\tTRG_CPK\tTRAB_Frac\tTRDG_Frac\tTotal_IGHG\tIGHG_Frac\tIGHG_CPK\tTotal_IGHA\tIGHA_Frac\tIGHA_CPK\tTotal_IGHE\tIGHE_Frac\tIGHE_CPK\tTotal_IGHD\tIGHD_Frac\tIGHD_CPK\tTotal_IGHM\tIGHM_Frac\tIGHM_CPK\n");
 					out.write(sampleName + "\t" + TCR_CPK + "\t" + BCR_CPK + "\t" + T2B_ratio + "\t" + total_count_of_tcr + "\t" + total_count_of_bcr + "\t" + tcr_membership + "\t" + bcr_membership + "\t" + TCR_entropy + "\t" + BCR_entropy + "\t" + total_TRA + "\t" + TRA_membership + "\t" + TRA_entropy + "\t" + TRA_Frac + "\t" + TRA_CPK + "\t" + total_TRB + "\t" + TRB_membership + "\t" + TRB_entropy + "\t" + TRB_Frac + "\t" + TRB_CPK + "\t" + total_TRD + "\t" + TRD_membership + "\t" + TRD_entropy + "\t" + TRD_Frac + "\t" + TRD_CPK + "\t" + total_TRG + "\t" + TRG_membership + "\t" + TRG_entropy + "\t" + TRG_Frac + "\t" + TRG_CPK + "\t" + TRAB_Frac + "\t" + TRDG_Frac + "\t" + total_IGHG + "\t" + IGHG_membership + "\t" + IGHG_entropy + "\t" + IGHG_Frac + "\t" + IGHG_CPK + "\t" + total_IGHA + "\t" + IGHA_membership + "\t" + IGHA_entropy + "\t" + IGHA_Frac + "\t" + IGHA_CPK + "\t" + total_IGHE + "\t" + IGHE_membership + "\t" + IGHE_entropy + "\t" + IGHE_Frac + "\t" + IGHE_CPK + "\t" + total_IGHD + "\t" + IGHD_membership + "\t" + IGHD_entropy + "\t" + IGHD_Frac + "\t" + IGHD_CPK + "\t" + total_IGHM + "\t" + IGHM_membership + "\t" + IGHM_entropy + "\t" + IGHM_Frac + "\t" + IGHM_CPK + "\n");
+=======
+					out.write(sampleName + "\t" + TCR_CPK + "\t" + BCR_CPK + "\t" + T2B_ratio + "\t" + total_count_of_tcr + "\t" + total_count_of_bcr + "\t" + tcr_membership + "\t" + bcr_membership + "\t" + TRA_Frac + "\t" + TRA_CPK + "\t" + TRB_Frac + "\t" + TRB_CPK + "\t" + TRD_Frac + "\t" + TRD_CPK + "\t" + TRG_Frac + "\t" + TRG_CPK + "\t" + TRAB_Frac + "\t" + TRDG_Frac + "\t" + IGHG_Frac + "\t" + IGHG_CPK + "\t" + IGHA_Frac + "\t" + IGHA_CPK + "\t" + IGHE_Frac + "\t" + IGHE_CPK + "\n");
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 				}
 			}
 			in.close();
@@ -309,5 +383,8 @@ public class TRUST4PostProcess2MatrixSummary {
 			e.printStackTrace();
 		}
 	}
+<<<<<<< HEAD
 	
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 }

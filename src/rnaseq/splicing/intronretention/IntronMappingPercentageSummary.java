@@ -39,10 +39,13 @@ public class IntronMappingPercentageSummary {
 			while (itr.hasNext()) {
 				String file = (String)itr.next();
 				String bedFile = file.split("/")[file.split("/").length - 1] + ".bed";
+<<<<<<< HEAD
 				if (file.substring(file.length() - 4, file.length()).equals(".bed")) {
 					bedFile = file.split("/")[file.split("/").length - 1];
 				}
 				
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 				//script += "drppm -CountNumberOfUniqReads " + bedFile + " true > " + bedFile + ".count" + "\n";
 				
 				String all_file = bedFile + ".count";

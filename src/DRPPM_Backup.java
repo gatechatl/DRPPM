@@ -527,7 +527,10 @@ import rnaseq.splicing.mats308.FilterMATSResults;
 import rnaseq.splicing.mats308.GenerateOverlappingResults;
 import rnaseq.splicing.mats308.MATSGenerateResultTable;
 import rnaseq.splicing.mats308.MATSScriptGenerator;
+<<<<<<< HEAD
 
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 import rnaseq.splicing.mats308.OverlapAlternativeSplicingGeneList;
 import rnaseq.splicing.mats308.SummarizeMATSSummary;
 import rnaseq.splicing.mats308.SummarizeResultsAfterMATSFilter;
@@ -730,8 +733,13 @@ import stjude.proteinpaint.tracks.GenerateLowComplexityDomainInfo;
 import stjude.proteinpaint.tracks.OpenReadingFrameFinder;
 import stjude.tools.rnaseq.MergeGeneCountChunxuPipeline;
 import stjude.tools.rnaseq.RNASEQConfig2MappingScriptGenerator;
+<<<<<<< HEAD
 import uniprottool.ExtractFastaOrganism;
 import worddocgenerator.kinasesummary.GenerateWordKinaseSummary;
+=======
+import UniprotTool.ExtractFastaOrganism;
+import WordDocumentGenerator.KinaseSummary.GenerateWordKinaseSummary;
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 
 /**
  * Collection of scripts and pipelines for DNA RNA Proteomics Phosphoproteomics

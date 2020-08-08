@@ -1,6 +1,7 @@
 package rnaseq.splicing.juncsalvager;
 
 import java.io.BufferedReader;
+<<<<<<< HEAD
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
@@ -9,10 +10,16 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+=======
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 
 public class JuncSalvagerWilcoxTestPostProcessing {
 
 	
+<<<<<<< HEAD
 	public static String description() {
 		return "Prioritize the candidates.";
 	}
@@ -22,10 +29,13 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 	public static String parameter_info() {
 		return "[inputComprehensiveZScoreFile] [inputPCGPFolder] [inputPCGPAnnotationFile] [inputGTExFolder] [inputGTExAnnotationFile] [outputFile]";
 	}
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 	public static void execute(String[] args) {
 		
 		try {
 			
+<<<<<<< HEAD
 			String inputComprehensiveZScoreFile = args[0];
 			String inputPCGPFolder = args[1]; // PCGP_903_FPKM_ECM_filtcol.txt
 			String inputPCGPAnnotationFile = args[2]; // /rgs01/project_space/zhanggrp/AltSpliceAtlas/common/analysis/PCGP_TARGET_RNAseq_Analysis/PCGP_TARGET_Sample2DiseaseType.txt
@@ -36,12 +46,19 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 			HashMap pcgp_annotation = new HashMap();
 			
 			FileInputStream fstream = new FileInputStream(inputPCGPAnnotationFile);
+=======
+			String inputPCGPFolder = args[0]; // PCGP_903_FPKM_ECM_filtcol.txt
+			String inputInteractome = args[1];
+			String outputMetaSummary = args[2];
+			FileInputStream fstream = new FileInputStream(inputPCGPFolder);
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
 			String header = in.readLine();
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
+<<<<<<< HEAD
 				split[1] = split[1].replaceAll(" ", "_");
 				if (pcgp_annotation.containsKey(split[1])) {
 					LinkedList list = (LinkedList)pcgp_annotation.get(split[1]);
@@ -310,10 +327,17 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 				out.write(exon + "\t" + score + "\t" + (normal_exon_3rd_quartile_map.size() + normal_exon_4th_quartile_map.size()) + "\t" + normal_exon_1st_quartile_map.size() + "\t" + normal_exon_2nd_quartile_map.size() + "\t" + normal_exon_3rd_quartile_map.size() + "\t" + normal_exon_4th_quartile_map.size() + "\t" + disease_1st_quartile_map.size() + "\t" + disease_2nd_quartile_map.size() + "\t" + disease_3rd_quartile_map.size() + "\t" + disease_4th_quartile_map.size() + "\t" + normal_1 + "\t" + normal_2 + "\t" + normal_3 + "\t" + normal_4 + "\t" + disease_1 + "\t" + disease_2 + "\t" + disease_3 + "\t" + disease_4 + "\n");
 			}
 			out.close();
+=======
+				
+			}
+			in.close();
+			
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+<<<<<<< HEAD
 	public static String grab_hashmap_key(HashMap map) {
 		String result = "";
 		Iterator itr = map.keySet().iterator();
@@ -322,4 +346,6 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 		}
 		return result;
 	}
+=======
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 }

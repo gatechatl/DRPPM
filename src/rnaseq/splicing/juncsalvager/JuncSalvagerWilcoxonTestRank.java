@@ -259,10 +259,17 @@ public class JuncSalvagerWilcoxonTestRank {
 					double rank = (Double)disease2median.get(pcgp_disease);
 					double percentile = rank / new Double(meta_analysis_map.size());
 					if (percentile <= 0.5 && percentile > 0.25) { 
+<<<<<<< HEAD
 						disease_med_expr += pcgp_disease + ":" + rank + ",";						
 					}
 					if (percentile <= 0.25) { 
 						disease_high_expr += pcgp_disease + ":" + rank + ",";						
+=======
+						disease_med_expr += pcgp_disease + ",";						
+					}
+					if (percentile <= 0.25) { 
+						disease_high_expr += pcgp_disease + ",";						
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 					}				
 				}
 				out_meta_analysis.write(exon + "\t" + stouffer_zscore + "\t" + num_medhigh_expr_gtex + "\t" + gtex_med_high_histology + "\t" + disease_high_expr + "\t" + disease_med_expr + "\n");

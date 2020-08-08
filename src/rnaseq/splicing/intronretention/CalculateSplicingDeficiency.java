@@ -40,7 +40,11 @@ public class CalculateSplicingDeficiency {
 				String start = split[1];
 				String end = split[2];
 				int distance = Math.abs(new Integer(end) - new Integer(start)) + 1;
+<<<<<<< HEAD
 				String gene_name = split[3].split("\\.")[0].split("_exon")[0];
+=======
+				String gene_name = split[3].split("\\.")[0];
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 				all_genes.put(gene_name, gene_name);
 				if (intron_total.containsKey(gene_name)) {
 					int total = (Integer)intron_total.get(gene_name);
@@ -62,7 +66,11 @@ public class CalculateSplicingDeficiency {
 				String start = split[1];
 				String end = split[2];
 				int distance = Math.abs(new Integer(end) - new Integer(start)) + 1;
+<<<<<<< HEAD
 				String gene_name = split[3].split("\\.")[0].split("_exon")[0];
+=======
+				String gene_name = split[3].split("\\.")[0];
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 				all_genes.put(gene_name, gene_name);
 				
 				if (exon_total.containsKey(gene_name)) {
@@ -83,7 +91,11 @@ public class CalculateSplicingDeficiency {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
+<<<<<<< HEAD
 				String gene_name = split[3].split("\\.")[0].split("_exon")[0];
+=======
+				String gene_name = split[3].split("\\.")[0];
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 				int reads = new Integer(split[6]);
 				if (num_intronic_reads.containsKey(gene_name)) {
 					int num = (Integer)num_intronic_reads.get(gene_name);
@@ -102,7 +114,11 @@ public class CalculateSplicingDeficiency {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
+<<<<<<< HEAD
 				String gene_name = split[3].split("\\.")[0].split("_exon")[0];
+=======
+				String gene_name = split[3].split("\\.")[0];
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 				int reads = new Integer(split[6]);
 				if (num_exonic_reads.containsKey(gene_name)) {
 					int num = (Integer)num_exonic_reads.get(gene_name);

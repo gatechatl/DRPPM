@@ -97,7 +97,11 @@ public class EstimateSomaticMutationRateIGHFromTRUST4 {
 								String new_result = orig_mismatch + "\t" + orig_length;
 								igg_shm_stat.put(split2[5], new_result);
 							} else {
+<<<<<<< HEAD
 								String result = mismatch + "\t" + seq1.length();
+=======
+								String result = mismatch + "\t" + seq2.length();
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 								igg_shm_stat.put(split2[5], result);
 							}
 						}
@@ -172,11 +176,17 @@ public class EstimateSomaticMutationRateIGHFromTRUST4 {
 					String ighg_name = (String)itr.next();
 					String result = (String)igg_shm_stat.get(ighg_name);
 					double mut_rate = new Double(result.split("\t")[0]) / new Double(result.split("\t")[1]);
+<<<<<<< HEAD
 					//if (mut_rate >= 0) {
 					//if (new Double(result.split("\t")[1]) > 0) {
 					out.write(sampleName + "\t" + ighg_name + "\t" + mut_rate + "\t" + result + "\n");
 					//}
 
+=======
+					if (mut_rate > 0) {
+						out.write(sampleName + "\t" + ighg_name + "\t" + mut_rate + "\t" + result + "\n");
+					}
+>>>>>>> dae22fb134ef93dd3a4b55fe3f588cbbe3c83712
 				}
 			}
 			in.close();
