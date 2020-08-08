@@ -31,16 +31,6 @@ public class MathTools {
 			double val = (Double)itr.next();
 			System.out.println(val);
 		}*/
-		LinkedList test = new LinkedList();
-		test.add(99999.0);
-		test.add(0.0);
-		test.add(0.0);
-		test.add(0.0);
-		test.add(0.0);
-		test.add(0.0);
-		
-		System.out.println(shannon_entropy(test));
-		System.exit(0);
 		double[] vals = {-1, -2, -3, 1, 2};
 		//System.out.println(standardError(vals));
 		//System.out.println(log2(4));
@@ -175,38 +165,6 @@ public class MathTools {
         return pval;
 	}
 
-	/**
-	 * Hn(p)=-SUM{(pi * log(pi))/log(n)}. n is the number of samples
-	 * 
-	 * @param values
-	 * @return
-	 */
-	public static double shannon_entropy(LinkedList values) {
-		
-		if (values.size() == 0) {
-			return Double.NaN;
-		}
-		double sum = sum(convertListDouble2Double(values));
-		int count_greater_0 = 0;
-		Iterator itr = values.iterator();
-		while (itr.hasNext()) {
-			double value = (Double)itr.next();
-			
-			if (value >= 0) {
-				count_greater_0++;
-			}
-		}
-		double cumulative = 0;
-		itr = values.iterator();
-		while (itr.hasNext()) {
-			double value = (Double)itr.next();
-			if (value > 0) {
-				double p = value / sum;
-				cumulative += - p * Math.log(p) / Math.log(count_greater_0);
-			}
-		}
-		return cumulative;
-	}
 	
 	public static double[] convertListStr2Double(LinkedList list) {
 		double[] num = new double[list.size()];
