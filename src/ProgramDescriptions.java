@@ -2706,6 +2706,6 @@ public class ProgramDescriptions {
 		return result;
 	}	
 
-	public static String VERSION = "20200805";
+	public static String VERSION = "20200808";
 	
 }
