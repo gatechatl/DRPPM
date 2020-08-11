@@ -351,6 +351,7 @@ import rnaseq.mapping.tools.star.CuffLinksScriptGenerator;
 import rnaseq.mapping.tools.star.FastaAddRemoveChr;
 import rnaseq.mapping.tools.star.Fastq2FileList;
 import rnaseq.mapping.tools.star.Fastq2FileListFlex;
+import rnaseq.mapping.tools.star.Fastq2FileListSimple;
 import rnaseq.mapping.tools.star.GTFFileAddRemoveChr;
 import rnaseq.mapping.tools.star.HumanMouseXenograftRawCount2RPM;
 import rnaseq.mapping.tools.star.MergeBamFiles;
@@ -2417,7 +2418,10 @@ public class ProgramDescriptions {
 		
 		if (Fastq2FileListFlex.type().equals(type)) {
 			result += "Fastq2FileListFlex: " + Fastq2FileListFlex.description() + "\n";
-		}
+		} // 
+		if (Fastq2FileListSimple.type().equals(type)) {
+			result += "Fastq2FileListSimple: " + Fastq2FileListSimple.description() + "\n";
+		} // 
 		if (JinghuiZhangSTARMappingFromYawei.type().equals(type)) {
 			result += "JinghuiZhangSTARMappingFromYawei: " + JinghuiZhangSTARMappingFromYawei.description() + "\n";
 		}
@@ -2704,6 +2708,7 @@ public class ProgramDescriptions {
 		if (MergeGeneNameMAXFast.type().equals(type)) {
 			result += "MergeGeneNameMAXFast: " + MergeGeneNameMAXFast.description() + "\n";
 		}
+		
 		return result;
 	}	
 

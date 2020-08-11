@@ -552,6 +552,7 @@ import rnaseq.mapping.tools.star.CuffLinksScriptGenerator;
 import rnaseq.mapping.tools.star.FastaAddRemoveChr;
 import rnaseq.mapping.tools.star.Fastq2FileList;
 import rnaseq.mapping.tools.star.Fastq2FileListFlex;
+import rnaseq.mapping.tools.star.Fastq2FileListSimple;
 import rnaseq.mapping.tools.star.GTFFileAddRemoveChr;
 import rnaseq.mapping.tools.star.HumanMouseXenograftRawCount2RPM;
 import rnaseq.mapping.tools.star.MergeBamFiles;
@@ -3714,7 +3715,18 @@ public class DRPPM {
 				}
 				Fastq2FileListFlex.execute(args_remain);
 				System.exit(0);
-				// JinghuiZhangSTARMappingFromYawei
+				// Fastq2FileListSimple
+			} else if (type.equalsIgnoreCase("-Fastq2FileListSimple")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {					
+					System.out.println("drppm -Fastq2FileListSimple "
+							+ Fastq2FileListSimple.parameter_info());
+					System.out.println("Description: " + Fastq2FileListSimple.description());
+					System.exit(0);
+				}
+				Fastq2FileListSimple.execute(args_remain); // previous version
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-JinghuiZhangSTARMappingFromYawei")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {					
