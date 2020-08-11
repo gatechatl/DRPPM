@@ -673,6 +673,7 @@ import stjude.tools.rnaseq.RNASEQConfig2MappingScriptGenerator;
 
 /**
  * Using specific keyword to query the program information.
+ * Updated 8/11/2020
  * @author tshaw
  *
  */
