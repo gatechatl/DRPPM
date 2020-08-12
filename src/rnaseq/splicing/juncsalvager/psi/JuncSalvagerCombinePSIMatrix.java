@@ -24,7 +24,7 @@ public class JuncSalvagerCombinePSIMatrix {
 		return "JUNCSALVAGER";
 	}
 	public static String description() {
-		return "Combine the psi values. Replace NaN with user defined value. Generate a blacklist for those with > 50% junction with 0.\n";
+		return "Combine the psi values. Replace NaN with user defined value. Generate a blacklist for those with > 10% junction with 0.\n";
 	}
 	public static String parameter_info() {
 		return "[inputFileLst] [replaceNaNwithThis] [outputFile] [outputFileBlackList] [final_outputFile]";
@@ -106,7 +106,7 @@ public class JuncSalvagerCombinePSIMatrix {
 				String exon = (String)itr.next();
 				int black_list_count = (Integer)map.get(exon);
 				double score = new Double(black_list_count) / count;
-				if (score > 0.5) {
+				if (score > 0.1) {
 					out_blacklist.write(exon + "\n");
 					final_black_list.put(exon, exon);
 				}

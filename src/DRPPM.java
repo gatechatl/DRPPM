@@ -310,6 +310,7 @@ import expression.matrix.tools.MergeSamples;
 import expression.matrix.tools.MultiplyMatrixValuesWithFactor;
 import expression.matrix.tools.OrderGeneMatrixBasedOnTTestDist;
 import expression.matrix.tools.QuantileNormalization;
+import expression.matrix.tools.RemoveColumnThatsEmpty;
 import expression.matrix.tools.RemoveColumnWithNAs;
 import expression.matrix.tools.RemoveColumnWithNaN;
 import expression.matrix.tools.RemoveColumnWithNulls;
@@ -3813,6 +3814,17 @@ public class DRPPM {
 					System.exit(0);
 				}
 				RemoveColumnWithNaN.execute(args_remain);
+				System.exit(0);
+				// RemoveColumnThatsEmpty
+			} else if (type.equalsIgnoreCase("-RemoveColumnThatsEmpty")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {					
+					System.out.println("drppm -RemoveColumnThatsEmpty "
+							+ RemoveColumnThatsEmpty.parameter_info());
+					System.out.println("Description: " + RemoveColumnThatsEmpty.description());
+					System.exit(0);
+				}
+				RemoveColumnThatsEmpty.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-JinghuiZhangCheckFileSize")) {

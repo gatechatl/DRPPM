@@ -145,6 +145,7 @@ import expression.matrix.tools.MergeSamples;
 import expression.matrix.tools.MultiplyMatrixValuesWithFactor;
 import expression.matrix.tools.OrderGeneMatrixBasedOnTTestDist;
 import expression.matrix.tools.QuantileNormalization;
+import expression.matrix.tools.RemoveColumnThatsEmpty;
 import expression.matrix.tools.RemoveColumnWithNAs;
 import expression.matrix.tools.RemoveColumnWithNaN;
 import expression.matrix.tools.RemoveColumnWithNulls;
@@ -1045,6 +1046,9 @@ public class ProgramDescriptions {
 		}
 		if (RemoveColumnsFromMatrix.type().equals(type)) {
 			result += " -RemoveColumnsFromMatrix: " + RemoveColumnsFromMatrix.description() + "\n";
+		}
+		if (RemoveColumnThatsEmpty.type().equals(type)) {
+			result += " -RemoveColumnThatsEmpty: " + RemoveColumnThatsEmpty.description() + "\n";
 		}
 		if (MergeRowsMaximizePSM.type().equals(type)) {
 			result += " -MergeRowsMaximizePSM: " + MergeRowsMaximizePSM.description() + "\n";
