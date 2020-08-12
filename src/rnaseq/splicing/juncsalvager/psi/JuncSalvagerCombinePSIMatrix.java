@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
+ * Generate a combined PSI matrix. Replace NaN with user defined value. We recommend putting 1.0 representing exon is being used. Generate a blacklist for those with > 50% junction with 0.
+ * We also require the exon to contain at least 10 reads.
  * 
  * @author tshaw
  *
