@@ -141,7 +141,7 @@ public class JuncSalvagerCombinePSIMatrix {
 					while (in_head.ready()) {
 						String str_head = in_head.readLine();
 						String[] str_head_split = str_head.split("\t");
-						if (black_list_index.containsKey(idx)) {
+						if (!black_list_index.containsKey(idx)) {
 							out_final.write("\t" + str_head_split[0] + "_" + str_head_split[1] + "_" + str_head_split[2]);
 						}						
 						idx++;
@@ -163,7 +163,7 @@ public class JuncSalvagerCombinePSIMatrix {
 					while (in_psi.ready()) {
 						String str_psi = in_psi.readLine();
 						String[] split_psi = str_psi.split("\t");
-						if (black_list_index.containsKey(idx)) {
+						if (!black_list_index.containsKey(idx)) {
 							String exon = split_psi[0] + "_" + split_psi[1] + "_" + split_psi[2];							
 							out_final.write("\t" + split_psi[split_psi.length - 4].replaceAll("NaN", replaceNaNwithThis));
 						}
