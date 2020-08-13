@@ -619,6 +619,7 @@ import rnaseq.splicing.juncsalvager.JuncSalvagerPipeline;
 import rnaseq.splicing.juncsalvager.JuncSalvagerSplitMatrixCandidates;
 import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxTestPostProcessing;
 import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxonTestRank;
+import rnaseq.splicing.juncsalvager.JuncSalvagerExtractGeneMatrix;
 import rnaseq.splicing.juncsalvager.SummarizeNovelExonAltStartSiteMatrix;
 import rnaseq.splicing.juncsalvager.SummarizeNovelExonSiteMatrix;
 import rnaseq.splicing.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
@@ -11286,6 +11287,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				COMBATBatchCorrectionScriptGenerator.execute(args_remain);
+				System.exit(0);
+				// JuncSalvagerExtractGeneMatrix
+			} else if (type.equalsIgnoreCase("-JuncSalvagerExtractGeneMatrix")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvagerExtractGeneMatrix "
+							+ JuncSalvagerExtractGeneMatrix.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvagerExtractGeneMatrix.execute(args_remain);
 				System.exit(0);
 				// 
 			}

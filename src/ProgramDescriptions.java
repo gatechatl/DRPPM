@@ -390,6 +390,7 @@ import rnaseq.splicing.intronretention.OverlapMouseHumanGeneName;
 import rnaseq.splicing.juncsalvager.GenerateCombinedBEDFileFromJuncSalvagerSummary;
 import rnaseq.splicing.juncsalvager.JuncSalvagerAppendAnnotation2Prioritization;
 import rnaseq.splicing.juncsalvager.JuncSalvagerAppendProteomicsValidation;
+import rnaseq.splicing.juncsalvager.JuncSalvagerExtractGeneMatrix;
 import rnaseq.splicing.juncsalvager.JuncSalvagerPipeline;
 import rnaseq.splicing.juncsalvager.JuncSalvagerSplitMatrixCandidates;
 import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxTestPostProcessing;
@@ -2711,6 +2712,9 @@ public class ProgramDescriptions {
 		}
 		if (MergeGeneNameMAXFast.type().equals(type)) {
 			result += "MergeGeneNameMAXFast: " + MergeGeneNameMAXFast.description() + "\n";
+		}
+		if (JuncSalvagerExtractGeneMatrix.type().equals(type)) {
+			result += "JuncSalvagerExtractGeneMatrix: " + JuncSalvagerExtractGeneMatrix.description() + "\n";
 		}
 		
 		return result;
