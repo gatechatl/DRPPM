@@ -8,6 +8,11 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 
+/**
+ * /rgs01/project_space/zhanggrp/AltSpliceAtlas/common/analysis/Comprehensive_CAR-T_Analysis/hg38_full_exon_analysis/PSI_Exon_Skipping
+ * @author tshaw
+ *
+ */
 public class JuncSalvagerGeneratePSIScript {
 
 

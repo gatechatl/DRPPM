@@ -124,6 +124,7 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 			}
 			
 			HashMap scores = new HashMap(); // exon
+			HashMap composite_pow2_weights = new HashMap();
 			//HashMap scores_count = new HashMap();
 			HashMap disease_exon_1st_quartile = new HashMap();
 			HashMap disease_exon_2nd_quartile = new HashMap();
@@ -237,10 +238,10 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 							pcgp_target_disase.put(disease, disease);
 							disease_exon_4th_quartile.put(exon, pcgp_target_disase);
 						}
-					}
-					
+					}					
 					
 					double score = new Double(split[4]) * (disease_weight - gtex_weight);
+					double normalized_weight = Math.pow(disease_weight - gtex_weight, 2);
 					if (scores.containsKey(split[0])) {
 						double prev_score = (Double)scores.get(split[0]);
 						scores.put(split[0], (prev_score + score));
@@ -249,6 +250,17 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 						//scores_count.put(split[0] + "\t" + disease, count);
 					} else {
 						scores.put(split[0], score);
+						//scores_count.put(split[0] + "\t" + disease, 1);
+					}
+					// composite_pow2_weight
+					if (composite_pow2_weights.containsKey(split[0])) {
+						double prev_normalized_weight = (Double)composite_pow2_weights.get(split[0]);
+						composite_pow2_weights.put(split[0], (prev_normalized_weight + normalized_weight));
+						//int count = (Integer)scores_count.get(split[0] + "\t" + disease);
+						//count++;
+						//scores_count.put(split[0] + "\t" + disease, count);
+					} else {
+						composite_pow2_weights.put(split[0], normalized_weight);
 						//scores_count.put(split[0] + "\t" + disease, 1);
 					}
 				}
@@ -263,6 +275,8 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 			while (itr.hasNext()) {
 				String exon = (String)itr.next();
 				double score = (Double)scores.get(exon);
+				double composite_pow2_weight = (Double)composite_pow2_weights.get(exon);
+				
 				HashMap disease_1st_quartile_map = new HashMap();
 				if (disease_exon_1st_quartile.containsKey(exon)) {
 					disease_1st_quartile_map = (HashMap)disease_exon_1st_quartile.get(exon);
@@ -307,7 +321,7 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 				String disease_3 = grab_hashmap_key(disease_3rd_quartile_map);
 				String disease_4 = grab_hashmap_key(disease_4th_quartile_map);
 				
-				out.write(exon + "\t" + score + "\t" + (normal_exon_3rd_quartile_map.size() + normal_exon_4th_quartile_map.size()) + "\t" + normal_exon_1st_quartile_map.size() + "\t" + normal_exon_2nd_quartile_map.size() + "\t" + normal_exon_3rd_quartile_map.size() + "\t" + normal_exon_4th_quartile_map.size() + "\t" + disease_1st_quartile_map.size() + "\t" + disease_2nd_quartile_map.size() + "\t" + disease_3rd_quartile_map.size() + "\t" + disease_4th_quartile_map.size() + "\t" + normal_1 + "\t" + normal_2 + "\t" + normal_3 + "\t" + normal_4 + "\t" + disease_1 + "\t" + disease_2 + "\t" + disease_3 + "\t" + disease_4 + "\n");
+				out.write(exon + "\t" + (score / Math.sqrt(composite_pow2_weight)) + "\t" + (normal_exon_3rd_quartile_map.size() + normal_exon_4th_quartile_map.size()) + "\t" + normal_exon_1st_quartile_map.size() + "\t" + normal_exon_2nd_quartile_map.size() + "\t" + normal_exon_3rd_quartile_map.size() + "\t" + normal_exon_4th_quartile_map.size() + "\t" + disease_1st_quartile_map.size() + "\t" + disease_2nd_quartile_map.size() + "\t" + disease_3rd_quartile_map.size() + "\t" + disease_4th_quartile_map.size() + "\t" + normal_1 + "\t" + normal_2 + "\t" + normal_3 + "\t" + normal_4 + "\t" + disease_1 + "\t" + disease_2 + "\t" + disease_3 + "\t" + disease_4 + "\n");
 			}
 			out.close();
 		} catch (Exception e) {
