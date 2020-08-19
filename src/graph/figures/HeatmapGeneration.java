@@ -298,7 +298,7 @@ public class HeatmapGeneration {
 	}
 	
 	public static String PHeat_Annotation_Parameter_Info() {
-		return "[inputFile] [sampleName] [geneSetFile] [outputPng] [title] [rowclust] [colClust] [TakeLog] [width] [height] [rowFontSize] [colFontSize] [colorType]";
+		return "[inputFile] [sampleName] [geneSetFile] [outputPng] [title] [rowclust] [colClust] [TakeLog] [width] [height] [rowFontSize] [colFontSize] [colorType] [annotation file]";
 	}
 	public static void executePHeatAnnotation(String[] args) {
 		try {
@@ -397,7 +397,102 @@ public class HeatmapGeneration {
 		}		
 	}
 	
-	
+	public static void executePHeatAnnotationNoNorm(String[] args) {
+		try {
+
+			String inputFile = args[0]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\phospho_peptide_raw_data_GBM_Name_Collapse.txt";
+			String listAFile = args[1]; //"";
+			String geneSetFile = args[2]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\GangMouseGeneListAnalysis.txt";
+			String outputFile = args[3]; //"C:\\Users\\tshaw\\Desktop\\PROTEOMICS\\SusanBaker_Mouse_Hong\\Analysis\\GangGeneList\\Phospho_peptide_GBM_Genes.png";
+			boolean row_cluster = true;
+			boolean col_cluster = true;
+			String width_size = "800";
+			String height_size = "1200";
+			String title = "";
+			String takeLogStr = "FALSE";
+			String row_font_size = "11";
+			String col_font_size = "11";
+			String annotation = "";
+			int colorType = 0;
+			if (args.length > 4) { 			
+				title = args[4];
+				if (args[5].toUpperCase().equals("TRUE")) {
+					row_cluster = true;
+				} else {
+					row_cluster = false;
+				}
+				if (args[6].toUpperCase().equals("TRUE")) {
+					col_cluster = true;
+				} else {
+					col_cluster = false;
+				}
+				
+				
+				
+				if (args.length > 7) {
+					if (args[7].toUpperCase().equals("TRUE")) {
+						takeLogStr = "TRUE";
+					} else {
+						takeLogStr = "FALSE";
+					}
+					width_size = args[8];
+					height_size = args[9];
+				}
+				if (args.length > 10) {
+					row_font_size = args[10];
+					col_font_size = args[11];
+				}
+				if (args.length > 12) {
+					colorType = new Integer(args[12]);
+				}
+				if (args.length > 13) {
+					annotation = args[13];
+				}
+			}
+			
+			String futureParameter = ""; // this parameter contains the specification of the heatmap
+			//String h2mFile = args[3]; //"C:\\Users\\tshaw\\Desktop\\RNASEQ\\hs_mm_homo_r66.txt";
+			
+			//String takeLogStr = args[5];
+			
+			
+			boolean takeLog = false;
+			
+			if (takeLogStr.toUpperCase().equals("TRUE")) {			
+				takeLog = true;			
+			}
+			
+			String listA = ""; //"'p1a','p1b','P2','P3','N1','N2','N3','Ctl1','Ctl2','Ctl3'";
+			String geneSet = ""; //"\"Pdgfra\", \"Kit\", \"Met\", \"Egfr\", \"Igf1r\", \"Braf\", \"Nras\", \"Kras\", \"Pik3ca\", \"Mycn\", \"Myc\", \"Mdm2\", \"Mdm4\", \"Cdk4\", \"Cdk6\", \"Ccnd2\", \"Nf1\", \"Pten\", \"Trp53\", \"Cdkn2a\", \"Cdkn2b\", \"Cdkn2c\", \"Rb1\"";
+			
+			//HashMap h2m = human2mouse(h2mFile);
+			
+			LinkedList listA_list = new LinkedList();
+			
+			if (!(listAFile.equals("") || listAFile.toUpperCase().equals("NA"))) {
+				listA_list = readGroupList(listAFile);
+			}
+			
+			LinkedList geneSet_list = readGroupList(geneSetFile);
+			
+			LinkedList allGeneName = readGeneNames(inputFile);
+						
+			//geneSet_list = convertH2MGene(geneSet_list, h2m);
+			
+			geneSet_list = filterList(geneSet_list, allGeneName);
+			
+			listA = list2str(listA_list);
+			
+			geneSet = list2strV2(geneSet_list);
+			
+			System.out.println(generatePHeatmapScriptAnnotationNoNorm(inputFile, outputFile, listA, geneSet, title, takeLog, geneSet_list.size(), col_cluster, row_cluster, width_size, height_size, row_font_size, col_font_size, colorType, annotation));
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}		
+	}	
 	public static void execute(String[] args) {
 		try {
 
@@ -779,12 +874,18 @@ public class HeatmapGeneration {
 		}
 		
 		
-		script += "sampleLocation = col_labels;\n";
+		//script += "sampleLocation = col_labels;\n";
 		//script += "sampleNames = col_labels[sampleLocation];\n";
 		
-		script += "sampleNames = col_labels;\n";
-		script += "labels = sampleNames;\n";
-		script += "colnames(selection) = col_labels;\n";
+		//script += "sampleNames = col_labels;\n";
+		//script += "labels = sampleNames;\n";
+		//script += "colnames(selection) = col_labels;\n";
+		//script += "sampleLocation = col_labels;\n";
+		//script += "sampleNames = col_labels[sampleLocation];\n";
+		
+		//script += "sampleNames = col_labels;\n";
+		script += "labels = col_labels;\n";
+		//script += "colnames(selection) = col_labels;\n";
 
 		if (log) {
 			script += "selection = log2(selection[labels] + 0.1);\n";
@@ -872,12 +973,15 @@ public class HeatmapGeneration {
 		}
 		
 		
-		script += "sampleLocation = col_labels;\n";
+		//script += "sampleLocation = col_labels;\n";
+		//script += "sampleNames = col_labels[sampleLocation];\n";
+
+		//script += "sampleLocation = col_labels;\n";
 		//script += "sampleNames = col_labels[sampleLocation];\n";
 		
-		script += "sampleNames = col_labels;\n";
-		script += "labels = sampleNames;\n";
-		script += "colnames(selection) = col_labels;\n";
+		//script += "sampleNames = col_labels;\n";
+		script += "labels = col_labels;\n";
+		//script += "colnames(selection) = col_labels;\n";
 
 		if (log) {
 			script += "selection = log2(selection[labels] + 0.1);\n";
@@ -918,6 +1022,100 @@ public class HeatmapGeneration {
 			script += "hmcols<- colorRampPalette(c(\"#34c5fd\",\"black\",\"red\"))(length(bk)-1)\n";
 		} else if (colorType == 2) {
 			script += "hmcols<- colorRampPalette(c(\"green\",\"black\",\"red\"))(length(bk)-1)\n";
+		}
+		
+		script += "png(file = \"" + outputFile + "\", width=" + width_size + ",height=" + height_size + ")\n";
+		String cluster_col = "T";
+		String cluster_row = "T";
+		if (!col_cluster) {
+			cluster_col = "F";
+		}
+		if (!row_cluster) {
+			cluster_row = "F";
+		}
+		// 2018/10/18 updated from complete to ward
+		String append_show_row = "show_rownames = T";
+		String append_show_col = "show_colnames = T";
+		if (new Double(row_font_size) == 0.0) {
+			row_font_size = "12";
+			append_show_row = "show_rownames = F";
+		}
+		if (new Double(col_font_size) == 0.0) {
+			col_font_size = "12";
+			append_show_col = "show_colnames = F";
+		}
+		script += "result2 = pheatmap(dataset, cluster_col = " + cluster_col + ", cluster_row = " + cluster_row + ", fontsize_row = " + row_font_size + ", fontsize_col = " + col_font_size + ", " + append_show_row + " , " + append_show_col + " , clustering_method = \"ward\", color=hmcols, annotation_col=annotation)\n";
+		script += "dev.off();\n";
+		//script += "clust <- cbind(result2, cluster = cutree(result2$tree_row, k = 10))\n";
+		script += "write.table(result2$tree_col$labels[result2$tree_col$order], file=\"" + outputFile + "._ordered_colnames.txt\")\n";
+		script += "write.table(result2$tree_row$labels[result2$tree_row$order], file=\"" + outputFile + "._ordered_row.txt\")\n";
+		return script;
+	}
+	
+	/**
+	 * Generate pheatmap annotation
+	 */
+	public static String generatePHeatmapScriptAnnotationNoNorm(String inputFile, String outputFile, String listA, String geneSet, String title, boolean log, int size, boolean col_cluster, boolean row_cluster, String width_size, String height_size, String row_font_size, String col_font_size, int colorType, String annotation) {
+		String script = "";
+		script += "options(bitmapType='cairo')\n";
+		script += "allDat = read.table(\"" + inputFile.replaceAll("\\\\", "/") + "\", header=TRUE, row.names=1 ,sep=\"\\t\");\n";
+		script += "selection = allDat;\n";
+		script += "rownames = rownames(selection);\n";
+		if (!listA.equals("")) {
+			script += "A = c(" + listA + ")\n";
+			script += "col_labels = A;\n";
+		} else {
+			script += "col_labels = colnames(selection);\n";
+		}
+		
+		
+		//script += "sampleLocation = col_labels;\n";
+		//script += "sampleNames = col_labels[sampleLocation];\n";
+		
+		//script += "sampleNames = col_labels;\n";
+		script += "labels = col_labels;\n";
+		//script += "colnames(selection) = col_labels;\n";
+
+		if (log) {
+			script += "selection = log2(selection[labels] + 1.0);\n";
+		}
+
+		//script += "rows = length(selection[,1]);\n";
+
+		//script += "zselection = apply(selection, 1, scale);\n";
+
+		//script += "zselection = apply(zselection, 1, rev)\n";
+
+		script += "zselection = selection\n";
+		script += "colnames(zselection) = names(selection)\n";
+		
+		
+		script += "selection = as.matrix(zselection);\n";
+		//script += "rownames(selection) = rownames;\n";
+		script += "selection[is.na(selection)] = 0;\n";
+		
+		script += geneSet;
+		
+		script += "dataset = selection[geneList,]\n";
+		
+		script += "dataset = dataset[apply(dataset[,-1], 1, function(x) !all(x==0)),]\n";
+		script += "library(pheatmap)\n";
+		script += "minimum = min(dataset);\n";
+		script += "maximum = max(dataset);\n";
+		//script += "if (abs(min(dataset)) > abs(max(dataset))) {\n";
+		//script += "dataset[dataset < -abs(max(dataset))] = -abs(max(dataset))\n";
+		//script += "} else {\n";
+		//script += "dataset[dataset > abs(min(dataset))] = abs(min(dataset))\n";
+		//script += "}\n";
+		script += "annotation = read.csv(file=\"" + annotation + "\",head=TRUE,sep=\"\\t\",stringsAsFactors=F,row.names = 1)\n";
+		
+		script += "bk = c(seq(minimum,minimum/2, length=100), seq(minimum/2,maximum/2,length=100),seq(maximum/2,maximum,length=100))\n";
+		if (colorType == 0) {
+			script += "hmcols<- colorRampPalette(c(\"white\",\"blue\",\"red\"))(length(bk)-1)\n";
+		} else if (colorType == 1) {
+			script += "hmcols<- colorRampPalette(c(\"white\",\"#34c5fd\",\"red\"))(length(bk)-1)\n";
+		} else if (colorType == 2) {
+			script += "hmcols<- colorRampPalette(c(\"white\",\"green\"\"red\"))(length(bk)-1)\n";
 		}
 		
 		script += "png(file = \"" + outputFile + "\", width=" + width_size + ",height=" + height_size + ")\n";

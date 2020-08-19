@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
+ * Generate a combined PSI matrix. Replace NaN with user defined value. We recommend putting 1.0 representing exon is being used. Generate a blacklist for those with > 50% junction with 0.
+ * We also require the exon to contain at least 10 reads.
  * 
  * @author tshaw
  *
@@ -22,7 +24,7 @@ public class JuncSalvagerCombinePSIMatrix {
 		return "JUNCSALVAGER";
 	}
 	public static String description() {
-		return "Combine the psi values. Replace NaN with user defined value. Generate a blacklist for those with > 50% junction with 0.\n";
+		return "Combine the psi values. Replace NaN with user defined value. Generate a blacklist for those with > 10% junction with 0.\n";
 	}
 	public static String parameter_info() {
 		return "[inputFileLst] [replaceNaNwithThis] [outputFile] [outputFileBlackList] [final_outputFile]";
@@ -104,7 +106,7 @@ public class JuncSalvagerCombinePSIMatrix {
 				String exon = (String)itr.next();
 				int black_list_count = (Integer)map.get(exon);
 				double score = new Double(black_list_count) / count;
-				if (score > 0.5) {
+				if (score > 0.1) {
 					out_blacklist.write(exon + "\n");
 					final_black_list.put(exon, exon);
 				}
@@ -141,7 +143,7 @@ public class JuncSalvagerCombinePSIMatrix {
 					while (in_head.ready()) {
 						String str_head = in_head.readLine();
 						String[] str_head_split = str_head.split("\t");
-						if (black_list_index.containsKey(idx)) {
+						if (!black_list_index.containsKey(idx)) {
 							out_final.write("\t" + str_head_split[0] + "_" + str_head_split[1] + "_" + str_head_split[2]);
 						}						
 						idx++;
@@ -163,7 +165,7 @@ public class JuncSalvagerCombinePSIMatrix {
 					while (in_psi.ready()) {
 						String str_psi = in_psi.readLine();
 						String[] split_psi = str_psi.split("\t");
-						if (black_list_index.containsKey(idx)) {
+						if (!black_list_index.containsKey(idx)) {
 							String exon = split_psi[0] + "_" + split_psi[1] + "_" + split_psi[2];							
 							out_final.write("\t" + split_psi[split_psi.length - 4].replaceAll("NaN", replaceNaNwithThis));
 						}

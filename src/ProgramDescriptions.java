@@ -145,6 +145,7 @@ import expression.matrix.tools.MergeSamples;
 import expression.matrix.tools.MultiplyMatrixValuesWithFactor;
 import expression.matrix.tools.OrderGeneMatrixBasedOnTTestDist;
 import expression.matrix.tools.QuantileNormalization;
+import expression.matrix.tools.RemoveColumnThatsEmpty;
 import expression.matrix.tools.RemoveColumnWithNAs;
 import expression.matrix.tools.RemoveColumnWithNaN;
 import expression.matrix.tools.RemoveColumnWithNulls;
@@ -351,6 +352,7 @@ import rnaseq.mapping.tools.star.CuffLinksScriptGenerator;
 import rnaseq.mapping.tools.star.FastaAddRemoveChr;
 import rnaseq.mapping.tools.star.Fastq2FileList;
 import rnaseq.mapping.tools.star.Fastq2FileListFlex;
+import rnaseq.mapping.tools.star.Fastq2FileListSimple;
 import rnaseq.mapping.tools.star.GTFFileAddRemoveChr;
 import rnaseq.mapping.tools.star.HumanMouseXenograftRawCount2RPM;
 import rnaseq.mapping.tools.star.MergeBamFiles;
@@ -388,6 +390,7 @@ import rnaseq.splicing.intronretention.OverlapMouseHumanGeneName;
 import rnaseq.splicing.juncsalvager.GenerateCombinedBEDFileFromJuncSalvagerSummary;
 import rnaseq.splicing.juncsalvager.JuncSalvagerAppendAnnotation2Prioritization;
 import rnaseq.splicing.juncsalvager.JuncSalvagerAppendProteomicsValidation;
+import rnaseq.splicing.juncsalvager.JuncSalvagerExtractGeneMatrix;
 import rnaseq.splicing.juncsalvager.JuncSalvagerPipeline;
 import rnaseq.splicing.juncsalvager.JuncSalvagerSplitMatrixCandidates;
 import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxTestPostProcessing;
@@ -673,7 +676,7 @@ import stjude.tools.rnaseq.RNASEQConfig2MappingScriptGenerator;
 
 /**
  * Using specific keyword to query the program information.
- * Updated 8/11/2020
+ * Updated 8/11/2020 
  * @author tshaw
  *
  */
@@ -1044,6 +1047,9 @@ public class ProgramDescriptions {
 		}
 		if (RemoveColumnsFromMatrix.type().equals(type)) {
 			result += " -RemoveColumnsFromMatrix: " + RemoveColumnsFromMatrix.description() + "\n";
+		}
+		if (RemoveColumnThatsEmpty.type().equals(type)) {
+			result += " -RemoveColumnThatsEmpty: " + RemoveColumnThatsEmpty.description() + "\n";
 		}
 		if (MergeRowsMaximizePSM.type().equals(type)) {
 			result += " -MergeRowsMaximizePSM: " + MergeRowsMaximizePSM.description() + "\n";
@@ -2417,7 +2423,10 @@ public class ProgramDescriptions {
 		
 		if (Fastq2FileListFlex.type().equals(type)) {
 			result += "Fastq2FileListFlex: " + Fastq2FileListFlex.description() + "\n";
-		}
+		} // 
+		if (Fastq2FileListSimple.type().equals(type)) {
+			result += "Fastq2FileListSimple: " + Fastq2FileListSimple.description() + "\n";
+		} // 
 		if (JinghuiZhangSTARMappingFromYawei.type().equals(type)) {
 			result += "JinghuiZhangSTARMappingFromYawei: " + JinghuiZhangSTARMappingFromYawei.description() + "\n";
 		}
@@ -2704,6 +2713,10 @@ public class ProgramDescriptions {
 		if (MergeGeneNameMAXFast.type().equals(type)) {
 			result += "MergeGeneNameMAXFast: " + MergeGeneNameMAXFast.description() + "\n";
 		}
+		if (JuncSalvagerExtractGeneMatrix.type().equals(type)) {
+			result += "JuncSalvagerExtractGeneMatrix: " + JuncSalvagerExtractGeneMatrix.description() + "\n";
+		}
+		
 		return result;
 	}	
 
