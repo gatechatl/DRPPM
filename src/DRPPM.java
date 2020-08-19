@@ -310,7 +310,6 @@ import expression.matrix.tools.MergeSamples;
 import expression.matrix.tools.MultiplyMatrixValuesWithFactor;
 import expression.matrix.tools.OrderGeneMatrixBasedOnTTestDist;
 import expression.matrix.tools.QuantileNormalization;
-import expression.matrix.tools.RemoveColumnThatsEmpty;
 import expression.matrix.tools.RemoveColumnWithNAs;
 import expression.matrix.tools.RemoveColumnWithNaN;
 import expression.matrix.tools.RemoveColumnWithNulls;
@@ -553,7 +552,6 @@ import rnaseq.mapping.tools.star.CuffLinksScriptGenerator;
 import rnaseq.mapping.tools.star.FastaAddRemoveChr;
 import rnaseq.mapping.tools.star.Fastq2FileList;
 import rnaseq.mapping.tools.star.Fastq2FileListFlex;
-import rnaseq.mapping.tools.star.Fastq2FileListSimple;
 import rnaseq.mapping.tools.star.GTFFileAddRemoveChr;
 import rnaseq.mapping.tools.star.HumanMouseXenograftRawCount2RPM;
 import rnaseq.mapping.tools.star.MergeBamFiles;
@@ -619,7 +617,6 @@ import rnaseq.splicing.juncsalvager.JuncSalvagerPipeline;
 import rnaseq.splicing.juncsalvager.JuncSalvagerSplitMatrixCandidates;
 import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxTestPostProcessing;
 import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxonTestRank;
-import rnaseq.splicing.juncsalvager.JuncSalvagerExtractGeneMatrix;
 import rnaseq.splicing.juncsalvager.SummarizeNovelExonAltStartSiteMatrix;
 import rnaseq.splicing.juncsalvager.SummarizeNovelExonSiteMatrix;
 import rnaseq.splicing.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
@@ -956,7 +953,7 @@ import worddocgenerator.kinasesummary.GenerateWordKinaseSummary;
 /**
  * Collection of scripts and pipelines for DNA RNA Proteomics Phosphoproteomics
  * and Metabolomic and Metagenomics This is the centralized jar class for
- * combining all datatype Last updated 2020-8-18
+ * combining all datatype Last updated 2017-06-29
  * 
  * @author Timothy Shaw
  * 
@@ -3717,18 +3714,7 @@ public class DRPPM {
 				}
 				Fastq2FileListFlex.execute(args_remain);
 				System.exit(0);
-				// Fastq2FileListSimple
-			} else if (type.equalsIgnoreCase("-Fastq2FileListSimple")) {
-				String[] args_remain = getRemaining(args);
-				if (args_remain.length == 0) {					
-					System.out.println("drppm -Fastq2FileListSimple "
-							+ Fastq2FileListSimple.parameter_info());
-					System.out.println("Description: " + Fastq2FileListSimple.description());
-					System.exit(0);
-				}
-				Fastq2FileListSimple.execute(args_remain); // previous version
-				System.exit(0);
-				// 
+				// JinghuiZhangSTARMappingFromYawei
 			} else if (type.equalsIgnoreCase("-JinghuiZhangSTARMappingFromYawei")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {					
@@ -3815,17 +3801,6 @@ public class DRPPM {
 					System.exit(0);
 				}
 				RemoveColumnWithNaN.execute(args_remain);
-				System.exit(0);
-				// RemoveColumnThatsEmpty
-			} else if (type.equalsIgnoreCase("-RemoveColumnThatsEmpty")) {
-				String[] args_remain = getRemaining(args);
-				if (args_remain.length == 0) {					
-					System.out.println("drppm -RemoveColumnThatsEmpty "
-							+ RemoveColumnThatsEmpty.parameter_info());
-					System.out.println("Description: " + RemoveColumnThatsEmpty.description());
-					System.exit(0);
-				}
-				RemoveColumnThatsEmpty.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-JinghuiZhangCheckFileSize")) {
@@ -11287,16 +11262,6 @@ public class DRPPM {
 					System.exit(0);
 				}
 				COMBATBatchCorrectionScriptGenerator.execute(args_remain);
-				System.exit(0);
-				// JuncSalvagerExtractGeneMatrix
-			} else if (type.equalsIgnoreCase("-JuncSalvagerExtractGeneMatrix")) {
-				String[] args_remain = getRemaining(args);
-				if (args_remain.length == 0) {
-					System.out.println("drppm -JuncSalvagerExtractGeneMatrix "
-							+ JuncSalvagerExtractGeneMatrix.parameter_info());
-					System.exit(0);
-				}
-				JuncSalvagerExtractGeneMatrix.execute(args_remain);
 				System.exit(0);
 				// 
 			}

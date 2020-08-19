@@ -242,6 +242,7 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 					
 					double score = new Double(split[4]) * (disease_weight - gtex_weight);
 					double normalized_weight = Math.pow(disease_weight - gtex_weight, 2);
+					
 					if (scores.containsKey(split[0])) {
 						double prev_score = (Double)scores.get(split[0]);
 						scores.put(split[0], (prev_score + score));
@@ -250,6 +251,17 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 						//scores_count.put(split[0] + "\t" + disease, count);
 					} else {
 						scores.put(split[0], score);
+						//scores_count.put(split[0] + "\t" + disease, 1);
+					}
+					// composite_pow2_weight
+					if (composite_pow2_weights.containsKey(split[0])) {
+						double prev_normalized_weight = (Double)composite_pow2_weights.get(split[0]);
+						composite_pow2_weights.put(split[0], (prev_normalized_weight + normalized_weight));
+						//int count = (Integer)scores_count.get(split[0] + "\t" + disease);
+						//count++;
+						//scores_count.put(split[0] + "\t" + disease, count);
+					} else {
+						composite_pow2_weights.put(split[0], normalized_weight);
 						//scores_count.put(split[0] + "\t" + disease, 1);
 					}
 					// composite_pow2_weight
