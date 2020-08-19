@@ -32,6 +32,7 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 			String inputGTExFolder = args[3]; // GTEx_7526_FPKM_ECM_filtcol.txt
 			String inputGTExAnnotationFile = args[4]; // /research/rgs01/project_space/zhanggrp/MethodDevelopment/common/ExonLevelQuantificationPipeline/Reference/ExonLevelGTF/GTEx_Annotation/GTEx_SampleID2Histology.txt
 			String outputFile = args[5];
+			String outputFile_moreNormalization = args[6];
 			
 			HashMap pcgp_annotation = new HashMap();
 			
@@ -283,6 +284,10 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 			BufferedWriter out = new BufferedWriter(fwriter);
 			out.write("Exon\tWeightedScore\tHighNormal\tNumGTEx1stQuartile\tNumGTEx2ndQuartile\tNumGTEx3rdQuartile\tNumGTEx4thQuartile\tNumDisease1stQuartile\tNumDisease2ndQuartile\tNumDisease3rdQuartile\tNumDisease4thQuartile\tGTEx1stQuartile\tGTEx2ndQuartile\tGTEx3rdQuartile\tGTEx4thQuartile\tDisease1stQuartile\tDisease2ndQuartile\tDisease3rdQuartile\tDisease4thQuartile\n");
 			
+			FileWriter fwriter2 = new FileWriter(outputFile_moreNormalization);
+			BufferedWriter out2 = new BufferedWriter(fwriter2);
+			out2.write("Exon\tWeightedScore\tHighNormal\tNumGTEx1stQuartile\tNumGTEx2ndQuartile\tNumGTEx3rdQuartile\tNumGTEx4thQuartile\tNumDisease1stQuartile\tNumDisease2ndQuartile\tNumDisease3rdQuartile\tNumDisease4thQuartile\tGTEx1stQuartile\tGTEx2ndQuartile\tGTEx3rdQuartile\tGTEx4thQuartile\tDisease1stQuartile\tDisease2ndQuartile\tDisease3rdQuartile\tDisease4thQuartile\n");
+			
 			itr = scores.keySet().iterator();
 			while (itr.hasNext()) {
 				String exon = (String)itr.next();
@@ -333,9 +338,11 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 				String disease_3 = grab_hashmap_key(disease_3rd_quartile_map);
 				String disease_4 = grab_hashmap_key(disease_4th_quartile_map);
 				
-				out.write(exon + "\t" + (score / Math.sqrt(composite_pow2_weight)) + "\t" + (normal_exon_3rd_quartile_map.size() + normal_exon_4th_quartile_map.size()) + "\t" + normal_exon_1st_quartile_map.size() + "\t" + normal_exon_2nd_quartile_map.size() + "\t" + normal_exon_3rd_quartile_map.size() + "\t" + normal_exon_4th_quartile_map.size() + "\t" + disease_1st_quartile_map.size() + "\t" + disease_2nd_quartile_map.size() + "\t" + disease_3rd_quartile_map.size() + "\t" + disease_4th_quartile_map.size() + "\t" + normal_1 + "\t" + normal_2 + "\t" + normal_3 + "\t" + normal_4 + "\t" + disease_1 + "\t" + disease_2 + "\t" + disease_3 + "\t" + disease_4 + "\n");
+				out.write(exon + "\t" + (score) + "\t" + (normal_exon_3rd_quartile_map.size() + normal_exon_4th_quartile_map.size()) + "\t" + normal_exon_1st_quartile_map.size() + "\t" + normal_exon_2nd_quartile_map.size() + "\t" + normal_exon_3rd_quartile_map.size() + "\t" + normal_exon_4th_quartile_map.size() + "\t" + disease_1st_quartile_map.size() + "\t" + disease_2nd_quartile_map.size() + "\t" + disease_3rd_quartile_map.size() + "\t" + disease_4th_quartile_map.size() + "\t" + normal_1 + "\t" + normal_2 + "\t" + normal_3 + "\t" + normal_4 + "\t" + disease_1 + "\t" + disease_2 + "\t" + disease_3 + "\t" + disease_4 + "\n");
+				out2.write(exon + "\t" + (score / Math.sqrt(composite_pow2_weight)) + "\t" + (normal_exon_3rd_quartile_map.size() + normal_exon_4th_quartile_map.size()) + "\t" + normal_exon_1st_quartile_map.size() + "\t" + normal_exon_2nd_quartile_map.size() + "\t" + normal_exon_3rd_quartile_map.size() + "\t" + normal_exon_4th_quartile_map.size() + "\t" + disease_1st_quartile_map.size() + "\t" + disease_2nd_quartile_map.size() + "\t" + disease_3rd_quartile_map.size() + "\t" + disease_4th_quartile_map.size() + "\t" + normal_1 + "\t" + normal_2 + "\t" + normal_3 + "\t" + normal_4 + "\t" + disease_1 + "\t" + disease_2 + "\t" + disease_3 + "\t" + disease_4 + "\n");
 			}
 			out.close();
+			out2.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
