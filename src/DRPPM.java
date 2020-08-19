@@ -956,7 +956,7 @@ import worddocgenerator.kinasesummary.GenerateWordKinaseSummary;
 /**
  * Collection of scripts and pipelines for DNA RNA Proteomics Phosphoproteomics
  * and Metabolomic and Metagenomics This is the centralized jar class for
- * combining all datatype Last updated 2017-06-29
+ * combining all datatype Last updated 2020-8-18
  * 
  * @author Timothy Shaw
  * 
