@@ -21,7 +21,7 @@ public class MultiplyMatrixValuesWithFactor {
 		return "EXPRESSION";
 	}
 	public static String parameter_info() {
-		return "[inputMatrixFile] [col_index_value_start] [factor] [toIntValue] [outputMatrixFile]";
+		return "[inputMatrixFile] [col_index_value_start] [factor] [toIntValue flag: true/false] [outputMatrixFile]";
 	}
 	public static void execute(String[] args) {
 		
