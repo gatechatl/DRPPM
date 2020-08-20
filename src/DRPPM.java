@@ -622,6 +622,7 @@ import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxonTestRank;
 import rnaseq.splicing.juncsalvager.JuncSalvagerExtractGeneMatrix;
 import rnaseq.splicing.juncsalvager.SummarizeNovelExonAltStartSiteMatrix;
 import rnaseq.splicing.juncsalvager.SummarizeNovelExonSiteMatrix;
+import rnaseq.splicing.juncsalvager.psi.JuncSalvager5prime3primeUsagePSI;
 import rnaseq.splicing.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
 import rnaseq.splicing.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
@@ -996,7 +997,7 @@ public class DRPPM {
 				GTFFileGeneName.execute(args_remain);
 				System.exit(0);
 				// JuncSalvagerExonSkippingPSI
-			}  else if (type.equalsIgnoreCase("-JuncSalvagerExonSkippingPSI")) {
+			} else if (type.equalsIgnoreCase("-JuncSalvagerExonSkippingPSI")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -JuncSalvagerExonSkippingPSI "
@@ -1005,7 +1006,17 @@ public class DRPPM {
 				}
 				JuncSalvagerExonSkippingPSI.execute(args_remain);
 				System.exit(0);
-				// JuncSalvagerGeneratePSIScript
+				// JuncSalvager5prime3primeUsagePSI
+			} else if (type.equalsIgnoreCase("-JuncSalvager5prime3primeUsagePSI")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvager5prime3primeUsagePSI "
+							+ JuncSalvager5prime3primeUsagePSI.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvager5prime3primeUsagePSI.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-JuncSalvagerGeneratePSIScript")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {

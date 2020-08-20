@@ -130,7 +130,7 @@ public class JuncSalvagerExonSkippingPSI {
 				int index0 = intron_left / 1000000;
 				index0 = index0 * 1000000;
 				int index1 = (index0 - 1) * 1000000;
-				int index2 = (index0 - 1) * 1000000;
+				int index2 = (index0 + 1) * 1000000;
 				if (exon.containsKey(chr)) {
 					HashMap coord = (HashMap)exon.get(chr);
 					if (coord.containsKey(index0)) {
@@ -192,11 +192,7 @@ public class JuncSalvagerExonSkippingPSI {
 				double pso = skip / (((left_count + right_count) / 2) + skip);
 				
 				double exon_usage = 0.0;
-				if (left_count > right_count) {
-					exon_usage = right_count;
-				} else {
-					exon_usage = left_count;
-				}
+				
 				/*if (left_count > 5 && right_count > 5) {					
 					exon_usage = (left_count + right_count) / 2;
 				} else {
