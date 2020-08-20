@@ -41,7 +41,7 @@ public class JuncSalvagerGeneratePSIScript {
 				String str = in.readLine();
 				File f = new File(str);
 				if (f.exists()) {
-					out.write("drppm -JuncSalvagerExonSkippingPSI " + str + " " + gtfFile + " 5 " + outputFolder + "/" + f.getName() + ".psi.txt" + "\n");
+					out.write("drppm -JuncSalvagerExonSkippingPSI " + str + " " + gtfFile + " 5 " + outputFolder + "/" + f.getName() + ".pso.txt" + " " + outputFolder + "/" + f.getName() + ".psi.txt" + "\n");
 					//System.out.println("drppm -JuncSalvagerExonSkippingPSI " + fileLst + " " + gtfFile + " " + outputFolder + "/" + f.getName() + ".psi.txt");
 				} else {
 					System.out.println("Warning! File doesn't exist: " + f.getPath());
