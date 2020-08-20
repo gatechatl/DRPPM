@@ -12,15 +12,18 @@ import java.util.Iterator;
 public class JuncSalvagerPrioritizeGeneLevelScore {
 
 	
-	public static void main(String[] args) {
+	public static void execute(String[] args) {
 		
 		try {
 			
 			HashMap map = new HashMap();
 			
-			String outputFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\Comprehensive_CAR-T_Analysis\\hg38_full_exon_analysis\\GeneLevel_solid_brain_exon_meta_analysis_matrixDB_proteomics_20200726.txt";
-			String inputFile = "\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\Comprehensive_CAR-T_Analysis\\hg38_full_exon_analysis\\solid_brain_exon_meta_analysis_matrixDB_proteomics_20200726.txt";
-
+			
+			String inputFile = args[0]; //"\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\Comprehensive_CAR-T_Analysis\\hg38_full_exon_analysis\\solid_brain_exon_meta_analysis_matrixDB_proteomics_20200726.txt";
+			String cutoff_gtex = args[1]; // 999,3,0,0
+			String cutoff_disease = args[1]; // 0,0,0,1
+			String outputFile = args[2]; //"\\\\gsc.stjude.org\\project_space\\zhanggrp\\AltSpliceAtlas\\common\\analysis\\Comprehensive_CAR-T_Analysis\\hg38_full_exon_analysis\\GeneLevel_solid_brain_exon_meta_analysis_matrixDB_proteomics_20200726.txt";
+			
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);						
 			

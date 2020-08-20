@@ -46,7 +46,7 @@ public class JuncSalvagerWilcoxonTestRank {
 			String outputMetaAnalysis = args[5];
 			FileWriter fwriter = new FileWriter(outputComparison);
 			BufferedWriter out = new BufferedWriter(fwriter);
-			out.write("Exon\tDisease\tGTExHistology\tpvalue\tzscore\t\tweighted_zscore\tDiseaseMedian\tGTExMedian\n");
+			out.write("Exon\tDisease\tGTExHistology\tpvalue\tzscore\tdisease_percentile\tgtex_percentile\tDiseaseMedian\tGTExMedian\n");
 			
 			//String outputFolderGTEx = args[5];
 			//String outputFile = args[6]; // write Disease \t GTEx_Tissue \t wilcox_pvalue \t 
@@ -179,7 +179,7 @@ public class JuncSalvagerWilcoxonTestRank {
 						double percentile_disease = disease_median / new Double(total_exons);
 						double percentile_gtex = gtex_median / new Double(total_exons);
 						//System.out.println(exon + "\t" + histology + "\t" + rank + "\t" + meta_analysis_map.size() + "\t" + percentile);
-						if (percentile_gtex > 0.5) {
+						/*if (percentile_gtex > 0.5) {
 							if (percentile_disease < 0.25) {
 								weight = 3.0;
 							} else if (percentile_disease < 0.5) {
@@ -187,7 +187,11 @@ public class JuncSalvagerWilcoxonTestRank {
 							} else if (percentile_disease < 0.75) {
 								weight = 1.0;
 							}							
-						}						
+						}*/
+						weight = percentile_disease - percentile_gtex;
+						if (weight < 0) {
+							weight = 0.0;
+						}
 						
 						//gtex_expression_map.put(exon + "\t" + histology, gtex_median);
 						double pvalue = 1.0;
@@ -204,7 +208,7 @@ public class JuncSalvagerWilcoxonTestRank {
 						}						
 						
 						double weighted_zscore = zscore * weight;
-						out.write(split_disease[0] + "\t" + pcgp_disease + "\t" + histology + "\t" + pvalue + "\t" + zscore + "\t" + weighted_zscore + "\t" + disease_median + "\t" + gtex_median + "\n");
+						out.write(split_disease[0] + "\t" + pcgp_disease + "\t" + histology + "\t" + pvalue + "\t" + zscore + "\t" + percentile_disease + "\t" +  percentile_gtex + "\t" + disease_median + "\t" + gtex_median + "\n");
 						if (meta_analysis_map.containsKey(exon)) {
 							LinkedList list = (LinkedList)meta_analysis_map.get(exon);
 							list.add(weighted_zscore);						

@@ -24,7 +24,7 @@ public class JuncSalvagerExonSkippingPSI {
 		return "Calculate the psi value for each exon in the gtf file using STAR SJ file.\n";
 	}
 	public static String parameter_info() {
-		return "[inputSTARSJ] [gtfFile] [outputFile]";
+		return "[inputSTARSJ] [gtfFile] [outputFile_SpliceOut] [outputFile_SpliceIn]";
 	}
 	public static void main(String[] args) {
 		int start = 53019384;
@@ -39,10 +39,16 @@ public class JuncSalvagerExonSkippingPSI {
 			String GTFFile = args[1];
 			int buffer = new Integer(args[2]);
 			String outputFile = args[3];
+			String outputFile2 = args[4];
 			
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
-			out.write("chr\tstart\tend\tpsi\tleft_read\tright_read\tskip_read\n");
+			out.write("chr\tstart\tend\tpso\tleft_read\tright_read\tskip_read\n");
+			
+			FileWriter fwriter2 = new FileWriter(outputFile2);
+			BufferedWriter out2 = new BufferedWriter(fwriter2);
+			out2.write("chr\tstart\tend\tpsi\tleft_read\tright_read\tskip_read\n");
+			
 			HashMap exon = new HashMap();
 			HashMap exon_left = new HashMap();
 			HashMap exon_right = new HashMap();
@@ -183,10 +189,14 @@ public class JuncSalvagerExonSkippingPSI {
 				String end = split_coord[2];
 				double left_count = (Integer)exon_left.get(chr + "\t" + start);
 				double right_count = (Integer)exon_right.get(chr + "\t" + end);
-				double psi = skip / (((left_count + right_count) / 2) + skip);
-				out.write(chr + "\t" + start + "\t" + end + "\t" + psi + "\t" + left_count + "\t" + right_count + "\t" + skip + "\n");
+				double pso = skip / (((left_count + right_count) / 2) + skip);
+				double psi = ((left_count + right_count) / 2) / (((left_count + right_count) / 2) + skip);
+				out.write(chr + "\t" + start + "\t" + end + "\t" + pso + "\t" + left_count + "\t" + right_count + "\t" + skip + "\n");
+				out2.write(chr + "\t" + start + "\t" + end + "\t" + psi + "\t" + left_count + "\t" + right_count + "\t" + skip + "\n");
 			}
 			out.close();
+			out2.close();
+			
 		} catch (Exception e ){
 			e.printStackTrace();
 		}

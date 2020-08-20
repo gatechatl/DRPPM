@@ -20,7 +20,7 @@ public class JuncSalvagerWilcoxTestPostProcessing {
 		return "DATAMATRIX";
 	}
 	public static String parameter_info() {
-		return "[inputComprehensiveZScoreFile] [inputPCGPFolder] [inputPCGPAnnotationFile] [inputGTExFolder] [inputGTExAnnotationFile] [outputFile]";
+		return "[inputComprehensiveZScoreFile] [inputPCGPFolder] [inputPCGPAnnotationFile] [inputGTExFolder] [inputGTExAnnotationFile] [outputFile] [outputFile_weight normalized]";
 	}
 	public static void execute(String[] args) {
 		
