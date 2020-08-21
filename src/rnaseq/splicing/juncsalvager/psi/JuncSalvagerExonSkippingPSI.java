@@ -113,14 +113,14 @@ public class JuncSalvagerExonSkippingPSI {
 				int intron_left = new Integer(split[1]) - 1;
 				int intron_right = new Integer(split[2]) + 1;
 				int uniq_read = new Integer(split[6]);
-				for (int i = 0; i < buffer; i++) {
+				for (int i = 0; i <= buffer; i++) {
 					if (exon_left.containsKey(chr + "\t" + (intron_right + i))) {
 						int prev_read = (Integer)exon_left.get(chr + "\t" + (intron_right + i));
 						prev_read += uniq_read;
 						exon_left.put(chr + "\t" + (intron_right + i), prev_read);
 					}
 				}
-				for (int i = 0; i < buffer; i++) {
+				for (int i = 0; i <= buffer; i++) {
 					if (exon_right.containsKey(chr + "\t" + (intron_left - i))) {
 						int prev_read = (Integer)exon_right.get(chr + "\t" + (intron_left - i));
 						prev_read += uniq_read;
@@ -154,7 +154,7 @@ public class JuncSalvagerExonSkippingPSI {
 							String start_end = (String)itr.next();
 							int exon_start = new Integer(start_end.split("\t")[0]);
 							int exon_end = new Integer(start_end.split("\t")[1]);
-							if (intron_left < (exon_start - buffer) && (exon_end + buffer) < intron_right) {
+							if (intron_left <= (exon_start - buffer) && (exon_end + buffer) <= intron_right) {
 								int count = (Integer)exon_skip.get(chr + "\t" + exon_start + "\t" + exon_end);
 								count += uniq_read;
 								exon_skip.put(chr + "\t" + exon_start + "\t" + exon_end, count);								
@@ -168,7 +168,7 @@ public class JuncSalvagerExonSkippingPSI {
 							String start_end = (String)itr.next();
 							int exon_start = new Integer(start_end.split("\t")[0]);
 							int exon_end = new Integer(start_end.split("\t")[1]);
-							if (intron_left < (exon_start - buffer) && (exon_end + buffer) < intron_right) {
+							if (intron_left <= (exon_start - buffer) && (exon_end + buffer) <= intron_right) {
 								int count = (Integer)exon_skip.get(chr + "\t" + exon_start + "\t" + exon_end);
 								count += uniq_read;
 								exon_skip.put(chr + "\t" + exon_start + "\t" + exon_end, count);								
