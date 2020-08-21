@@ -192,7 +192,11 @@ public class JuncSalvagerExonSkippingPSI {
 				double pso = skip / (((left_count + right_count) / 2) + skip);
 				
 				double exon_usage = 0.0;
-				
+				if (left_count > right_count) {
+					exon_usage = right_count;
+				} else {
+					exon_usage = left_count;
+				}
 				/*if (left_count > 5 && right_count > 5) {					
 					exon_usage = (left_count + right_count) / 2;
 				} else {
@@ -206,7 +210,8 @@ public class JuncSalvagerExonSkippingPSI {
 						}
 					}
 				}*/
-				double psi = (exon_usage) / (((left_count + right_count) / 2) + skip);
+				
+				double psi = (exon_usage) / (exon_usage + skip);
 				out.write(chr + "\t" + start + "\t" + end + "\t" + pso + "\t" + left_count + "\t" + right_count + "\t" + skip + "\n");
 				out2.write(chr + "\t" + start + "\t" + end + "\t" + psi + "\t" + left_count + "\t" + right_count + "\t" + skip + "\n");
 			}
