@@ -174,7 +174,7 @@ public class JuncSalvagerSplitMatrixCandidates {
 				in = new BufferedReader(new InputStreamReader(din));
 				header = in.readLine();
 				String[] split_header = header.split("\t");
-				for (int i = 2; i < split_header.length; i++) {
+				for (int i = 2; i < split_header.length; i++) {outputFolderPCGP
 					if (samples.contains(split_header[i])) {
 						ids.add(i);
 						out.write("\t" + split_header[i]);
