@@ -134,15 +134,19 @@ public class JuncSalvagerSplitMatrixCandidates {
 				String[] arguments2 = {(outputFolderPCGP + "/" + disease + ".txt"), "1.0", "0.1", (outputFolderPCGP + "/" + disease + "_1FPKM.txt")};
 				FilterMatrixExpression.execute(arguments2);
 				rank_norm(outputFolderPCGP + "/" + disease + "_1FPKM.txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_median_tmp.txt");
-								 
-				String[] arguments3 = {(outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt"), (outputFolderPCGP + "/" + disease + "_rank_1FPKM.txt")};
-				RemoveQuotations.execute(arguments3);
 				
-				if (!new File(outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt").exists()) {
-					new File(outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt").createNewFile();
+
+				if (new File(outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt").exists()) {
+					String[] arguments3 = {(outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt"), (outputFolderPCGP + "/" + disease + "_rank_1FPKM.txt")};
+					RemoveQuotations.execute(arguments3);					
 				}
-				String[] arguments4 = {outputFolderPCGP + "/" + disease + "_rank_1FPKM_median_tmp.txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_median.txt"};
-				RemoveQuotations.execute(arguments4);				
+				
+
+								
+				if (!new File(outputFolderPCGP + "/" + disease + "_rank_1FPKM_median_tmp.txt").exists()) {
+					String[] arguments4 = {outputFolderPCGP + "/" + disease + "_rank_1FPKM_median_tmp.txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_median.txt"};
+					RemoveQuotations.execute(arguments4);				
+				}
 				
 				f = new File(outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt");
 				if (f.exists()) {
