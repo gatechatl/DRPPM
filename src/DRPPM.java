@@ -863,6 +863,7 @@ import stjude.projects.junminpeng.hgg.FilterKinaseBasedOnFrequency;
 import stjude.projects.junminpeng.proteomics.peptide.peak.iondrawer.GenerateDTAFilesScript;
 import stjude.projects.junminpeng.proteomics.peptide.peak.iondrawer.GenerateDTARawFilesScript;
 import stjude.projects.junminpeng.proteomics.peptide.peak.iondrawer.GenerateDisplayIonHTMLImgSimple;
+import stjude.projects.junminpeng.proteomics.peptide.peak.iondrawer.GenerateDisplayIonHTMLImgUbiquitin;
 import stjude.projects.junminpeng.proteomics.peptide.peak.iondrawer.GenerateDisplayIonHtmlImg;
 import stjude.projects.leventaki.FilterCNVkitcnrfiles;
 import stjude.projects.leventaki.High20ToTHETA;
@@ -6794,7 +6795,18 @@ public class DRPPM {
 				}
 				GenerateDisplayIonHtmlImg.execute(args_remain);
 				System.exit(0);
-				// GenerateDisplayIonHTMLImgSimple
+				// GenerateDisplayIonHTMLImgUbiquitin
+			} else if (type.equalsIgnoreCase("-GenerateDisplayIonHTMLImgUbiquitin")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+	
+					System.out
+							.println("drppm -GenerateDisplayIonHTMLImgUbiquitin: " + GenerateDisplayIonHTMLImgUbiquitin.parameter_info());
+					System.exit(0);
+				}
+				GenerateDisplayIonHTMLImgUbiquitin.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-GenerateDisplayIonHTMLImgSimple")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {

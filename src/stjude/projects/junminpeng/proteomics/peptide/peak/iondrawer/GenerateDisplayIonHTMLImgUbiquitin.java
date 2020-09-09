@@ -20,7 +20,7 @@ public class GenerateDisplayIonHTMLImgUbiquitin {
 
 	public static String parameter_info() {
 
-		return "[inputFile] [ipaddress] [outputIMG] [outputCSV] [outputHTML]";
+		return "[inputFile] [ipaddress] [outputIMG] [outputCSV] [outputHTML] [TMT_flag: should be false]";
 	}
 	public static void execute(String[] args) {
 		try {
