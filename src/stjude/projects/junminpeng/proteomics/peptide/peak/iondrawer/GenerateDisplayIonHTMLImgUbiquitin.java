@@ -63,7 +63,7 @@ public class GenerateDisplayIonHTMLImgUbiquitin {
 			FileInputStream fstream = new FileInputStream(inputFile);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
-			//in.readLine();
+			in.readLine();
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split_peptide = str.split("\t");
@@ -175,10 +175,10 @@ public class GenerateDisplayIonHTMLImgUbiquitin {
 		int idx = 1;
 		HashMap dynamic_mass = new HashMap();
 		for (int i = 0; i < peptide_mass.length(); i++) {
-			if (peptide_mass.substring(i, i + 1).equals("\\(")) {
+			if (peptide_mass.substring(i, i + 1).equals("(")) {
 				String mass_str = "";
 				i++;
-				while (!peptide_mass.substring(i, i + 1).equals("\\)")) {
+				while (!peptide_mass.substring(i, i + 1).equals(")")) {
 					mass_str += peptide_mass.substring(i, i + 1);
 					i++;					
 				}
