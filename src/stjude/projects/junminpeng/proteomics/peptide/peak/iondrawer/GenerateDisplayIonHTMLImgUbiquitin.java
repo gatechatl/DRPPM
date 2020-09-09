@@ -199,7 +199,7 @@ public class GenerateDisplayIonHTMLImgUbiquitin {
 			dsite += "0";
 		}
 		int index = 0;
-		for (int i = 0; i < peptide.length() - 1; i++) {
+		/*for (int i = 0; i < peptide.length() - 1; i++) {
 			
 			
 			if (original_peptide.substring(i, i + 2).equals("K$")) {
@@ -224,7 +224,7 @@ public class GenerateDisplayIonHTMLImgUbiquitin {
 				i++;
 			}
 			index++;
-		}
+		}*/
 		/*if (peptide.contains("M\\*")) {
 			//result = "http://" + ipaddress + "/cgi-bin/displayions_html5?Dta=" + dta_path + "&MassType=1&NumAxis=1&Pep=" + peptide.replaceAll("\\*", "") + "&Nterm=229.16&MassC=160.0306&MassK=357.2579&MassM=147.0354";
 			result = "http://" + ipaddress + "/cgi-bin/displayions_html5?Dta=" + path + "&MassType=1&NumAxis=1&Pep=" + peptide.replaceAll("\\*", "") + "&Nterm=229.16&MassK=357.2579&MassM=147.0354";
