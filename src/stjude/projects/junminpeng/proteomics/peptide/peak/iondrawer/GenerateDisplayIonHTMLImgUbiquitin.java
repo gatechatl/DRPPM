@@ -20,7 +20,7 @@ public class GenerateDisplayIonHTMLImgUbiquitin {
 
 	public static String parameter_info() {
 
-		return "[inputFile] [ipaddress] [outputIMG] [outputCSV] [outputHTML] [TMT_flag: should be false]";
+		return "[inputFile] [ipaddress] [outputIMG] [outputCSV] [outputHTML] [log file] [TMT_flag: should be false]";
 	}
 	public static void execute(String[] args) {
 		try {
@@ -68,7 +68,8 @@ public class GenerateDisplayIonHTMLImgUbiquitin {
 				String str = in.readLine();
 				String[] split_peptide = str.split("\t");
 				String dta_file = split_peptide[1];
-				String txt_file = dta_file.substring(0, dta_file.length() - 3);
+				String txt_file = dta_file.replaceAll(".dta", ".txt");
+				System.out.println(txt_file);
 				File f = new File(txt_file);
 				String name = f.getName().replaceAll(".txt", "");
 				FileInputStream fstream3 = new FileInputStream(txt_file);
