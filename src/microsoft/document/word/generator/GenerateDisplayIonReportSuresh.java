@@ -105,6 +105,7 @@ public class GenerateDisplayIonReportSuresh {
 	        String id = dtaFile.replaceAll(".dta", "");
 	        String scanNum = dtaFile.split("_")[1];
 	        String charge = dtaFile.split("_")[2];
+	        String link = split2[4];
 	        XWPFParagraph data = doc.createParagraph();
 	        XWPFRun run_data = data.createRun();
 	        
@@ -138,6 +139,9 @@ public class GenerateDisplayIonReportSuresh {
 	        r1.setText("Scan Number: " + scanNum);
 	        r1.addTab();
 	        r1.setText("Charge: " + charge);
+	        r1.addTab();
+	        r1.addBreak();
+	        r1.setText("Weblink: " + link);
 	        r1.addTab();
 	        //r1.setText("Jscore: " + xcorr);
 	        //r1.addTab();

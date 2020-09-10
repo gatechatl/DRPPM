@@ -123,6 +123,7 @@ public class GenerateDisplayIonHTMLImgUbiquitin {
 							str2 = str2.replaceAll("</FONT></B>", "*");
 							str2 = str2.replaceAll("<B><FONT COLOR=\"0000FF\">", "");
 							str2 = str2.replaceAll("<FONT COLOR=\"#FF7F00\"><B>", "");
+							str2 = str2.replaceAll("<FONT COLOR=\"#9932CD\"><B>", "");
 							str2 = str2.replaceAll("</B></FONT>", "");
 							str2 = str2.replaceAll("\\*S", "#S");
 							str2 = str2.replaceAll("\\*T", "#T");
