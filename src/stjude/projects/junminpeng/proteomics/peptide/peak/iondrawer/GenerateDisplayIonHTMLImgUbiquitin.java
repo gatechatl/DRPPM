@@ -101,8 +101,9 @@ public class GenerateDisplayIonHTMLImgUbiquitin {
 					if (TMT_flag_str.equals("yes")) {
 						tmt_flag = true;
 					}
+					File dta_file_f = new File(final_dta_path);
 					executeCommand("wget \"" + generateScript(final_dta_path, peptide, suresh_peptide, ipaddress, tmt_flag) + "\" -O " + outputFolderHtml + "/" + name + ".html");
-					out.write(peptide + "\t" + name + "\t" + generateScript(final_dta_path, peptide, suresh_peptide, ipaddress, tmt_flag) + "\n");
+					out.write(name + "\t" + suresh_peptide + "\t" + dta_file_f.getName() + "\t" + final_dta_path + "\t" + generateScript(final_dta_path, peptide, suresh_peptide, ipaddress, tmt_flag) + "\n");
 					String outputFile2 = outputFolderCsv + "/" + name + ".csv";
 					FileWriter fwriter2 = new FileWriter(outputFile2);
 		            BufferedWriter out2 = new BufferedWriter(fwriter2);
