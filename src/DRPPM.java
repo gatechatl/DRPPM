@@ -230,6 +230,7 @@ import microarray.tools.methylation.EPIC850K.Epic850KHyperHypoMethylationFilter;
 import microarray.tools.methylation.EPIC850K.Methylation850KAppendGeneInfo;
 import microarray.tools.methylation.EPIC850K.Methylation850KWilcoxonTestAppendGeneInfo;
 import microsoft.document.word.generator.GenerateDisplayIonReport;
+import microsoft.document.word.generator.GenerateDisplayIonReportSuresh;
 import microsoft.document.word.generator.Txt2Excel;
 import misc.CommandLine;
 import misc.CustomFastaCombiner;
@@ -6830,7 +6831,18 @@ public class DRPPM {
 				}
 				GenerateDisplayIonReport.execute(args_remain);
 				System.exit(0);
-				//
+				// GenerateDisplayIonReportSuresh
+			} else if (type.equalsIgnoreCase("-GenerateDisplayIonReportSuresh")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+	
+					System.out.println("drppm -GenerateDisplayIonReportSuresh "
+							+ GenerateDisplayIonReportSuresh.parameter_info());
+					System.exit(0);
+				}
+				GenerateDisplayIonReportSuresh.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-GrabPhosphositeExpression")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
