@@ -118,7 +118,7 @@ public class JuncSalvagerWilcoxonTestRank {
 				Iterator itr2 = gtex_annotation.keySet().iterator();				
 				while (itr2.hasNext()) {
 					String histology = (String)itr2.next();
-					
+					System.out.println(histology);
 					
 					String pcgp_file = inputPCGPFolder + "/" + pcgp_disease + "_rank.txt";
 					FileInputStream fstreamDisease = new FileInputStream(pcgp_file);
