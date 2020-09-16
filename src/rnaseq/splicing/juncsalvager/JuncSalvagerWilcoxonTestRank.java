@@ -120,13 +120,13 @@ public class JuncSalvagerWilcoxonTestRank {
 					String histology = (String)itr2.next();
 					
 					
-					String pcgp_file = inputPCGPFolder + "/" + pcgp_disease + "_rank.txt";
+					String pcgp_file = inputPCGPFolder + "/" + pcgp_disease + "_rank_1FPKM.txt";
 					FileInputStream fstreamDisease = new FileInputStream(pcgp_file);
 					DataInputStream dinDisease = new DataInputStream(fstreamDisease);
 					BufferedReader inDisease = new BufferedReader(new InputStreamReader(dinDisease));
 					String header_disase = inDisease.readLine();
 					
-					String gtex_file = inputGTExFolder + "/" + histology + "_rank.txt";
+					String gtex_file = inputGTExFolder + "/" + histology + "_rank_1FPKM.txt";
 					FileInputStream fstream_gtex = new FileInputStream(gtex_file);
 					DataInputStream din_gtex = new DataInputStream(fstream_gtex);
 					BufferedReader in_gtex = new BufferedReader(new InputStreamReader(din_gtex));
@@ -176,8 +176,10 @@ public class JuncSalvagerWilcoxonTestRank {
 						}
 						double weight = 0.0;
 						
-						double percentile_disease = disease_median / new Double(total_exons);
-						double percentile_gtex = gtex_median / new Double(total_exons);
+						//double percentile_disease = disease_median / new Double(total_exons);
+						//double percentile_gtex = gtex_median / new Double(total_exons);
+						double percentile_disease = disease_median;
+						double percentile_gtex = gtex_median;
 						//System.out.println(exon + "\t" + histology + "\t" + rank + "\t" + meta_analysis_map.size() + "\t" + percentile);
 						/*if (percentile_gtex > 0.5) {
 							if (percentile_disease < 0.25) {
@@ -195,18 +197,21 @@ public class JuncSalvagerWilcoxonTestRank {
 						
 						//gtex_expression_map.put(exon + "\t" + histology, gtex_median);
 						double pvalue = 0.5;
-						if (weight > 0) { // smaller the higher expressed it is
+						//if (disease_median > gtex_median) { // smaller the higher expressed it is
 							pvalue = MathTools.WilcoxRankSumTest(disease_values, gtex_values);
 							if (pvalue < 2.2E-16) {
 								pvalue = 2.2E-16;
 							}
-						}
+						//}
 						double zscore = 0.0;
 						
 						if (pvalue < 0.5) {
 							zscore = -1 * StatisticsConversion.inverseCumulativeProbability(pvalue);							
 						}						
 						
+						if (zscore < 0) {
+							zscore = 0.0;
+						}
 						double weighted_zscore = zscore * weight;
 						out.write(split_disease[0] + "\t" + pcgp_disease + "\t" + histology + "\t" + pvalue + "\t" + zscore + "\t" + percentile_disease + "\t" +  percentile_gtex + "\t" + disease_median + "\t" + gtex_median + "\n");
 						if (meta_analysis_map.containsKey(exon)) {
