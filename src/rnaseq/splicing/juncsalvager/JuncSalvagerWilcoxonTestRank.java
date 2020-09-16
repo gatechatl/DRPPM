@@ -194,8 +194,8 @@ public class JuncSalvagerWilcoxonTestRank {
 						}
 						
 						//gtex_expression_map.put(exon + "\t" + histology, gtex_median);
-						double pvalue = 1.0;
-						if (disease_median < gtex_median) { // smaller the higher expressed it is
+						double pvalue = 0.5;
+						if (weight > 0) { // smaller the higher expressed it is
 							pvalue = MathTools.WilcoxRankSumTest(disease_values, gtex_values);
 							if (pvalue < 2.2E-16) {
 								pvalue = 2.2E-16;
@@ -203,7 +203,7 @@ public class JuncSalvagerWilcoxonTestRank {
 						}
 						double zscore = 0.0;
 						
-						if (pvalue < 1.0) {
+						if (pvalue < 0.5) {
 							zscore = -1 * StatisticsConversion.inverseCumulativeProbability(pvalue);							
 						}						
 						
