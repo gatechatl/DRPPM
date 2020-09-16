@@ -132,6 +132,7 @@ import expression.matrix.tools.FilterMatrixFileFlex;
 import expression.matrix.tools.FilterTopMADScores;
 import expression.matrix.tools.GeneListMatrix;
 import expression.matrix.tools.GeneListMatrix2;
+import expression.matrix.tools.GenerateGenesetMatrix;
 import expression.matrix.tools.GenerateSpearmanRankMatrix;
 import expression.matrix.tools.GenerateTrendPlot;
 import expression.matrix.tools.HumanMouseSpearmanRankCorrel;
@@ -2716,10 +2717,13 @@ public class ProgramDescriptions {
 		if (JuncSalvagerExtractGeneMatrix.type().equals(type)) {
 			result += "JuncSalvagerExtractGeneMatrix: " + JuncSalvagerExtractGeneMatrix.description() + "\n";
 		}
+		if (GenerateGenesetMatrix.type().equals(type)) {
+			result += "GenerateGenesetMatrix: " + GenerateGenesetMatrix.description() + "\n";
+		}
 		
 		return result;
 	}	
 
-	public static String VERSION = "20200808";
+	public static String VERSION = "20200916";
 	
 }

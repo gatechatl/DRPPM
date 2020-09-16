@@ -298,6 +298,7 @@ import expression.matrix.tools.FilterMatrixFileFlex;
 import expression.matrix.tools.FilterTopMADScores;
 import expression.matrix.tools.GeneListMatrix;
 import expression.matrix.tools.GeneListMatrix2;
+import expression.matrix.tools.GenerateGenesetMatrix;
 import expression.matrix.tools.GenerateSpearmanRankMatrix;
 import expression.matrix.tools.GenerateTrendPlot;
 import expression.matrix.tools.HumanMouseSpearmanRankCorrel;
@@ -11343,6 +11344,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				JuncSalvagerExtractGeneMatrix.execute(args_remain);
+				System.exit(0);
+				// GenerateGenesetMatrix
+			} else if (type.equalsIgnoreCase("-GenerateGenesetMatrix")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateGenesetMatrix "
+							+ GenerateGenesetMatrix.parameter_info());
+					System.exit(0);
+				}
+				GenerateGenesetMatrix.execute(args_remain);
 				System.exit(0);
 				// 
 			}
