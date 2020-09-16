@@ -120,13 +120,13 @@ public class JuncSalvagerWilcoxonTestRank {
 					String histology = (String)itr2.next();
 					
 					
-					String pcgp_file = inputPCGPFolder + "/" + pcgp_disease + "_rank_1FPKM.txt";
+					String pcgp_file = inputPCGPFolder + "/" + pcgp_disease + "_rank.txt";
 					FileInputStream fstreamDisease = new FileInputStream(pcgp_file);
 					DataInputStream dinDisease = new DataInputStream(fstreamDisease);
 					BufferedReader inDisease = new BufferedReader(new InputStreamReader(dinDisease));
 					String header_disase = inDisease.readLine();
 					
-					String gtex_file = inputGTExFolder + "/" + histology + "_rank_1FPKM.txt";
+					String gtex_file = inputGTExFolder + "/" + histology + "_rank.txt";
 					FileInputStream fstream_gtex = new FileInputStream(gtex_file);
 					DataInputStream din_gtex = new DataInputStream(fstream_gtex);
 					BufferedReader in_gtex = new BufferedReader(new InputStreamReader(din_gtex));
@@ -176,10 +176,10 @@ public class JuncSalvagerWilcoxonTestRank {
 						}
 						double weight = 0.0;
 						
-						//double percentile_disease = disease_median / new Double(total_exons);
-						//double percentile_gtex = gtex_median / new Double(total_exons);
-						double percentile_disease = disease_median;
-						double percentile_gtex = gtex_median;
+						double percentile_disease = disease_median / new Double(total_exons);
+						double percentile_gtex = gtex_median / new Double(total_exons);
+						//double percentile_disease = disease_median;
+						//double percentile_gtex = gtex_median;
 						//System.out.println(exon + "\t" + histology + "\t" + rank + "\t" + meta_analysis_map.size() + "\t" + percentile);
 						/*if (percentile_gtex > 0.5) {
 							if (percentile_disease < 0.25) {
