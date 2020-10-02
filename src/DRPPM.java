@@ -3336,6 +3336,17 @@ public class DRPPM {
 				RNApegPostProcessingExons.execute(args_remain);
 				System.exit(0);
 				// RNApegDefineExonBasedoOnBW 
+			} else if (type.equalsIgnoreCase("-RNApegPostProcessingExons")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {					
+					System.out.println("drppm -RNApegPostProcessingExons "
+							+ RNApegPostProcessingExons.parameter_info());
+					System.out.println("Description: " + RNApegPostProcessingExons.description());
+					System.exit(0);
+				}
+				RNApegPostProcessingExons.execute(args_remain);
+				System.exit(0);
+				// RNApegDefineExonBasedoOnBW 
 			} else if (type.equalsIgnoreCase("-RNApegDefineExonBasedoOnBW")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {					
