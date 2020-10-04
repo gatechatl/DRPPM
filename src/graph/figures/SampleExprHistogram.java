@@ -24,7 +24,7 @@ public class SampleExprHistogram {
 		return "A program for generating histogram for a matrix table";
 	}
 	public static String parameter_info() {
-		return "[inputFile] [outputPath] [takeLog] [min] [max] [binwidth: def is 30]";
+		return "[inputFile] [outputPath] [takeLog] [min] [max] [binwidth: suggest is 1]";
 	}
 	public static void execute(String[] args) {
 		String inputFile = args[0];
@@ -32,7 +32,7 @@ public class SampleExprHistogram {
 		boolean takeLog = Boolean.valueOf(args[2]);
 		double min = readNum(args[3]);
 		double max = readNum(args[4]);
-		double binwidth = 30; 
+		double binwidth = 1; 
 		if (args.length > 5) {
 			binwidth = readNum(args[5]);
 		}

@@ -32,7 +32,7 @@ The outputs for DRPPM are also defined in the parameter. See list of program in 
 
 ```
 ## Reference
-Timothy I. Shaw. DRPPM: an integrated library for DNA/RNA/Proteome/Post-translational Modifications. 2020.
+Timothy I. Shaw. DRPPM: integrated software for processing OMICS data. 2020.
 
 ## Example Publications
 KH Lee, P Zhang, HJ Kim et al. C9orf72 Dipeptide Repeats Impair the Assembly, Dynamics, and Function of Membrane-Less Organelles. Cell 167 (3), 774-788. e17
