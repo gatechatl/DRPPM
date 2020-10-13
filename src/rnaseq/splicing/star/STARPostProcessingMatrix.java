@@ -30,7 +30,7 @@ public class STARPostProcessingMatrix {
 		return "Takes in the sj.out.tab and output\n";
 	}
 	public static String parameter_info() {
-		return "[RNApeg file] [min_reads_for_novel] [gtf_file] [geneName] [outputFolder]";
+		return "[STAR SJ file] [min_reads_for_novel] [gtf_file] [geneName] [outputFolder]";
 	}
 	public static void execute(String[] args) {
 		
@@ -52,6 +52,7 @@ public class STARPostProcessingMatrix {
 				outputFolder_gene.mkdir();				
 			}*/
 		
+			
 			HashMap transcript_id2line = new HashMap();
 			String direction = "";
 			String temp_chr = "";
@@ -167,23 +168,40 @@ public class STARPostProcessingMatrix {
 			while (in2.ready()) {
 				String str2 = in2.readLine();
 				String[] split = str2.split("\t");
-				String name = split[3];
-				if (geneName.equals(name)) {
+				//String name = split[3];
+				String chr = split[0];
+				int junction1_position = (new Integer(split[1]) - 1);
+				int junction2_position = (new Integer(split[2]) + 1);
+				String junction1_direction = "+";
+				String junction2_direction = "+";
+				if (split[3].equals("2")) {
+					junction1_direction = "-";
+					junction2_direction = "-";
+				}
+				String junction1 = chr + ":" + junction1_position + ":" + junction1_direction;
+				String junction2 = chr + ":" + junction2_position + ":" + junction2_direction;
+				String junction1_chr = chr;
+				String junction2_chr = chr;
+				String annotation = split[5];
+				if (((min - 10000) <= new Integer(junction1_position) && new Integer(junction1_position) <= (max + 10000)) || ((min - 10000) <= new Integer(junction2_position) && new Integer(junction2_position) <= (max + 10000))) {
+				//if (geneName.equals(name)) {
+				
 					String junction = split[0];
-					String junction1 = junction.split(",")[0];
-					String junction1_chr = junction1.split(":")[0];
-					int junction1_position = new Integer(junction1.split(":")[1]);
+					//String junction1 = junction.split(",")[0];
+					//String junction1_chr = junction1.split(":")[0];
+					//int junction1_position = new Integer(junction1.split(":")[1]);
 					
-					String junction2 = junction.split(",")[1];
-					String junction2_chr = junction2.split(":")[0];
-					int junction2_position = new Integer(junction2.split(":")[1]);
+					//String junction2 = junction.split(",")[1];
+					//String junction2_chr = junction2.split(":")[0];
+					//int junction2_position = new Integer(junction2.split(":")[1]);
 											
 					double read = new Double(split[1]);
 					boolean found_hit = false;
 					
 					
-					String type = split[2];
-					if (type.equals("known")) {
+					//String type = split[2];
+					//if (type.equals("known")) {
+					if (annotation.equals("1")) { // if it is part of the SJ db
 						
 						/*if (junction2_position == 48907153) {
 							System.out.println("Found in known section");

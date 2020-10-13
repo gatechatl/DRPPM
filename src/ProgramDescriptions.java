@@ -424,6 +424,7 @@ import rnaseq.splicing.spladder.CustomFilterSpladderHardFilter;
 import rnaseq.splicing.spladder.CustomFilterSpladderSingleType;
 import rnaseq.splicing.spladder.SpladderScriptGenerator;
 import rnaseq.splicing.spladder.SpladderSummarizeOutput;
+import rnaseq.splicing.star.STARPostProcessingMatrix;
 import rnaseq.splicing.summary.AppendExpressionToMATSOutput;
 import rnaseq.tools.ercc.GenerateERCCgtffile;
 import rnaseq.tools.exonjunction.JunctionVsGeneJunc;
@@ -2720,10 +2721,13 @@ public class ProgramDescriptions {
 		if (GenerateGenesetMatrix.type().equals(type)) {
 			result += "GenerateGenesetMatrix: " + GenerateGenesetMatrix.description() + "\n";
 		}
+		if (STARPostProcessingMatrix.type().equals(type)) {
+			result += "STARPostProcessingMatrix: " + STARPostProcessingMatrix.description() + "\n";
+		}
 		
 		return result;
 	}	
 
-	public static String VERSION = "20201004";
+	public static String VERSION = "20201013";
 	
 }

@@ -667,6 +667,7 @@ import rnaseq.splicing.splicefactor.enrichment.PositionWeightMatrixScanner;
 import rnaseq.splicing.splicefactor.enrichment.ReadMATSExtractNeighboringSequencing;
 import rnaseq.splicing.splicefactor.enrichment.SpliceFactorMotifFisherExact;
 import rnaseq.splicing.splicefactor.enrichment.SpliceFactorMotifScanner;
+import rnaseq.splicing.star.STARPostProcessingMatrix;
 import rnaseq.splicing.summary.AppendExpressionToMATSOutput;
 import rnaseq.tools.ercc.GenerateERCCgtffile;
 import rnaseq.tools.exonjunction.CompareDifferentialAnalysis;
@@ -11366,7 +11367,17 @@ public class DRPPM {
 				}
 				GenerateGenesetMatrix.execute(args_remain);
 				System.exit(0);
-				// 
+				// STARPostProcessingMatrix
+			} else if (type.equalsIgnoreCase("-STARPostProcessingMatrix")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -STARPostProcessingMatrix "
+							+ STARPostProcessingMatrix.parameter_info());
+					System.exit(0);
+				}
+				STARPostProcessingMatrix.execute(args_remain);
+				System.exit(0);
+				// STARPostProcessingMatrix
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
