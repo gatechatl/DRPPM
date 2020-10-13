@@ -160,7 +160,9 @@ public class STARPostProcessingMatrix {
 			// col 4: strand (0: undefined, 1 for +, 2 for -)
 			// col 5 intron motif 0: non-canonical; 1: GT/AG; 2: CT/AC, 3: GC/AG, 4: CT/GC, 5: AT/AC, 6: GT/AT
 			// col 6: 0: unannotated, 1: annotated (only if splice junctions database is used)
-			
+			// col 7: number of uniquely mapped reads
+			// col 8: number of multi-mapped reads
+			// col 9: maximum spliced alignment overhang
 			HashMap all_junction = new HashMap();
 			FileInputStream fstream2 = new FileInputStream(sj_out_tab_file);
 			DataInputStream din2 = new DataInputStream(fstream2);
@@ -195,7 +197,7 @@ public class STARPostProcessingMatrix {
 					//String junction2_chr = junction2.split(":")[0];
 					//int junction2_position = new Integer(junction2.split(":")[1]);
 											
-					double read = new Double(split[1]);
+					double read = new Double(split[7]);
 					boolean found_hit = false;
 					
 					
