@@ -187,7 +187,7 @@ public class STARPostProcessingMatrix {
 				String annotation = split[5];
 				
 				String junction = junction1 + "," + junction2;
-				if (temp_chr.equals(chr) && ((min - 10000) <= new Integer(junction1_position) && new Integer(junction1_position) <= (max + 10000)) || ((min - 10000) <= new Integer(junction2_position) && new Integer(junction2_position) <= (max + 10000))) {
+				if (temp_chr.equals(chr) && (((min - 10000) <= new Integer(junction1_position) && new Integer(junction1_position) <= (max + 10000)) || ((min - 10000) <= new Integer(junction2_position) && new Integer(junction2_position) <= (max + 10000)))) {
 				//if (geneName.equals(name)) {
 				
 					
