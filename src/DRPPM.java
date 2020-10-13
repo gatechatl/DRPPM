@@ -667,6 +667,7 @@ import rnaseq.splicing.splicefactor.enrichment.PositionWeightMatrixScanner;
 import rnaseq.splicing.splicefactor.enrichment.ReadMATSExtractNeighboringSequencing;
 import rnaseq.splicing.splicefactor.enrichment.SpliceFactorMotifFisherExact;
 import rnaseq.splicing.splicefactor.enrichment.SpliceFactorMotifScanner;
+import rnaseq.splicing.star.JuncSalvagerExaminePutativeExons;
 import rnaseq.splicing.star.STARPostProcessingMatrix;
 import rnaseq.splicing.summary.AppendExpressionToMATSOutput;
 import rnaseq.tools.ercc.GenerateERCCgtffile;
@@ -11377,7 +11378,17 @@ public class DRPPM {
 				}
 				STARPostProcessingMatrix.execute(args_remain);
 				System.exit(0);
-				// STARPostProcessingMatrix
+				// JuncSalvagerExaminePutativeExons
+			} else if (type.equalsIgnoreCase("-JuncSalvagerExaminePutativeExons")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvagerExaminePutativeExons "
+							+ JuncSalvagerExaminePutativeExons.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvagerExaminePutativeExons.execute(args_remain);
+				System.exit(0);
+				// 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
