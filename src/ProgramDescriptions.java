@@ -392,6 +392,7 @@ import rnaseq.splicing.juncsalvager.GenerateCombinedBEDFileFromJuncSalvagerSumma
 import rnaseq.splicing.juncsalvager.JuncSalvagerAppendAnnotation2Prioritization;
 import rnaseq.splicing.juncsalvager.JuncSalvagerAppendProteomicsValidation;
 import rnaseq.splicing.juncsalvager.JuncSalvagerExtractGeneMatrix;
+import rnaseq.splicing.juncsalvager.JuncSalvagerGenerateInputSampleLst;
 import rnaseq.splicing.juncsalvager.JuncSalvagerPipeline;
 import rnaseq.splicing.juncsalvager.JuncSalvagerSplitMatrixCandidates;
 import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxTestPostProcessing;
@@ -2728,7 +2729,9 @@ public class ProgramDescriptions {
 		if (JuncSalvagerExaminePutativeExons.type().equals(type)) {
 			result += "JuncSalvagerExaminePutativeExons: " + JuncSalvagerExaminePutativeExons.description() + "\n";
 		}
-		
+		if (JuncSalvagerGenerateInputSampleLst.type().equals(type)) {
+			result += "JuncSalvagerGenerateInputSampleLst: " + JuncSalvagerGenerateInputSampleLst.description() + "\n";
+		}
 		return result;
 	}	
 

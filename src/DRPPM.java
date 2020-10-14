@@ -617,6 +617,7 @@ import rnaseq.splicing.intronretention.graphs.GenerateIntronRetentionBarPlot;
 import rnaseq.splicing.juncsalvager.GenerateCombinedBEDFileFromJuncSalvagerSummary;
 import rnaseq.splicing.juncsalvager.JuncSalvagerAppendAnnotation2Prioritization;
 import rnaseq.splicing.juncsalvager.JuncSalvagerAppendProteomicsValidation;
+import rnaseq.splicing.juncsalvager.JuncSalvagerGenerateInputSampleLst;
 import rnaseq.splicing.juncsalvager.JuncSalvagerPipeline;
 import rnaseq.splicing.juncsalvager.JuncSalvagerSplitMatrixCandidates;
 import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxTestPostProcessing;
@@ -11387,6 +11388,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				JuncSalvagerExaminePutativeExons.execute(args_remain);
+				System.exit(0);
+				// JuncSalvagerGenerateInputSampleLst
+			} else if (type.equalsIgnoreCase("-JuncSalvagerGenerateInputSampleLst")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvagerGenerateInputSampleLst "
+							+ JuncSalvagerGenerateInputSampleLst.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvagerGenerateInputSampleLst.execute(args_remain);
 				System.exit(0);
 				// 
 			}

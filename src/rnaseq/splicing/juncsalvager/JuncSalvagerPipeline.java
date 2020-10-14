@@ -121,7 +121,7 @@ public class JuncSalvagerPipeline {
 				String[] split = line.split("\t");
 				String sampleName = split[0];
 				String bamFile = split[1];
-				String rnapegFile = split[2];
+				String star_sj_tab = split[2];
 				File file = new File(outputFolder + "/" + sampleName);
 				if (!file.isDirectory()) {
 					file.mkdir();
@@ -159,9 +159,11 @@ public class JuncSalvagerPipeline {
 						
 						FileWriter fwriter_sample_gene_shell = new FileWriter(outputSampleGeneShell);
 						BufferedWriter out_sample_gene_shell = new BufferedWriter(fwriter_sample_gene_shell);
-						out_sample_gene_shell.write("drppm -RNApegPostProcessingMatrix " + rnapegFile + " 5 " + gtfFile + " " + geneName + " " + sample_gene_folder + "\n");
+						//out_sample_gene_shell.write("drppm -RNApegPostProcessingMatrix " + rnapegFile + " 5 " + gtfFile + " " + geneName + " " + sample_gene_folder + "\n");
+						out_sample_gene_shell.write("drppm -STARPostProcessingMatrix " + star_sj_tab + " 5 " + gtfFile + " " + geneName + " " + sample_gene_folder + "\n");
 						out_sample_gene_shell.write("bamCoverage --bam " + bamFile + " --binSize 1 --outFileFormat bedgraph --region " + position + " -o " + bedGraphFile + "\n"); // note this require python installation of deeptools
-						out_sample_gene_shell.write("drppm -RNApegDefineExonBasedoOnBW " + sample_gene_folder + "/ExonList.txt " + bedGraphFile + " " + gtfFile + " " + geneName + " 8 0.1 " + sample_gene_folder + "\n");
+						//out_sample_gene_shell.write("drppm -RNApegDefineExonBasedoOnBW " + sample_gene_folder + "/ExonList.txt " + bedGraphFile + " " + gtfFile + " " + geneName + " 8 0.1 " + sample_gene_folder + "\n");
+						out_sample_gene_shell.write("drppm -JuncSalvagerExaminePutativeExons " + sample_gene_folder + "/ExonList.txt " + bedGraphFile + " " + gtfFile + " " + geneName + " 8 0.1 " + sample_gene_folder + "\n");
 						out_sample_gene_shell.write("\n");
 						out_sample_gene_shell.close();
 					}
