@@ -43,7 +43,7 @@ public class JuncSalvagerGenerateInputSampleLst {
 				String name = file.getName().replaceAll(".STAR.Aligned.sortedByCoord.out.bam", "");
 				name = name.replaceAll(".Aligned.sortedByCoord.out.bam", "");
 				String bam = str;
-				String sj_out_tab = file.getName().replaceAll(".STAR.Aligned.sortedByCoord.out.bam", ".SJ.out.tab");
+				String sj_out_tab = file.getPath().replaceAll(".STAR.Aligned.sortedByCoord.out.bam", ".SJ.out.tab");
 				sj_out_tab = sj_out_tab.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab");
 				out.write(name + "\t" + str + "\t" + sj_out_tab + "\n");
 			}
