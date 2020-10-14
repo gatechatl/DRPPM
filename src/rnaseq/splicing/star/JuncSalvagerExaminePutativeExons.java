@@ -183,7 +183,7 @@ public class JuncSalvagerExaminePutativeExons {
 				}				
 			}
 			
-			System.out.println("Finished calculate exon and intron reads");
+			System.out.println("Finished calculating exon and intron reads");
 					
 			double[] exon_counts = MathTools.convertListDouble2Double(exon_mapping_counts);
 			double[] intron_counts = MathTools.convertListDouble2Double(intron_mapping_counts);

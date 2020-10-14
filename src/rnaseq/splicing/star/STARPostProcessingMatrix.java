@@ -199,7 +199,7 @@ public class STARPostProcessingMatrix {
 					//String junction2_chr = junction2.split(":")[0];
 					//int junction2_position = new Integer(junction2.split(":")[1]);
 											
-					double read = new Double(split[7]);
+					double read = new Double(split[6]) + new Double(split[7]);
 					boolean found_hit = false;
 					
 					
