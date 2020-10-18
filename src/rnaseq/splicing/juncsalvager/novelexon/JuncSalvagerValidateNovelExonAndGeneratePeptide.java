@@ -87,6 +87,7 @@ public class JuncSalvagerValidateNovelExonAndGeneratePeptide {
 							fstream = new FileInputStream(f.getPath());
 							din = new DataInputStream(fstream);
 							in = new BufferedReader(new InputStreamReader(din));
+							String header = in.readLine();
 							while (in.ready()) {
 								String str = in.readLine();
 								String[] split = str.split("\t");
