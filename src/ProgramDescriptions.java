@@ -399,6 +399,7 @@ import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxTestPostProcessing;
 import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxonTestRank;
 import rnaseq.splicing.juncsalvager.SummarizeNovelExonAltStartSiteMatrix;
 import rnaseq.splicing.juncsalvager.SummarizeNovelExonSiteMatrix;
+import rnaseq.splicing.juncsalvager.novelexon.JuncSalvagerValidateNovelExonAndGeneratePeptide;
 import rnaseq.splicing.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
 import rnaseq.splicing.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
@@ -2731,6 +2732,9 @@ public class ProgramDescriptions {
 		}
 		if (JuncSalvagerGenerateInputSampleLst.type().equals(type)) {
 			result += "JuncSalvagerGenerateInputSampleLst: " + JuncSalvagerGenerateInputSampleLst.description() + "\n";
+		}
+		if (JuncSalvagerValidateNovelExonAndGeneratePeptide.type().equals(type)) {
+			result += "JuncSalvagerValidateNovelExonAndGeneratePeptide: " + JuncSalvagerValidateNovelExonAndGeneratePeptide.description() + "\n";
 		}
 		return result;
 	}	

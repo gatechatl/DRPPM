@@ -141,7 +141,7 @@ public class JuncSalvagerPipeline {
 						String prev_chr = prev_position.split(":")[0].replaceAll("chr", "");
 						int prev_start = new Integer(prev_position.split(":")[1].split("-")[0]);
 						int prev_end = new Integer(prev_position.split(":")[1].split("-")[1]);						
-						String position = prev_chr + ":" + (prev_start - 5000) + ":" + (prev_end + 5000); // works with bamCoverage
+						String position = prev_chr + ":" + (prev_start - 10000) + ":" + (prev_end + 10000); // works with bamCoverage
 						String sample_gene_folder = outputFolder + "/" + sampleName + "/" + geneName;
 						File file2 = new File(sample_gene_folder);
 						if (!file2.isDirectory()) {
