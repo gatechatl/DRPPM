@@ -42,14 +42,7 @@ public class JuncSalvagerValidateNovelExonAndGeneratePeptide {
 			String outputBed = args[2];
 			String outputNovelExonSummary = args[3];
 			
-			HashMap all_novel_exons_summary = new HashMap();
-			
-			String direction = "";
-			String temp_chr = "";
-			int min = 999999999;
-			int max = -1;
-			String prev_line = "";
-			LinkedList list = new LinkedList();
+			HashMap all_novel_exons_summary = new HashMap();			
 			HashMap exon_structure = new HashMap();
 			
 			HashMap exons = new HashMap();
@@ -102,7 +95,7 @@ public class JuncSalvagerValidateNovelExonAndGeneratePeptide {
 										all_novel_exons_summary.put(exon_coord, sample_list);
 									} else {
 										LinkedList sample_list = new LinkedList();
-										list.add(sampleFolder_file.getName());
+										sample_list.add(sampleFolder_file.getName());
 										all_novel_exons_summary.put(exon_coord, sample_list);
 									}
 								}
