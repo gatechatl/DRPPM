@@ -625,6 +625,7 @@ import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxonTestRank;
 import rnaseq.splicing.juncsalvager.JuncSalvagerExtractGeneMatrix;
 import rnaseq.splicing.juncsalvager.SummarizeNovelExonAltStartSiteMatrix;
 import rnaseq.splicing.juncsalvager.SummarizeNovelExonSiteMatrix;
+import rnaseq.splicing.juncsalvager.novelexon.JuncSalvagerTranslateFasta;
 import rnaseq.splicing.juncsalvager.novelexon.JuncSalvagerValidateNovelExonAndGeneratePeptide;
 import rnaseq.splicing.juncsalvager.psi.JuncSalvager5prime3primeUsagePSI;
 import rnaseq.splicing.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
@@ -11409,6 +11410,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				JuncSalvagerValidateNovelExonAndGeneratePeptide.execute(args_remain);
+				System.exit(0);
+				// JuncSalvagerTranslateFasta
+			} else if (type.equalsIgnoreCase("-JuncSalvagerTranslateFasta")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvagerTranslateFasta "
+							+ JuncSalvagerTranslateFasta.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvagerTranslateFasta.execute(args_remain);
 				System.exit(0);
 				// 
 			}

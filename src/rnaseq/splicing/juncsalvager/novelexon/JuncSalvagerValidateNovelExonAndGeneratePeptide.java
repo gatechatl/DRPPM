@@ -30,7 +30,7 @@ public class JuncSalvagerValidateNovelExonAndGeneratePeptide {
 		return "Filter the novel exons that overlap with the GTF file.";
 	}
 	public static String parameter_info() {
-		return "[inputGTFFile] [exonFolder] [outputBed] [outputNovelExonSummary]";
+		return "[inputGTFFile] [exonFolder] [exon_gtf] [outputBed] [outputNovelExonSummary]";
 	}
 	public static void execute(String[] args) {
 		
