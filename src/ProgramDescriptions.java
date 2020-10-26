@@ -109,6 +109,7 @@ import enrichment.tool.go.ParseGeneOntology;
 import expression.matrix.summary.CalculateMatrixSampleSummary;
 import expression.matrix.summary.CheckIntegrityOfMatrix;
 import expression.matrix.summary.ConvertMatrix2BinnedValue;
+import expression.matrix.tools.AppendAnnotation2SampleName;
 import expression.matrix.tools.AppendMADValue;
 import expression.matrix.tools.AppendMEDIANValue;
 import expression.matrix.tools.AppendMatrixTogether;
@@ -2739,6 +2740,9 @@ public class ProgramDescriptions {
 		}
 		if (JuncSalvagerTranslateFasta.type().equals(type)) {
 			result += "JuncSalvagerTranslateFasta: " + JuncSalvagerTranslateFasta.description() + "\n";
+		}
+		if (AppendAnnotation2SampleName.type().equals(type)) {
+			result += "AppendAnnotation2SampleName: " + AppendAnnotation2SampleName.description() + "\n";
 		}
 		return result;
 	}	

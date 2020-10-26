@@ -275,6 +275,7 @@ import expression.matrix.summary.CalculateMatrixSampleSummary;
 import expression.matrix.summary.CheckIntegrityOfMatrix;
 import expression.matrix.summary.ConvertMatrix2BinnedValue;
 import expression.matrix.tools.AddGeneKO2Sample;
+import expression.matrix.tools.AppendAnnotation2SampleName;
 import expression.matrix.tools.AppendMADValue;
 import expression.matrix.tools.AppendMEDIANValue;
 import expression.matrix.tools.AppendMatrixTogether;
@@ -11420,6 +11421,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				JuncSalvagerTranslateFasta.execute(args_remain);
+				System.exit(0);
+				// AppendAnnotation2SampleName
+			} else if (type.equalsIgnoreCase("-AppendAnnotation2SampleName")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -AppendAnnotation2SampleName "
+							+ AppendAnnotation2SampleName.parameter_info());
+					System.exit(0);
+				}
+				AppendAnnotation2SampleName.execute(args_remain);
 				System.exit(0);
 				// 
 			}
