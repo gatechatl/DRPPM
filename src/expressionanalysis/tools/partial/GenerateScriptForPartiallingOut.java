@@ -46,6 +46,7 @@ public class GenerateScriptForPartiallingOut {
 			String[] split = header.split("\t");
 			out.write("data = read.table(\"" + inputFile + "\", sep=\"\\t\", header = T, row.names=1);\n");
 			for (int i = 1; i < split.length; i++) {
+				split[i] = split[i].replaceAll("-", ".");
 				if (i != index) {
 					out.write("r" + i + " = resid(m" + i + " <- lm(" + split[i] + " ~ " + split[index] + ", data = data))\n");
 					out.write(split[i] + " = coef(m" + i + ")[\"(Intercept)\"] + r" + i + "\n");
@@ -54,6 +55,7 @@ public class GenerateScriptForPartiallingOut {
 			boolean first = true;
 			out.write("out = cbind(");
 			for (int i = 1; i < split.length; i++) {
+				split[i] = split[i].replaceAll("-", ".");
 				if (i != index) {
 					if (first) {
 						out.write(split[i]);
