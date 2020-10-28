@@ -344,6 +344,7 @@ import expressionanalysis.tools.gsea.GenerateGSEAInputCLSFile;
 import expressionanalysis.tools.gsea.GenerateGSEAInputGCTFile;
 import expressionanalysis.tools.gsea.SummarizeGSEAResult;
 import expressionanalysis.tools.headermod.ModifyHeaderOfMatrix;
+import expressionanalysis.tools.partial.GenerateScriptForPartiallingOut;
 import expressionanalysis.tools.unsupervised.GeneratePCAScatterPlotPython;
 import expressionanalysis.tools.unsupervised.GenerateRScriptForCalculatingMADScores;
 import expressionanalysis.tools.unsupervised.GenerateRScriptForCalculatingVARScores;
@@ -11431,6 +11432,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				AppendAnnotation2SampleName.execute(args_remain);
+				System.exit(0);
+				// GenerateScriptForPartiallingOut
+			} else if (type.equalsIgnoreCase("-GenerateScriptForPartiallingOut")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateScriptForPartiallingOut "
+							+ GenerateScriptForPartiallingOut.parameter_info());
+					System.exit(0);
+				}
+				GenerateScriptForPartiallingOut.execute(args_remain);
 				System.exit(0);
 				// 
 			}

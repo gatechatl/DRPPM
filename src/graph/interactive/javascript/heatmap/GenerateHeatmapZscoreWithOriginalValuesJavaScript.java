@@ -14,7 +14,7 @@ public class GenerateHeatmapZscoreWithOriginalValuesJavaScript {
 		return "JAVASCRIPT";
 	}
 	public static String parameter_info() {
-		return "[inputMatrix] [sampleInfo]";
+		return "[inputMatrix] [sampleInfo] [width] [height]";
 	}
 	public static void execute(String[] args) {
 		

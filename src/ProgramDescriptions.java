@@ -172,6 +172,7 @@ import expressionanalysis.tools.gsea.ConvertGSEAList2AnnotationFile;
 import expressionanalysis.tools.gsea.GSEAHeatmapFlex;
 import expressionanalysis.tools.gsea.SummarizeGSEAResult;
 import expressionanalysis.tools.headermod.ModifyHeaderOfMatrix;
+import expressionanalysis.tools.partial.GenerateScriptForPartiallingOut;
 import expressionanalysis.tools.unsupervised.GenerateRScriptForCalculatingMADScores;
 import expressionanalysis.tools.unsupervised.GenerateRScriptForCalculatingVARScores;
 import expressionanalysis.tools.unsupervised.GenerateRScriptForLIMMALogNormalize;
@@ -2744,9 +2745,12 @@ public class ProgramDescriptions {
 		if (AppendAnnotation2SampleName.type().equals(type)) {
 			result += "AppendAnnotation2SampleName: " + AppendAnnotation2SampleName.description() + "\n";
 		}
+		if (GenerateScriptForPartiallingOut.type().equals(type)) {
+			result += "GenerateScriptForPartiallingOut: " + GenerateScriptForPartiallingOut.description() + "\n";
+		}
 		return result;
 	}	
 
-	public static String VERSION = "20201025a";
+	public static String VERSION = "20201028a";
 	
 }
