@@ -37,14 +37,16 @@ public class AlternativeJuncGTFFileGenerator {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
-				if (split[2].equals("exon")) {
-					String meta = split[8];
-					//String geneid = GTFFile.grabMeta(split[8], "gene_id");
-					String gene_name = GTFFile.grabMeta(split[8], "gene_name");
-					String transcript_id = GTFFile.grabMeta(split[8], "transcript_id");
-					String new_gene_id = gene_name + "_" + split[0] + "_" + split[3] + "_" + split[4] + "_" + split[6];
-					out.write(split[0] + "\tTimExon\tgene\t" + split[3] + "\t" + split[4] + "\t" + split[5] + "\t" + split[6] + "\t" + split[7] + "\tgene_id \"" + new_gene_id + "\"\n");
-					out.write(split[0] + "\tTimExon\texon\t" + split[3] + "\t" + split[4] + "\t" + split[5] + "\t" + split[6] + "\t" + split[7] + "\tgene_id \"" + new_gene_id + "\"; transcript_id \"" + transcript_id + "\"; gene_type \"Tim_defined\"; gene_name \"" + gene_name + "\"; transcript_type \"Tim_defined\"; transcript_name \"" + new_gene_id + "\"; exon_number 1; exon_id \"" + new_gene_id + "\"; level 1;\n");
+				if (!split[0].substring(0, 1).equals("#")) {
+					if (split[2].equals("exon")) {
+						String meta = split[8];
+						//String geneid = GTFFile.grabMeta(split[8], "gene_id");
+						String gene_name = GTFFile.grabMeta(split[8], "gene_name");
+						String transcript_id = GTFFile.grabMeta(split[8], "transcript_id");
+						String new_gene_id = gene_name + "_" + split[0] + "_" + split[3] + "_" + split[4] + "_" + split[6];
+						out.write(split[0] + "\tTimExon\tgene\t" + split[3] + "\t" + split[4] + "\t" + split[5] + "\t" + split[6] + "\t" + split[7] + "\tgene_id \"" + new_gene_id + "\"\n");
+						out.write(split[0] + "\tTimExon\texon\t" + split[3] + "\t" + split[4] + "\t" + split[5] + "\t" + split[6] + "\t" + split[7] + "\tgene_id \"" + new_gene_id + "\"; transcript_id \"" + transcript_id + "\"; gene_type \"Tim_defined\"; gene_name \"" + gene_name + "\"; transcript_type \"Tim_defined\"; transcript_name \"" + new_gene_id + "\"; exon_number 1; exon_id \"" + new_gene_id + "\"; level 1;\n");
+					}
 				}
 			}
 			in.close();
