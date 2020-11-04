@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 
 public class JuncSalvagerConvert2GTFFriendlyBED {
 
@@ -29,13 +30,19 @@ public class JuncSalvagerConvert2GTFFriendlyBED {
 			FileWriter fwriter = new FileWriter(outputBEDFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			
+			HashMap map = new HashMap();
 			FileInputStream fstream = new FileInputStream(inputBEDFile);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
-				out.write(split[0] + "\t" + split[1] + "\t" + split[2] + "\t" + split[3] + ":" + split[0] + ":" + split[1] + ":" + split[2] + "\t" + split[4] + "\t" + split[5] + "\n");
+				String line = split[0] + "\t" + split[1] + "\t" + split[2] + "\t" + split[3] + ":" + split[0] + ":" + split[1] + ":" + split[2] + "\t" + split[4] + "\t" + split[5] + "\n";
+				if (!map.containsKey(line)) {
+					out.write(line);
+					map.put(line ,"");
+				}
+				
 			}
 			in.close();
 			out.close();
