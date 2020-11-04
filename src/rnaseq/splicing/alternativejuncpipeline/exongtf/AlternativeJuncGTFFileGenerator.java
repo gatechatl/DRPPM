@@ -8,6 +8,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 
 public class AlternativeJuncGTFFileGenerator {
 
@@ -31,6 +32,7 @@ public class AlternativeJuncGTFFileGenerator {
 			FileWriter fwriter = new FileWriter(outputExonGTFFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 
+			HashMap map = new HashMap();
 			FileInputStream fstream = new FileInputStream(inputGtfFile);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
@@ -42,10 +44,14 @@ public class AlternativeJuncGTFFileGenerator {
 						String meta = split[8];
 						//String geneid = GTFFile.grabMeta(split[8], "gene_id");
 						String gene_name = GTFFile.grabMeta(split[8], "gene_name");
-						String transcript_id = GTFFile.grabMeta(split[8], "transcript_id");
+						//String transcript_id = GTFFile.grabMeta(split[8], "transcript_id");
 						String new_gene_id = gene_name + "_" + split[0] + "_" + split[3] + "_" + split[4] + "_" + split[6];
-						out.write(split[0] + "\tTimExon\tgene\t" + split[3] + "\t" + split[4] + "\t" + split[5] + "\t" + split[6] + "\t" + split[7] + "\tgene_id \"" + new_gene_id + "\"\n");
-						out.write(split[0] + "\tTimExon\texon\t" + split[3] + "\t" + split[4] + "\t" + split[5] + "\t" + split[6] + "\t" + split[7] + "\tgene_id \"" + new_gene_id + "\"; transcript_id \"" + transcript_id + "\"; gene_type \"Tim_defined\"; gene_name \"" + gene_name + "\"; transcript_type \"Tim_defined\"; transcript_name \"" + new_gene_id + "\"; exon_number 1; exon_id \"" + new_gene_id + "\"; level 1;\n");
+						String line = split[0] + "\tTimExon\tgene\t" + split[3] + "\t" + split[4] + "\t" + split[5] + "\t" + split[6] + "\t" + split[7] + "\tgene_id \"" + new_gene_id + "\"\n";
+						if (!map.containsKey(line)) {
+							out.write(split[0] + "\tTimExon\tgene\t" + split[3] + "\t" + split[4] + "\t" + split[5] + "\t" + split[6] + "\t" + split[7] + "\tgene_id \"" + new_gene_id + "\"\n");
+							out.write(split[0] + "\tTimExon\texon\t" + split[3] + "\t" + split[4] + "\t" + split[5] + "\t" + split[6] + "\t" + split[7] + "\tgene_id \"" + new_gene_id + "\"; transcript_id \"" + new_gene_id + "\"; gene_type \"Tim_defined\"; gene_name \"" + gene_name + "\"; transcript_type \"Tim_defined\"; transcript_name \"" + new_gene_id + "\"; exon_number 1; exon_id \"" + new_gene_id + "\"; level 1;\n");
+							map.put(line, "");
+						}
 					}
 				}
 			}
