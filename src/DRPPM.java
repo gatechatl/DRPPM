@@ -596,43 +596,44 @@ import rnaseq.quantification.kallisto.KallistoGenerateCountFile;
 import rnaseq.quantification.kallisto.KallistoGenerateCountFileWithReference;
 import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrix;
 import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrixSampleCol;
-import rnaseq.splicing.intronretention.Bam2BedConversion;
-import rnaseq.splicing.intronretention.CalculateCoverageBed;
-import rnaseq.splicing.intronretention.CalculateSplicingDeficiency;
-import rnaseq.splicing.intronretention.CalculateSplicingDeficiencyScript;
-import rnaseq.splicing.intronretention.CombineSplicingDeficiencyName;
-import rnaseq.splicing.intronretention.CombineSplicingDeficiencyNameMeta;
-import rnaseq.splicing.intronretention.CombineSplicingDeficiencyNameMetaHG38;
-import rnaseq.splicing.intronretention.CountNumberOfUniqReads;
-import rnaseq.splicing.intronretention.CountNumberOfUniqReadsScript;
-import rnaseq.splicing.intronretention.DetectIntronRetention;
-import rnaseq.splicing.intronretention.FilterBEDReads;
-import rnaseq.splicing.intronretention.FilterBEDReadsScript;
-import rnaseq.splicing.intronretention.FilterReadsForSDScore;
-import rnaseq.splicing.intronretention.IntersectBed;
-import rnaseq.splicing.intronretention.IntronMappingPercentageSummary;
-import rnaseq.splicing.intronretention.IntronRetentionHistogramData;
-import rnaseq.splicing.intronretention.IntronRetentionPipelineWrapper;
-import rnaseq.splicing.intronretention.OverlapAllMouseHuman;
-import rnaseq.splicing.intronretention.OverlapMouseHumanGeneName;
-import rnaseq.splicing.intronretention.graphs.GenerateIntronRetentionBarPlot;
-import rnaseq.splicing.juncsalvager.GenerateCombinedBEDFileFromJuncSalvagerSummary;
-import rnaseq.splicing.juncsalvager.JuncSalvagerAppendAnnotation2Prioritization;
-import rnaseq.splicing.juncsalvager.JuncSalvagerAppendProteomicsValidation;
-import rnaseq.splicing.juncsalvager.JuncSalvagerGenerateInputSampleLst;
-import rnaseq.splicing.juncsalvager.JuncSalvagerPipeline;
-import rnaseq.splicing.juncsalvager.JuncSalvagerSplitMatrixCandidates;
-import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxTestPostProcessing;
-import rnaseq.splicing.juncsalvager.JuncSalvagerWilcoxonTestRank;
-import rnaseq.splicing.juncsalvager.JuncSalvagerExtractGeneMatrix;
-import rnaseq.splicing.juncsalvager.SummarizeNovelExonAltStartSiteMatrix;
-import rnaseq.splicing.juncsalvager.SummarizeNovelExonSiteMatrix;
-import rnaseq.splicing.juncsalvager.novelexon.JuncSalvagerTranslateFasta;
-import rnaseq.splicing.juncsalvager.novelexon.JuncSalvagerValidateNovelExonAndGeneratePeptide;
-import rnaseq.splicing.juncsalvager.psi.JuncSalvager5prime3primeUsagePSI;
-import rnaseq.splicing.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
-import rnaseq.splicing.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
-import rnaseq.splicing.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.Bam2BedConversion;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.CalculateCoverageBed;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.CalculateSplicingDeficiency;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.CalculateSplicingDeficiencyScript;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.CombineSplicingDeficiencyName;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.CombineSplicingDeficiencyNameMeta;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.CombineSplicingDeficiencyNameMetaHG38;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.CountNumberOfUniqReads;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.CountNumberOfUniqReadsScript;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.DetectIntronRetention;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.FilterBEDReads;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.FilterBEDReadsScript;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.FilterReadsForSDScore;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.IntersectBed;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.IntronMappingPercentageSummary;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.IntronRetentionHistogramData;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.IntronRetentionPipelineWrapper;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.OverlapAllMouseHuman;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.OverlapMouseHumanGeneName;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.graphs.GenerateIntronRetentionBarPlot;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.GenerateCombinedBEDFileFromJuncSalvagerSummary;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerAppendAnnotation2Prioritization;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerAppendProteomicsValidation;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerExtractGeneMatrix;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerGenerateInputSampleLst;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerPipeline;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerSplitMatrixCandidates;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerWilcoxTestPostProcessing;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerWilcoxonTestRank;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.SummarizeNovelExonAltStartSiteMatrix;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.SummarizeNovelExonSiteMatrix;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerConvert2GTFFriendlyBED;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerTranslateFasta;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerValidateNovelExonAndGeneratePeptide;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvager5prime3primeUsagePSI;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
 import rnaseq.splicing.mats308.AddGeneName2MATS;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
@@ -11442,6 +11443,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				GenerateScriptForPartiallingOut.execute(args_remain);
+				System.exit(0);
+				// JuncSalvagerConvert2GTFFriendlyBED
+			} else if (type.equalsIgnoreCase("-JuncSalvagerConvert2GTFFriendlyBED")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvagerConvert2GTFFriendlyBED "
+							+ JuncSalvagerConvert2GTFFriendlyBED.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvagerConvert2GTFFriendlyBED.execute(args_remain);
 				System.exit(0);
 				// 
 			}
