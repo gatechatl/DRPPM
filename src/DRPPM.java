@@ -596,6 +596,7 @@ import rnaseq.quantification.kallisto.KallistoGenerateCountFile;
 import rnaseq.quantification.kallisto.KallistoGenerateCountFileWithReference;
 import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrix;
 import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrixSampleCol;
+import rnaseq.splicing.alternativejuncpipeline.exongtf.AlternativeJuncGTFFileGenerator;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.Bam2BedConversion;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.CalculateCoverageBed;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.CalculateSplicingDeficiency;
@@ -11453,6 +11454,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				JuncSalvagerConvert2GTFFriendlyBED.execute(args_remain);
+				System.exit(0);
+				// AlternativeJuncGTFFileGenerator
+			} else if (type.equalsIgnoreCase("-AlternativeJuncGTFFileGenerator")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -AlternativeJuncGTFFileGenerator "
+							+ AlternativeJuncGTFFileGenerator.parameter_info());
+					System.exit(0);
+				}
+				AlternativeJuncGTFFileGenerator.execute(args_remain);
 				System.exit(0);
 				// 
 			}
