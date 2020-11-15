@@ -131,7 +131,7 @@ public class JuncSalvagerSplitMatrixCandidates {
 				File f = new File(outputFolderPCGP + "/" + disease + "_rank_tmp.txt");
 				f.delete();
 				
-				String[] arguments2 = {(outputFolderPCGP + "/" + disease + ".txt"), "1.0", "0.1", (outputFolderPCGP + "/" + disease + "_1FPKM.txt")};
+				String[] arguments2 = {(outputFolderPCGP + "/" + disease + ".txt"), "1.0", "0.9", (outputFolderPCGP + "/" + disease + "_1FPKM.txt")};
 				FilterMatrixExpression.execute(arguments2);
 				rank_norm(outputFolderPCGP + "/" + disease + "_1FPKM.txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_median_tmp.txt");
 				

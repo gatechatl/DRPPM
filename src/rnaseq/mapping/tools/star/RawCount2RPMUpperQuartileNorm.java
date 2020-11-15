@@ -76,6 +76,8 @@ public class RawCount2RPMUpperQuartileNorm {
 			}
 			in.close();
 			out.close();
+			
+			System.out.println("Something wrong with this code...");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

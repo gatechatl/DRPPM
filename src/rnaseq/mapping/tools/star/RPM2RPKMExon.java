@@ -96,7 +96,7 @@ public class RPM2RPKMExon {
 					Iterator itr2 = list.iterator();
 					while (itr2.hasNext()) {
 						String transcriptID = (String)itr2.next();
-						System.out.println(transcriptID);
+						//System.out.println(transcriptID);
 						int length = (Integer)transcripts.get(transcriptID);
 						if (gene_length.containsKey(geneID)) {
 							int orig_length = (Integer)gene_length.get(geneID);
