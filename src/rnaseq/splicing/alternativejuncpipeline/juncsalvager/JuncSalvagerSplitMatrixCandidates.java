@@ -131,9 +131,10 @@ public class JuncSalvagerSplitMatrixCandidates {
 				File f = new File(outputFolderPCGP + "/" + disease + "_rank_tmp.txt");
 				f.delete();
 				
-				String[] arguments2 = {(outputFolderPCGP + "/" + disease + ".txt"), "1.0", "0.5", (outputFolderPCGP + "/" + disease + "_1FPKM.txt")};
-				FilterMatrixExpression.execute(arguments2);
-				rank_norm(outputFolderPCGP + "/" + disease + "_1FPKM.txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_median_tmp.txt");
+				//String[] arguments2 = {(outputFolderPCGP + "/" + disease + ".txt"), "1.0", "0.5", (outputFolderPCGP + "/" + disease + "_1FPKM.txt")};
+				//FilterMatrixExpression.execute(arguments2);
+				//rank_norm(outputFolderPCGP + "/" + disease + "_1FPKM.txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_median_tmp.txt");
+				rank_norm(outputFolderPCGP + "/" + disease + ".txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_median_tmp.txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_quartile_tmp.txt");
 				
 				if (new File(outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt").exists()) {
 					String[] arguments3 = {(outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt"), (outputFolderPCGP + "/" + disease + "_rank_1FPKM.txt")};
@@ -145,12 +146,22 @@ public class JuncSalvagerSplitMatrixCandidates {
 					RemoveQuotations.execute(arguments4);				
 				}
 				
+				if (new File(outputFolderPCGP + "/" + disease + "_rank_1FPKM_quartile_tmp.txt").exists()) {
+					String[] arguments5 = {outputFolderPCGP + "/" + disease + "_rank_1FPKM_quartile_tmp.txt", outputFolderPCGP + "/" + disease + "_rank_1FPKM_quartile.txt"};
+					RemoveQuotations.execute(arguments5);				
+				}
+				
 				f = new File(outputFolderPCGP + "/" + disease + "_rank_1FPKM_tmp.txt");
 				if (f.exists()) {
 					f.delete();
 				}
 				
 				f = new File(outputFolderPCGP + "/" + disease + "_rank_1FPKM_median_tmp.txt");
+				if (f.exists()) {
+					f.delete();
+				}
+				
+				f = new File(outputFolderPCGP + "/" + disease + "_rank_1FPKM_quartile_tmp.txt");
 				if (f.exists()) {
 					f.delete();
 				}
@@ -218,10 +229,12 @@ public class JuncSalvagerSplitMatrixCandidates {
 			script += "sampleNames = col_labels[2:length(col_labels)];\n";
 			script += "colnames(selection) = col_labels;\n";
 			script += "rownames(selection) = genenames;\n";
+			script += "selection[selection < 1] = 0.0;\n";
 			script += "mat = as.matrix(selection[, sampleNames]);\n";
 			//script += "numTop = 50;\n";
 			script += "rownames(mat)=genenames\n";
-			script += "mat <- apply(-mat, 2, rank, ties.method= \"first\");\n";			
+			script += "mat <- apply(-mat, 2, rank, ties.method= \"max\");\n";
+			
 			script += "write.table(mat, file=\"" + outputFile + "\", sep=\"\t\");\n";
 			CommandLine.writeFile(inputFile + ".r", script);
 			CommandLine.executeCommand("R --vanilla < " + inputFile + ".r");
@@ -232,7 +245,7 @@ public class JuncSalvagerSplitMatrixCandidates {
 		}
 	}
 	
-	public static void rank_norm(String inputFile, String outputFile, String outputMedianFile) {
+	public static void rank_norm(String inputFile, String outputFile, String outputMedianFile, String outputQuartileFile) {
 		
 		try {
 			
@@ -240,6 +253,29 @@ public class JuncSalvagerSplitMatrixCandidates {
 			String script = "";
 			//script += "library(limma);\n";
 			//script += "#library(edgeR)\n";
+			script += "rank_min = function(r) {\n";
+			script += "	new_r = rank(r, ties.method = \"min\");\n";
+			script += "	new_r = new_r - min(new_r) + 1;\n";
+			script += "	return(new_r);\n";
+			script += "}\n";
+			script += "\n";
+			script += "norm_max = function(mat) {\n";
+			script += " return = 1 - (mat / max(mat));\n";
+			script += "}\n";
+			script += "\n";
+			script += "quartile_mat = function(mat) {\n";
+						
+			script += " return (1 - (mat / max(mat)));\n";
+			
+			script += "quartile_conversion = function(mat) {\n";
+			script += " new_mat = mat;\n";
+			script += " new_mat[new_mat <= 0.25] = 0;\n";
+			script += " new_mat[new_mat > 0.25 & new_mat <= 0.5] = 1;\n";
+			script += " new_mat[new_mat > 0.5 & new_mat <= 0.75] = 2;\n";
+			script += " new_mat[new_mat > 0.75] = 3;\n";
+			script += " return (new_mat)\n";
+			script += "}\n";
+			script += "\n";
 			script += "data=read.csv(\"" + inputFile + "\", sep=\"\\t\", header=T, as.is=T);\n";
 			script += "gene=data[,1]\n";
 			script += "allDat = data;\n";
@@ -252,11 +288,15 @@ public class JuncSalvagerSplitMatrixCandidates {
 			script += "mat = as.matrix(selection[, sampleNames]);\n";
 			//script += "numTop = 50;\n";
 			script += "rownames(mat)=genenames\n";
-			script += "mat <- apply(-mat, 2, rank, ties.method= \"first\");\n";		
-			script += "new_mat = 1 - (mat / length(mat[,1]));\n";
+			script += "mat <- apply(-mat, 2, rank_min);\n";		
+			script += "new_mat = apply(max, 2, norm_max);\n";
 			script += "write.table(new_mat, file=\"" + outputFile + "\", sep=\"\t\");\n";
 			script += "median_mat = apply(new_mat, 1, median);\n";
 			script += "write.table(median_mat, file=\"" + outputMedianFile + "\", sep=\"\t\");\n";
+			script += "quartile_mat = apply(new_mat, 2, quartile_conversion);\n";
+			script += "write.table(quartile_mat, file=\"" + outputQuartileFile + "\", sep=\"\t\");\n";
+		
+			
 			CommandLine.writeFile(inputFile + ".r", script);
 			CommandLine.executeCommand("R --vanilla < " + inputFile + ".r");
 			
