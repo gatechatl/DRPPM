@@ -31,7 +31,7 @@ public class JuncSalvagerGenerateBarplotData {
 
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
-			out.write("SampleName\t1st_Quartile\t2nd_Quartile\t3rd_Quartile\t4th_Quartile\n");
+			out.write("SampleName\tFourth_Quartile\tThird_Quartile\tSecond_Quartile\tFirst_Quartile\n");
 			FileInputStream fstream = new FileInputStream(inputFileList);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
@@ -78,7 +78,7 @@ public class JuncSalvagerGenerateBarplotData {
 				int count_2nd_quartile = (Integer)map.get("2nd_Quartile");
 				int count_3rd_quartile = (Integer)map.get("3rd_Quartile");
 				int count_4th_quartile = (Integer)map.get("4th_Quartile");
-				out.write(split[0] + "\t" + count_1st_quartile + "\t" + count_2nd_quartile + "\t" + count_3rd_quartile + "\t" + count_4th_quartile + "\n");
+				out.write(split[0] + "\t" + count_4th_quartile + "\t" + count_3rd_quartile + "\t" + count_2nd_quartile + "\t" + count_1st_quartile + "\n");
 				
 				
 			}
