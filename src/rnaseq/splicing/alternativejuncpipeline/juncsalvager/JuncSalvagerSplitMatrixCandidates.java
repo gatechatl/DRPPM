@@ -266,10 +266,10 @@ public class JuncSalvagerSplitMatrixCandidates {
 			
 			script += "quartile_conversion = function(mat) {\n";
 			script += " new_mat = mat;\n";
-			script += " new_mat[new_mat <= 0.25] = 0;\n";
-			script += " new_mat[new_mat > 0.25 & new_mat <= 0.5] = 1;\n";
-			script += " new_mat[new_mat > 0.5 & new_mat <= 0.75] = 2;\n";
-			script += " new_mat[new_mat > 0.75] = 3;\n";
+			script += " new_mat[mat <= 0.25] = 0;\n";
+			script += " new_mat[mat > 0.25 & mat <= 0.5] = 1;\n";
+			script += " new_mat[mat > 0.5 & mat <= 0.75] = 2;\n";
+			script += " new_mat[mat > 0.75] = 3;\n";
 			script += " return (new_mat)\n";
 			script += "}\n";
 			script += "\n";
