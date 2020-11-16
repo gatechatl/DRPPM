@@ -263,9 +263,6 @@ public class JuncSalvagerSplitMatrixCandidates {
 			script += " return = 1 - (mat / max(mat));\n";
 			script += "}\n";
 			script += "\n";
-			script += "quartile_mat = function(mat) {\n";
-						
-			script += " return (1 - (mat / max(mat)));\n";
 			
 			script += "quartile_conversion = function(mat) {\n";
 			script += " new_mat = mat;\n";
@@ -289,7 +286,7 @@ public class JuncSalvagerSplitMatrixCandidates {
 			//script += "numTop = 50;\n";
 			script += "rownames(mat)=genenames\n";
 			script += "mat <- apply(-mat, 2, rank_min);\n";		
-			script += "new_mat = apply(max, 2, norm_max);\n";
+			script += "new_mat = apply(mat, 2, norm_max);\n";
 			script += "write.table(new_mat, file=\"" + outputFile + "\", sep=\"\t\");\n";
 			script += "median_mat = apply(new_mat, 1, median);\n";
 			script += "write.table(median_mat, file=\"" + outputMedianFile + "\", sep=\"\t\");\n";
@@ -297,8 +294,8 @@ public class JuncSalvagerSplitMatrixCandidates {
 			script += "write.table(quartile_mat, file=\"" + outputQuartileFile + "\", sep=\"\t\");\n";
 		
 			
-			CommandLine.writeFile(inputFile + ".r", script);
-			CommandLine.executeCommand("R --vanilla < " + inputFile + ".r");
+			CommandLine.writeFile(inputFile + "_1FPKM.r", script);
+			CommandLine.executeCommand("R --vanilla < " + inputFile + "_1FPKM.r");
 			
 		
 		} catch (Exception e) {
