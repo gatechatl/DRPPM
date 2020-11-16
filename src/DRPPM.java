@@ -621,6 +621,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.GenerateCombinedBEDF
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerAppendAnnotation2Prioritization;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerAppendProteomicsValidation;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerExtractGeneMatrix;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerGenerateBarplotData;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerGenerateInputSampleLst;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerPipeline;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerSplitMatrixCandidates;
@@ -11464,6 +11465,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				AlternativeJuncGTFFileGenerator.execute(args_remain);
+				System.exit(0);
+				// JuncSalvagerGenerateBarplotData
+			} else if (type.equalsIgnoreCase("-JuncSalvagerGenerateBarplotData")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvagerGenerateBarplotData "
+							+ JuncSalvagerGenerateBarplotData.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvagerGenerateBarplotData.execute(args_remain);
 				System.exit(0);
 				// 
 			}

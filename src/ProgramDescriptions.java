@@ -395,6 +395,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.GenerateCombinedBEDF
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerAppendAnnotation2Prioritization;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerAppendProteomicsValidation;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerExtractGeneMatrix;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerGenerateBarplotData;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerGenerateInputSampleLst;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerPipeline;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerSplitMatrixCandidates;
@@ -2756,9 +2757,12 @@ public class ProgramDescriptions {
 		if (AlternativeJuncGTFFileGenerator.type().equals(type)) {
 			result += "AlternativeJuncGTFFileGenerator: " + AlternativeJuncGTFFileGenerator.description() + "\n";
 		}
+		if (JuncSalvagerGenerateBarplotData.type().equals(type)) {
+			result += "JuncSalvagerGenerateBarplotData: " + JuncSalvagerGenerateBarplotData.description() + "\n";
+		}
 		return result;
 	}	
 
-	public static String VERSION = "20201115e";
+	public static String VERSION = "20201115f";
 	
 }
