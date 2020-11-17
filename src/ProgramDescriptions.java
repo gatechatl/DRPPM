@@ -366,6 +366,7 @@ import rnaseq.mapping.tools.star.RPM2RPKMTranscript;
 import rnaseq.mapping.tools.star.RawCount2RPM;
 import rnaseq.mapping.tools.star.RawCount2RPMProteinFeatures;
 import rnaseq.mapping.tools.star.RawCount2RPMSkipFirstTwoColumns;
+import rnaseq.mapping.tools.star.RscriptDEseq2EdgeRCount2CPMFPKMTPM;
 import rnaseq.mapping.tools.star.STARMappingScriptGenerator;
 import rnaseq.mapping.tools.star.STARMappingScriptGeneratorForTrimFastq;
 import rnaseq.mapping.tools.star.SummarizeStarMapping;
@@ -2760,9 +2761,12 @@ public class ProgramDescriptions {
 		if (JuncSalvagerGenerateBarplotData.type().equals(type)) {
 			result += "JuncSalvagerGenerateBarplotData: " + JuncSalvagerGenerateBarplotData.description() + "\n";
 		}
+		if (RscriptDEseq2EdgeRCount2CPMFPKMTPM.type().equals(type)) {
+			result += "RscriptDEseq2EdgeRCount2CPMFPKMTPM: " + RscriptDEseq2EdgeRCount2CPMFPKMTPM.description() + "\n";
+		}
 		return result;
 	}	
 
-	public static String VERSION = "20201115g";
+	public static String VERSION = "20201117a";
 	
 }

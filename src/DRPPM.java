@@ -568,6 +568,7 @@ import rnaseq.mapping.tools.star.RPM2RPKMTranscript;
 import rnaseq.mapping.tools.star.RawCount2RPM;
 import rnaseq.mapping.tools.star.RawCount2RPMProteinFeatures;
 import rnaseq.mapping.tools.star.RawCount2RPMSkipFirstTwoColumns;
+import rnaseq.mapping.tools.star.RscriptDEseq2EdgeRCount2CPMFPKMTPM;
 import rnaseq.mapping.tools.star.STARMappingScriptGenerator;
 import rnaseq.mapping.tools.star.STARMappingScriptGeneratorForTrimFastq;
 import rnaseq.mapping.tools.star.SummarizeStarMapping;
@@ -11475,6 +11476,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				JuncSalvagerGenerateBarplotData.execute(args_remain);
+				System.exit(0);
+				// RscriptDEseq2EdgeRCount2CPMFPKMTPM
+			} else if (type.equalsIgnoreCase("-RscriptDEseq2EdgeRCount2CPMFPKMTPM")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -RscriptDEseq2EdgeRCount2CPMFPKMTPM "
+							+ RscriptDEseq2EdgeRCount2CPMFPKMTPM.parameter_info());
+					System.exit(0);
+				}
+				RscriptDEseq2EdgeRCount2CPMFPKMTPM.execute(args_remain);
 				System.exit(0);
 				// 
 			}
