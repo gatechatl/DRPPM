@@ -53,17 +53,17 @@ public class RscriptDEseq2EdgeRCount2CPMFPKMTPM {
 		script += "test <- DGEList(counts=updated_counts)\n";
 		script += "dge <- calcNormFactors(dge, method=\"TMM\")\n";
 		script += "cpm_result = cpm(dge)\n";
-		script += "write.table(cpm_result, file=\"" + outputPrefix + "_CPM.txt\", sep=\"\\t\", row.names=FALSE, quote = FALSE)\n";
+		script += "write.table(cbind(names = rownames(cpm_result), cpm_result), file=\"" + outputPrefix + "_CPM.txt\", sep=\"\\t\", row.names=FALSE, quote = FALSE)\n";
 
 		script += "rpkm_result = rpkm(dge)\n";
 
-		script += "write.table(rpkm_result, file=\"" + outputPrefix + "_FPKM.txt\", sep=\"\\t\", row.names=FALSE, quote = FALSE)\n";
+		script += "write.table(cbind(names = rownames(rpkm_result), rpkm_result), file=\"" + outputPrefix + "_FPKM.txt\", sep=\"\\t\", row.names=FALSE, quote = FALSE)\n";
 
 		script += "total_rpkm = apply (rpkm_result, 2, sum)\n";
 
 		script += "tpm_result =  1E6 * rpkm_result / total_rpkm\n";
 
-		script += "write.table(tpm_result, file=\"" + outputPrefix + "_TPM.txt\", sep=\"\\t\", row.names=FALSE, quote = FALSE)\n";
+		script += "write.table(cbind(names = rownames(tpm_result), tpm_result), file=\"" + outputPrefix + "_TPM.txt\", sep=\"\\t\", row.names=FALSE, quote = FALSE)\n";
 		return script;
 	}
 }
