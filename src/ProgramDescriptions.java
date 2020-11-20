@@ -399,6 +399,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerExtractG
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerGenerateBarplotData;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerGenerateInputSampleLst;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerPipeline;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerSortSumColumn;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerSplitMatrixCandidates;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerWilcoxTestPostProcessing;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerWilcoxonTestRank;
@@ -2764,9 +2765,12 @@ public class ProgramDescriptions {
 		if (RscriptDEseq2EdgeRCount2CPMFPKMTPM.type().equals(type)) {
 			result += "RscriptDEseq2EdgeRCount2CPMFPKMTPM: " + RscriptDEseq2EdgeRCount2CPMFPKMTPM.description() + "\n";
 		}
+		if (JuncSalvagerSortSumColumn.type().equals(type)) {
+			result += "JuncSalvagerSortSumColumn: " + JuncSalvagerSortSumColumn.description() + "\n";
+		}
 		return result;
 	}	
 
-	public static String VERSION = "20201117b";
+	public static String VERSION = "20201119a";
 	
 }

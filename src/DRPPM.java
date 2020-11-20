@@ -625,6 +625,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerExtractG
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerGenerateBarplotData;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerGenerateInputSampleLst;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerPipeline;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerSortSumColumn;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerSplitMatrixCandidates;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerWilcoxTestPostProcessing;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerWilcoxonTestRank;
@@ -11486,6 +11487,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				RscriptDEseq2EdgeRCount2CPMFPKMTPM.execute(args_remain);
+				System.exit(0);
+				// JuncSalvagerSortSumColumn
+			}else if (type.equalsIgnoreCase("-JuncSalvagerSortSumColumn")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvagerSortSumColumn "
+							+ JuncSalvagerSortSumColumn.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvagerSortSumColumn.execute(args_remain);
 				System.exit(0);
 				// 
 			}
