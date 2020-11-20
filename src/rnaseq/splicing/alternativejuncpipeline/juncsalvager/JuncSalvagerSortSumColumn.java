@@ -18,7 +18,7 @@ public class JuncSalvagerSortSumColumn {
 		try {
 			
 			String inputFile = args[0];
-			String outputFile = args[2];
+			String outputFile = args[1];
 			String script = generate_sort_python_script(inputFile, outputFile);
 			CommandLine.writeFile(outputFile + "_python.py", script);
 			CommandLine.executeCommand("python " + outputFile + "_python.py");
