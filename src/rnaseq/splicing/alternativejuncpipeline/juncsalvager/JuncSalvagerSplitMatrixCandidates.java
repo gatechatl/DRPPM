@@ -282,9 +282,10 @@ public class JuncSalvagerSplitMatrixCandidates {
 			script += "sampleNames = col_labels[2:length(col_labels)];\n";
 			script += "colnames(selection) = col_labels;\n";
 			script += "rownames(selection) = genenames;\n";
-			script += "mat = as.matrix(selection[, sampleNames]);\n";
+			script += "mat = as.matrix(selection[, sampleNames]);\n";			
 			//script += "numTop = 50;\n";
 			script += "rownames(mat)=genenames\n";
+			script += "mat[mat < 1] = 0;\n";
 			script += "mat <- apply(-mat, 2, rank_min);\n";		
 			script += "new_mat = apply(mat, 2, norm_max);\n";
 			script += "write.table(new_mat, file=\"" + outputFile + "\", sep=\"\t\");\n";
