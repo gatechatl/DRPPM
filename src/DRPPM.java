@@ -826,7 +826,7 @@ import stjude.projects.jinghuizhang.hla.trust4.ConvertSTARBamLstTo2CoFileLst;
 import stjude.projects.jinghuizhang.hla.trust4.EstimateSomaticMutationRateIGHFromTRUST4;
 import stjude.projects.jinghuizhang.hla.trust4.GenerateScriptForTRUST4;
 import stjude.projects.jinghuizhang.hla.trust4.JinghuiZhangAppendSJDiseaseType;
-import stjude.projects.jinghuizhang.hla.trust4.JinghuiZhangHLAJiccardDistanceMatrix;
+import stjude.projects.jinghuizhang.hla.trust4.JinghuiZhangHLAJaccardDistanceMatrix;
 import stjude.projects.jinghuizhang.hla.trust4.TRUST4PostProcess2MatrixSummary;
 import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangAppendTCGAImmuneClusterInformation;
 import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangStatisticalTestForEnrichedImmuneSignatures;
@@ -4419,11 +4419,22 @@ public class DRPPM {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {					
 					System.out.println("drppm -JinghuiZhangHLAJiccardDistanceMatrix "
-							+ JinghuiZhangHLAJiccardDistanceMatrix.parameter_info());
-					System.out.println("Description: " + JinghuiZhangHLAJiccardDistanceMatrix.description());
+							+ JinghuiZhangHLAJaccardDistanceMatrix.parameter_info());
+					System.out.println("Description: " + JinghuiZhangHLAJaccardDistanceMatrix.description());
 					System.exit(0);
 				}
-				JinghuiZhangHLAJiccardDistanceMatrix.execute(args_remain);
+				JinghuiZhangHLAJaccardDistanceMatrix.execute(args_remain);
+				System.exit(0);
+				// JinghuiZhangAppendSJDiseaseType
+			} else if (type.equalsIgnoreCase("-JinghuiZhangHLAJaccardDistanceMatrix")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {					
+					System.out.println("drppm -JinghuiZhangHLAJaccardDistanceMatrix "
+							+ JinghuiZhangHLAJaccardDistanceMatrix.parameter_info());
+					System.out.println("Description: " + JinghuiZhangHLAJaccardDistanceMatrix.description());
+					System.exit(0);
+				}
+				JinghuiZhangHLAJaccardDistanceMatrix.execute(args_remain);
 				System.exit(0);
 				// JinghuiZhangAppendSJDiseaseType
 			} else if (type.equalsIgnoreCase("-JinghuiZhangAppendSJDiseaseType")) {

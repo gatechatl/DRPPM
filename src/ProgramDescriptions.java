@@ -553,7 +553,7 @@ import stjude.projects.jinghuizhang.hla.trust4.ConvertSTARBamLstTo2CoFileLst;
 import stjude.projects.jinghuizhang.hla.trust4.EstimateSomaticMutationRateIGHFromTRUST4;
 import stjude.projects.jinghuizhang.hla.trust4.GenerateScriptForTRUST4;
 import stjude.projects.jinghuizhang.hla.trust4.JinghuiZhangAppendSJDiseaseType;
-import stjude.projects.jinghuizhang.hla.trust4.JinghuiZhangHLAJiccardDistanceMatrix;
+import stjude.projects.jinghuizhang.hla.trust4.JinghuiZhangHLAJaccardDistanceMatrix;
 import stjude.projects.jinghuizhang.hla.trust4.TRUST4PostProcess2MatrixSummary;
 import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangAppendTCGAImmuneClusterInformation;
 import stjude.projects.jinghuizhang.immunesignature.JinghuiZhangStatisticalTestForEnrichedImmuneSignatures;
@@ -2624,8 +2624,8 @@ public class ProgramDescriptions {
 			result += "CombineSplicingDeficiencyNameMetaHG38: " + CombineSplicingDeficiencyNameMetaHG38.description() + "\n";
 		}
 		
-		if (JinghuiZhangHLAJiccardDistanceMatrix.type().equals(type)) {
-			result += "JinghuiZhangHLAJiccardDistanceMatrix: " + JinghuiZhangHLAJiccardDistanceMatrix.description() + "\n";
+		if (JinghuiZhangHLAJaccardDistanceMatrix.type().equals(type)) {
+			result += "JinghuiZhangHLAJiccardDistanceMatrix: " + JinghuiZhangHLAJaccardDistanceMatrix.description() + "\n";
 		}
 		if (JinghuiZhangAppendSJDiseaseType.type().equals(type)) {
 			result += "JinghuiZhangAppendSJDiseaseType: " + JinghuiZhangAppendSJDiseaseType.description() + "\n";

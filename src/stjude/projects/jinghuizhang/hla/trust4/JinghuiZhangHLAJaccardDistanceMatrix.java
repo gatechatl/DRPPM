@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class JinghuiZhangHLAJiccardDistanceMatrix {
+public class JinghuiZhangHLAJaccardDistanceMatrix {
 
 	public static String description() {
 		return "Quantify the HLA matrix.";
