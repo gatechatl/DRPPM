@@ -252,6 +252,15 @@ public class GTF2BED {
 	        String sort_gene_bed_script = "sort -k 1,1 -k2,2n " + outputPrefix + ".intron.bed > " + outputPrefix + ".intron.sorted.bed";
 	        CommandLine.executeCommand(sort_gene_bed_script);
 	        
+
+	        String mv_sort_exon_bed_script = "mv " + outputPrefix + ".exon.sorted.bed " + outputPrefix + ".exon.bed";
+	        CommandLine.executeCommand(mv_sort_exon_bed_script);
+	        String mv_sort_intron_bed_script = "mv " + outputPrefix + ".intron.sorted.bed " + outputPrefix + ".intron.bed";
+	        CommandLine.executeCommand(mv_sort_intron_bed_script);
+	        String mv_sort_gene_bed_script = "mv " + outputPrefix + ".gene.sorted.bed " + outputPrefix + ".gene.bed";
+	        CommandLine.executeCommand(mv_sort_gene_bed_script);
+
+	        
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
