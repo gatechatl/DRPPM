@@ -14,11 +14,12 @@ public class FilterBEDReadsScript {
 		
 		String inputFile = args[0];
 		int length = new Integer(args[1]);
-		System.out.println(generateScript(inputFile, length));
+		int buffer = new Integer(args[2]);
+		System.out.println(generateScript(inputFile, length, buffer));
 		
 	}
 	
-	public static String generateScript(String inputFile1, int length) {
+	public static String generateScript(String inputFile1, int length, int buffer) {
 		 
 		LinkedList listFile = FileTools.readFileList(inputFile1);
 		String script = "";
@@ -27,8 +28,8 @@ public class FilterBEDReadsScript {
 		while (itr.hasNext()) {
 			String file = (String)itr.next();
 			String bedFile = file.split("/")[file.split("/").length - 1] + ".bed";
-			script += "drppm -FilterBEDReads " + bedFile + "_exon.bed " + length + " " + bedFile + "_exon_filter.bed" + "\n";
-			script += "drppm -FilterBEDReads " + bedFile + "_intron.bed " + length + " " + bedFile + "_intron_filter.bed" + "\n";
+			script += "drppm -FilterBEDReads " + bedFile + "_exon.bed " + length + " " + buffer + " " + bedFile + "_exon_filter.bed" + "\n";
+			script += "drppm -FilterBEDReads " + bedFile + "_intron.bed " + length + " " + buffer + " " + bedFile + "_intron_filter.bed" + "\n";
 		}
 		return script;
 	}

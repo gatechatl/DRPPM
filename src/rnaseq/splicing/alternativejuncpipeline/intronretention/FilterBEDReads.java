@@ -18,7 +18,8 @@ public class FilterBEDReads {
 			
 			String fileName = args[0];
 			int length = new Integer(args[1]);
-			String outputFile = args[2];
+			int buffer = new Integer(args[2]);
+			String outputFile = args[3];
 			
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
@@ -30,7 +31,7 @@ public class FilterBEDReads {
 				String[] split = str.split("\t");				
 				double start = new Double(split[1]);
 				double end = new Double(split[2]);
-				if (end - start <= length) {
+				if ((end - start) >= (length - buffer) && (length + buffer) >= (end - start)) {
 					out.write(str + "\n");
 				}			
 			}

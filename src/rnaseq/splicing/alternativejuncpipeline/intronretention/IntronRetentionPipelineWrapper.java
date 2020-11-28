@@ -95,7 +95,7 @@ public class IntronRetentionPipelineWrapper {
 				out.write("drppm -IntersectBed " + sample_bam + " " + intron_only_bed + " " + exon_bed + " " + gene_bed + ">>" + sample_script + "\n");
 				out.write("drppm -CountNumUniqReadsScript " + sample_bam + ">>" + sample_script + "\n");
 				out.write("echo 'drppm -IntronMappingPercentageSummary " + sample_bam + " " + sampleName + "_intron_summary.txt' >> " + sample_script + "\n");
-				out.write("drppm -FilterBEDReadsScript " + sample_bam + " " + readLength + " >> " + sample_script + "\n");
+				out.write("drppm -FilterBEDReadsScript " + sample_bam + " " + readLength + " 2 >> " + sample_script + "\n");
 				out.write("drppm -CalculateCoverageBed " + sample_bam + " " + intron_only_bed + " " + exon_bed + " >> " + sample_script + "\n");				
 				out.write("drppm -CalculateSplicingDeficiencyScript " + sample_bam + " " + intron_only_bed + " " + exon_bed + " >> " + sample_script + "\n");
 				
