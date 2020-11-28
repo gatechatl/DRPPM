@@ -30,8 +30,8 @@ public class CalculateCoverageBed {
 		while (itr.hasNext()) {
 			String file = (String)itr.next();
 			String bedFile = file.split("/")[file.split("/").length - 1] + ".bed";
-			script += "coverageBed -a " + bedFile + "_exon_filter.bed -b " + exon_bed + "> " + bedFile + "_exon.coverageBed.txt \n";
-			script += "coverageBed -a " + bedFile + "_intron_filter.bed -b " + intron_bed + "> " + bedFile + "_intron.coverageBed.txt \n";
+			script += "coverageBed -a " + bedFile + "_exon_filter.bed -b " + exon_bed + " -sorted -counts -F 0.1 > " + bedFile + "_exon.coverageBed.txt \n";
+			script += "coverageBed -a " + bedFile + "_intron_filter.bed -b " + intron_bed + " -sorted -counts -F 0.1 > " + bedFile + "_intron.coverageBed.txt \n";
 		}
 		return script;
 	}
