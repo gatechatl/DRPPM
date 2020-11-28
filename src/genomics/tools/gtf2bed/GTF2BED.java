@@ -88,107 +88,111 @@ public class GTF2BED {
 			String prev_chr_transcript_id = "";
 			String prev_direction_transcript_id = "";
 			
-			String intron_file = outputPrefix + ".intron.bed"; 
+			String intron_file_preraw = outputPrefix + ".intron_preraw.bed";
+			String intron_file = outputPrefix + ".intron.bed";
+			
 			FileInputStream fstream = new FileInputStream(inputFile);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
-				String chr = split[0];
-				String start = split[3];
-				String end = split[4];
-				String direction = split[6];
-				String gene_id = GTFFile.grabMeta(split[8], "gene_id");
-				String transcript = GTFFile.grabMeta(split[8], "transcript_id");
-				String transcript_id = transcript;
-				
-				map_transcript2geneid.put(transcript_id, gene_id);
-				
-				String biotype = GTFFile.grabMeta(split[8], "gene_biotype");
-				String transcript_name = GTFFile.grabMeta(split[8], "transcript_name");
-				String gene_name = GTFFile.grabMeta(split[8], "gene_name");
-				if (map_transcript.containsKey(gene_id)) {
-					String prev_transcript = (String)map_transcript.get(gene_id);
-					if (!prev_transcript.contains(transcript)) {
-						prev_transcript += "," + transcript;
-						map_transcript.put(gene_id, prev_transcript);
-					}
-				} else {
-					map_transcript.put(gene_id, transcript);
-				}
-				
-				if (map_transcript_name.containsKey(gene_id)) {
-					String prev_transcript_name = (String)map_transcript_name.get(gene_id);
-					if (!prev_transcript_name.contains(transcript)) {
-						prev_transcript_name += "," + transcript;
-						map_transcript_name.put(gene_id, prev_transcript_name);
-					}
-				} else {
-					map_transcript_name.put(gene_id, transcript);
-				}
-				
-				map_geneName.put(gene_id, gene_name);
-				map_biotype.put(gene_id, biotype);
-				
-				String exon_num = "exon_" + GTFFile.grabMeta(split[8], "exon_number");
-				if (split[2].equals("gene")) {
-					out_gene.write(chr + "\t" + start + "\t" + end + "\t" + gene_id + "\t0\t" + direction + "\n");  
-				}
-				if (split[2].equals("transcript")) {
-					out_transcript.write(chr + "\t" + start + "\t" + end + "\t" + gene_id + "\t0\t" + direction + "\n");  
-				}
-				if (split[2].equals("CDS")) {
-					out_cds.write(chr + "\t" + start + "\t" + end + "\t" + gene_id + "\t0\t" + direction + "\n");  
-				}
-				if (split[2].equals("exon")) {
-					out_exon.write(chr + "\t" + start + "\t" + end + "\t" + gene_id + "_" + exon_num + "\t0\t" + direction + "\n");  
-				}
-				if (split[2].equals("UTR")) {
-					out_utr.write(chr + "\t" + start + "\t" + end + "\t" + gene_id + "_" + exon_num + "\t0\t" + direction + "\n");  
-				}
-				if (split[2].equals("exon")) {
-					if (exon_num.equals("exon_1")) {
-						out_first_exon.write(chr + "\t" + start + "\t" + end + "\t" + gene_id + "_" + exon_num + "\t0\t" + direction + "\n");
-					}
-				}
-				
-				if (!prev_gene_id.equals("") && !prev_gene_id.equals(gene_id)) {
-					String entry = prev_chr + "\t" + prev_start + "\t" + prev_end + "\t" + prev_gene_id + "\t" + 0 + "\t" + prev_direction + "\n";
-					out_gene_version2.write(entry);										
-					prev_start = 999999999;
-					prev_end = -1;
-				}
-				if (prev_start > new Integer(start)) {
-					prev_start = new Integer(start);
-				}				
-				if (prev_end < new Integer(end)) {
-					prev_end = new Integer(end);
-				}
-				prev_gene_id = gene_id;
-				prev_chr = chr;
-				prev_direction = direction;
-				
-				if (!prev_transcript_id.equals("") && !prev_transcript_id.equals(transcript_id)) {
-					String convert_geneid = (String)map_transcript2geneid.get(prev_transcript_id);
-					String entry = prev_chr_transcript_id + "\t" + prev_start_transcript_id + "\t" + prev_end_transcript_id + "\t" + convert_geneid + "\t" + 0 + "\t" + prev_direction_transcript_id + "\n";
-					if (!unique_transcript_entries.containsKey(entry)) {
-						out_transcript_version2.write(entry);
-						unique_transcript_entries.put(entry, entry);
+				if (!split[0].substring(0, 1).equals("#")) {
+					String chr = split[0];
+					String start = split[3];
+					String end = split[4];
+					String direction = split[6];
+					String gene_id = GTFFile.grabMeta(split[8], "gene_id");
+					String transcript = GTFFile.grabMeta(split[8], "transcript_id");
+					String transcript_id = transcript;
+					
+					map_transcript2geneid.put(transcript_id, gene_id);
+					
+					String biotype = GTFFile.grabMeta(split[8], "gene_biotype");
+					String transcript_name = GTFFile.grabMeta(split[8], "transcript_name");
+					String gene_name = GTFFile.grabMeta(split[8], "gene_name");
+					if (map_transcript.containsKey(gene_id)) {
+						String prev_transcript = (String)map_transcript.get(gene_id);
+						if (!prev_transcript.contains(transcript)) {
+							prev_transcript += "," + transcript;
+							map_transcript.put(gene_id, prev_transcript);
+						}
+					} else {
+						map_transcript.put(gene_id, transcript);
 					}
 					
-					prev_start_transcript_id = 999999999;
-					prev_end_transcript_id = -1;
+					if (map_transcript_name.containsKey(gene_id)) {
+						String prev_transcript_name = (String)map_transcript_name.get(gene_id);
+						if (!prev_transcript_name.contains(transcript)) {
+							prev_transcript_name += "," + transcript;
+							map_transcript_name.put(gene_id, prev_transcript_name);
+						}
+					} else {
+						map_transcript_name.put(gene_id, transcript);
+					}
+					
+					map_geneName.put(gene_id, gene_name);
+					map_biotype.put(gene_id, biotype);
+					
+					String exon_num = "exon_" + GTFFile.grabMeta(split[8], "exon_number");
+					if (split[2].equals("gene")) {
+						out_gene.write(chr + "\t" + start + "\t" + end + "\t" + gene_id + "\t0\t" + direction + "\n");  
+					}
+					if (split[2].equals("transcript")) {
+						out_transcript.write(chr + "\t" + start + "\t" + end + "\t" + gene_id + "\t0\t" + direction + "\n");  
+					}
+					if (split[2].equals("CDS")) {
+						out_cds.write(chr + "\t" + start + "\t" + end + "\t" + gene_id + "\t0\t" + direction + "\n");  
+					}
+					if (split[2].equals("exon")) {
+						out_exon.write(chr + "\t" + start + "\t" + end + "\t" + gene_id + "_" + exon_num + "\t0\t" + direction + "\n");  
+					}
+					if (split[2].equals("UTR")) {
+						out_utr.write(chr + "\t" + start + "\t" + end + "\t" + gene_id + "_" + exon_num + "\t0\t" + direction + "\n");  
+					}
+					if (split[2].equals("exon")) {
+						if (exon_num.equals("exon_1")) {
+							out_first_exon.write(chr + "\t" + start + "\t" + end + "\t" + gene_id + "_" + exon_num + "\t0\t" + direction + "\n");
+						}
+					}
+					
+					if (!prev_gene_id.equals("") && !prev_gene_id.equals(gene_id)) {
+						String entry = prev_chr + "\t" + prev_start + "\t" + prev_end + "\t" + prev_gene_id + "\t" + 0 + "\t" + prev_direction + "\n";
+						out_gene_version2.write(entry);										
+						prev_start = 999999999;
+						prev_end = -1;
+					}
+					if (prev_start > new Integer(start)) {
+						prev_start = new Integer(start);
+					}				
+					if (prev_end < new Integer(end)) {
+						prev_end = new Integer(end);
+					}
+					prev_gene_id = gene_id;
+					prev_chr = chr;
+					prev_direction = direction;
+					
+					if (!prev_transcript_id.equals("") && !prev_transcript_id.equals(transcript_id)) {
+						String convert_geneid = (String)map_transcript2geneid.get(prev_transcript_id);
+						String entry = prev_chr_transcript_id + "\t" + prev_start_transcript_id + "\t" + prev_end_transcript_id + "\t" + convert_geneid + "\t" + 0 + "\t" + prev_direction_transcript_id + "\n";
+						if (!unique_transcript_entries.containsKey(entry)) {
+							out_transcript_version2.write(entry);
+							unique_transcript_entries.put(entry, entry);
+						}
+						
+						prev_start_transcript_id = 999999999;
+						prev_end_transcript_id = -1;
+					}
+					if (prev_start_transcript_id > new Integer(start)) {
+						prev_start_transcript_id = new Integer(start);
+					}				
+					if (prev_end_transcript_id < new Integer(end)) {
+						prev_end_transcript_id = new Integer(end);
+					}
+					prev_transcript_id = transcript_id;
+					prev_chr_transcript_id = chr;
+					prev_direction_transcript_id = direction;
 				}
-				if (prev_start_transcript_id > new Integer(start)) {
-					prev_start_transcript_id = new Integer(start);
-				}				
-				if (prev_end_transcript_id < new Integer(end)) {
-					prev_end_transcript_id = new Integer(end);
-				}
-				prev_transcript_id = transcript_id;
-				prev_chr_transcript_id = chr;
-				prev_direction_transcript_id = direction;
 			}
 			in.close();
 			
@@ -228,13 +232,19 @@ public class GTF2BED {
 	        File f = new File(outputPrefix + ".transcript.bed");
 	        long transcript_fileSize = f.length();
 	        if (transcript_fileSize > 1000) {
-				String bedtools_subtract = "bedtools subtract -a " + outputPrefix + ".transcript.bed" + " -b " + outputPrefix + ".exon.bed -s > " + intron_file;
+				String bedtools_subtract = "bedtools subtract -a " + outputPrefix + ".transcript.bed" + " -b " + outputPrefix + ".exon.bed -s > " + intron_file_preraw;
 				CommandLine.executeCommand(bedtools_subtract);
 	        } else {
-				String bedtools_subtract = "bedtools subtract -a " + outputPrefix + ".gene.bed" + " -b " + outputPrefix + ".exon.bed -s > " + intron_file;
+				String bedtools_subtract = "bedtools subtract -a " + outputPrefix + ".gene.bed" + " -b " + outputPrefix + ".exon.bed -s > " + intron_file_preraw;
 				CommandLine.executeCommand(bedtools_subtract);	        	
 	        }
-			
+			String fix_intron_index = "awk -v s=1 '{print $1, ($2+1), ($3-1), $4, $5, $6}' OFS='\t' " + intron_file_preraw + " > " + intron_file;
+	        CommandLine.executeCommand(fix_intron_index);
+	        File f2 = new File(intron_file_preraw);
+	        if (f2.exists()) {
+	        	f2.delete();
+	        }
+	        
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
