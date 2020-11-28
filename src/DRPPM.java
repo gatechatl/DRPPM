@@ -617,6 +617,7 @@ import rnaseq.splicing.alternativejuncpipeline.intronretention.IntronRetentionHi
 import rnaseq.splicing.alternativejuncpipeline.intronretention.IntronRetentionPipelineWrapper;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.OverlapAllMouseHuman;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.OverlapMouseHumanGeneName;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.SortExonIntronBED;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.graphs.GenerateIntronRetentionBarPlot;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.GenerateCombinedBEDFileFromJuncSalvagerSummary;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerAppendAnnotation2Prioritization;
@@ -11500,7 +11501,7 @@ public class DRPPM {
 				RscriptDEseq2EdgeRCount2CPMFPKMTPM.execute(args_remain);
 				System.exit(0);
 				// JuncSalvagerSortSumColumn
-			}else if (type.equalsIgnoreCase("-JuncSalvagerSortSumColumn")) {
+			} else if (type.equalsIgnoreCase("-JuncSalvagerSortSumColumn")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -JuncSalvagerSortSumColumn "
@@ -11508,6 +11509,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				JuncSalvagerSortSumColumn.execute(args_remain);
+				System.exit(0);
+				// SortExonIntronBED
+			} else if (type.equalsIgnoreCase("-SortExonIntronBED")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SortExonIntronBED "
+							+ SortExonIntronBED.parameter_info());
+					System.exit(0);
+				}
+				SortExonIntronBED.execute(args_remain);
 				System.exit(0);
 				// 
 			}

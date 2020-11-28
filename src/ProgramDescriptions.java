@@ -392,6 +392,7 @@ import rnaseq.splicing.alternativejuncpipeline.intronretention.CombineSplicingDe
 import rnaseq.splicing.alternativejuncpipeline.intronretention.FilterReadsForSDScore;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.OverlapAllMouseHuman;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.OverlapMouseHumanGeneName;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.SortExonIntronBED;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.GenerateCombinedBEDFileFromJuncSalvagerSummary;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerAppendAnnotation2Prioritization;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerAppendProteomicsValidation;
@@ -2767,6 +2768,9 @@ public class ProgramDescriptions {
 		}
 		if (JuncSalvagerSortSumColumn.type().equals(type)) {
 			result += "JuncSalvagerSortSumColumn: " + JuncSalvagerSortSumColumn.description() + "\n";
+		}
+		if (SortExonIntronBED.type().equals(type)) {
+			result += "SortExonIntronBED: " + SortExonIntronBED.description() + "\n";
 		}
 		return result;
 	}	

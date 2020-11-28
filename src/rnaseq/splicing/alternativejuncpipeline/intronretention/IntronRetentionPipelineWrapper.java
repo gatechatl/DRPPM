@@ -35,6 +35,9 @@ public class IntronRetentionPipelineWrapper {
 			String intron_only_bed = "NA";
 			String exon_bed = "NA";
 			String gene_bed = "NA";			
+			String intron_only_bed_sorted = "NA";
+			String exon_bed_sorted = "NA";
+			String gene_bed_sorted = "NA";			
 			String kgXref = "NA"; ///rgs01/resgen/dev/wc/tshaw/REFERENCE/IDCONVERSION/UCSC/hg19/kgXref.txt
 			String hg38gtf = "NA";
 			FileInputStream fstream = new FileInputStream(config_file);
@@ -92,10 +95,17 @@ public class IntronRetentionPipelineWrapper {
 				String sample_script = sampleName + ".sh";
 			
 				out.write("drppm -Bam2Bed " + sample_bam + ">" + sample_script + "\n");
+				
+				//out.write("echo 'sort -k 1,1 -k2,2n " + exon_bed + " > " + exon_bed_sorted + "' >> " + sample_script + "\n");
+				//out.write("echo 'sort -k 1,1 -k2,2n " + intron_only_bed + " > " + intron_only_bed_sorted + "' >> " + sample_script + "\n");
+				//out.write("echo 'sort -k 1,1 -k2,2n " + gene_bed + " > " + gene_bed_sorted + "' >> " + sample_script + "\n");
+				
 				out.write("drppm -IntersectBed " + sample_bam + " " + intron_only_bed + " " + exon_bed + " " + gene_bed + ">>" + sample_script + "\n");
 				out.write("drppm -CountNumUniqReadsScript " + sample_bam + ">>" + sample_script + "\n");
+
 				out.write("echo 'drppm -IntronMappingPercentageSummary " + sample_bam + " " + sampleName + "_intron_summary.txt' >> " + sample_script + "\n");
 				out.write("drppm -FilterBEDReadsScript " + sample_bam + " " + readLength + " 2 >> " + sample_script + "\n");
+				out.write("drppm -SortExonIntronBED " + sample_bam + " >> " + sample_script + "\n");				
 				out.write("drppm -CalculateCoverageBed " + sample_bam + " " + intron_only_bed + " " + exon_bed + " >> " + sample_script + "\n");				
 				out.write("drppm -CalculateSplicingDeficiencyScript " + sample_bam + " " + intron_only_bed + " " + exon_bed + " >> " + sample_script + "\n");
 				
