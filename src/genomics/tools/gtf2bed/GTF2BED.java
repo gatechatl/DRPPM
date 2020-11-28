@@ -238,7 +238,7 @@ public class GTF2BED {
 				String bedtools_subtract = "bedtools subtract -a " + outputPrefix + ".gene.bed" + " -b " + outputPrefix + ".exon.bed -s > " + intron_file_preraw;
 				CommandLine.executeCommand(bedtools_subtract);	        	
 	        }
-			String fix_intron_index = "awk -v s=1 '{print $1, ($2+1), ($3-1), $4, $5, $6}' OFS='\t' " + intron_file_preraw + " > " + intron_file;
+			String fix_intron_index = "awk -v s=1 '{if (($3 - 1) > ($2 + 1)) {print $1, ($2+1), ($3-1), $4, $5, $6}}' OFS='\t' " + intron_file_preraw + " > " + intron_file;
 	        CommandLine.executeCommand(fix_intron_index);
 	        File f2 = new File(intron_file_preraw);
 	        if (f2.exists()) {
