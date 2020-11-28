@@ -27,9 +27,9 @@ public class IntersectBed {
 		while (itr.hasNext()) {
 			String file = (String)itr.next();
 			String bedFile = file.split("/")[file.split("/").length - 1] + ".bed";
-			script += "intersectBed -b " +  bedFile + " -a " + intronBed + " -sorted > " + bedFile + "_intron.bed \n";
-			script += "intersectBed -b " +  bedFile + " -a " + exonBed + " -sorted > " + bedFile + "_exon.bed \n";
-			script += "intersectBed -b " +  bedFile + " -a " + geneBed + " -sorted > " + bedFile + "_gene.bed \n";
+			script += "intersectBed -a " +  bedFile + " -b " + intronBed + " -sorted > " + bedFile + "_intron.bed \n";
+			script += "intersectBed -a " +  bedFile + " -b " + exonBed + " -sorted > " + bedFile + "_exon.bed \n";
+			script += "intersectBed -a " +  bedFile + " -b " + geneBed + " -sorted > " + bedFile + "_gene.bed \n";
 		}
 		return script;
 	}
