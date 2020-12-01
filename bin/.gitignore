@@ -1,6 +1,12 @@
+/rnaseq/
+/sequencing/
+/specialized/
+/statistics/
+/stjude/
+/uniprottool/
+/unsorted/
+/worddocgenerator/
 /MouseModelToHumanCompare/
-/ProgramDescriptions.class
-/SearchProgram.class
 /bedtools/
 /constants/
 /customScript/
@@ -29,8 +35,3 @@
 /protein/
 /proteomics/
 /references/
-/rnaseq/
-/sequencing/
-/specialized/
-/statistics/
-/stjude/
