@@ -13,6 +13,8 @@ public class CountNumberOfUniqReads {
 			
 			String fileName = args[0];
 			String flag = args[1];
+			int length = new Integer(args[2]);
+			int buffer = new Integer(args[3]);
 			//HashMap map = new HashMap();
 			double count = 0;
 			String last_tag = "";
@@ -25,7 +27,7 @@ public class CountNumberOfUniqReads {
 				if (!split[3].equals(last_tag)) {
 					double start = new Double(split[1]);
 					double end = new Double(split[2]);
-					if (flag.equals("true") || end - start <= 101) {
+					if (flag.equals("true") || (end - start) >= (length - buffer) && (length + buffer) >= (end - start)) {
 						count++;
 					}
 				}

@@ -447,6 +447,7 @@ import rnaseq.tools.genelengthanalysis.TranscriptLengthSlidingWindowInhibitedGen
 import rnaseq.tools.metadata.AppendMetadataTag2RNAseqMatrixSampleName;
 import rnaseq.tools.pipeline.ExpandGeneListAfterLIMMA;
 import rnaseq.tools.pipeline.GenerateLIMMAComparisonScript;
+import rnaseq.tools.pipeline.WrappingMyRNAseqAnalysisPipeline;
 import rnaseq.tools.qc.SetupInferExperimentPipeline;
 import rnaseq.tools.qc.star_2_7_1a.ExtractQCMetricsSTAR271a;
 import rnaseq.tools.quantification.CalculateExonRPKM;
@@ -2772,9 +2773,12 @@ public class ProgramDescriptions {
 		if (SortExonIntronBED.type().equals(type)) {
 			result += "SortExonIntronBED: " + SortExonIntronBED.description() + "\n";
 		}
+		if (WrappingMyRNAseqAnalysisPipeline.type().equals(type)) {
+			result += "WrappingMyRNAseqAnalysisPipeline: " + WrappingMyRNAseqAnalysisPipeline.description() + "\n";
+		}
 		return result;
 	}	
 
-	public static String VERSION = "20201128a";
+	public static String VERSION = "20201130";
 	
 }

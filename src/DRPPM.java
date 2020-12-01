@@ -704,6 +704,7 @@ import rnaseq.tools.mousemodel.qc.FPKMBoxPlotOfGeneKOSampleSpecific;
 import rnaseq.tools.mousemodel.qc.RenameSampleForBoxPlot;
 import rnaseq.tools.pipeline.ExpandGeneListAfterLIMMA;
 import rnaseq.tools.pipeline.GenerateLIMMAComparisonScript;
+import rnaseq.tools.pipeline.WrappingMyRNAseqAnalysisPipeline;
 import rnaseq.tools.qc.SetupInferExperimentPipeline;
 import rnaseq.tools.qc.star_2_7_1a.ExtractQCMetricsSTAR271a;
 import rnaseq.tools.quantification.CalculateExonRPKM;
@@ -11520,7 +11521,27 @@ public class DRPPM {
 				}
 				SortExonIntronBED.execute(args_remain);
 				System.exit(0);
-				// 
+				// WackyRNAseqAnalysisPipeline
+			} else if (type.equalsIgnoreCase("-SortExonIntronBED")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -SortExonIntronBED "
+							+ SortExonIntronBED.parameter_info());
+					System.exit(0);
+				}
+				SortExonIntronBED.execute(args_remain);
+				System.exit(0);
+				// WrappingMyRNAseqAnalysisPipeline
+			}else if (type.equalsIgnoreCase("-WrappingMyRNAseqAnalysisPipeline")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -WrappingMyRNAseqAnalysisPipeline "
+							+ WrappingMyRNAseqAnalysisPipeline.parameter_info());
+					System.exit(0);
+				}
+				WrappingMyRNAseqAnalysisPipeline.execute(args_remain);
+				System.exit(0);
+				// WrappingMyRNAseqAnalysisPipeline
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

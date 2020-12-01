@@ -30,6 +30,10 @@ public class JuncSalvagerGeneratePSIScript {
 			String outputFolder = args[2];
 			String outputScript = args[3];
 			
+			File directory = new File(outputFolder);
+			if (!directory.exists()) {
+				directory.mkdir();
+			}	
 			
 			FileWriter fwriter = new FileWriter(outputScript);
 			BufferedWriter out = new BufferedWriter(fwriter);

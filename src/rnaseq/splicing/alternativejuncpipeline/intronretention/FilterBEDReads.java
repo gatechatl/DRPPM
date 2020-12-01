@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 
 /**
- * Only keep reads that satisfy a certain length
+ * Only keep reads that satisfy the length condition
  * @author tshaw
  *
  */

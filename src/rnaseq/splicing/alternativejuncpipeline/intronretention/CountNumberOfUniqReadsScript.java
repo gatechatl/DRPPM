@@ -26,10 +26,10 @@ public class CountNumberOfUniqReadsScript {
 		while (itr.hasNext()) {
 			String file = (String)itr.next();
 			String bedFile = file.split("/")[file.split("/").length - 1] + ".bed";
-			script += "drppm -CountNumberOfUniqReads " + bedFile + " true > " + bedFile + ".count" + "\n";			
-			script += "drppm -CountNumberOfUniqReads " + bedFile + "_exon.bed true > " + bedFile + "_exon.bed.count" + "\n";
-			script += "drppm -CountNumberOfUniqReads " + bedFile + "_gene.bed true > " + bedFile + "_gene.bed.count" + "\n";
-			script += "drppm -CountNumberOfUniqReads " + bedFile + "_intron.bed false > " + bedFile + "_intron.bed.count" + "\n";
+			script += "drppm -CountNumberOfUniqReads " + bedFile + " true 101 2 > " + bedFile + ".count" + "\n";			
+			script += "drppm -CountNumberOfUniqReads " + bedFile + "_exon.bed true 101 2 > " + bedFile + "_exon.bed.count" + "\n";
+			script += "drppm -CountNumberOfUniqReads " + bedFile + "_gene.bed true 101 2 > " + bedFile + "_gene.bed.count" + "\n";
+			script += "drppm -CountNumberOfUniqReads " + bedFile + "_intron.bed false 101 2 > " + bedFile + "_intron.bed.count" + "\n";
 		}
 		return script;
 	}
