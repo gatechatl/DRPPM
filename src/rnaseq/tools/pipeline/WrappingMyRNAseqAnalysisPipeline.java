@@ -35,11 +35,23 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	}
 	
 	//chrNameLengthFile, String houseKeepingGenebed, String refseq_bed, String ribosome_bed
-	private static String STAR_INDEX_DIR = "NA"; 
+	private static String STAR_INDEX_DIR = "NA";
+	private static String SPLICING_DEFICIENCY_CONFIG = "NA";
 	private static String CHR_NAME_LENGTH_FILE = "NA";
 	private static String RSEQC_HOUSE_KEEPING_GENE_BED = "NA";
 	private static String RSEQC_REFSEQ_BED = "NA";
 	private static String RSEQC_RIBOSOME_BED = "NA";
+	private static String PRIMARY_GTF_REF = "NA";
+	
+	private static boolean SKIP_BAM2FASTQ = false;
+	private static boolean SKIP_STAR = false;
+	private static boolean SKIP_FASTQC = false;
+	private static boolean SKIP_RSEQC = false;
+	private static boolean SKIP_PSI_PSO_CALC = false;
+	private static boolean SKIP_SPLICING_DEFICIENCY = false;
+	private static boolean SKIP_HTSEQ_EXON_QUANT = false;
+	private static boolean SKIP_HTSEQ_GENE = false;
+	
 	public static void execute(String[] args) {
 		
 		try {
@@ -98,18 +110,52 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (split[0].equalsIgnoreCase("RSEQC_RIBOSOME_BED")) {
 								RSEQC_RIBOSOME_BED = split[1];
 							}
+							if (split[0].equalsIgnoreCase("SPLICING_DEFICIENCY_CONFIG")) {
+								SPLICING_DEFICIENCY_CONFIG = split[1];
+							}
+							if (split[0].equalsIgnoreCase("PRIMARY_GTF_REF")) {
+								PRIMARY_GTF_REF = split[1];
+							}
 							
+							if (split[0].equalsIgnoreCase("SKIP_BAM2FASTQ")) {
+								SKIP_BAM2FASTQ = new Boolean(split[1]);
+							}
+							if (split[0].equalsIgnoreCase("SKIP_STAR")) {
+								SKIP_STAR = new Boolean(split[1]);
+							}
+							if (split[0].equalsIgnoreCase("SKIP_FASTQC")) {
+								SKIP_FASTQC = new Boolean(split[1]);
+							}
+							if (split[0].equalsIgnoreCase("SKIP_RSEQC")) {
+								SKIP_RSEQC = new Boolean(split[1]);
+							}
+							if (split[0].equalsIgnoreCase("SKIP_PSI_PSO_CALC")) {
+								SKIP_PSI_PSO_CALC = new Boolean(split[1]);
+							}
+							if (split[0].equalsIgnoreCase("SKIP_SPLICING_DEFICIENCY")) {
+								SKIP_SPLICING_DEFICIENCY = new Boolean(split[1]);
+							}
+							if (split[0].equalsIgnoreCase("SKIP_HTSEQ_EXON_QUANT")) {
+								SKIP_HTSEQ_EXON_QUANT = new Boolean(split[1]);
+							}
+							if (split[0].equalsIgnoreCase("SKIP_HTSEQ_GENE")) {
+								SKIP_HTSEQ_GENE = new Boolean(split[1]);
+							}						
 						}
 					}
 				}
 			}
 			in.close();
 			
+			// need to add code to check for whether all the files are present
+			
+			
 			// these are all the variables that we need to keep track from the input file
 			LinkedList sampleName_linkedList = new LinkedList();
 			HashMap fq1_path_map = new HashMap();
 			HashMap fq2_path_map = new HashMap(); 
 			HashMap bam_path_map = new HashMap();
+			HashMap sj_path_map = new HashMap(); // assume that STAR was used for the mapping
 			HashMap read_length_map = new HashMap();
 			HashMap strand_direction_map = new HashMap();
 			HashMap other_parameters_map = new HashMap();
@@ -202,7 +248,22 @@ public class WrappingMyRNAseqAnalysisPipeline {
 								}
 								
 								sampleName_linkedList.add(sampleName);
-								bam_path_map.put(sampleName, bam_file_path);
+								//bam_path_map.put(sampleName, bam_file_path);
+								if ((new File(bam_file_path)).exists()) {
+									bam_path_map.put(sampleName, bam_file_path);
+								} else {
+									System.out.println("*Warning* bam files are missing...");
+									bam_path_map.put(sampleName, "NA");
+								}
+								
+								if ((new File(bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"))).exists()) {
+									sj_path_map.put(sampleName, bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"));
+								} else {
+									System.out.println("*Warning* STAR junctions are missing...");
+									sj_path_map.put(sampleName, "NA");
+								}
+								
+								
 								read_length_map.put(sampleName, read_length);
 								strand_direction_map.put(sampleName, strand_direction);
 								// generate output sample folder
@@ -272,26 +333,29 @@ public class WrappingMyRNAseqAnalysisPipeline {
 						StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
 						
 						//out.write("## bam2fastq conversion ##\n");
-						string_buffer.append("## bam2fastq conversion ##\n");
-						//out.write("cd " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + "\n");
-						string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + "\n");
-						//out.write("drppm -Bam2Fastq " + sampleName + "_bam_file.lst bam2fastq.sh" + "\n");
-						string_buffer.append("drppm -Bam2Fastq " + sampleName + "_bam_file.lst bam2fastq.sh" + "\n");
-						//out.write("sh bam2fastq.sh" + "\n");
-						string_buffer.append("sh bam2fastq.sh" + "\n");
-						//out.write("cd " + current_working_dir + "\n"); // change back to current directory
-						string_buffer.append("cd " + current_working_dir + "\n");
 						
-						// move the fastq files from the intermediat folder to the final output fastq folder
-	
-						//out.write("mv " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + sampleName + ".R1.fastq " + " " + fastq_folder + "\n");
-						string_buffer.append("mv " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + sampleName + ".R1.fastq " + " " + fastq_folder + "/\n");
-						//out.write("mv " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + sampleName + ".R2.fastq " + " " + fastq_folder + "\n");
-						string_buffer.append("mv " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + sampleName + ".R2.fastq " + " " + fastq_folder + "/\n");
-						//out.write("## end bam2fastq conversion ##\n\n");
-						string_buffer.append("## end bam2fastq conversion ##\n\n");
-								
-						string_buffer_map.put(sampleName, string_buffer);
+						if (!SKIP_BAM2FASTQ) {
+							string_buffer.append("## bam2fastq conversion ##\n");
+							//out.write("cd " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + "\n");
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + "\n");
+							//out.write("drppm -Bam2Fastq " + sampleName + "_bam_file.lst bam2fastq.sh" + "\n");
+							string_buffer.append("drppm -Bam2Fastq " + sampleName + "_bam_file.lst bam2fastq.sh" + "\n");
+							//out.write("sh bam2fastq.sh" + "\n");
+							string_buffer.append("sh bam2fastq.sh" + "\n");
+							//out.write("cd " + current_working_dir + "\n"); // change back to current directory
+							string_buffer.append("cd " + current_working_dir + "\n");
+							
+							// move the fastq files from the intermediat folder to the final output fastq folder
+		
+							//out.write("mv " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + sampleName + ".R1.fastq " + " " + fastq_folder + "\n");
+							string_buffer.append("mv " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + sampleName + ".R1.fastq " + " " + fastq_folder + "/\n");
+							//out.write("mv " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + sampleName + ".R2.fastq " + " " + fastq_folder + "\n");
+							string_buffer.append("mv " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + sampleName + ".R2.fastq " + " " + fastq_folder + "/\n");
+							//out.write("## end bam2fastq conversion ##\n\n");
+							string_buffer.append("## end bam2fastq conversion ##\n\n");								
+							
+							string_buffer_map.put(sampleName, string_buffer);
+						}
 						fq1_path_map.put(sampleName, fastq_folder + "/" + sampleName + ".R1.fastq");
 						fq2_path_map.put(sampleName, fastq_folder + "/" + sampleName + ".R2.fastq");
 					}
@@ -300,137 +364,269 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			} 
 			
 			// perform fastqc on the fq files
-			itr = sampleName_linkedList.iterator();
-			while (itr.hasNext()) {			
-				String sampleName = (String)itr.next();
-				
-				if (fq1_path_map.containsKey(sampleName)) {
-					String qc_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/qc";
-					File qc_intermediate_folder_f = new File(qc_intermediate_folder);
-					if (!qc_intermediate_folder_f.exists()) {
-						qc_intermediate_folder_f.mkdir();
-					}
-					String qc_folder = outputFolder + "/" + sampleName + "/qc";
-					File qc_folder_f = new File(qc_folder);
-					if (!qc_folder_f.exists()) {
-						qc_folder_f.mkdir();
-					}
-					String fastqc_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/qc/fastqc";
-					File fastqc_intermediate_folder_f = new File(fastqc_intermediate_folder);
-					if (!fastqc_intermediate_folder_f.exists()) {
-						fastqc_intermediate_folder_f.mkdir();
-					}
-					String fastqc_folder = outputFolder + "/" + sampleName + "/qc/fastqc";
-					File fastqc_folder_f = new File(fastqc_folder);
-					if (!fastqc_folder_f.exists()) {
-						fastqc_folder_f.mkdir();
-					}
+		
+			if (type.equalsIgnoreCase("FASTQ") || remapping) {
+				itr = sampleName_linkedList.iterator();
+				while (itr.hasNext()) {			
+					String sampleName = (String)itr.next();
 					
-					StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);					
-					//out.write("## fastqc ##\n");
-					string_buffer.append("## fastqc ##\n");
 					if (fq1_path_map.containsKey(sampleName)) {
-						String fq1_path = (String)fq1_path_map.get(sampleName);
-						//out.write("fastqc " + fq1_path + " -o " + fastqc_intermediate_folder + "\n");
-						string_buffer.append("fastqc " + fq1_path + " -o " + fastqc_folder + "\n");
+						String qc_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/qc";
+						File qc_intermediate_folder_f = new File(qc_intermediate_folder);
+						if (!qc_intermediate_folder_f.exists()) {
+							qc_intermediate_folder_f.mkdir();
+						}
+						String qc_folder = outputFolder + "/" + sampleName + "/qc";
+						File qc_folder_f = new File(qc_folder);
+						if (!qc_folder_f.exists()) {
+							qc_folder_f.mkdir();
+						}
+						String fastqc_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/qc/fastqc";
+						File fastqc_intermediate_folder_f = new File(fastqc_intermediate_folder);
+						if (!fastqc_intermediate_folder_f.exists()) {
+							fastqc_intermediate_folder_f.mkdir();
+						}
+						String fastqc_folder = outputFolder + "/" + sampleName + "/qc/fastqc";
+						File fastqc_folder_f = new File(fastqc_folder);
+						if (!fastqc_folder_f.exists()) {
+							fastqc_folder_f.mkdir();
+						}
+						
+						if (!SKIP_FASTQC) {
+							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);					
+							//out.write("## fastqc ##\n");
+							string_buffer.append("## fastqc ##\n");
+							if (fq1_path_map.containsKey(sampleName)) {
+								String fq1_path = (String)fq1_path_map.get(sampleName);
+								//out.write("fastqc " + fq1_path + " -o " + fastqc_intermediate_folder + "\n");
+								string_buffer.append("fastqc " + fq1_path + " -o " + fastqc_folder + "\n");
+							}
+							if (fq2_path_map.containsKey(sampleName)) {
+								String fq2_path = (String)fq2_path_map.get(sampleName);
+								//out.write("fastqc " + fq2_path + " -o " + fastqc_intermediate_folder + "\n");
+								string_buffer.append("fastqc " + fq2_path + " -o " + fastqc_folder + "\n");
+							}
+							//out.write("cp -r " + fastqc_intermediate_folder + " " + fastqc_folder + "\n");
+							//string_buffer.append("cp -r " + fastqc_intermediate_folder + " " + fastqc_folder + "\n");
+							//out.write("## end fastqc ##\n\n");
+							string_buffer.append("## end fastqc ##\n\n");
+						
+							string_buffer_map.put(sampleName, string_buffer);
+						}
 					}
-					if (fq2_path_map.containsKey(sampleName)) {
-						String fq2_path = (String)fq2_path_map.get(sampleName);
-						//out.write("fastqc " + fq2_path + " -o " + fastqc_intermediate_folder + "\n");
-						string_buffer.append("fastqc " + fq2_path + " -o " + fastqc_folder + "\n");
-					}
-					//out.write("cp -r " + fastqc_intermediate_folder + " " + fastqc_folder + "\n");
-					//string_buffer.append("cp -r " + fastqc_intermediate_folder + " " + fastqc_folder + "\n");
-					//out.write("## end fastqc ##\n\n");
-					string_buffer.append("## end fastqc ##\n\n");
-					string_buffer_map.put(sampleName, string_buffer);
 				}
-			}
-			// generate STAR script
-			itr = sampleName_linkedList.iterator();
-			while (itr.hasNext()) {
-				String sampleName = (String)itr.next();
-				if (fq1_path_map.containsKey(sampleName)) {
-					String star_folder = outputFolder + "/" + sampleName + "/star";
-					File star_folder_f = new File(star_folder);
-					if (!star_folder_f.exists()) {
-						star_folder_f.mkdir();
-					}
-		
-					String star_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/star/";
-					File star_intermediate_folder_f = new File(star_intermediate_folder);
-					if (!star_intermediate_folder_f.exists()) {
-						star_intermediate_folder_f.mkdir();
-					}
-		
-					// generate sample_fastq_lst
-					String fq1 = (String)fq1_path_map.get(sampleName);
-					String fq2 = (String)fq2_path_map.get(sampleName);
-		
-					// generate fq mapping file.
-					String sampleName_fq_star_lst = outputIntermediateFolder + "/" + sampleName + "/star/" + sampleName + "_star_file.lst";
-					FileWriter fwriter_sampleName_fq_star_lst = new FileWriter(sampleName_fq_star_lst);
-					BufferedWriter out_sampleName_fq_star_lst = new BufferedWriter(fwriter_sampleName_fq_star_lst);
-					out_sampleName_fq_star_lst.write(fq1 + "\t" + fq2 + "\t" + sampleName + "\n");
-					out_sampleName_fq_star_lst.close();
-					
-					StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
-					//out.write("## STAR mapping ##\n");
-					string_buffer.append("## STAR mapping ##\n");
-					//out.write("cd " + current_working_dir + "\n"); // change to current directory
-					//out.write("cd " + outputIntermediateFolder + "/" + sampleName + "/star/" + "\n");
-					string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/star/" + "\n");
-					//out.write("drppm -JinghuiZhangSTARMappingFromYaweiUpdated " + sampleName_fq_star_lst + " " + STAR_INDEX_DIR + " 4 step2_execute.sh false" + "\n");
-					string_buffer.append("drppm -JinghuiZhangSTARMappingFromYaweiUpdated " + sampleName_fq_star_lst + " " + STAR_INDEX_DIR + " 4 step2_execute.sh false" + "\n");
-					//out.write("sh step2_execute.sh\n");
-					string_buffer.append("sh step2_execute.sh\n");
-					//out.write("cd " + current_working_dir + "\n"); // change back to current directory
-					string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/star/" + sampleName + "\n");
-					string_buffer.append("samtools index " + sampleName + ".STAR.Aligned.sortedByCoord.out.bam" + "\n");
-					//string_buffer.append("samtools index " + sampleName + ".STAR.Aligned.toTranscriptome.out.bam" + "\n");					
-					string_buffer.append("cd " + current_working_dir + "\n");
-					//out.write("cp -r " + outputIntermediateFolder + "/star/" + " " + outputFolder + "/star/\n");
-					string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/star/" + sampleName + "/*"+ " " + outputFolder + "/" + sampleName + "/star/\n");
-					
-					//out.write("## End STAR Mapping ##\n\n");
-					string_buffer.append("## End STAR Mapping ##\n\n");
-					string_buffer_map.put(sampleName, string_buffer);	
-								
-					
-					bam_path_map.put(sampleName, outputFolder + "/" + sampleName + "/star/" + sampleName + ".STAR.Aligned.sortedByCoord.out.bam");
+			
+				
+				// generate STAR script
+				
+				itr = sampleName_linkedList.iterator();
+				while (itr.hasNext()) {
+					String sampleName = (String)itr.next();
+					if (fq1_path_map.containsKey(sampleName)) {
+						String star_folder = outputFolder + "/" + sampleName + "/star";
+						File star_folder_f = new File(star_folder);
+						if (!star_folder_f.exists()) {
+							star_folder_f.mkdir();
+						}
+			
+						String star_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/star/";
+						File star_intermediate_folder_f = new File(star_intermediate_folder);
+						if (!star_intermediate_folder_f.exists()) {
+							star_intermediate_folder_f.mkdir();
+						}
+			
+						// generate sample_fastq_lst
+						String fq1 = (String)fq1_path_map.get(sampleName);
+						String fq2 = (String)fq2_path_map.get(sampleName);
+			
+						// generate fq mapping file.
+						String sampleName_fq_star_lst = outputIntermediateFolder + "/" + sampleName + "/star/" + sampleName + "_star_file.lst";
+						FileWriter fwriter_sampleName_fq_star_lst = new FileWriter(sampleName_fq_star_lst);
+						BufferedWriter out_sampleName_fq_star_lst = new BufferedWriter(fwriter_sampleName_fq_star_lst);
+						out_sampleName_fq_star_lst.write(fq1 + "\t" + fq2 + "\t" + sampleName + "\n");
+						out_sampleName_fq_star_lst.close();
+						
+						
+						if (!SKIP_STAR) {
+							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
+							//out.write("## STAR mapping ##\n");
+							string_buffer.append("## STAR mapping ##\n");
+							//out.write("cd " + current_working_dir + "\n"); // change to current directory
+							//out.write("cd " + outputIntermediateFolder + "/" + sampleName + "/star/" + "\n");
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/star/" + "\n");
+							//out.write("drppm -JinghuiZhangSTARMappingFromYaweiUpdated " + sampleName_fq_star_lst + " " + STAR_INDEX_DIR + " 4 step2_execute.sh false" + "\n");
+							string_buffer.append("drppm -JinghuiZhangSTARMappingFromYaweiUpdated " + sampleName_fq_star_lst + " " + STAR_INDEX_DIR + " 4 step2_execute.sh false" + "\n");
+							//out.write("sh step2_execute.sh\n");
+							string_buffer.append("sh step2_execute.sh\n");
+							//out.write("cd " + current_working_dir + "\n"); // change back to current directory
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/star/" + sampleName + "\n");
+							string_buffer.append("samtools index " + sampleName + ".STAR.Aligned.sortedByCoord.out.bam" + "\n");
+							//string_buffer.append("samtools index " + sampleName + ".STAR.Aligned.toTranscriptome.out.bam" + "\n");					
+							string_buffer.append("cd " + current_working_dir + "\n");
+							//out.write("cp -r " + outputIntermediateFolder + "/star/" + " " + outputFolder + "/star/\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/star/" + sampleName + "/*"+ " " + outputFolder + "/" + sampleName + "/star/\n");
+							
+							//out.write("## End STAR Mapping ##\n\n");
+							string_buffer.append("## End STAR Mapping ##\n\n");
+							string_buffer_map.put(sampleName, string_buffer);	
+						}
+						String bam_file_path = outputFolder + "/" + sampleName + "/star/" + sampleName + ".STAR.Aligned.sortedByCoord.out.bam";
+						if ((new File(bam_file_path)).exists()) {
+							bam_path_map.put(sampleName, bam_file_path);
+						} else {
+							bam_path_map.put(sampleName, "NA");
+						}
+						if ((new File(bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"))).exists()) {
+							sj_path_map.put(sampleName, bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"));
+						} else {						
+							sj_path_map.put(sampleName, "NA");
+						}
+					}			
 				}			
-			}			
-
+		
+			}
+			
+			// check if we need to reindex the bam files ...
+			
+			
 			// generate script for RSEQC
 			itr = sampleName_linkedList.iterator();
 			while (itr.hasNext()) {
 				String sampleName = (String)itr.next();
 				if (bam_path_map.containsKey(sampleName)) {
 					String bam_file_path = (String)bam_path_map.get(sampleName);
-					String rseqc_folder = outputFolder + "/" + sampleName + "/rseqc";
-					File rseqc_folder_f = new File(rseqc_folder);
-					if (!rseqc_folder_f.exists()) {
-						rseqc_folder_f.mkdir();
+					if ((new File(bam_file_path)).exists() || !(remapping || type.equalsIgnoreCase("FASTQ"))) {
+						String rseqc_folder = outputFolder + "/" + sampleName + "/rseqc";
+						File rseqc_folder_f = new File(rseqc_folder);
+						if (!rseqc_folder_f.exists()) {
+							rseqc_folder_f.mkdir();
+						}
+			
+						String rseqc_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/rseqc";
+						File rseqc_intermediate_folder_f = new File(rseqc_intermediate_folder);
+						if (!rseqc_intermediate_folder_f.exists()) {
+							rseqc_intermediate_folder_f.mkdir();
+						}
+	
+						if (!SKIP_RSEQC) {
+							
+							// need to add code to check for whether all the files are present
+							
+							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
+							//out.write("## RSEQC mapping ##\n");
+							string_buffer.append("## RSEQC mapping ##\n");
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/rseqc/" + "\n");					
+							string_buffer.append(rseqc_script_generation(sampleName, bam_file_path, CHR_NAME_LENGTH_FILE, RSEQC_HOUSE_KEEPING_GENE_BED, RSEQC_REFSEQ_BED, RSEQC_RIBOSOME_BED) + "\n");
+							string_buffer.append("cd " + current_working_dir + "\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/rseqc/*" + " " + outputFolder + "/" + sampleName + "/rseqc/\n");
+							string_buffer.append("## END RSEQC mapping ##\n\n");
+							string_buffer_map.put(sampleName, string_buffer);
+						}
+					} else {
+						if (!SKIP_RSEQC) {
+							System.out.println("BAM file for " + sampleName + " is missing... skipping RSEQC step...");
+						}
 					}
-		
-					String rseqc_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/rseqc";
-					File rseqc_intermediate_folder_f = new File(rseqc_intermediate_folder);
-					if (!rseqc_intermediate_folder_f.exists()) {
-						rseqc_intermediate_folder_f.mkdir();
-					}
+				}
+			}
+
+			// generate script for PSI_PSO calculation
+			itr = sampleName_linkedList.iterator();
+			while (itr.hasNext()) {
+				String sampleName = (String)itr.next();
+				if (sj_path_map.containsKey(sampleName)) {
+					String sj_file_path = (String)sj_path_map.get(sampleName);
 					
-					StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
-					//out.write("## RSEQC mapping ##\n");
-					string_buffer.append("## RSEQC mapping ##\n");
-					string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/rseqc/" + "\n");					
-					string_buffer.append(rseqc_script_generation(sampleName, bam_file_path, CHR_NAME_LENGTH_FILE, RSEQC_HOUSE_KEEPING_GENE_BED, RSEQC_REFSEQ_BED, RSEQC_RIBOSOME_BED) + "\n");
-					string_buffer.append("cd " + current_working_dir + "\n");
-					string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/rseqc/" + " " + outputFolder + "/" + sampleName + "/rseqc/\n");
-					string_buffer.append("## END RSEQC mapping ##\n\n");
+					if ((new File(sj_file_path)).exists() || !(remapping || type.equalsIgnoreCase("FASTQ"))) {
+						String psi_pso_folder = outputFolder + "/" + sampleName + "/psipso";
+						File psi_pso_folder_f = new File(psi_pso_folder);
+						if (!psi_pso_folder_f.exists()) {
+							psi_pso_folder_f.mkdir();
+						}
+			
+						String psi_pso_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/psipso";
+						File psi_pso_intermediate_folder_f = new File(psi_pso_intermediate_folder);
+						if (!psi_pso_intermediate_folder_f.exists()) {
+							psi_pso_intermediate_folder_f.mkdir();
+						}
+						
+						if (!SKIP_PSI_PSO_CALC) {
+							
+							// need to add code to check for whether all the files are present
+							
+							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
+							string_buffer.append("## PSI PSO calculation ##\n");
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/psipso/" + "\n");					
+							string_buffer.append("drppm -JuncSalvagerGeneratePSIScript SJ.file.lst " + SPLICING_DEFICIENCY_CONFIG + " psi_pso_output step3_output_script.sh" + "\n");
+							string_buffer.append("sh  step3_output_script.sh" + "\n");
+							string_buffer.append("cd " + current_working_dir + "\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/psipso/*" + " " + outputFolder + "/" + sampleName + "/psipso/\n");
+							string_buffer.append("## END PSI PSO calculation ##\n\n");
+							string_buffer_map.put(sampleName, string_buffer);
+						}
+						
+
+						
+					} else {
+						if (!SKIP_PSI_PSO_CALC) {
+							System.out.println("SJ file for " + sampleName + " is missing... skipping the PSI PSO calculation step...");
+						}
+					}
 					
 				}
 			}
 
+			// generate script for Splicing Deficiency
+			itr = sampleName_linkedList.iterator();
+			while (itr.hasNext()) {
+				String sampleName = (String)itr.next();
+				if (bam_path_map.containsKey(sampleName)) {
+					String bam_file_path = (String)bam_path_map.get(sampleName);
+					
+					if ((new File(bam_file_path)).exists() || !(remapping || type.equalsIgnoreCase("FASTQ"))) {
+						String splicingdeficiency_folder = outputFolder + "/" + sampleName + "/splicingdeficiency";
+						File splicingdeficiency_folder_f = new File(splicingdeficiency_folder);
+						if (!splicingdeficiency_folder_f.exists()) {
+							splicingdeficiency_folder_f.mkdir();
+						}
+			
+						String splicingdeficiency_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/splicingdeficiency";
+						File splicingdeficiency_intermediate_folder_f = new File(splicingdeficiency_intermediate_folder);
+						if (!splicingdeficiency_intermediate_folder_f.exists()) {
+							splicingdeficiency_intermediate_folder_f.mkdir();
+						}
+						
+					
+	
+						String sampleName_bam_lst = outputIntermediateFolder + "/" + sampleName + "/splicingdeficiency/" + sampleName + "_bam_file.lst";
+						FileWriter fwriter_sampleName_bam_lst = new FileWriter(sampleName_bam_lst);
+						BufferedWriter out_sampleName_bam_lst = new BufferedWriter(fwriter_sampleName_bam_lst);
+						out_sampleName_bam_lst.write(sampleName + "\t" + bam_file_path + "\n");
+						out_sampleName_bam_lst.close();
+						
+						if (!SKIP_SPLICING_DEFICIENCY) {
+							
+							// need to add code to check for whether all the files are present
+							
+							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
+							string_buffer.append("## Splicing Deficiency calculation ##\n");
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/splicingdeficiency/" + "\n");					
+							string_buffer.append("drppm -IntronRetentionPipelineWrapper " + sampleName_bam_lst + " " + SPLICING_DEFICIENCY_CONFIG + " 101 " + sampleName + "\n");
+							string_buffer.append("sh step1_" + sampleName + ".run_this_first.sh" + "\n");
+							string_buffer.append("sh " + sampleName + ".sh" + "\n");
+							string_buffer.append("drppm -EnsemblTranscriptID2GeneNameAppened " + sampleName + ".STAR.Aligned.sortedByCoord.out.bam.bed_SD.txt " + PRIMARY_GTF_REF + " " + sampleName + ".STAR.Aligned.sortedByCoord.out.bam.bed_SD_geneName.txt" + "\n");
+							string_buffer.append("cd " + current_working_dir + "\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/splicingdeficiency/*" + " " + outputFolder + "/" + sampleName + "/splicingdeficiency/\n");
+							string_buffer.append("## END Splicing Deficiency calculation ##\n\n");
+						}
+					} else {
+						if (!SKIP_SPLICING_DEFICIENCY) {
+							System.out.println("BAM file for " + sampleName + " is missing... skipping the splicing deficiency calculation step...");
+						}
+					}
+				}
+			}
+			
 			// finally write out the shell script
 			itr = sampleName_linkedList.iterator();
 			while (itr.hasNext()) {
