@@ -495,7 +495,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				String sampleName = (String)itr.next();
 				if (bam_path_map.containsKey(sampleName)) {
 					String bam_file_path = (String)bam_path_map.get(sampleName);
-					if ((new File(bam_file_path)).exists() || !(remapping || type.equalsIgnoreCase("FASTQ"))) {
+					if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
 						String rseqc_folder = outputFolder + "/" + sampleName + "/rseqc";
 						File rseqc_folder_f = new File(rseqc_folder);
 						if (!rseqc_folder_f.exists()) {
@@ -537,7 +537,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				if (sj_path_map.containsKey(sampleName)) {
 					String sj_file_path = (String)sj_path_map.get(sampleName);
 					
-					if ((new File(sj_file_path)).exists() || !(remapping || type.equalsIgnoreCase("FASTQ"))) {
+					if ((new File(sj_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
 						String psi_pso_folder = outputFolder + "/" + sampleName + "/psipso";
 						File psi_pso_folder_f = new File(psi_pso_folder);
 						if (!psi_pso_folder_f.exists()) {
@@ -583,7 +583,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				if (bam_path_map.containsKey(sampleName)) {
 					String bam_file_path = (String)bam_path_map.get(sampleName);
 					
-					if ((new File(bam_file_path)).exists() || !(remapping || type.equalsIgnoreCase("FASTQ"))) {
+					if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
 						String splicingdeficiency_folder = outputFolder + "/" + sampleName + "/splicingdeficiency";
 						File splicingdeficiency_folder_f = new File(splicingdeficiency_folder);
 						if (!splicingdeficiency_folder_f.exists()) {
