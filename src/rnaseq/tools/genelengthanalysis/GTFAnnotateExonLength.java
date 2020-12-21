@@ -124,8 +124,10 @@ public class GTFAnnotateExonLength {
 				Iterator itr2 = list.iterator();
 				while (itr2.hasNext()) {
 					String transcript_id = (String)itr2.next();
-					transcripts += transcript_id + ",";
-					total += (Integer)transcript_length.get(transcript_id);
+					
+					int transcript_len = (Integer)transcript_length.get(transcript_id); 
+					transcripts += transcript_id + "(" + transcript_len + "),";
+					total += transcript_len;
 				}
 				out_geneID.write(geneID + "\t" + (total / list.size()) + "\t" + total + "\t" + list.size() + "\t" + transcripts + "\n");
 			}
