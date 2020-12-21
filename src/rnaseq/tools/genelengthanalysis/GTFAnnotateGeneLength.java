@@ -76,21 +76,29 @@ public class GTFAnnotateGeneLength {
 						
 						if (geneName2transcript.containsKey(gene_name)) {
 							LinkedList list = (LinkedList)geneName2transcript.get(gene_name);
-							list.add(transcript_id);
+							if (!list.contains(transcript_id)) {
+								list.add(transcript_id);
+							}
 							geneName2transcript.put(gene_name, list);
 						} else {
 							LinkedList list = new LinkedList();
-							list.add(transcript_id);
+							if (!list.contains(transcript_id)) {
+								list.add(transcript_id);
+							}
 							geneName2transcript.put(gene_name, list);
 						}
 						
 						if (geneID2transcript.containsKey(gene_id)) {
 							LinkedList list = (LinkedList)geneID2transcript.get(gene_id);
-							list.add(transcript_id);
+							if (!list.contains(transcript_id)) {
+								list.add(transcript_id);
+							}
 							geneID2transcript.put(gene_id, list);
 						} else {
 							LinkedList list = new LinkedList();
-							list.add(transcript_id);
+							if (!list.contains(transcript_id)) {
+								list.add(transcript_id);
+							}
 							geneID2transcript.put(gene_id, list);
 						}
 						if (geneType.equals("exon")) {
