@@ -69,69 +69,70 @@ public class GTFAnnotateGeneLength {
 					String gene_id = GTFFile.grabMeta(meta, "gene_id");
 					String gene_name = GTFFile.grabMeta(meta, "gene_name");
 					String transcript_id = GTFFile.grabMeta(meta, "transcript_id");
-					
-					if (!transcript_id.equals("")) {
-						transcript2GeneName.put(transcript_id, gene_name);
-						transcript2GeneID.put(transcript_id, gene_id);
-						
-						if (geneName2transcript.containsKey(gene_name)) {
-							LinkedList list = (LinkedList)geneName2transcript.get(gene_name);
-							if (!list.contains(transcript_id)) {
-								list.add(transcript_id);
+					if (!gene_id.trim().equals("") && !transcript_id.trim().equals("")) {
+						if (!transcript_id.equals("")) {
+							transcript2GeneName.put(transcript_id, gene_name);
+							transcript2GeneID.put(transcript_id, gene_id);
+							
+							if (geneName2transcript.containsKey(gene_name)) {
+								LinkedList list = (LinkedList)geneName2transcript.get(gene_name);
+								if (!list.contains(transcript_id)) {
+									list.add(transcript_id);
+								}
+								geneName2transcript.put(gene_name, list);
+							} else {
+								LinkedList list = new LinkedList();
+								if (!list.contains(transcript_id)) {
+									list.add(transcript_id);
+								}
+								geneName2transcript.put(gene_name, list);
 							}
-							geneName2transcript.put(gene_name, list);
-						} else {
-							LinkedList list = new LinkedList();
-							if (!list.contains(transcript_id)) {
-								list.add(transcript_id);
+							
+							if (geneID2transcript.containsKey(gene_id)) {
+								LinkedList list = (LinkedList)geneID2transcript.get(gene_id);
+								if (!list.contains(transcript_id)) {
+									list.add(transcript_id);
+								}
+								geneID2transcript.put(gene_id, list);
+							} else {
+								LinkedList list = new LinkedList();
+								if (!list.contains(transcript_id)) {
+									list.add(transcript_id);
+								}
+								geneID2transcript.put(gene_id, list);
 							}
-							geneName2transcript.put(gene_name, list);
-						}
-						
-						if (geneID2transcript.containsKey(gene_id)) {
-							LinkedList list = (LinkedList)geneID2transcript.get(gene_id);
-							if (!list.contains(transcript_id)) {
-								list.add(transcript_id);
-							}
-							geneID2transcript.put(gene_id, list);
-						} else {
-							LinkedList list = new LinkedList();
-							if (!list.contains(transcript_id)) {
-								list.add(transcript_id);
-							}
-							geneID2transcript.put(gene_id, list);
-						}
-						if (geneType.equals("exon")) {
-							if (transcript_start.containsKey(transcript_id)) {
-								int start = (Integer)transcript_start.get(transcript_id);
-								if (start > new Integer(split[3])) {
+							if (geneType.equals("exon")) {
+								if (transcript_start.containsKey(transcript_id)) {
+									int start = (Integer)transcript_start.get(transcript_id);
+									if (start > new Integer(split[3])) {
+										transcript_start.put(transcript_id, new Integer(split[3]));
+									}
+								} else {
 									transcript_start.put(transcript_id, new Integer(split[3]));
 								}
-							} else {
-								transcript_start.put(transcript_id, new Integer(split[3]));
-							}
-							if (transcript_end.containsKey(transcript_id)) {
-								int end = (Integer)transcript_end.get(transcript_id);
-								if (end < new Integer(split[4])) {
+								if (transcript_end.containsKey(transcript_id)) {
+									int end = (Integer)transcript_end.get(transcript_id);
+									if (end < new Integer(split[4])) {
+										transcript_end.put(transcript_id, new Integer(split[4]));
+									}
+								} else {
 									transcript_end.put(transcript_id, new Integer(split[4]));
 								}
-							} else {
-								transcript_end.put(transcript_id, new Integer(split[4]));
-							}
-							if (transcript_length.containsKey(transcript_id)) {
-								int end = (Integer)transcript_end.get(transcript_id);
-								int start = (Integer)transcript_start.get(transcript_id);
-								int len = end - start + 1;
-								
-								transcript_length.put(transcript_id, len);
-							} else {
-								int end = (Integer)transcript_end.get(transcript_id);
-								int start = (Integer)transcript_start.get(transcript_id);
-								int len = end - start + 1;
-								
-								transcript_length.put(transcript_id, len);
-							}
-						}				
+								if (transcript_length.containsKey(transcript_id)) {
+									int end = (Integer)transcript_end.get(transcript_id);
+									int start = (Integer)transcript_start.get(transcript_id);
+									int len = end - start + 1;
+									
+									transcript_length.put(transcript_id, len);
+								} else {
+									int end = (Integer)transcript_end.get(transcript_id);
+									int start = (Integer)transcript_start.get(transcript_id);
+									int len = end - start + 1;
+									
+									transcript_length.put(transcript_id, len);
+								}
+							}				
+						}
 					}
 				} // end if ##
 			}

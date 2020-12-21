@@ -62,44 +62,46 @@ public class GTFAnnotateExonLength {
 					String gene_id = GTFFile.grabMeta(meta, "gene_id");
 					String gene_name = GTFFile.grabMeta(meta, "gene_name");
 					String transcript_id = GTFFile.grabMeta(meta, "transcript_id");
-					transcript2GeneName.put(transcript_id, gene_name);
-					transcript2GeneID.put(transcript_id, gene_id);
-					if (geneName2transcript.containsKey(gene_name)) {
-						LinkedList list = (LinkedList)geneName2transcript.get(gene_name);
-						if (!list.contains(transcript_id)) {
-							list.add(transcript_id);
-						}
-						geneName2transcript.put(gene_name, list);
-					} else {
-						LinkedList list = new LinkedList();
-						if (!list.contains(transcript_id)) {
-							list.add(transcript_id);
-						}
-						geneName2transcript.put(gene_name, list);
-					}
-					
-					if (geneID2transcript.containsKey(gene_id)) {
-						LinkedList list = (LinkedList)geneID2transcript.get(gene_id);
-						if (!list.contains(transcript_id)) {
-							list.add(transcript_id);
-						}
-						geneID2transcript.put(gene_id, list);
-					} else {
-						LinkedList list = new LinkedList();
-						if (!list.contains(transcript_id)) {
-							list.add(transcript_id);
-						}
-						geneID2transcript.put(gene_id, list);
-					}
-					if (geneType.equals("exon")) {
-						if (transcript_length.containsKey(transcript_id)) {
-							int len = (Integer)transcript_length.get(transcript_id);
-							len = len + length;
-							transcript_length.put(transcript_id, len);
+					if (!gene_id.trim().equals("") && !transcript_id.trim().equals("")) {
+						transcript2GeneName.put(transcript_id, gene_name);
+						transcript2GeneID.put(transcript_id, gene_id);
+						if (geneName2transcript.containsKey(gene_name)) {
+							LinkedList list = (LinkedList)geneName2transcript.get(gene_name);
+							if (!list.contains(transcript_id)) {
+								list.add(transcript_id);
+							}
+							geneName2transcript.put(gene_name, list);
 						} else {
-							transcript_length.put(transcript_id, length);
+							LinkedList list = new LinkedList();
+							if (!list.contains(transcript_id)) {
+								list.add(transcript_id);
+							}
+							geneName2transcript.put(gene_name, list);
 						}
-					}				
+						
+						if (geneID2transcript.containsKey(gene_id)) {
+							LinkedList list = (LinkedList)geneID2transcript.get(gene_id);
+							if (!list.contains(transcript_id)) {
+								list.add(transcript_id);
+							}
+							geneID2transcript.put(gene_id, list);
+						} else {
+							LinkedList list = new LinkedList();
+							if (!list.contains(transcript_id)) {
+								list.add(transcript_id);
+							}
+							geneID2transcript.put(gene_id, list);
+						}
+						if (geneType.equals("exon")) {
+							if (transcript_length.containsKey(transcript_id)) {
+								int len = (Integer)transcript_length.get(transcript_id);
+								len = len + length;
+								transcript_length.put(transcript_id, len);
+							} else {
+								transcript_length.put(transcript_id, length);
+							}
+						}				
+					}
 				}
 				
 			}
