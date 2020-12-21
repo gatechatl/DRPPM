@@ -57,7 +57,7 @@ public class GTFAnnotateExonLength {
 					String[] split = str.split("\t");
 					
 					String geneType = split[2];
-					int length = new Integer(split[4]) - new Integer(split[3]);
+					int length = new Integer(split[4]) - new Integer(split[3]) + 1;
 					String meta = split[8];
 					String gene_id = GTFFile.grabMeta(meta, "gene_id");
 					String gene_name = GTFFile.grabMeta(meta, "gene_name");
