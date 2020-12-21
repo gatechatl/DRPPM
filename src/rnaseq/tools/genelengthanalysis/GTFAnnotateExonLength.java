@@ -131,7 +131,8 @@ public class GTFAnnotateExonLength {
 					transcripts += transcript_id + "(" + transcript_len + "),";
 					total += transcript_len;
 				}
-				out_geneID.write(geneID + "\t" + (total / list.size()) + "\t" + total + "\t" + list.size() + "\t" + transcripts + "\n");
+				//out_geneID.write(geneID + "\t" + (total / list.size()) + "\t" + total + "\t" + list.size() + "\t" + transcripts + "\n");
+				out_geneID.write(geneID + "\t" + (total / list.size()) + "\n");
 			}
 			out_geneID.close();
 			
