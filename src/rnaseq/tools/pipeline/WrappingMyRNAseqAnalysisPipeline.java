@@ -471,12 +471,12 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer_map.put(sampleName, string_buffer);	
 						}
 						String bam_file_path = outputFolder + "/" + sampleName + "/star/" + sampleName + ".STAR.Aligned.sortedByCoord.out.bam";
-						if ((new File(bam_file_path)).exists()) {
+						if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
 							bam_path_map.put(sampleName, bam_file_path);
 						} else {
 							bam_path_map.put(sampleName, "NA");
 						}
-						if ((new File(bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"))).exists()) {
+						if ((new File(bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"))).exists()  || remapping || type.equalsIgnoreCase("FASTQ")) {
 							sj_path_map.put(sampleName, bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"));
 						} else {						
 							sj_path_map.put(sampleName, "NA");
@@ -518,7 +518,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/rseqc/" + "\n");					
 							string_buffer.append(rseqc_script_generation(sampleName, bam_file_path, CHR_NAME_LENGTH_FILE, RSEQC_HOUSE_KEEPING_GENE_BED, RSEQC_REFSEQ_BED, RSEQC_RIBOSOME_BED) + "\n");
 							string_buffer.append("cd " + current_working_dir + "\n");
-							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/rseqc/*" + " " + outputFolder + "/" + sampleName + "/rseqc/\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/rseqc/*" + " " + outputFolder + "/" + sampleName + "/rseqc/\n"); // need to specify the files to copy in the future...
 							string_buffer.append("## END RSEQC mapping ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
 						}
@@ -550,6 +550,12 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							psi_pso_intermediate_folder_f.mkdir();
 						}
 						
+						String sampleName_sj_lst = outputIntermediateFolder + "/" + sampleName + "/psipso/" + sampleName + ".SJ.file.lst";
+						FileWriter fwriter_sampleName_sj_lst = new FileWriter(sampleName_sj_lst);
+						BufferedWriter out_sampleName_sj_lst = new BufferedWriter(fwriter_sampleName_sj_lst);
+						out_sampleName_sj_lst.write(sj_file_path + "\n");
+						out_sampleName_sj_lst.close(); 
+						
 						if (!SKIP_PSI_PSO_CALC) {
 							
 							// need to add code to check for whether all the files are present
@@ -557,10 +563,10 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
 							string_buffer.append("## PSI PSO calculation ##\n");
 							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/psipso/" + "\n");					
-							string_buffer.append("drppm -JuncSalvagerGeneratePSIScript SJ.file.lst " + SPLICING_DEFICIENCY_CONFIG + " psi_pso_output step3_output_script.sh" + "\n");
-							string_buffer.append("sh  step3_output_script.sh" + "\n");
+							string_buffer.append("drppm -JuncSalvagerGeneratePSIScript " + sampleName_sj_lst + " " + PRIMARY_GTF_REF + " psi_pso_output step2_output_script.sh" + "\n");
+							string_buffer.append("sh step2_output_script.sh" + "\n");
 							string_buffer.append("cd " + current_working_dir + "\n");
-							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/psipso/*" + " " + outputFolder + "/" + sampleName + "/psipso/\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/psipso/psi_pso_output/*" + " " + outputFolder + "/" + sampleName + "/psipso/\n"); // need to specify the files to copy in the future...
 							string_buffer.append("## END PSI PSO calculation ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
 						}
@@ -614,7 +620,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("drppm -IntronRetentionPipelineWrapper " + sampleName_bam_lst + " " + SPLICING_DEFICIENCY_CONFIG + " 101 " + sampleName + "\n");
 							string_buffer.append("sh step1_" + sampleName + ".run_this_first.sh" + "\n");
 							string_buffer.append("sh " + sampleName + ".sh" + "\n");
-							string_buffer.append("drppm -EnsemblTranscriptID2GeneNameAppened " + sampleName + ".STAR.Aligned.sortedByCoord.out.bam.bed_SD.txt " + PRIMARY_GTF_REF + " " + sampleName + ".STAR.Aligned.sortedByCoord.out.bam.bed_SD_geneName.txt" + "\n");
+							string_buffer.append("drppm -CleanEnsemblGeneID2GeneName " + sampleName + ".STAR.Aligned.sortedByCoord.out.bam.bed_SD.txt " + PRIMARY_GTF_REF + " " + sampleName + ".STAR.Aligned.sortedByCoord.out.bam.bed_SD_geneName.txt" + "\n");
 							string_buffer.append("cd " + current_working_dir + "\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/splicingdeficiency/*" + " " + outputFolder + "/" + sampleName + "/splicingdeficiency/\n");
 							string_buffer.append("## END Splicing Deficiency calculation ##\n\n");

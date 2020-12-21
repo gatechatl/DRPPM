@@ -2772,7 +2772,8 @@ public class ProgramDescriptions {
 		}
 		if (SortExonIntronBED.type().equals(type)) {
 			result += "SortExonIntronBED: " + SortExonIntronBED.description() + "\n";
-		}
+		}		
+		
 		if (WrappingMyRNAseqAnalysisPipeline.type().equals(type)) {
 			result += "WrappingMyRNAseqAnalysisPipeline: " + WrappingMyRNAseqAnalysisPipeline.description() + "\n";
 		}

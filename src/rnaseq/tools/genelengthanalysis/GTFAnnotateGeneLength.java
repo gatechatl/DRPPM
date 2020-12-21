@@ -113,13 +113,13 @@ public class GTFAnnotateGeneLength {
 							if (transcript_length.containsKey(transcript_id)) {
 								int end = (Integer)transcript_end.get(transcript_id);
 								int start = (Integer)transcript_start.get(transcript_id);
-								int len = end - start;
+								int len = end - start + 1;
 								
 								transcript_length.put(transcript_id, len);
 							} else {
 								int end = (Integer)transcript_end.get(transcript_id);
 								int start = (Integer)transcript_start.get(transcript_id);
-								int len = end - start;
+								int len = end - start + 1;
 								
 								transcript_length.put(transcript_id, len);
 							}

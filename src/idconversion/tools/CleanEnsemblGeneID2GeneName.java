@@ -38,8 +38,8 @@ public class CleanEnsemblGeneID2GeneName {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
-				if (gtf.geneid2geneName.containsKey(split[0].replaceAll("\"",  "").split("\\.")[0])) {
-					String geneName = (String)gtf.geneid2geneName.get(split[0].replaceAll("\"",  "").split("\\.")[0]);
+				if (gtf.geneid_clean2geneName.containsKey(split[0].replaceAll("\"",  "").split("\\.")[0])) {
+					String geneName = (String)gtf.geneid_clean2geneName.get(split[0].replaceAll("\"",  "").split("\\.")[0]);
 					
 					//System.out.println(str + "\t" + geneName);
 					out.write(geneName + "");
