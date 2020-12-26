@@ -120,6 +120,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (split[0].equalsIgnoreCase("PRIMARY_GTF_REF")) {
 								PRIMARY_GTF_REF = split[1];
 							}
+							if (split[0].equalsIgnoreCase("JUNCSALVAGER_GENELIST")) {
+								JUNCSALVAGER_GENELIST = split[1];
+							}
 							
 							if (split[0].equalsIgnoreCase("SKIP_BAM2FASTQ")) {
 								SKIP_BAM2FASTQ = new Boolean(split[1]);
@@ -648,8 +651,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				String sampleName = (String)itr.next();
 				if (sj_path_map.containsKey(sampleName)) {
 					String sj_file_path = (String)sj_path_map.get(sampleName);
-					
-					if ((new File(sj_file_path)).exists()) {
+					String sj_bam_path = (String)bam_path_map.get(sampleName);
+					if ((new File(sj_file_path)).exists() && (new File(sj_bam_path)).exists()) {
 						String juncsalvager_folder = outputFolder + "/" + sampleName + "/juncsalvager";
 						File JuncSalvager_folder_f = new File(juncsalvager_folder);
 						if (!JuncSalvager_folder_f.exists()) {
@@ -662,11 +665,11 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							juncsalvager_intermediate_folder_f.mkdir();
 						}
 						
-						String sampleName_sj_lst = outputIntermediateFolder + "/" + sampleName + "/juncsalvager/" + sampleName + ".SJ.file.lst";
-						FileWriter fwriter_sampleName_sj_lst = new FileWriter(sampleName_sj_lst);
-						BufferedWriter out_sampleName_sj_lst = new BufferedWriter(fwriter_sampleName_sj_lst);
-						out_sampleName_sj_lst.write(sj_file_path + "\n");
-						out_sampleName_sj_lst.close(); 
+						String sampleName_juncsalvager_lst = outputIntermediateFolder + "/" + sampleName + "/juncsalvager/" + sampleName + ".juncsalvager.lst";
+						FileWriter fwriter_sampleName_juncsalvager_lst = new FileWriter(sampleName_juncsalvager_lst);
+						BufferedWriter out_sampleName_juncsalvager_lst = new BufferedWriter(fwriter_sampleName_juncsalvager_lst);
+						out_sampleName_juncsalvager_lst.write(sampleName + "\t" + sj_bam_path + "\t" + sj_file_path + "\n");
+						out_sampleName_juncsalvager_lst.close(); 
 						
 						if (!SKIP_JUNCSALVAGER) {
 							
@@ -674,12 +677,12 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							String juncsalvager_outputFolder = outputFolder + "/" + sampleName + "/juncsalvager/result";
 							String juncsalvager_shellscript = outputIntermediateFolder + "/" + sampleName + "/juncsalvager/juncsalvager.sh";
 							String juncsalvager_outputNovelFile = outputFolder + "/" + sampleName + "/juncsalvager/novel_exon.lst";
-							String juncsalvager_AltSpliceFile = outputFolder + "/" + sampleName + "/juncsalvager/novel_exon.lst";
+							String juncsalvager_AltSpliceFile = outputFolder + "/" + sampleName + "/juncsalvager/alternatie_start_site.lst";
 							
 							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
 							string_buffer.append("## Junc Salvager Pipeline ##\n");
 							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/juncsalvager/" + "\n");					
-							string_buffer.append("drppm -JuncSalvagerPipeline " + sampleName_sj_lst + " " + JUNCSALVAGER_GENELIST + " PRIMARY_GTF_REF " + JUNCSALVAGER_PARAM + " " + juncsalvager_outputFolder + " " + juncsalvager_shellscript + " " + juncsalvager_outputNovelFile + " " + juncsalvager_AltSpliceFile + "\n");
+							string_buffer.append("drppm -JuncSalvagerPipeline " + sampleName_juncsalvager_lst + " " + JUNCSALVAGER_GENELIST + " " + PRIMARY_GTF_REF + " " + JUNCSALVAGER_PARAM + " " + juncsalvager_outputFolder + " " + juncsalvager_shellscript + " " + juncsalvager_outputNovelFile + " " + juncsalvager_AltSpliceFile + "\n");
 							string_buffer.append("sh " + juncsalvager_shellscript + "\n");
 							string_buffer.append("## END JuncSalvagerPipeline calculation ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
@@ -715,9 +718,14 @@ public class WrappingMyRNAseqAnalysisPipeline {
 						if (!SKIP_HTSEQ_GENE) {
 							String strand_direction = (String)strand_direction_map.get(sampleName);
 							String orientation = "no";
-							if (strand_direction.equals("fr-firststrand")) {
+							if (strand_direction.equalsIgnoreCase("fr-firststrand")) {
 								orientation = "yes";
-							} else if (strand_direction.equals("fr-firststrand")) {
+							} else if (strand_direction.equalsIgnoreCase("fr-secondstrand")) {
+								orientation = "reverse";
+							}
+							if (strand_direction.equalsIgnoreCase("yes")) {
+								orientation = "yes";
+							} else if (strand_direction.equalsIgnoreCase("reverse")) {
 								orientation = "reverse";
 							}
 							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);

@@ -477,63 +477,63 @@ public class STARPostProcessingMatrix {
 						int start = new Integer(split_line[1]);
 						int end = new Integer(split_line[2]);
 						String transcript_id = split_line[4];
-						
-						HashMap exon_map = (HashMap)exon_structure.get(transcript_id);
-						
-						if (exon_map.containsKey(line)) {
-							EXON current_exon = (EXON)exon_map.get(line);
-							//System.out.println("line: " + line);
-							//String line = chr + "\t" + start + "\t" + end + "\t" + direction + "\t" + transcript_id;
-							String next_exon_line = current_exon.get_next_serial_line();
-							if (exon_map.containsKey(next_exon_line)) {
-								EXON next_exon = (EXON)exon_map.get(next_exon_line);
-								
-								//list.add(chr + "\t" + start + "\t" + end + "\t" + position + "\n");
-								if (direction.equals("+")) {
-									if (end - 5 < junction1_position && junction1_position < end + 5) {
-										
-										// grab the next exon
-										Iterator itr2 = next_exon.novel_exon_junction.keySet().iterator();
-										while (itr2.hasNext()) {
-											String novel_junction = (String)itr2.next();
-											String novel_junction1 = novel_junction.split("\t")[0];
-											String novel_junction2 = novel_junction.split("\t")[1];
-											//System.out.println(novel_junction1);
-											//System.out.println(novel_junction2);
-											String novel_junction1_chr = novel_junction1.split(":")[0];
-											int novel_junction1_position = new Integer(novel_junction1.split(":")[1]);
-																					
-											String novel_junction2_chr = novel_junction2.split(":")[0];
-											int novel_junction2_position = new Integer(novel_junction2.split(":")[1]);
-											if (junction2_position < novel_junction1_position) {
-												novel_exon.put(junction2 + "\t" + novel_junction1, junction2 + "\t" + novel_junction1);
-												found_exon = true;
-											}
-										}
-										
-										one_side = true;
-									}
-								} else {
-									if (start - 5 < junction2_position && junction2_position < start + 5) {
-										
-										Iterator itr2 = next_exon.novel_exon_junction.keySet().iterator();
-										while (itr2.hasNext()) {
-											String novel_junction = (String)itr2.next();
-											String novel_junction1 = novel_junction.split("\t")[0];
-											String novel_junction2 = novel_junction.split("\t")[1];
+						if (exon_structure.containsKey(transcript_id)) {
+							HashMap exon_map = (HashMap)exon_structure.get(transcript_id);						
+							if (exon_map.containsKey(line)) {
+								EXON current_exon = (EXON)exon_map.get(line);
+								//System.out.println("line: " + line);
+								//String line = chr + "\t" + start + "\t" + end + "\t" + direction + "\t" + transcript_id;
+								String next_exon_line = current_exon.get_next_serial_line();
+								if (exon_map.containsKey(next_exon_line)) {
+									EXON next_exon = (EXON)exon_map.get(next_exon_line);
+									
+									//list.add(chr + "\t" + start + "\t" + end + "\t" + position + "\n");
+									if (direction.equals("+")) {
+										if (end - 5 < junction1_position && junction1_position < end + 5) {
 											
-											String novel_junction1_chr = novel_junction1.split(":")[0];
-											int novel_junction1_position = new Integer(novel_junction1.split(":")[1]);
-																					
-											String novel_junction2_chr = novel_junction2.split(":")[0];
-											int novel_junction2_position = new Integer(novel_junction2.split(":")[1]);
-											if (novel_junction2_position < junction1_position) {
-												novel_exon.put(novel_junction2 + "\t" + junction1, novel_junction2 + "\t" + junction1);	
-												found_exon = true;
+											// grab the next exon
+											Iterator itr2 = next_exon.novel_exon_junction.keySet().iterator();
+											while (itr2.hasNext()) {
+												String novel_junction = (String)itr2.next();
+												String novel_junction1 = novel_junction.split("\t")[0];
+												String novel_junction2 = novel_junction.split("\t")[1];
+												//System.out.println(novel_junction1);
+												//System.out.println(novel_junction2);
+												String novel_junction1_chr = novel_junction1.split(":")[0];
+												int novel_junction1_position = new Integer(novel_junction1.split(":")[1]);
+																						
+												String novel_junction2_chr = novel_junction2.split(":")[0];
+												int novel_junction2_position = new Integer(novel_junction2.split(":")[1]);
+												if (junction2_position < novel_junction1_position) {
+													novel_exon.put(junction2 + "\t" + novel_junction1, junction2 + "\t" + novel_junction1);
+													found_exon = true;
+												}
 											}
+											
+											one_side = true;
 										}
-										
-										one_side = true;
+									} else {
+										if (start - 5 < junction2_position && junction2_position < start + 5) {
+											
+											Iterator itr2 = next_exon.novel_exon_junction.keySet().iterator();
+											while (itr2.hasNext()) {
+												String novel_junction = (String)itr2.next();
+												String novel_junction1 = novel_junction.split("\t")[0];
+												String novel_junction2 = novel_junction.split("\t")[1];
+												
+												String novel_junction1_chr = novel_junction1.split(":")[0];
+												int novel_junction1_position = new Integer(novel_junction1.split(":")[1]);
+																						
+												String novel_junction2_chr = novel_junction2.split(":")[0];
+												int novel_junction2_position = new Integer(novel_junction2.split(":")[1]);
+												if (novel_junction2_position < junction1_position) {
+													novel_exon.put(novel_junction2 + "\t" + junction1, novel_junction2 + "\t" + junction1);	
+													found_exon = true;
+												}
+											}
+											
+											one_side = true;
+										}
 									}
 								}
 							}
