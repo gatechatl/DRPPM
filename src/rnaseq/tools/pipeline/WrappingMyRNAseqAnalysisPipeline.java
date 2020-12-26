@@ -42,6 +42,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String RSEQC_REFSEQ_BED = "NA";
 	private static String RSEQC_RIBOSOME_BED = "NA";
 	private static String PRIMARY_GTF_REF = "NA";
+	private static String JUNCSALVAGER_GENELIST = "NA";
+	private static String JUNCSALVAGER_PARAM = "NA";
+	
 	
 	private static boolean SKIP_BAM2FASTQ = false;
 	private static boolean SKIP_STAR = false;
@@ -51,6 +54,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static boolean SKIP_SPLICING_DEFICIENCY = false;
 	private static boolean SKIP_HTSEQ_EXON_QUANT = false;
 	private static boolean SKIP_HTSEQ_GENE = false;
+	private static boolean SKIP_JUNCSALVAGER = false;
 	
 	public static void execute(String[] args) {
 		
@@ -140,7 +144,10 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							}
 							if (split[0].equalsIgnoreCase("SKIP_HTSEQ_GENE")) {
 								SKIP_HTSEQ_GENE = new Boolean(split[1]);
-							}						
+							}
+							if (split[0].equalsIgnoreCase("SKIP_JUNCSALVAGER")) {
+								SKIP_JUNCSALVAGER = new Boolean(split[1]);
+							}
 						}
 					}
 				}
@@ -624,6 +631,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("cd " + current_working_dir + "\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/splicingdeficiency/*" + " " + outputFolder + "/" + sampleName + "/splicingdeficiency/\n");
 							string_buffer.append("## END Splicing Deficiency calculation ##\n\n");
+							string_buffer_map.put(sampleName, string_buffer);
 						}
 					} else {
 						if (!SKIP_SPLICING_DEFICIENCY) {
@@ -632,6 +640,98 @@ public class WrappingMyRNAseqAnalysisPipeline {
 					}
 				}
 			}
+			
+			
+			// generate script for novel exon and novel alternative start site
+			itr = sampleName_linkedList.iterator();
+			while (itr.hasNext()) {
+				String sampleName = (String)itr.next();
+				if (sj_path_map.containsKey(sampleName)) {
+					String sj_file_path = (String)sj_path_map.get(sampleName);
+					
+					if ((new File(sj_file_path)).exists()) {
+						String juncsalvager_folder = outputFolder + "/" + sampleName + "/juncsalvager";
+						File JuncSalvager_folder_f = new File(juncsalvager_folder);
+						if (!JuncSalvager_folder_f.exists()) {
+							JuncSalvager_folder_f.mkdir();
+						}
+			
+						String juncsalvager_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/juncsalvager";
+						File juncsalvager_intermediate_folder_f = new File(juncsalvager_intermediate_folder);
+						if (!juncsalvager_intermediate_folder_f.exists()) {
+							juncsalvager_intermediate_folder_f.mkdir();
+						}
+						
+						String sampleName_sj_lst = outputIntermediateFolder + "/" + sampleName + "/juncsalvager/" + sampleName + ".SJ.file.lst";
+						FileWriter fwriter_sampleName_sj_lst = new FileWriter(sampleName_sj_lst);
+						BufferedWriter out_sampleName_sj_lst = new BufferedWriter(fwriter_sampleName_sj_lst);
+						out_sampleName_sj_lst.write(sj_file_path + "\n");
+						out_sampleName_sj_lst.close(); 
+						
+						if (!SKIP_JUNCSALVAGER) {
+							
+							// need to add code to check for whether all the files are present
+							String juncsalvager_outputFolder = outputFolder + "/" + sampleName + "/juncsalvager/result";
+							String juncsalvager_shellscript = outputIntermediateFolder + "/" + sampleName + "/juncsalvager/juncsalvager.sh";
+							String juncsalvager_outputNovelFile = outputFolder + "/" + sampleName + "/juncsalvager/novel_exon.lst";
+							String juncsalvager_AltSpliceFile = outputFolder + "/" + sampleName + "/juncsalvager/novel_exon.lst";
+							
+							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
+							string_buffer.append("## Junc Salvager Pipeline ##\n");
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/juncsalvager/" + "\n");					
+							string_buffer.append("drppm -JuncSalvagerPipeline " + sampleName_sj_lst + " " + JUNCSALVAGER_GENELIST + " PRIMARY_GTF_REF " + JUNCSALVAGER_PARAM + " " + juncsalvager_outputFolder + " " + juncsalvager_shellscript + " " + juncsalvager_outputNovelFile + " " + juncsalvager_AltSpliceFile + "\n");
+							string_buffer.append("sh " + juncsalvager_shellscript + "\n");
+							string_buffer.append("## END JuncSalvagerPipeline calculation ##\n\n");
+							string_buffer_map.put(sampleName, string_buffer);
+						}
+					} else {
+						if (!SKIP_JUNCSALVAGER) {
+							System.out.println("junction SJ.tab file for " + sampleName + " is missing... skipping the juncsalvager step...");
+						}
+					}
+				}
+			}
+			
+			// generate script for HTSEQ
+			itr = sampleName_linkedList.iterator();
+			while (itr.hasNext()) {
+				String sampleName = (String)itr.next();
+				if (bam_path_map.containsKey(sampleName)) {
+					String bam_file_path = (String)bam_path_map.get(sampleName);
+					
+					if ((new File(bam_file_path)).exists()) {
+						String htseq_gene_level_folder = outputFolder + "/" + sampleName + "/htseq_gene_level";
+						File htseq_gene_level_folder_f = new File(htseq_gene_level_folder);
+						if (!htseq_gene_level_folder_f.exists()) {
+							htseq_gene_level_folder_f.mkdir();
+						}
+			
+						String htseq_gene_level_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level";
+						File htseq_gene_level_intermediate_folder_f = new File(htseq_gene_level_intermediate_folder);
+						if (!htseq_gene_level_intermediate_folder_f.exists()) {
+							htseq_gene_level_intermediate_folder_f.mkdir();
+						}
+
+						if (!SKIP_HTSEQ_GENE) {
+							String strand_direction = (String)strand_direction_map.get(sampleName);
+							String orientation = "no";
+							if (strand_direction.equals("fr-firststrand")) {
+								orientation = "yes";
+							} else if (strand_direction.equals("fr-firststrand")) {
+								orientation = "reverse";
+							}
+							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
+							string_buffer.append("## HTSEQ Gene Level ##\n");
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level/" + "\n");					
+							string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t exon " + bam_file_path + " " + PRIMARY_GTF_REF + "\n");							
+							string_buffer.append("## END HTSEQ Gene Level  ##\n\n");
+							string_buffer_map.put(sampleName, string_buffer);
+						}
+					}
+					
+				}
+			}
+			
 			
 			// finally write out the shell script
 			itr = sampleName_linkedList.iterator();

@@ -11,7 +11,7 @@ public class JuncSalvagerSortSumColumn {
 		return "JinghuiZhang";
 	}
 	public static String parameter_info() {
-		return "[inputQuartileCount] [outputQuartileCount]";
+		return "[inputQuartileCount] [ascend or descent: true or false] [outputQuartileCount]";
 	}
 	public static void execute(String[] args) {
 		
