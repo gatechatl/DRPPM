@@ -565,9 +565,11 @@ import rnaseq.mapping.tools.star.RPM2FPKMGenCode;
 import rnaseq.mapping.tools.star.RPM2RPKMExon;
 import rnaseq.mapping.tools.star.RPM2RPKMExonRelaxedGeneID;
 import rnaseq.mapping.tools.star.RPM2RPKMTranscript;
+import rnaseq.mapping.tools.star.RPM2RPKMWithLengthReference;
 import rnaseq.mapping.tools.star.RawCount2RPM;
 import rnaseq.mapping.tools.star.RawCount2RPMProteinFeatures;
 import rnaseq.mapping.tools.star.RawCount2RPMSkipFirstTwoColumns;
+import rnaseq.mapping.tools.star.RawExonCount2CPMProteinFeatures;
 import rnaseq.mapping.tools.star.RscriptDEseq2EdgeRCount2CPMFPKMTPM;
 import rnaseq.mapping.tools.star.STARMappingScriptGenerator;
 import rnaseq.mapping.tools.star.STARMappingScriptGeneratorForTrimFastq;
@@ -639,6 +641,8 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvager5pri
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
+import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
+import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.mats308.AddGeneName2MATS;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
@@ -9570,7 +9574,17 @@ public class DRPPM {
 				}
 				RPM2RPKMTranscript.execute(args_remain);
 				System.exit(0);
-				// RPM2RPKMExon
+				// RPM2RPKMWithLengthReference
+			} else if (type.equalsIgnoreCase("-RPM2RPKMWithLengthReference")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -RPM2RPKMWithLengthReference "
+							+ RPM2RPKMWithLengthReference.parameter_info());
+					System.exit(0);
+				}
+				RPM2RPKMWithLengthReference.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-RPM2RPKMExon")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
@@ -11281,6 +11295,16 @@ public class DRPPM {
 				}
 				RawCount2RPMProteinFeatures.execute(args_remain);
 				System.exit(0);
+				// RawExonCount2CPMProteinFeatures
+			} else if (type.equalsIgnoreCase("-RawExonCount2CPMProteinFeatures")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -RawExonCount2CPMProteinFeatures "
+							+ RawExonCount2CPMProteinFeatures.parameter_info());
+					System.exit(0);
+				}
+				RawExonCount2CPMProteinFeatures.execute(args_remain);
+				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-GMTHuman2Mouse")) {
 				String[] args_remain = getRemaining(args);
@@ -11532,7 +11556,7 @@ public class DRPPM {
 				SortExonIntronBED.execute(args_remain);
 				System.exit(0);
 				// WrappingMyRNAseqAnalysisPipeline
-			}else if (type.equalsIgnoreCase("-WrappingMyRNAseqAnalysisPipeline")) {
+			} else if (type.equalsIgnoreCase("-WrappingMyRNAseqAnalysisPipeline")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -WrappingMyRNAseqAnalysisPipeline "
@@ -11541,7 +11565,27 @@ public class DRPPM {
 				}
 				WrappingMyRNAseqAnalysisPipeline.execute(args_remain);
 				System.exit(0);
-				// WrappingMyRNAseqAnalysisPipeline
+				// FilterExonMatrixByGeneSymbol
+			} else if (type.equalsIgnoreCase("-CSIMinerFilterExonMatrixByGeneSymbol")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerFilterExonMatrixByGeneSymbol "
+							+ CSIMinerFilterExonMatrixByGeneSymbol.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerFilterExonMatrixByGeneSymbol.execute(args_remain);
+				System.exit(0);
+				// CSIMinerCalculatePercentileCutoff
+			} else if (type.equalsIgnoreCase("-CSIMinerCalculatePercentileCutoff")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerCalculatePercentileCutoff "
+							+ CSIMinerCalculatePercentileCutoff.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerCalculatePercentileCutoff.execute(args_remain);
+				System.exit(0);
+				// 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

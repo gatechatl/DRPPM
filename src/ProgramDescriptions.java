@@ -363,9 +363,11 @@ import rnaseq.mapping.tools.star.RPM2FPKMGenCode;
 import rnaseq.mapping.tools.star.RPM2RPKMExon;
 import rnaseq.mapping.tools.star.RPM2RPKMExonRelaxedGeneID;
 import rnaseq.mapping.tools.star.RPM2RPKMTranscript;
+import rnaseq.mapping.tools.star.RPM2RPKMWithLengthReference;
 import rnaseq.mapping.tools.star.RawCount2RPM;
 import rnaseq.mapping.tools.star.RawCount2RPMProteinFeatures;
 import rnaseq.mapping.tools.star.RawCount2RPMSkipFirstTwoColumns;
+import rnaseq.mapping.tools.star.RawExonCount2CPMProteinFeatures;
 import rnaseq.mapping.tools.star.RscriptDEseq2EdgeRCount2CPMFPKMTPM;
 import rnaseq.mapping.tools.star.STARMappingScriptGenerator;
 import rnaseq.mapping.tools.star.STARMappingScriptGeneratorForTrimFastq;
@@ -412,6 +414,8 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvag
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
+import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
+import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
 import rnaseq.splicing.mats308.SummarizeMATSSummary;
@@ -2777,9 +2781,22 @@ public class ProgramDescriptions {
 		if (WrappingMyRNAseqAnalysisPipeline.type().equals(type)) {
 			result += "WrappingMyRNAseqAnalysisPipeline: " + WrappingMyRNAseqAnalysisPipeline.description() + "\n";
 		}
+		if (RawExonCount2CPMProteinFeatures.type().equals(type)) {
+			result += "RawExonCount2CPMProteinFeatures: " + RawExonCount2CPMProteinFeatures.description() + "\n";
+		}
+		if (RPM2RPKMWithLengthReference.type().equals(type)) {
+			result += "RPM2RPKMWithLengthReference: " + RPM2RPKMWithLengthReference.description() + "\n";
+		}		
+		if (CSIMinerFilterExonMatrixByGeneSymbol.type().equals(type)) {
+			result += "CSIMinerFilterExonMatrixByGeneSymbol: " + CSIMinerFilterExonMatrixByGeneSymbol.description() + "\n";
+		}
+		if (CSIMinerCalculatePercentileCutoff.type().equals(type)) {
+			result += "CSIMinerCalculatePercentileCutoff: " + CSIMinerCalculatePercentileCutoff.description() + "\n";
+		}
+		
 		return result;
 	}	
 
-	public static String VERSION = "20201226A";
+	public static String VERSION = "20201227A";
 	
 }

@@ -99,7 +99,7 @@ public class MathTools {
 		System.out.println(embedded(5, 1, 3, 4));
 		
 	}
-	
+
 	public static double thousandth_dec(double val) {
 		return new Double(new Double(val * 1000).intValue()) / 1000;
 	}

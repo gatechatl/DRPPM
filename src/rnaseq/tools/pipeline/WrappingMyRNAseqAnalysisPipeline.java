@@ -42,9 +42,10 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String RSEQC_REFSEQ_BED = "NA";
 	private static String RSEQC_RIBOSOME_BED = "NA";
 	private static String PRIMARY_GTF_REF = "NA";
+	private static String PRIMARY_GTF_EXON_REF = "NA";
+	private static String PRIMARY_GTF_EXON_LENGTH = "NA";
 	private static String JUNCSALVAGER_GENELIST = "NA";
-	private static String JUNCSALVAGER_PARAM = "NA";
-	
+	private static String JUNCSALVAGER_PARAM = "NA";	
 	
 	private static boolean SKIP_BAM2FASTQ = false;
 	private static boolean SKIP_STAR = false;
@@ -120,9 +121,16 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (split[0].equalsIgnoreCase("PRIMARY_GTF_REF")) {
 								PRIMARY_GTF_REF = split[1];
 							}
+							if (split[0].equalsIgnoreCase("PRIMARY_GTF_EXON_REF")) {
+								PRIMARY_GTF_EXON_REF = split[1];
+							}
 							if (split[0].equalsIgnoreCase("JUNCSALVAGER_GENELIST")) {
 								JUNCSALVAGER_GENELIST = split[1];
 							}
+							if (split[0].equalsIgnoreCase("PRIMARY_GTF_EXON_LENGTH")) {
+								PRIMARY_GTF_EXON_LENGTH = split[1];
+							}
+							
 							
 							if (split[0].equalsIgnoreCase("SKIP_BAM2FASTQ")) {
 								SKIP_BAM2FASTQ = new Boolean(split[1]);
@@ -632,7 +640,10 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("sh " + sampleName + ".sh" + "\n");
 							string_buffer.append("drppm -CleanEnsemblGeneID2GeneName " + sampleName + ".STAR.Aligned.sortedByCoord.out.bam.bed_SD.txt " + PRIMARY_GTF_REF + " " + sampleName + ".STAR.Aligned.sortedByCoord.out.bam.bed_SD_geneName.txt" + "\n");
 							string_buffer.append("cd " + current_working_dir + "\n");
-							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/splicingdeficiency/*" + " " + outputFolder + "/" + sampleName + "/splicingdeficiency/\n");
+							//string_buffer.append("rm -r " + outputIntermediateFolder + "/" + sampleName + "/splicingdeficiency/*bed\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/splicingdeficiency/*_intron_summary.txt" + " " + outputFolder + "/" + sampleName + "/splicingdeficiency/\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/splicingdeficiency/*_SD.txt" + " " + outputFolder + "/" + sampleName + "/splicingdeficiency/\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/splicingdeficiency/*_SD_geneName.txt" + " " + outputFolder + "/" + sampleName + "/splicingdeficiency/\n");
 							string_buffer.append("## END Splicing Deficiency calculation ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
 						}
@@ -694,6 +705,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 					}
 				}
 			}
+	
+			HashMap sampleName2htseqcount = new HashMap();
 			
 			// generate script for HTSEQ
 			itr = sampleName_linkedList.iterator();
@@ -715,6 +728,12 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							htseq_gene_level_intermediate_folder_f.mkdir();
 						}
 
+						String sampleName_htseq_lst = outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.lst";
+						FileWriter fwriter_sampleName_htseq_lst = new FileWriter(sampleName_htseq_lst);
+						BufferedWriter out_sampleName_htseq_lst = new BufferedWriter(fwriter_sampleName_htseq_lst);
+						out_sampleName_htseq_lst.write(sampleName + ".htseq.rawcount");
+						out_sampleName_htseq_lst.close(); 
+						
 						if (!SKIP_HTSEQ_GENE) {
 							String strand_direction = (String)strand_direction_map.get(sampleName);
 							String orientation = "no";
@@ -728,10 +747,33 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							} else if (strand_direction.equalsIgnoreCase("reverse")) {
 								orientation = "reverse";
 							}
+							
 							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
 							string_buffer.append("## HTSEQ Gene Level ##\n");
 							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level/" + "\n");					
-							string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t exon " + bam_file_path + " " + PRIMARY_GTF_REF + "\n");							
+							string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t exon " + bam_file_path + " " + PRIMARY_GTF_REF + " > counts." + sampleName + ".htseq.rawcount.txt\n");
+							string_buffer.append("drppm -CombineHTSEQResultRaw " + sampleName + ".htseq.lst " + sampleName + ".htseq.count.txt\n");
+							string_buffer.append("drppm -CombineHTSEQResultTotalFeatures " + sampleName + ".htseq.lst " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.cpm.txt\n");
+							string_buffer.append("drppm -RPM2RPKMExon " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.cpm.txt " + sampleName + ".htseq.fpkm.txt\n");
+							string_buffer.append("drppm -RPM2RPKMTranscript " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.count.txt " + sampleName + ".htseq.length.txt\n");
+							string_buffer.append("drppm -RawCount2RPM " + sampleName + ".htseq.length.txt " + sampleName + ".htseq.tpm.txt\n");
+							
+							string_buffer.append("drppm -EnsemblGeneIDAppendAnnotation " + sampleName + ".htseq.count.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.count.annotation.txt\n");
+							string_buffer.append("drppm -EnsemblGeneIDAppendAnnotation " + sampleName + ".htseq.cpm.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.cpm.annotation.txt\n");
+							string_buffer.append("drppm -EnsemblGeneIDAppendAnnotation " + sampleName + ".htseq.tpm.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.tpm.annotation.txt\n");
+							string_buffer.append("drppm -EnsemblGeneIDAppendAnnotation " + sampleName + ".htseq.fpkm.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.fpkm.annotation.txt\n");
+
+							string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".htseq.count.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.count.geneName.txt\n");
+							string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".htseq.cpm.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.cpm.geneName.txt\n");
+							string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".htseq.tpm.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.tpm.geneName.txt\n");
+							string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".htseq.fpkm.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.fpkm.geneName.txt\n");
+							string_buffer.append("drppm -MergeGeneName " + sampleName + ".htseq.fpkm.ganeName.txt MAX " + sampleName + ".htseq.fpkm.geneName.max.txt\n");
+							string_buffer.append("drppm -MergeGeneName " + sampleName + ".htseq.cpm.ganeName.txt MAX " + sampleName + ".htseq.cpm.geneName.max.txt\n");
+							string_buffer.append("drppm -MergeGeneName " + sampleName + ".htseq.tpm.ganeName.txt MAX " + sampleName + ".htseq.tpm.geneName.max.txt\n");
+							
+							string_buffer.append("cd " + current_working_dir + "\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level/counts." + sampleName + ".htseq.rawcount.txt " + outputFolder + "/" + sampleName + "/htseq_exon_level/\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level/*" + " " + outputFolder + "/" + sampleName + "/htseq_gene_level/\n");
 							string_buffer.append("## END HTSEQ Gene Level  ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
 						}
@@ -740,7 +782,98 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				}
 			}
 			
+
 			
+			// generate script for HTSEQ EXON
+			itr = sampleName_linkedList.iterator();
+			while (itr.hasNext()) {
+				String sampleName = (String)itr.next();
+				if (bam_path_map.containsKey(sampleName)) {
+					String bam_file_path = (String)bam_path_map.get(sampleName);
+					
+					if ((new File(bam_file_path)).exists()) {
+						String htseq_exon_level_folder = outputFolder + "/" + sampleName + "/htseq_exon_level";
+						File htseq_exon_level_folder_f = new File(htseq_exon_level_folder);
+						if (!htseq_exon_level_folder_f.exists()) {
+							htseq_exon_level_folder_f.mkdir();
+						}
+			
+						String htseq_exon_level_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level";
+						File htseq_exon_level_intermediate_folder_f = new File(htseq_exon_level_intermediate_folder);
+						if (!htseq_exon_level_intermediate_folder_f.exists()) {
+							htseq_exon_level_intermediate_folder_f.mkdir();
+						}
+
+						String sampleName_htseq_lst = outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level/" + sampleName + ".htseq.lst";
+						FileWriter fwriter_sampleName_htseq_lst = new FileWriter(sampleName_htseq_lst);
+						BufferedWriter out_sampleName_htseq_lst = new BufferedWriter(fwriter_sampleName_htseq_lst);
+						out_sampleName_htseq_lst.write(sampleName + ".htseq.rawcount");
+						out_sampleName_htseq_lst.close(); 
+						
+						String sampleName_exon_htseq_lst = outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level/" + sampleName + ".exon.htseq.lst";
+						FileWriter fwriter_exon_sampleName_htseq_lst = new FileWriter(sampleName_exon_htseq_lst);
+						BufferedWriter out_exon_sampleName_htseq_lst = new BufferedWriter(fwriter_exon_sampleName_htseq_lst);
+						out_exon_sampleName_htseq_lst.write(sampleName + ".exon.htseq.rawcount");
+						out_exon_sampleName_htseq_lst.close(); 
+						
+						if (!SKIP_HTSEQ_EXON_QUANT) {
+							String strand_direction = (String)strand_direction_map.get(sampleName);
+							String orientation = "no";
+							if (strand_direction.equalsIgnoreCase("fr-firststrand")) {
+								orientation = "yes";
+							} else if (strand_direction.equalsIgnoreCase("fr-secondstrand")) {
+								orientation = "reverse";
+							}
+							if (strand_direction.equalsIgnoreCase("yes")) {
+								orientation = "yes";
+							} else if (strand_direction.equalsIgnoreCase("reverse")) {
+								orientation = "reverse";
+							}
+							
+							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
+							string_buffer.append("## HTSEQ Exon Quant ##\n");
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level/" + "\n");					
+							string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t exon --nonunique all " + bam_file_path + " " + PRIMARY_GTF_EXON_REF + " > counts." + sampleName + ".exon.htseq.rawcount.txt\n");
+							
+							if (SKIP_HTSEQ_GENE) {
+								string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t exon " + bam_file_path + " " + PRIMARY_GTF_REF + " > counts." + sampleName + ".htseq.rawcount.txt\n");
+								string_buffer.append("drppm -CombineHTSEQResultRaw " + sampleName + ".htseq.lst " + sampleName + ".htseq.count.txt\n");
+							}
+							
+							string_buffer.append("drppm -CombineHTSEQResultRaw " + sampleName + ".exon.htseq.lst " + sampleName + ".exon.htseq.count.txt\n");
+							string_buffer.append("drppm -RawExonCount2CPMProteinFeatures " + PRIMARY_GTF_REF + " " + sampleName + ".exon.htseq.count.txt " + sampleName + ".htseq.count.txt " + sampleName + ".exon.htseq.cpm.txt " + sampleName + ".htseq.total.count.txt \n");							
+							
+							string_buffer.append("drppm -RPM2RPKMWithLengthReference " + PRIMARY_GTF_EXON_LENGTH + " " + sampleName + ".exon.htseq.cpm.txt " + sampleName + ".exon.htseq.fpkm.txt 0 1\n");
+							string_buffer.append("drppm -RPM2RPKMWithLengthReference " + PRIMARY_GTF_EXON_LENGTH + " " + sampleName + ".exon.htseq.count.txt " + sampleName + ".exon.htseq.length.txt 0 1\n");
+							string_buffer.append("drppm -RawCount2RPM " + sampleName + ".exon.htseq.length.txt " + sampleName + ".exon.htseq.tpm.txt\n");							
+							
+							//string_buffer.append("drppm -CombineHTSEQResultTotalFeatures " + sampleName + ".exon.htseq.lst " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.cpm.txt\n");
+							//string_buffer.append("drppm -RPM2RPKMExon " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.cpm.txt " + sampleName + ".exon.htseq.fpkm.txt\n");
+							//string_buffer.append("drppm -RPM2RPKMTranscript " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.count.txt " + sampleName + ".exon.htseq.length.txt\n");
+							//string_buffer.append("drppm -RawCount2RPM " + sampleName + ".exon.htseq.length.txt " + sampleName + ".exon.htseq.tpm.txt\n");
+							
+							//string_buffer.append("drppm -EnsemblGeneIDAppendAnnotation " + sampleName + ".exon.htseq.count.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.count.annotation.txt\n");
+							//string_buffer.append("drppm -EnsemblGeneIDAppendAnnotation " + sampleName + ".exon.htseq.cpm.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.cpm.annotation.txt\n");
+							//string_buffer.append("drppm -EnsemblGeneIDAppendAnnotation " + sampleName + ".exon.htseq.tpm.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.tpm.annotation.txt\n");
+							//string_buffer.append("drppm -EnsemblGeneIDAppendAnnotation " + sampleName + ".exon.htseq.fpkm.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.fpkm.annotation.txt\n");
+
+							//string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".exon.htseq.count.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.count.geneName.txt\n");
+							//string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".exon.htseq.cpm.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.cpm.geneName.txt\n");
+							//string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".exon.htseq.tpm.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.tpm.geneName.txt\n");
+							//string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".exon.htseq.fpkm.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.fpkm.geneName.txt\n");
+							//string_buffer.append("drppm -MergeGeneName " + sampleName + ".exon.htseq.fpkm.ganeName.txt MAX " + sampleName + ".exon.htseq.fpkm.geneName.max.txt\n");
+							//string_buffer.append("drppm -MergeGeneName " + sampleName + ".exon.htseq.cpm.ganeName.txt MAX " + sampleName + ".exon.htseq.cpm.geneName.max.txt\n");
+							//string_buffer.append("drppm -MergeGeneName " + sampleName + ".exon.htseq.tpm.ganeName.txt MAX " + sampleName + ".exon.htseq.tpm.geneName.max.txt\n");
+							
+							string_buffer.append("cd " + current_working_dir + "\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level/*" + " " + outputFolder + "/" + sampleName + "/htseq_exon_level/\n");
+							string_buffer.append("## END HTSEQ Exon Quant ##\n\n");
+							string_buffer_map.put(sampleName, string_buffer);
+						}
+					}					
+				}
+			}
+
 			// finally write out the shell script
 			itr = sampleName_linkedList.iterator();
 			while (itr.hasNext()) {

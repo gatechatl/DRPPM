@@ -19,7 +19,7 @@ public class AlternativeJuncGTFFileGenerator {
 		return "Generate the exon GTF file for the htseq quantification.\n";
 	}
 	public static String parameter_info() {
-		return "[inputGTFFile] [outputExonGTFFile]";
+		return "[inputGTFFile] [outputExonGTFFile] [ExonLength]";
 	}
 	public static void execute(String[] args) {
 		
@@ -27,11 +27,14 @@ public class AlternativeJuncGTFFileGenerator {
 			
 			String inputGtfFile = args[0];
 			String outputExonGTFFile = args[1];
-			
+			String outputExonLength = args[2];
 
 			FileWriter fwriter = new FileWriter(outputExonGTFFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 
+			FileWriter fwriter_exon_length = new FileWriter(outputExonLength);
+			BufferedWriter out_exon_length = new BufferedWriter(fwriter_exon_length);
+			out_exon_length.write("ExonID\tLength\n");
 			HashMap map = new HashMap();
 			FileInputStream fstream = new FileInputStream(inputGtfFile);
 			DataInputStream din = new DataInputStream(fstream);
@@ -50,6 +53,8 @@ public class AlternativeJuncGTFFileGenerator {
 						if (!map.containsKey(line)) {
 							out.write(split[0] + "\tTimExon\tgene\t" + split[3] + "\t" + split[4] + "\t" + split[5] + "\t" + split[6] + "\t" + split[7] + "\tgene_id \"" + new_gene_id + "\"\n");
 							out.write(split[0] + "\tTimExon\texon\t" + split[3] + "\t" + split[4] + "\t" + split[5] + "\t" + split[6] + "\t" + split[7] + "\tgene_id \"" + new_gene_id + "\"; transcript_id \"" + new_gene_id + "\"; gene_type \"Tim_defined\"; gene_name \"" + gene_name + "\"; transcript_type \"Tim_defined\"; transcript_name \"" + new_gene_id + "\"; exon_number 1; exon_id \"" + new_gene_id + "\"; level 1;\n");
+							int len = new Integer(split[4]) - new Integer(split[3]) + 1;
+							out_exon_length.write(new_gene_id + "\t" + len + "\n");
 							map.put(line, "");
 						}
 					}
@@ -57,6 +62,7 @@ public class AlternativeJuncGTFFileGenerator {
 			}
 			in.close();
 			out.close();
+			out_exon_length.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
