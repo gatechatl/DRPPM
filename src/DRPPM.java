@@ -284,6 +284,7 @@ import expression.matrix.tools.CalculateCorrelationMatrix;
 import expression.matrix.tools.CalculateSTATOfMatrixRow;
 import expression.matrix.tools.CombineMatrixPreCheckGeneOrderTheSame;
 import expression.matrix.tools.CombineMultipleMatrixTogether;
+import expression.matrix.tools.CombineMultipleMatrixTogetherButSkipLeftNCols;
 import expression.matrix.tools.CombineMultipleMatrixTogetherByRow;
 import expression.matrix.tools.CombineTwoMatrixWithMismatch;
 import expression.matrix.tools.CombineTwoMatrixWithMismatchDoubleGene;
@@ -629,7 +630,6 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerGenerate
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerGenerateInputSampleLst;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerPipeline;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerSortSumColumn;
-import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerSplitMatrixCandidates;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerWilcoxTestPostProcessing;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerWilcoxonTestRank;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.SummarizeNovelExonAltStartSiteMatrix;
@@ -643,6 +643,8 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExon
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
 import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
 import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
+import rnaseq.splicing.csiminer.CSIMinerPipeline;
+import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
 import rnaseq.splicing.mats308.AddGeneName2MATS;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
@@ -3749,7 +3751,18 @@ public class DRPPM {
 				}
 				CombineMultipleMatrixTogether.execute(args_remain);
 				System.exit(0);
-				// Fastq2FileListFlex
+				// CombineMultipleMatrixTogetherButSkipLeftNCols
+			} else if (type.equalsIgnoreCase("-CombineMultipleMatrixTogetherButSkipLeftNCols")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {					
+					System.out.println("drppm -CombineMultipleMatrixTogetherButSkipLeftNCols "
+							+ CombineMultipleMatrixTogetherButSkipLeftNCols.parameter_info());
+					System.out.println("Description: " + CombineMultipleMatrixTogetherButSkipLeftNCols.description());
+					System.exit(0);
+				}
+				CombineMultipleMatrixTogetherButSkipLeftNCols.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-Fastq2FileListFlex")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {					
@@ -4590,13 +4603,24 @@ public class DRPPM {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {					
 					System.out.println("drppm -JuncSalvagerSplitMatrixCandidates "
-							+ JuncSalvagerSplitMatrixCandidates.parameter_info());
-					System.out.println("Description: " + JuncSalvagerSplitMatrixCandidates.description());
+							+ CSIMinerSplitMatrixCandidates.parameter_info());
+					System.out.println("Description: " + CSIMinerSplitMatrixCandidates.description());
 					System.exit(0);
 				}
-				JuncSalvagerSplitMatrixCandidates.execute(args_remain);
+				CSIMinerSplitMatrixCandidates.execute(args_remain);
 				System.exit(0);
-				// CombineMatrixPreCheckGeneOrderTheSame
+				// CSIMinerSplitMatrixCandidates
+			} else if (type.equalsIgnoreCase("-CSIMinerSplitMatrixCandidates")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {					
+					System.out.println("drppm -CSIMinerSplitMatrixCandidates "
+							+ CSIMinerSplitMatrixCandidates.parameter_info());
+					System.out.println("Description: " + CSIMinerSplitMatrixCandidates.description());
+					System.exit(0);
+				}
+				CSIMinerSplitMatrixCandidates.execute(args_remain);
+				System.exit(0);
+				// CSIMinerSplitMatrixCandidates
 			} else if (type.equalsIgnoreCase("-CombineMatrixPreCheckGeneOrderTheSame")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {					
@@ -11585,8 +11609,18 @@ public class DRPPM {
 				}
 				CSIMinerCalculatePercentileCutoff.execute(args_remain);
 				System.exit(0);
-				// 
-			}
+				// CSIMinerPipeline 
+			} else if (type.equalsIgnoreCase("-CSIMinerPipeline")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerPipeline "
+							+ CSIMinerPipeline.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerPipeline.execute(args_remain);
+				System.exit(0);
+				//  
+			} 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

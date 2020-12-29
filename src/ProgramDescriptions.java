@@ -118,6 +118,7 @@ import expression.matrix.tools.CalculateCorrelationMatrix;
 import expression.matrix.tools.CalculateSTATOfMatrixRow;
 import expression.matrix.tools.CombineMatrixPreCheckGeneOrderTheSame;
 import expression.matrix.tools.CombineMultipleMatrixTogether;
+import expression.matrix.tools.CombineMultipleMatrixTogetherButSkipLeftNCols;
 import expression.matrix.tools.CombineMultipleMatrixTogetherByRow;
 import expression.matrix.tools.CombineTwoMatrixWithMismatch;
 import expression.matrix.tools.CombineTwoMatrixWithMismatchDoubleGene;
@@ -403,7 +404,6 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerGenerate
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerGenerateInputSampleLst;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerPipeline;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerSortSumColumn;
-import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerSplitMatrixCandidates;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerWilcoxTestPostProcessing;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.JuncSalvagerWilcoxonTestRank;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.SummarizeNovelExonAltStartSiteMatrix;
@@ -416,6 +416,8 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExon
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
 import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
 import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
+import rnaseq.splicing.csiminer.CSIMinerPipeline;
+import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
 import rnaseq.splicing.mats308.SummarizeMATSSummary;
@@ -2684,8 +2686,8 @@ public class ProgramDescriptions {
 		if (EnsemblGeneIDAppendAnnotationCoord.type().equals(type)) {
 			result += "EnsemblGeneIDAppendAnnotationCoord: " + EnsemblGeneIDAppendAnnotationCoord.description() + "\n";
 		}
-		if (JuncSalvagerSplitMatrixCandidates.type().equals(type)) {
-			result += "JuncSalvagerSplitMatrixCandidates: " + JuncSalvagerSplitMatrixCandidates.description() + "\n";
+		if (CSIMinerSplitMatrixCandidates.type().equals(type)) {
+			result += "JuncSalvagerSplitMatrixCandidates: " + CSIMinerSplitMatrixCandidates.description() + "\n";
 		}
 		if (CombineMatrixPreCheckGeneOrderTheSame.type().equals(type)) {
 			result += "CombineMatrixPreCheckGeneOrderTheSame: " + CombineMatrixPreCheckGeneOrderTheSame.description() + "\n";
@@ -2793,10 +2795,15 @@ public class ProgramDescriptions {
 		if (CSIMinerCalculatePercentileCutoff.type().equals(type)) {
 			result += "CSIMinerCalculatePercentileCutoff: " + CSIMinerCalculatePercentileCutoff.description() + "\n";
 		}
-		
+		if (CombineMultipleMatrixTogetherButSkipLeftNCols.type().equals(type)) {
+			result += "CombineMultipleMatrixTogetherButSkipLeftNCols: " + CombineMultipleMatrixTogetherButSkipLeftNCols.description() + "\n";
+		}
+		if (CSIMinerPipeline.type().equals(type)) {
+			result += "CSIMinerPipeline: " + CSIMinerPipeline.description() + "\n";
+		}
 		return result;
 	}	
 
-	public static String VERSION = "20201227A";
+	public static String VERSION = "20201229";
 	
 }

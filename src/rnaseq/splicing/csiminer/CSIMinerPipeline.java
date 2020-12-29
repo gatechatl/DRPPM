@@ -162,6 +162,19 @@ public class CSIMinerPipeline {
 			String cancer_exon_matrix_percentile = outputIntermediateFolder + "/" + CANCER_PREFIX + ".exon.matrix.percentile.txt";
 			String cancer_exon_matrix_binned = outputIntermediateFolder + "/" + CANCER_PREFIX + ".exon.matrix.binned.txt";
 
+
+			String norm_exon_matrix_gene_filter = outputIntermediateFolder + "/" + NORM_PREFIX + ".exon.matrix.genefilter.txt";
+			String norm_exon_matrix_gene_filter_precleaned = outputIntermediateFolder + "/" + NORM_PREFIX + ".exon.matrix.genefilter.precleaned.txt";
+			String norm_exon_matrix_gene_filter_cleaned = outputIntermediateFolder + "/" + NORM_PREFIX + ".exon.matrix.genefilter.cleaned.txt";
+			String norm_exon_matrix_percentile = outputIntermediateFolder + "/" + NORM_PREFIX + ".exon.matrix.percentile.txt";
+			String norm_exon_matrix_binned = outputIntermediateFolder + "/" + NORM_PREFIX + ".exon.matrix.binned.txt";
+
+			String wilcoxon_result = CANCER_PREFIX + "_" + NORM_PREFIX + "_WILCOX_RESULT.txt";
+			String meta_analysis = CANCER_PREFIX + "_" + NORM_PREFIX + "_RAW_METAANALYSIS_RESULT.txt";
+
+			String summarize_meta_analysis_result = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT.txt";
+			String summarize_weighted_meta_analysis_result = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT.txt";
+
 			StringBuffer string_buffer = new StringBuffer();
 			
 			//out.write("## bam2fastq conversion ##\n");
@@ -170,18 +183,33 @@ public class CSIMinerPipeline {
 			
 			string_buffer.append("## CSI-miner processing of cancer samples ##\n");
 			//out.write("cd " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + "\n");
-			string_buffer.append("drppm -FilterExonMatrixByGeneSymbol " + CANCER_EXON_MATRIX + " " + QUERY_GENELIST + " " + cancer_exon_matrix_gene_filter + "\n");
+			string_buffer.append("drppm -CSIMinerFilterExonMatrixByGeneSymbol " + CANCER_EXON_MATRIX + " " + QUERY_GENELIST + " " + cancer_exon_matrix_gene_filter + "\n");
 			string_buffer.append("drppm -RemoveColumnsFromMatrix " + cancer_exon_matrix_gene_filter + " 1,2,3,4,5,6 " + cancer_exon_matrix_gene_filter_precleaned + "\n");
 			string_buffer.append("drppm -SampleFilter " + cancer_exon_matrix_gene_filter_precleaned + " Annotation " + cancer_exon_matrix_gene_filter_cleaned + " no\n");
 			
 			string_buffer.append("drppm -CSIMinerCalculatePercentileCutoff " + cancer_exon_matrix_gene_filter_cleaned + " " + cancer_exon_matrix_percentile + " " + cancer_exon_matrix_binned + "\n");
 			
+			string_buffer.append("drppm -CSIMinerSplitMatrixCandidates " + cancer_exon_matrix_gene_filter_cleaned + " " + CANCER_SAMPLE2DISEASETYPE + " " + CANCER_PREFIX + "\n");
+			
+			string_buffer.append("drppm -CSIMinerFilterExonMatrixByGeneSymbol " + NORM_EXON_MATRIX + " " + QUERY_GENELIST + " " + norm_exon_matrix_gene_filter + "\n");
+			string_buffer.append("drppm -RemoveColumnsFromMatrix " + norm_exon_matrix_gene_filter + " 1,2,3,4,5,6 " + norm_exon_matrix_gene_filter_precleaned + "\n");
+			string_buffer.append("drppm -SampleFilter " + norm_exon_matrix_gene_filter_precleaned + " Annotation " + norm_exon_matrix_gene_filter_cleaned + " no\n");
+			
+			string_buffer.append("drppm -CSIMinerCalculatePercentileCutoff " + norm_exon_matrix_gene_filter_cleaned + " " + norm_exon_matrix_percentile + " " + norm_exon_matrix_binned + "\n");
+			string_buffer.append("drppm -CSIMinerSplitMatrixCandidates " + norm_exon_matrix_gene_filter_cleaned + " " + NORM_SAMPLE2TISSUETYPE + " " + NORM_PREFIX + "\n");
+			string_buffer.append("drppm -JuncSalvagerWilcoxonTestRank " + CANCER_PREFIX + " " + CANCER_SAMPLE2DISEASETYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + wilcoxon_result + " " + meta_analysis + "\n");
+			string_buffer.append("drppm -JuncSalvagerWilcoxTestPostProcessing " + wilcoxon_result + " " + CANCER_PREFIX + " " + CANCER_SAMPLE2DISEASETYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + summarize_meta_analysis_result + " " + summarize_weighted_meta_analysis_result + "\n");
+			
+			// need to generate plots and other stuff
+			
 			
 			//out.write("drppm -Bam2Fastq " + sampleName + "_bam_file.lst bam2fastq.sh" + "\n");
 			
 			string_buffer.append("## end CSI-miner processing ##\n\n");								
-			
-			
+
+			// finally write out the shell script
+			out.write(string_buffer.toString());
+			out.close();
  
 		} catch (Exception e) {
 			e.printStackTrace();
