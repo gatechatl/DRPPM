@@ -123,16 +123,19 @@ public class GTFAnnotateExonLength {
 				String transcripts = "";
 				LinkedList list = (LinkedList)geneID2transcript.get(geneID);
 				int total = 0;
+				int count_good_list = 0;
 				Iterator itr2 = list.iterator();
 				while (itr2.hasNext()) {
 					String transcript_id = (String)itr2.next();
-					
-					int transcript_len = (Integer)transcript_length.get(transcript_id); 
-					transcripts += transcript_id + "(" + transcript_len + "),";
-					total += transcript_len;
+					if (transcript_length.containsKey(transcript_id)) {
+						int transcript_len = (Integer)transcript_length.get(transcript_id); 
+						transcripts += transcript_id + "(" + transcript_len + "),";
+						total += transcript_len;
+						count_good_list++;
+					}
 				}
 				//out_geneID.write(geneID + "\t" + (total / list.size()) + "\t" + total + "\t" + list.size() + "\t" + transcripts + "\n");
-				out_geneID.write(geneID + "\t" + (total / list.size()) + "\n");
+				out_geneID.write(geneID + "\t" + (total / count_good_list) + "\n");
 			}
 			out_geneID.close();
 			
@@ -142,12 +145,16 @@ public class GTFAnnotateExonLength {
 				String geneName = (String)itr.next();
 				LinkedList list = (LinkedList)geneName2transcript.get(geneName);
 				int total = 0;
+				int count_good_list = 0;
 				Iterator itr2 = list.iterator();
 				while (itr2.hasNext()) {
 					String transcript_id = (String)itr2.next();
-					total += (Integer)transcript_length.get(transcript_id);
+					if (transcript_length.containsKey(transcript_id)) {
+						total += (Integer)transcript_length.get(transcript_id);
+						count_good_list++;
+					}
 				}
-				out_geneName.write(geneName + "\t" + (total / list.size()) + "\n");
+				out_geneName.write(geneName + "\t" + (total / count_good_list) + "\n");
 			}
 			out_geneName.close();
 			
