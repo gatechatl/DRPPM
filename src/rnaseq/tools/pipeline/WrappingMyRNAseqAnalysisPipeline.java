@@ -502,7 +502,44 @@ public class WrappingMyRNAseqAnalysisPipeline {
 					}			
 				}			
 		
+			} else { // generate a STAR like folder that includes the mapped bam files
+				// we need to generate a folder and assumes the input is STAR input
+				itr = sampleName_linkedList.iterator();
+				while (itr.hasNext()) {
+					String sampleName = (String)itr.next();
+					String bam_file = (String)bam_path_map.get(sampleName);
+					
+					String star_folder = outputFolder + "/" + sampleName + "/star";
+					File star_folder_f = new File(star_folder);
+					if (!star_folder_f.exists()) {
+						star_folder_f.mkdir();
+					}
+					String bam_file_path = outputFolder + "/" + sampleName + "/star/" + sampleName + ".STAR.Aligned.sortedByCoord.out.bam";
+					
+					StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
+					string_buffer.append("## Soft linking the bam files to the output star folder ##\n");					
+					string_buffer.append("ln -s " + bam_file + " " + bam_file_path + "\n");
+					
+					
+					if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
+						bam_path_map.put(sampleName, bam_file_path);
+					} else {
+						bam_path_map.put(sampleName, "NA");
+					}
+					if ((new File(bam_file.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"))).exists()) {
+						String orig_sj_tab = bam_file.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab");
+						String new_sj_tab = bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab");						
+						string_buffer.append("ln -s " + orig_sj_tab + " " + new_sj_tab + "\n");
+						sj_path_map.put(sampleName, bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"));
+						
+					} else {						
+						sj_path_map.put(sampleName, "NA");
+					}
+					
+				}
 			}
+			
+			
 			
 			// check if we need to reindex the bam files ...
 			
