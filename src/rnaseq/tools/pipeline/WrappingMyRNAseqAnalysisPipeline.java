@@ -701,7 +701,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				if (sj_path_map.containsKey(sampleName)) {
 					String sj_file_path = (String)sj_path_map.get(sampleName);
 					String sj_bam_path = (String)bam_path_map.get(sampleName);
-					if ((new File(sj_file_path)).exists() && (new File(sj_bam_path)).exists()) {
+					if (((new File(sj_file_path)).exists() && (new File(sj_bam_path)).exists()) || remapping || type.equalsIgnoreCase("FASTQ")) {
 						String juncsalvager_folder = outputFolder + "/" + sampleName + "/juncsalvager";
 						File JuncSalvager_folder_f = new File(juncsalvager_folder);
 						if (!JuncSalvager_folder_f.exists()) {
@@ -753,7 +753,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				if (bam_path_map.containsKey(sampleName)) {
 					String bam_file_path = (String)bam_path_map.get(sampleName);
 					
-					if ((new File(bam_file_path)).exists()) {
+					if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
 						String htseq_gene_level_folder = outputFolder + "/" + sampleName + "/htseq_gene_level";
 						File htseq_gene_level_folder_f = new File(htseq_gene_level_folder);
 						if (!htseq_gene_level_folder_f.exists()) {
@@ -829,7 +829,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				if (bam_path_map.containsKey(sampleName)) {
 					String bam_file_path = (String)bam_path_map.get(sampleName);
 					
-					if ((new File(bam_file_path)).exists()) {
+					if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
 						String htseq_exon_level_folder = outputFolder + "/" + sampleName + "/htseq_exon_level";
 						File htseq_exon_level_folder_f = new File(htseq_exon_level_folder);
 						if (!htseq_exon_level_folder_f.exists()) {
