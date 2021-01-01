@@ -473,6 +473,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							//out.write("cd " + outputIntermediateFolder + "/" + sampleName + "/star/" + "\n");
 							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/star/" + "\n");
 							//out.write("drppm -JinghuiZhangSTARMappingFromYaweiUpdated " + sampleName_fq_star_lst + " " + STAR_INDEX_DIR + " 4 step2_execute.sh false" + "\n");
+							
 							string_buffer.append("drppm -JinghuiZhangSTARMappingFromYaweiUpdated " + sampleName_fq_star_lst + " " + STAR_INDEX_DIR + " 4 step2_execute.sh false" + "\n");
 							//out.write("sh step2_execute.sh\n");
 							string_buffer.append("sh step2_execute.sh\n");

@@ -101,6 +101,8 @@ public class JinghuiZhangSTARMappingFromYaweiUpdated {
 		line += "     --limitBAMsortRAM 100672447591\\\n";
 		if (gzip_flag) {
 			line += "     --readFilesCommand zcat\\\n";
+		} else if (inputR1.endsWith("gz") && inputR2.endsWith("gz")) {
+			line += "     --readFilesCommand zcat\\\n";
 		}
 		return line;
 	}
