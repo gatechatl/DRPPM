@@ -1,5 +1,7 @@
 package rnaseq.splicing.csiminer;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -21,6 +23,16 @@ import idconversion.tools.GTFFile;
 public class CSIMinerAnnotateExonBasedOnTheSpliceGraph {
 
 	
+	public static String type() {
+		return "CSI-Miner";
+	}
+	public static String description() {
+		return "Grab the surrounding exons that contains a different isoform for the same gene.";
+	}
+	public static String parameter_info() {
+		return "[inputGTFFile] [query_exon] [outputSplicingHotspot]";
+	}
+	
 	public static void execute(String[] args) {
 		
 		try {
@@ -28,6 +40,9 @@ public class CSIMinerAnnotateExonBasedOnTheSpliceGraph {
 			String inputGTFFile = args[0]; // assumes the gtf is in order
 			String query_exon = args[1];
 			String outputSplicingHotspot = args[2];
+			
+			FileWriter fwriter = new FileWriter(outputSplicingHotspot);
+			BufferedWriter out = new BufferedWriter(fwriter);
 			
 			GTFFile gtf = new GTFFile();
 			gtf.initialize(inputGTFFile);
@@ -164,10 +179,17 @@ public class CSIMinerAnnotateExonBasedOnTheSpliceGraph {
 				}
 			}
 			
-			/*Iterator itr = (String)exon_candidates.iterator();
+			int count = exon_candidates.size();
+			
+			String exons = "";
+			Iterator itr = exon_candidates.iterator();
 			while (itr.hasNext()) {
-				
-			}*/
+				String exon = (String)itr.next();
+				exons += exon + ",";
+			}
+			out.write(query_exon + "\t" + count + "\t" + up_stream_exon + "\t" + down_stream_exon + "\t" + exons + "\n");
+			
+			out.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

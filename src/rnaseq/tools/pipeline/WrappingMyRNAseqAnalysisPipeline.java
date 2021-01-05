@@ -551,6 +551,33 @@ public class WrappingMyRNAseqAnalysisPipeline {
 						sj_path_map.put(sampleName, "NA");
 					}
 					
+					if ((new File(bam_file.replaceAll(".Aligned.sortedByCoord.out.bam", ".Log.final.out"))).exists()) {
+						String orig_log_final_out = bam_file.replaceAll(".Aligned.sortedByCoord.out.bam", ".Log.final.out");
+						String new_log_final_out = bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".Log.final.out");						
+						//string_buffer.append("ln -s " + orig_sj_tab + " " + new_sj_tab + "\n");
+						//sj_path_map.put(sampleName, bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"));
+						if (!new File(new_log_final_out).exists()) {					
+							CommandLine.executeCommand("ln -s " + orig_log_final_out + " " + new_log_final_out);
+						}						
+					}
+					if ((new File(bam_file.replaceAll(".Aligned.sortedByCoord.out.bam", ".Chimeric.out.junction"))).exists()) {
+						String orig_chimeric_tab = bam_file.replaceAll(".Aligned.sortedByCoord.out.bam", ".Chimeric.out.junction");
+						String new_chimeric_tab = bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".Chimeric.out.junction");						
+						//string_buffer.append("ln -s " + orig_sj_tab + " " + new_sj_tab + "\n");
+						//sj_path_map.put(sampleName, bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"));
+						if (!new File(new_chimeric_tab).exists()) {					
+							CommandLine.executeCommand("ln -s " + orig_chimeric_tab + " " + new_chimeric_tab);
+						}						
+					}
+					if ((new File(bam_file.replaceAll(".Aligned.sortedByCoord.out.bam", ".ReadsPerGene.out.tab"))).exists()) {
+						String orig_readspergene_tab = bam_file.replaceAll(".Aligned.sortedByCoord.out.bam", ".ReadsPerGene.out.tab");
+						String new_readspergene_tab = bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".ReadsPerGene.out.tab");						
+						//string_buffer.append("ln -s " + orig_sj_tab + " " + new_sj_tab + "\n");
+						//sj_path_map.put(sampleName, bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"));
+						if (!new File(new_readspergene_tab).exists()) {					
+							CommandLine.executeCommand("ln -s " + orig_readspergene_tab + " " + new_readspergene_tab);
+						}						
+					}
 				}
 			}
 			

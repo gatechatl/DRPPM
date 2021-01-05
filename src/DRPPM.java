@@ -641,6 +641,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvager5pri
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
+import rnaseq.splicing.csiminer.CSIMinerAnnotateExonBasedOnTheSpliceGraph;
 import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
 import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
@@ -11610,6 +11611,16 @@ public class DRPPM {
 				CSIMinerCalculatePercentileCutoff.execute(args_remain);
 				System.exit(0);
 				// CSIMinerPipeline 
+			} else if (type.equalsIgnoreCase("-CSIMinerAnnotateExonBasedOnTheSpliceGraph")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerAnnotateExonBasedOnTheSpliceGraph "
+							+ CSIMinerAnnotateExonBasedOnTheSpliceGraph.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerAnnotateExonBasedOnTheSpliceGraph.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-CSIMinerPipeline")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
@@ -11619,7 +11630,7 @@ public class DRPPM {
 				}
 				CSIMinerPipeline.execute(args_remain);
 				System.exit(0);
-				//  
+				// CSIMinerAnnotateExonBasedOnTheSpliceGraph
 			} 
 		} catch (Exception e) {
 			e.printStackTrace();
