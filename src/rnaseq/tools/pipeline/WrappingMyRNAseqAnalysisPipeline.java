@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import mappingtools.Bam2Fastq;
+import misc.CommandLine;
 
 /**
  * Generates the entire script for the RNAseq analysis pipeline.
@@ -518,10 +519,11 @@ public class WrappingMyRNAseqAnalysisPipeline {
 					String bam_file_path = outputFolder + "/" + sampleName + "/star/" + sampleName + ".STAR.Aligned.sortedByCoord.out.bam";
 					
 					StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
-					string_buffer.append("## Soft linking the bam files to the output star folder ##\n");					
-					string_buffer.append("ln -s " + bam_file + " " + bam_file_path + "\n");
-					
-					
+					//string_buffer.append("## Soft linking the bam files to the output star folder ##\n");					
+					//string_buffer.append("ln -s " + bam_file + " " + bam_file_path + "\n");
+					if (!new File(bam_file_path).exists()) {					
+						CommandLine.executeCommand("ln -s " + bam_file + " " + bam_file_path);
+					}
 					if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
 						bam_path_map.put(sampleName, bam_file_path);
 					} else {
@@ -530,8 +532,11 @@ public class WrappingMyRNAseqAnalysisPipeline {
 					if ((new File(bam_file.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"))).exists()) {
 						String orig_sj_tab = bam_file.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab");
 						String new_sj_tab = bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab");						
-						string_buffer.append("ln -s " + orig_sj_tab + " " + new_sj_tab + "\n");
-						sj_path_map.put(sampleName, bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"));
+						//string_buffer.append("ln -s " + orig_sj_tab + " " + new_sj_tab + "\n");
+						//sj_path_map.put(sampleName, bam_file_path.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"));
+						if (!new File(new_sj_tab).exists()) {					
+							CommandLine.executeCommand("ln -s " + orig_sj_tab + " " + new_sj_tab);
+						}
 						
 					} else {						
 						sj_path_map.put(sampleName, "NA");

@@ -15,11 +15,13 @@ public class GTFFile {
 	public static HashMap geneid_clean2geneName = new HashMap();
 	public static HashMap gene2transcript = new HashMap();
 	public static HashMap exon2transcript = new HashMap();
+	public static HashMap coord_exon2transcript = new HashMap();
 	public static HashMap transcript2gene = new HashMap();
 	public static HashMap transcript_clean2gene_clean = new HashMap();
 	public static HashMap transcript_clean2gene = new HashMap();
-	
+
 	public static HashMap transcript2exon = new HashMap();
+	public static HashMap transcript2coord_exon = new HashMap();
 	public static HashMap geneid2biotype = new HashMap();
 	public static HashMap geneName2biotype = new HashMap();
 	public static HashMap geneName2geneID = new HashMap();
@@ -154,6 +156,16 @@ public class GTFFile {
 					} else {
 						exon2transcript.put(new_exon, transcript_id);
 					}
+					
+					String new_coord_exon = "CHR" + chr + ":" + start + "-" + end + ":" + direct;					
+					if (coord_exon2transcript.containsKey(new_coord_exon)) {
+						String orig_transcript = (String)coord_exon2transcript.get(new_coord_exon);
+						orig_transcript += "," + transcript_id;
+						coord_exon2transcript.put(new_coord_exon, orig_transcript);
+					} else {
+						coord_exon2transcript.put(new_coord_exon, transcript_id);
+					}
+					
 					if (split[2].equals("exon")) {
 						if (transcript2exon.containsKey(transcript_id)) {
 							String orig_exon = (String)transcript2exon.get(transcript_id);
@@ -161,6 +173,16 @@ public class GTFFile {
 							transcript2exon.put(transcript_id, orig_exon);
 						} else {
 							transcript2exon.put(transcript_id, new_exon);
+						}
+					}
+					
+					if (split[2].equals("exon")) {
+						if (transcript2coord_exon.containsKey(transcript_id)) {
+							String orig_coord_exon = (String)transcript2coord_exon.get(transcript_id);
+							orig_coord_exon += "," + new_coord_exon;
+							transcript2coord_exon.put(transcript_id, orig_coord_exon);
+						} else {
+							transcript2coord_exon.put(transcript_id, new_coord_exon);
 						}
 					}
 				}
