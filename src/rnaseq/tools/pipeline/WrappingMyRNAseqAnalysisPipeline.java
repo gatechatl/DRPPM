@@ -524,6 +524,15 @@ public class WrappingMyRNAseqAnalysisPipeline {
 					if (!new File(bam_file_path).exists()) {					
 						CommandLine.executeCommand("ln -s " + bam_file + " " + bam_file_path);
 					}
+					if (!new File(bam_file_path + ".bai").exists()) {
+						if (new File(bam_file + ".bai").exists()) {
+							CommandLine.executeCommand("ln -s " + bam_file + ".bai" + " " + bam_file_path + ".bai");
+						} else {
+							string_buffer.append("## generate samtools index of the bam file ##\n");
+							string_buffer.append("samtools index " + bam_file_path + "\n");
+							string_buffer.append("## END generating bam index ##\n\n");
+						}
+					}
 					if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
 						bam_path_map.put(sampleName, bam_file_path);
 					} else {
