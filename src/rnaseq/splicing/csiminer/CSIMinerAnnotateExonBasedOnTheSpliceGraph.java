@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import idconversion.tools.GTFFile;
+import idconversion.tools.GTFFileExon;
 
 /**
  * Examine whether there are known differentiated isoforms capturing the exon of interest. Output a true false table with annotation with other differentiated exons.
@@ -38,15 +39,17 @@ public class CSIMinerAnnotateExonBasedOnTheSpliceGraph {
 		try {
 			
 			String inputGTFFile = args[0]; // assumes the gtf is in order
-			String query_exon = args[1];
+			String query_exon = "CHR" + args[1];
 			String outputSplicingHotspot = args[2];
 			
 			FileWriter fwriter = new FileWriter(outputSplicingHotspot);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			
-			GTFFile gtf = new GTFFile();
+			GTFFileExon gtf = new GTFFileExon();
 			gtf.initialize(inputGTFFile);
 	
+			System.out.println("Finish loading GTF file");
+			
 			HashMap exon_terminal = new HashMap();
 			HashMap exon2upstream = new HashMap();
 			HashMap exon2downstream = new HashMap();
