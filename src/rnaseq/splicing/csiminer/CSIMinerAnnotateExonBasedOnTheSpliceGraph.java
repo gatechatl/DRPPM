@@ -56,9 +56,22 @@ public class CSIMinerAnnotateExonBasedOnTheSpliceGraph {
 			
 			String direction = query_exon.split(":")[2];
 			// find the transcript for the query exon
-			String transcript_id = (String)gtf.coord_exon2transcript.get(query_exon);
-			String gene_id = (String)gtf.transcript2gene.get(transcript_id);
-			String transcript_ids = (String)gtf.gene2transcript.get(gene_id);
+			
+			System.out.println("query_exon: " + query_exon);
+			String transcript_ids = "NA";
+			if (gtf.coord_exon2transcript.containsKey(query_exon)) {
+				transcript_ids = (String)gtf.coord_exon2transcript.get(query_exon);
+			} 
+			System.out.println("transcript_id: " + transcript_ids);
+			String gene_id = "NA";
+			if (gtf.transcript2gene.containsKey(transcript_ids.split(",")[0])) {
+				gene_id = (String)gtf.transcript2gene.get(transcript_ids.split(",")[0]);
+			}
+			System.out.println("gene_id: " + gene_id);
+			if (gtf.gene2transcript.containsKey(gene_id)) {
+				transcript_ids = (String)gtf.gene2transcript.get(gene_id);
+			}
+			System.out.println("All transcript in this gene: " + transcript_ids);
 									
 			for (String transcript: transcript_ids.split(",")) {
 				

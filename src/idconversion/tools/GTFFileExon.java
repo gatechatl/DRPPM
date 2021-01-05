@@ -86,7 +86,7 @@ public class GTFFileExon {
 					transcript2gene.put(transcript_id, gene_id);
 
 					// the tag for the exon
-					String new_exon = "CHR" + chr + ":" + start + "-" + end + ":" + direct + ":" + exon_number;
+					String new_exon = chr + ":" + start + "-" + end + ":" + direct + ":" + exon_number;
 					
 					if (exon2transcript.containsKey(new_exon)) {
 						String orig_transcript = (String)exon2transcript.get(new_exon);
@@ -96,7 +96,7 @@ public class GTFFileExon {
 						exon2transcript.put(new_exon, transcript_id);
 					}
 					
-					String new_coord_exon = "CHR" + chr + ":" + start + "-" + end + ":" + direct;					
+					String new_coord_exon = chr + ":" + start + "-" + end + ":" + direct;					
 					if (coord_exon2transcript.containsKey(new_coord_exon)) {
 						String orig_transcript = (String)coord_exon2transcript.get(new_coord_exon);
 						orig_transcript += "," + transcript_id;
