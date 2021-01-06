@@ -122,7 +122,7 @@ public class CSIMinerAnnotateExonBasedOnTheSpliceGraph {
 					String[] split_coord_exons = coord_exons.split(",");
 					for (int i = split_coord_exons.length - 1; i >= 0; i--) {
 						String current_exon = split_coord_exons[i];
-						
+						System.out.println("check current_exonin " + transcript + ": " + current_exon);
 						// upstream exon
 						if (i + 1 < split_coord_exons.length) {
 							String prev_exon = split_coord_exons[i + 1];
