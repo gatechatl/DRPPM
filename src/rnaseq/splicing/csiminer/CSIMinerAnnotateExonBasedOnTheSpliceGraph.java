@@ -80,10 +80,11 @@ public class CSIMinerAnnotateExonBasedOnTheSpliceGraph {
 					String[] split_coord_exons = coord_exons.split(",");
 					for (int i = 0; i < split_coord_exons.length; i++) {
 						String current_exon = split_coord_exons[i];
-						
+						System.out.println("iterating through exon check current_exonin " + transcript + ": " + current_exon);
 						// downstream exon
 						if (i + 1 < split_coord_exons.length) {
 							String next_exon = split_coord_exons[i + 1];
+							
 							if (exon2downstream.containsKey(current_exon)) {
 								LinkedList next_exon_list = (LinkedList)exon2downstream.get(current_exon);
 								if (!next_exon_list.contains(next_exon)) {
@@ -122,7 +123,7 @@ public class CSIMinerAnnotateExonBasedOnTheSpliceGraph {
 					String[] split_coord_exons = coord_exons.split(",");
 					for (int i = split_coord_exons.length - 1; i >= 0; i--) {
 						String current_exon = split_coord_exons[i];
-						System.out.println("check current_exonin " + transcript + ": " + current_exon);
+						System.out.println("iterating through exon check current_exonin " + transcript + ": " + current_exon);
 						// upstream exon
 						if (i + 1 < split_coord_exons.length) {
 							String prev_exon = split_coord_exons[i + 1];
@@ -220,9 +221,9 @@ public class CSIMinerAnnotateExonBasedOnTheSpliceGraph {
 			while (itr.hasNext()) {
 				String up_stream_exon = (String)itr.next();
 				LinkedList downstream_exon_list = (LinkedList)exon2downstream.get(up_stream_exon);
-				if (downstream_exon_list.size() > 1) {
-					return up_stream_exon;
-				}
+				//if (downstream_exon_list.size() > 1) {
+				//	return up_stream_exon;
+				//}
 				String candidate = find_up_stream_exons(exon2upstream, exon2downstream, up_stream_exon);
 				if (!up_stream_candidates.contains(candidate)) {
 					up_stream_candidates.add(candidate);
@@ -265,9 +266,9 @@ public class CSIMinerAnnotateExonBasedOnTheSpliceGraph {
 			while (itr.hasNext()) {
 				String down_stream_exon = (String)itr.next();
 				LinkedList upstream_exon_list = (LinkedList)exon2downstream.get(down_stream_exon);
-				if (upstream_exon_list.size() > 1) {
-					return down_stream_exon;
-				}
+				//if (upstream_exon_list.size() > 1) {
+				//	return down_stream_exon;
+				//}
 				String candidate = find_down_stream_exons(exon2upstream, exon2downstream, down_stream_exon);
 				if (!down_stream_candidates.contains(candidate)) {
 					down_stream_candidates.add(candidate);
