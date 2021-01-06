@@ -211,84 +211,90 @@ public class CSIMinerAnnotateExonBasedOnTheSpliceGraph {
 		}
 	}
 	public static String find_up_stream_exons(HashMap exon2upstream, HashMap exon2downstream, String query_exon) {
-		LinkedList upstream_exon_list = (LinkedList)exon2upstream.get(query_exon);
-		String direction = query_exon.split(":")[2];
-		LinkedList up_stream_candidates = new LinkedList();
-		Iterator itr = upstream_exon_list.iterator();		
-		while (itr.hasNext()) {
-			String up_stream_exon = (String)itr.next();
-			LinkedList downstream_exon_list = (LinkedList)exon2downstream.get(up_stream_exon);
-			if (downstream_exon_list.size() > 1) {
-				return up_stream_exon;
-			}
-			String candidate = find_up_stream_exons(exon2upstream, exon2downstream, up_stream_exon);
-			if (!up_stream_candidates.contains(candidate)) {
-				up_stream_candidates.add(candidate);
-			}
-		}		
-		if (up_stream_candidates.size() == 1) {
-			return (String)up_stream_candidates.get(0);
-		} else if (up_stream_candidates.size() > 1) {		
-			if (direction.equals("+")) {
-				String return_exon = (String)up_stream_candidates.get(0);
-				for (int i = 1; i < up_stream_candidates.size() - 1; i++) {
-					String test_exon = (String)up_stream_candidates.get(i);
-					if (isExon1LowerThanExon2(test_exon, return_exon)) {
-						return_exon = test_exon;
-					}
-				}			
-				return return_exon;
-			} else if (direction.equals("-")) {
-				String return_exon = (String)up_stream_candidates.get(0);
-				for (int i = 1; i < up_stream_candidates.size() - 1; i++) {
-					String test_exon = (String)up_stream_candidates.get(i);
-					if (isExon2HigherThanExon1(return_exon, test_exon)) {
-						return_exon = test_exon;
-					}
-				}			
-				return return_exon;
+		System.out.println("up_stream_exon: " + query_exon);
+		if (exon2upstream.containsKey(query_exon)) {
+			LinkedList upstream_exon_list = (LinkedList)exon2upstream.get(query_exon);
+			String direction = query_exon.split(":")[2];
+			LinkedList up_stream_candidates = new LinkedList();
+			Iterator itr = upstream_exon_list.iterator();		
+			while (itr.hasNext()) {
+				String up_stream_exon = (String)itr.next();
+				LinkedList downstream_exon_list = (LinkedList)exon2downstream.get(up_stream_exon);
+				if (downstream_exon_list.size() > 1) {
+					return up_stream_exon;
+				}
+				String candidate = find_up_stream_exons(exon2upstream, exon2downstream, up_stream_exon);
+				if (!up_stream_candidates.contains(candidate)) {
+					up_stream_candidates.add(candidate);
+				}
+			}		
+			if (up_stream_candidates.size() == 1) {
+				return (String)up_stream_candidates.get(0);
+			} else if (up_stream_candidates.size() > 1) {		
+				if (direction.equals("+")) {
+					String return_exon = (String)up_stream_candidates.get(0);
+					for (int i = 1; i < up_stream_candidates.size() - 1; i++) {
+						String test_exon = (String)up_stream_candidates.get(i);
+						if (isExon1LowerThanExon2(test_exon, return_exon)) {
+							return_exon = test_exon;
+						}
+					}			
+					return return_exon;
+				} else if (direction.equals("-")) {
+					String return_exon = (String)up_stream_candidates.get(0);
+					for (int i = 1; i < up_stream_candidates.size() - 1; i++) {
+						String test_exon = (String)up_stream_candidates.get(i);
+						if (isExon2HigherThanExon1(return_exon, test_exon)) {
+							return_exon = test_exon;
+						}
+					}			
+					return return_exon;
+				}
 			}
 		}
 		return "NA";
 	}
 	
 	public static String find_down_stream_exons(HashMap exon2upstream, HashMap exon2downstream, String query_exon) {
-		LinkedList downstream_exon_list = (LinkedList)exon2downstream.get(query_exon);
-		String direction = query_exon.split(":")[2];
-		LinkedList down_stream_candidates = new LinkedList();
-		Iterator itr = downstream_exon_list.iterator();		
-		while (itr.hasNext()) {
-			String down_stream_exon = (String)itr.next();
-			LinkedList upstream_exon_list = (LinkedList)exon2downstream.get(down_stream_exon);
-			if (upstream_exon_list.size() > 1) {
-				return down_stream_exon;
-			}
-			String candidate = find_down_stream_exons(exon2upstream, exon2downstream, down_stream_exon);
-			if (!down_stream_candidates.contains(candidate)) {
-				down_stream_candidates.add(candidate);
-			}
-		}		
-		if (down_stream_candidates.size() == 1) {
-			return (String)down_stream_candidates.get(0);
-		} else if (down_stream_candidates.size() > 1) {		
-			if (direction.equals("-")) {
-				String return_exon = (String)down_stream_candidates.get(0);
-				for (int i = 1; i < down_stream_candidates.size() - 1; i++) {
-					String test_exon = (String)down_stream_candidates.get(i);
-					if (isExon1LowerThanExon2(test_exon, return_exon)) {
-						return_exon = test_exon;
-					}
-				}			
-				return return_exon;
-			} else if (direction.equals("+")) {
-				String return_exon = (String)down_stream_candidates.get(0);
-				for (int i = 1; i < down_stream_candidates.size() - 1; i++) {
-					String test_exon = (String)down_stream_candidates.get(i);
-					if (isExon2HigherThanExon1(return_exon, test_exon)) {
-						return_exon = test_exon;
-					}
-				}			
-				return return_exon;
+		System.out.println("down_stream_exon: " + query_exon);
+		if (exon2downstream.containsKey(query_exon)) {
+			LinkedList downstream_exon_list = (LinkedList)exon2downstream.get(query_exon);
+			String direction = query_exon.split(":")[2];
+			LinkedList down_stream_candidates = new LinkedList();
+			Iterator itr = downstream_exon_list.iterator();		
+			while (itr.hasNext()) {
+				String down_stream_exon = (String)itr.next();
+				LinkedList upstream_exon_list = (LinkedList)exon2downstream.get(down_stream_exon);
+				if (upstream_exon_list.size() > 1) {
+					return down_stream_exon;
+				}
+				String candidate = find_down_stream_exons(exon2upstream, exon2downstream, down_stream_exon);
+				if (!down_stream_candidates.contains(candidate)) {
+					down_stream_candidates.add(candidate);
+				}
+			}		
+			if (down_stream_candidates.size() == 1) {
+				return (String)down_stream_candidates.get(0);
+			} else if (down_stream_candidates.size() > 1) {		
+				if (direction.equals("-")) {
+					String return_exon = (String)down_stream_candidates.get(0);
+					for (int i = 1; i < down_stream_candidates.size() - 1; i++) {
+						String test_exon = (String)down_stream_candidates.get(i);
+						if (isExon1LowerThanExon2(test_exon, return_exon)) {
+							return_exon = test_exon;
+						}
+					}			
+					return return_exon;
+				} else if (direction.equals("+")) {
+					String return_exon = (String)down_stream_candidates.get(0);
+					for (int i = 1; i < down_stream_candidates.size() - 1; i++) {
+						String test_exon = (String)down_stream_candidates.get(i);
+						if (isExon2HigherThanExon1(return_exon, test_exon)) {
+							return_exon = test_exon;
+						}
+					}			
+					return return_exon;
+				}
 			}
 		}
 		return "NA";

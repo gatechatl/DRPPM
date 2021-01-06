@@ -78,7 +78,9 @@ public class GTFFileExon {
 					
 					if (gene2transcript.containsKey(gene_id)) {
 						String orig_transcript = (String)gene2transcript.get(gene_id);
-						orig_transcript += "," + transcript_id;
+						if (!orig_transcript.contains(transcript_id)) {
+							orig_transcript += "," + transcript_id;
+						}
 						gene2transcript.put(gene_id, orig_transcript);
 					} else {
 						gene2transcript.put(gene_id, transcript_id);
@@ -90,7 +92,9 @@ public class GTFFileExon {
 					
 					if (exon2transcript.containsKey(new_exon)) {
 						String orig_transcript = (String)exon2transcript.get(new_exon);
-						orig_transcript += "," + transcript_id;
+						if (!orig_transcript.contains(transcript_id)) {
+							orig_transcript += "," + transcript_id;
+						}
 						exon2transcript.put(new_exon, orig_transcript);
 					} else {
 						exon2transcript.put(new_exon, transcript_id);
@@ -99,7 +103,9 @@ public class GTFFileExon {
 					String new_coord_exon = chr + ":" + start + "-" + end + ":" + direct;					
 					if (coord_exon2transcript.containsKey(new_coord_exon)) {
 						String orig_transcript = (String)coord_exon2transcript.get(new_coord_exon);
-						orig_transcript += "," + transcript_id;
+						if (!orig_transcript.contains(transcript_id)) {
+							orig_transcript += "," + transcript_id;
+						}
 						coord_exon2transcript.put(new_coord_exon, orig_transcript);
 					} else {
 						coord_exon2transcript.put(new_coord_exon, transcript_id);
@@ -108,7 +114,9 @@ public class GTFFileExon {
 					if (split[2].equals("exon")) {
 						if (transcript2exon.containsKey(transcript_id)) {
 							String orig_exon = (String)transcript2exon.get(transcript_id);
-							orig_exon += "," + new_exon;
+							if (!orig_exon.contains(new_exon)) {
+								orig_exon += "," + new_exon;
+							}
 							transcript2exon.put(transcript_id, orig_exon);
 						} else {
 							transcript2exon.put(transcript_id, new_exon);
@@ -118,7 +126,9 @@ public class GTFFileExon {
 					if (split[2].equals("exon")) {
 						if (transcript2coord_exon.containsKey(transcript_id)) {
 							String orig_coord_exon = (String)transcript2coord_exon.get(transcript_id);
-							orig_coord_exon += "," + new_coord_exon;
+							if (!orig_coord_exon.contains(new_coord_exon)) {
+								orig_coord_exon += "," + new_coord_exon;
+							}
 							transcript2coord_exon.put(transcript_id, orig_coord_exon);
 						} else {
 							transcript2coord_exon.put(transcript_id, new_coord_exon);
