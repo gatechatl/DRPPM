@@ -39,7 +39,7 @@ public class CSIMinerAnnotateExonBasedOnTheSpliceGraph {
 		try {
 			
 			String inputGTFFile = args[0]; // assumes the gtf is in order
-			String query_exon = "CHR" + args[1];
+			String query_exon = args[1];
 			String outputSplicingHotspot = args[2];
 			
 			FileWriter fwriter = new FileWriter(outputSplicingHotspot);
