@@ -47,6 +47,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String PRIMARY_GTF_EXON_LENGTH = "NA";
 	private static String JUNCSALVAGER_GENELIST = "NA";
 	private static String JUNCSALVAGER_PARAM = "NA";	
+	private static String RNAEDITING_VARIANTS = "NA";
+	private static String PRIMARY_FASTA = "NA";
 	
 	private static boolean SKIP_BAM2FASTQ = false;
 	private static boolean SKIP_STAR = false;
@@ -57,6 +59,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static boolean SKIP_HTSEQ_EXON_QUANT = false;
 	private static boolean SKIP_HTSEQ_GENE = false;
 	private static boolean SKIP_JUNCSALVAGER = false;
+	private static boolean SKIP_RNAEDIT = false;
+	private static boolean SKIP_KNOWNVARIANTS = false;
+	private static boolean SKIP_RNAINDEL = false;
 	
 	public static void execute(String[] args) {
 		
@@ -84,9 +89,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			
 			FileWriter fwriter = new FileWriter(outputShellScript);
 			BufferedWriter out = new BufferedWriter(fwriter);						
-			
-			
-			
+								
 			// parsing the runtime config file
 			FileInputStream fstream = new FileInputStream(runtime_config_file);
 			DataInputStream din = new DataInputStream(fstream);
@@ -125,11 +128,17 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (split[0].equalsIgnoreCase("PRIMARY_GTF_EXON_REF")) {
 								PRIMARY_GTF_EXON_REF = split[1];
 							}
+							if (split[0].equalsIgnoreCase("PRIMARY_FASTA")) {
+								PRIMARY_FASTA = split[1];
+							}
 							if (split[0].equalsIgnoreCase("JUNCSALVAGER_GENELIST")) {
 								JUNCSALVAGER_GENELIST = split[1];
 							}
 							if (split[0].equalsIgnoreCase("PRIMARY_GTF_EXON_LENGTH")) {
 								PRIMARY_GTF_EXON_LENGTH = split[1];
+							}
+							if (split[0].equalsIgnoreCase("RNAEDITING_VARIANTS")) {
+								RNAEDITING_VARIANTS = split[1];
 							}
 							
 							
@@ -268,6 +277,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 								
 								sampleName_linkedList.add(sampleName);
 								//bam_path_map.put(sampleName, bam_file_path);
+
 								if ((new File(bam_file_path)).exists()) {
 									bam_path_map.put(sampleName, bam_file_path);
 								} else {
@@ -634,7 +644,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				if (sj_path_map.containsKey(sampleName)) {
 					String sj_file_path = (String)sj_path_map.get(sampleName);
 					
-					if ((new File(sj_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
+					if ((new File(sj_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ") || !SKIP_STAR) {
 						String psi_pso_folder = outputFolder + "/" + sampleName + "/psipso";
 						File psi_pso_folder_f = new File(psi_pso_folder);
 						if (!psi_pso_folder_f.exists()) {
@@ -686,7 +696,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				if (bam_path_map.containsKey(sampleName)) {
 					String bam_file_path = (String)bam_path_map.get(sampleName);
 					
-					if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
+					if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ") || !SKIP_STAR) {
 						String splicingdeficiency_folder = outputFolder + "/" + sampleName + "/splicingdeficiency";
 						File splicingdeficiency_folder_f = new File(splicingdeficiency_folder);
 						if (!splicingdeficiency_folder_f.exists()) {
@@ -742,7 +752,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				if (sj_path_map.containsKey(sampleName)) {
 					String sj_file_path = (String)sj_path_map.get(sampleName);
 					String sj_bam_path = (String)bam_path_map.get(sampleName);
-					if (((new File(sj_file_path)).exists() && (new File(sj_bam_path)).exists()) || remapping || type.equalsIgnoreCase("FASTQ")) {
+					if (((new File(sj_file_path)).exists() && (new File(sj_bam_path)).exists()) || remapping || type.equalsIgnoreCase("FASTQ") || !SKIP_STAR) {
 						String juncsalvager_folder = outputFolder + "/" + sampleName + "/juncsalvager";
 						File JuncSalvager_folder_f = new File(juncsalvager_folder);
 						if (!JuncSalvager_folder_f.exists()) {
@@ -856,6 +866,10 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("## END HTSEQ Gene Level  ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
 						}
+					} else {
+						if (!SKIP_HTSEQ_GENE) {
+							System.out.println("bam file for " + sampleName + " is missing... skipping the htseq gene pipeline...");
+						}
 					}
 					
 				}
@@ -949,10 +963,72 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("## END HTSEQ Exon Quant ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
 						}
-					}					
+					} else {
+						if (!SKIP_HTSEQ_EXON_QUANT) {
+							System.out.println("bam file for " + sampleName + " is missing... skipping the htseq exon pipeline...");
+						}
+					}
 				}
 			}
 
+			
+			
+			// generate script for RNAEDITING variants
+			itr = sampleName_linkedList.iterator();
+			while (itr.hasNext()) {
+				String sampleName = (String)itr.next();
+				if (bam_path_map.containsKey(sampleName)) {
+					String bam_file_path = (String)bam_path_map.get(sampleName);					
+					if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
+
+						String rnaediting_folder = outputFolder + "/" + sampleName + "/rnaediting";
+						File rnaediting_folder_f = new File(rnaediting_folder);
+						if (!rnaediting_folder_f.exists()) {
+							rnaediting_folder_f.mkdir();
+						}
+			
+						String rnaediting_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/rnaediting";
+						File rnaediting_intermediate_folder_f = new File(rnaediting_intermediate_folder);
+						if (!rnaediting_intermediate_folder_f.exists()) {
+							rnaediting_intermediate_folder_f.mkdir();
+						}
+						
+						if (!SKIP_RNAEDIT) {
+							String strand_direction = (String)strand_direction_map.get(sampleName);
+							String orientation = "no";
+							if (strand_direction.equalsIgnoreCase("fr-firststrand")) {
+								orientation = "yes";
+							} else if (strand_direction.equalsIgnoreCase("fr-secondstrand")) {
+								orientation = "reverse";
+							}
+							if (strand_direction.equalsIgnoreCase("yes")) {
+								orientation = "yes";
+							} else if (strand_direction.equalsIgnoreCase("reverse")) {
+								orientation = "reverse";
+							}
+							
+							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
+							string_buffer.append("## RNAEditing Variants ##\n");
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/rnaediting/" + "\n");					
+							string_buffer.append("bam-readcount -f " + PRIMARY_FASTA + " -l " + RNAEDITING_VARIANTS + " " + bam_file_path + " > " + sampleName + "_rnaediting_variants.txt\n");
+							
+							// need to add a step to summarize the variants
+							
+							// bam-readcount -f ~/References/genomic/hg38_release35_GRCh38.p13/FASTA/GRCh38.primary_assembly.genome.fa -l ~/References/genomic/rnaediting_references/pcgp_rnaediting_hg38_sites_updated.txt ../star/SJALCL014725_D1_PolyA/SJALCL014725_D1_PolyA.STAR.Aligned.sortedByCoord.out.bam
+							
+							string_buffer.append("cd " + current_working_dir + "\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/rnaediting/*" + " " + outputFolder + "/" + sampleName + "/rnaediting/\n");
+							string_buffer.append("## END RNAEditing Variants ##\n\n");
+							string_buffer_map.put(sampleName, string_buffer);
+						}
+					} else {
+						if (!SKIP_RNAEDIT) {
+							System.out.println("bam file for " + sampleName + " is missing... skipping the rnaedit pipeline...");
+						}					
+					}
+				}
+			}
+			
 			// finally write out the shell script
 			itr = sampleName_linkedList.iterator();
 			while (itr.hasNext()) {
@@ -980,9 +1056,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 		script += "bam2wig.py -s " + chrNameLengthFile + " -i " + bam_file + " -o " + sampleName + "_bam2wig -u \n";
 		script += "wigToBigWig " + sampleName + "_bam2wig.wig " + chrNameLengthFile + " " + sampleName + "_bam2wig.bw -clip \n";
 		script += "geneBody_coverage.py -r " + houseKeepingGenebed + " -i " + bam_file + " -o " + sampleName + "_geneBody_coverage > " + sampleName + "_geneBody_coverage.txt\n";
-		script += "bam_stat.py -i " + bam_file + " > rseqc_bam_stat_report.txt\n";
-		script += "junction_annotation.py -i " + bam_file + " -o " + sampleName + "_junction_annotation -r " + refseq_bed + " > " + sampleName + "_junction_annotation_summary.txt\n";
-		script += "junction_saturation.py -i " + bam_file + " -r " + refseq_bed + " -o " + sampleName + "_junction_saturation > " + sampleName + "_junction_saturation_summary.txt\n";
+		script += "bam_stat.py -i " + bam_file + " > rseqc_bam_stat_report.txt 2> rseqc_bam_stat_report_more.txt\n";
+		script += "junction_annotation.py -i " + bam_file + " -o " + sampleName + "_junction_annotation -r " + refseq_bed + " > " + sampleName + "_junction_annotation_summary.txt 2> " + sampleName + "_junction_annotation_summary_more.txt\n";
+		script += "junction_saturation.py -i " + bam_file + " -r " + refseq_bed + " -o " + sampleName + "_junction_saturation > " + sampleName + "_junction_saturation_summary.txt 2> " + sampleName + "_junction_saturation_summary_more.txt\n";
 		script += "tin.py -i " + bam_file + " -r " + ribosome_bed + "\n";
 		return script;
 	}
