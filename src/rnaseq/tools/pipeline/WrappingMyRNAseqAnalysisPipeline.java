@@ -49,6 +49,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String JUNCSALVAGER_PARAM = "NA";	
 	private static String RNAEDITING_VARIANTS = "NA";
 	private static String PRIMARY_FASTA = "NA";
+	private static boolean RSEQC_NOWIG = false;
 	
 	private static boolean SKIP_BAM2FASTQ = false;
 	private static boolean SKIP_STAR = false;
@@ -103,7 +104,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 						if (str.contains("=")) {
 							
 							split[0] = split[0].trim();
-							split[1] = split[1].trim();
+							split[1] = split[1].split("#")[0].trim();
 							if (split[0].equalsIgnoreCase("STAR_INDEX_DIR")) {
 								STAR_INDEX_DIR = split[1];
 							}
@@ -140,7 +141,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (split[0].equalsIgnoreCase("RNAEDITING_VARIANTS")) {
 								RNAEDITING_VARIANTS = split[1];
 							}
-							
+							if (split[0].equalsIgnoreCase("RSEQC_NOWIG")) {
+								RSEQC_NOWIG = new Boolean(split[1]);
+							}
 							
 							if (split[0].equalsIgnoreCase("SKIP_BAM2FASTQ")) {
 								SKIP_BAM2FASTQ = new Boolean(split[1]);
@@ -622,11 +625,21 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
 							//out.write("## RSEQC mapping ##\n");
 							string_buffer.append("## RSEQC mapping ##\n");
-							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/rseqc/" + "\n");					
-							string_buffer.append(rseqc_script_generation(sampleName, bam_file_path, CHR_NAME_LENGTH_FILE, RSEQC_HOUSE_KEEPING_GENE_BED, RSEQC_REFSEQ_BED, RSEQC_RIBOSOME_BED) + "\n");
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/rseqc/" + "\n");
+							if (!RSEQC_NOWIG) {
+								string_buffer.append("bam2wig.py -s " + CHR_NAME_LENGTH_FILE + " -i " + bam_file_path + " -o " + sampleName + "_bam2wig -u \n");
+								string_buffer.append("wigToBigWig " + sampleName + "_bam2wig.wig " + CHR_NAME_LENGTH_FILE + " " + sampleName + "_bam2wig.bw -clip \n");
+							}
+							string_buffer.append("geneBody_coverage.py -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " -i " + bam_file_path + " -o " + sampleName + "_geneBody_coverage > " + sampleName + "_geneBody_coverage.txt\n");
+							string_buffer.append("bam_stat.py -i " + bam_file_path + " > rseqc_bam_stat_report.txt 2> rseqc_bam_stat_report_more.txt\n");
+							string_buffer.append("junction_annotation.py -i " + bam_file_path + " -o " + sampleName + "_junction_annotation -r " + RSEQC_REFSEQ_BED + " > " + sampleName + "_junction_annotation_summary.txt 2> " + sampleName + "_junction_annotation_summary_more.txt\n");
+							string_buffer.append("junction_saturation.py -i " + bam_file_path + " -r " + RSEQC_REFSEQ_BED + " -o " + sampleName + "_junction_saturation > " + sampleName + "_junction_saturation_summary.txt 2> " + sampleName + "_junction_saturation_summary_more.txt\n");
+							string_buffer.append("tin.py -i " + bam_file_path + " -r " + RSEQC_RIBOSOME_BED + "\n");
+							//string_buffer.append(rseqc_script_generation(sampleName, bam_file_path, CHR_NAME_LENGTH_FILE, RSEQC_HOUSE_KEEPING_GENE_BED, RSEQC_REFSEQ_BED, RSEQC_RIBOSOME_BED) + "\n");
 							string_buffer.append("cd " + current_working_dir + "\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/rseqc/*" + " " + outputFolder + "/" + sampleName + "/rseqc/\n"); // need to specify the files to copy in the future...
 							string_buffer.append("## END RSEQC mapping ##\n\n");
+							
 							string_buffer_map.put(sampleName, string_buffer);
 						}
 					} else {
