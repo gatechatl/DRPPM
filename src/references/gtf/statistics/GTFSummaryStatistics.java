@@ -98,7 +98,7 @@ public class GTFSummaryStatistics {
 			}
 			
 			System.out.println("total_transcript: " + total_transcript.size());
-			System.out.println("exon_count: " + exon_count.size());
+			System.out.println("transcript with exons: " + exon_count.size());
 			System.out.println("all_gene_name: " + all_gene_name.size());
 			System.out.println("Total genes with exon: " + gene_name_exon_count.size());			
 			

@@ -19,6 +19,7 @@ import network.layout.GenerateMultipleCirclesLabels;
 import network.layout.NetworkNodeReplaceColor;
 import network.layout.RemoveRedundantEdges;
 import network.modules.CalculateDistanceBetweenModules;
+import network.sjaracne.preprocessing.GenerateInputMatrixIllumina;
 import network.statistics.CalculateGraphStatistics;
 import nextgenerationsequencing.fastq.SplitFastqForwardReverse;
 import bedtools.BedAddRemoveChr;
@@ -2801,9 +2802,12 @@ public class ProgramDescriptions {
 		if (CSIMinerPipeline.type().equals(type)) {
 			result += "CSIMinerPipeline: " + CSIMinerPipeline.description() + "\n";
 		}
+		if (GenerateInputMatrixIllumina.type().equals(type)) {
+			result += "GenerateInputMatrixIllumina: " + GenerateInputMatrixIllumina.description() + "\n";
+		}
 		return result;
 	}	
 
-	public static String VERSION = "2021-0115A";
+	public static String VERSION = "2021-0131A";
 	
 }

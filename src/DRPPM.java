@@ -182,6 +182,7 @@ import network.layout.NetworkNodeReplaceColor;
 import network.layout.RemoveRedundantEdges;
 import network.modules.CalculateDistanceBetweenModules;
 import network.protein.complex.annotation.AppendProteinComplexInfo;
+import network.sjaracne.preprocessing.GenerateInputMatrixIllumina;
 import network.statistics.CalculateGraphStatistics;
 import network.transcription.tf.tools.TFGeneEnrichmentFilter;
 import network.transcription.tf.tools.TFRegulatedGenes;
@@ -4633,6 +4634,17 @@ public class DRPPM {
 				CombineMatrixPreCheckGeneOrderTheSame.execute(args_remain);
 				System.exit(0);
 			} else {
+				
+				 
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length >= 1) {					
+					System.out.println(SearchProgram.searchName(args_remain[0]));
+				} else if (args_remain.length == 0) {
+					System.out.println("Type the following to search for a program...");
+					System.out.println("drppm -Find [Input your program name]");
+					System.out.println();					
+				}
+					
 				System.out.println("Here are the available programs");
 				printProgramInfo();
 			}
@@ -11630,8 +11642,26 @@ public class DRPPM {
 				}
 				CSIMinerPipeline.execute(args_remain);
 				System.exit(0);
-				// CSIMinerAnnotateExonBasedOnTheSpliceGraph
-			} 
+				// GenerateInputMatrixIllumina
+			} else if (type.equalsIgnoreCase("-GenerateInputMatrixIllumina")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateInputMatrixIllumina "
+							+ GenerateInputMatrixIllumina.parameter_info());
+					System.exit(0);
+				}
+				GenerateInputMatrixIllumina.execute(args_remain);
+				System.exit(0);
+				// 
+			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length >= 1) {					
+					System.out.println(SearchProgram.searchName(args_remain[0]));
+				} else if (args_remain.length == 0) {
+					System.out.println("drppm -Find [Input your program name]");					
+				}
+				System.exit(0);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

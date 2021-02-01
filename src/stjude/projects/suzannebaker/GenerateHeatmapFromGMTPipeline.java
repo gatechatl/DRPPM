@@ -30,7 +30,7 @@ public class GenerateHeatmapFromGMTPipeline {
 		return "Generate a matrix based on the gene list for generating heatmap";
 	}
 	public static String parameter_info() {
-		return "[matrixFile] [pathwayFile] [sampleComparisonIndex example: \"1,2,3:4,5,6;7,8,9:10,11,12\"] [outputFolder] [outputShellScript]";
+		return "[matrixFile] [pathwayFile] [sampleComparisonIndex example: \"1,2,3:4,5,6;7,8,9:10,11,12\"] [sampleInfo: title] [outputFolder] [outputShellScript]";
 	}
 	public static void execute(String[] args) {
 		

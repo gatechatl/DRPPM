@@ -49,6 +49,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String JUNCSALVAGER_PARAM = "NA";	
 	private static String RNAEDITING_VARIANTS = "NA";
 	private static String PRIMARY_FASTA = "NA";
+	private static String OPTITYPE_PROGRAM = "NA";
 	private static boolean RSEQC_NOWIG = false;
 	
 	private static boolean SKIP_BAM2FASTQ = false;
@@ -63,7 +64,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static boolean SKIP_RNAEDIT = false;
 	private static boolean SKIP_KNOWNVARIANTS = false;
 	private static boolean SKIP_RNAINDEL = false;
-	
+	private static boolean SKIP_OPTITYPE = false;
 	public static void execute(String[] args) {
 		
 		try {
@@ -141,6 +142,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (split[0].equalsIgnoreCase("RNAEDITING_VARIANTS")) {
 								RNAEDITING_VARIANTS = split[1];
 							}
+							if (split[0].equalsIgnoreCase("OPTITYPE_PROGRAM")) {
+								OPTITYPE_PROGRAM = split[1];
+							}
 							if (split[0].equalsIgnoreCase("RSEQC_NOWIG")) {
 								RSEQC_NOWIG = new Boolean(split[1]);
 							}
@@ -171,6 +175,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							}
 							if (split[0].equalsIgnoreCase("SKIP_JUNCSALVAGER")) {
 								SKIP_JUNCSALVAGER = new Boolean(split[1]);
+							}
+							if (split[0].equalsIgnoreCase("SKIP_OPTITYPE")) {
+								SKIP_OPTITYPE = new Boolean(split[1]);
 							}
 						}
 					}
@@ -393,7 +400,24 @@ public class WrappingMyRNAseqAnalysisPipeline {
 					}
 				}
 				
-			} 
+			} else {
+				
+				itr = sampleName_linkedList.iterator();
+				while (itr.hasNext()) {
+					String sampleName = (String)itr.next();
+					String fastq_folder = outputFolder + "/" + sampleName + "/fastq";
+					if (!fq1_path_map.containsKey(sampleName)) {
+						if (new File(fastq_folder + "/" + sampleName + ".R1.fastq").exists()) {
+							fq1_path_map.put(sampleName, fastq_folder + "/" + sampleName + ".R1.fastq");
+						}
+					}
+					if (!fq2_path_map.containsKey(sampleName)) {
+						if (new File(fastq_folder + "/" + sampleName + ".R2.fastq").exists()) {
+							fq2_path_map.put(sampleName, fastq_folder + "/" + sampleName + ".R2.fastq");
+						}
+					}
+				}
+			}
 			
 			// perform fastqc on the fq files
 		
@@ -1042,6 +1066,46 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				}
 			}
 			
+			// Run Isotyping
+			itr = sampleName_linkedList.iterator();
+			while (itr.hasNext()) {
+				String sampleName = (String)itr.next();
+				if (fq1_path_map.containsKey(sampleName)) {
+					String fq1_file_path = (String)fq1_path_map.get(sampleName);
+					if ((new File(fq1_file_path)).exists()) {
+						String optitype_folder = outputFolder + "/" + sampleName + "/optitype";
+						File optitype_folder_f = new File(optitype_folder);
+						if (!optitype_folder_f.exists()) {
+							optitype_folder_f.mkdir();
+						}
+			
+						String optitype_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/optitype";
+						File optitype_intermediate_folder_f = new File(optitype_intermediate_folder);
+						if (!optitype_intermediate_folder_f.exists()) {
+							optitype_intermediate_folder_f.mkdir();
+						}
+					
+
+						if (!SKIP_OPTITYPE) {
+							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
+							string_buffer.append("## OPTITYPING ##\n");							
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/optitype/" + "\n");
+							String fq_files = (String)fq1_file_path;
+							if (fq2_path_map.containsKey(sampleName)) {
+								fq_files += " " + fq2_path_map.get(sampleName);
+							}
+							string_buffer.append("python " + OPTITYPE_PROGRAM + " -i " + fq_files + " --rna -v -o " + sampleName + ".optitype\n");
+							string_buffer.append("cd " + current_working_dir + "\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/optitype/" + sampleName + ".optitype/*" + " " + outputFolder + "/" + sampleName + "/optitype/\n");							
+							string_buffer.append("## END OPTITYPING ##\n\n");
+							string_buffer_map.put(sampleName, string_buffer);
+						}
+					}
+				}
+			}
+			
+			// 
+
 			// finally write out the shell script
 			itr = sampleName_linkedList.iterator();
 			while (itr.hasNext()) {
