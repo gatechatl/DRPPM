@@ -1,3 +1,3 @@
 #!/bin/bash
 
-java -Xmx64g -XX:-UseGCOverheadLimit -jar /home/gatechatl/git/DRPPM/export/DRPPM_20210131_newmachine.jar $@
+java -Xmx64g -XX:-UseGCOverheadLimit -jar /home/gatechatl/git/DRPPM/export/DRPPM_20210210_newmachine.jar $@
