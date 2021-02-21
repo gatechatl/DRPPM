@@ -11,7 +11,37 @@ DRPPM is a library collection of scripts for analyzing DNA/RNA/Proteome/Post-tra
 
 ## Prerequisites
 * [Java version J2SE-1.5](https://www.oracle.com/technetwork/java/javase/)
-Certain R script require additional libraries... Need to update this...
+
+(A possibly incomplete list of) Required R script libraries:
+| Packages  | version |
+| ------------- | ------------- |
+| limma  |   |
+| edgeR  |   |
+| DESeq2 |   |   
+| dplyr |   |
+| magrittr |   |
+| readr |   |
+| Rtsne |   |
+| ggpubr |   |
+| sva |   |
+| ggplot2 |   |
+| pheatmap |   |
+| pvclust |   |
+| Peptides |   |
+| lavaan |    |
+| gridExtra |    |
+| BioNet |    |
+| VennDiagram |    |
+| RUVSeq |    |
+| RColorBrewer |    |
+| reshape2 |    |
+| Seurat |    |
+| Matrix |    |
+| monocle |    |
+| rsnps |    |
+| RPMM |    |
+
+
 
 ## Download an executable Jar pacakge
 * [jar package] (https://github.com/gatechatl/DRPPM/blob/master/export/DRPPM_20190829_newmachine.jar)
