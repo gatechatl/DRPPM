@@ -1,7 +1,7 @@
 # DRPPM
 ## DNA RNA Proteome Post-translational Modifications 
 
-DRPPM is a library collection of scripts for analyzing DNA/RNA/Proteome/Post-translational Modifications. The purpose of the program is primarily used to document the steps applied in the analysis and figure generation related to my publication. Some of the pipeline has been repurposed by other individuals for other pipelines. The library contains scripts and software pipelines for analyzing somatic lesions, transcription regulation, proteome, and metabolome. As part of the package, tools were developed for gene/protein network analysis and interactive visualizations. 
+DRPPM is a library collection of scripts for analyzing DNA/RNA/Proteome/Post-translational Modifications. The program is capable of performing data wrangling of genomics, transcriptomics, and proteomics data. While the program collection includes some personalized pipelines, it also contains standardized RNAseq analysis pipelines like WRAP for splicing analysis. In addition to basic data processing, the DRPPM also contains the ability to generate publication-ready figures and interactive plots of gene/protein networks. See https://github.com/gatechatl/DRPPM_Example_Input_Output for the examples.
 
 ## Details are documented in the Wiki page 
 * Access additional details about the program [wiki](https://github.com/gatechatl/DRPPM/wiki/)
@@ -12,7 +12,7 @@ DRPPM is a library collection of scripts for analyzing DNA/RNA/Proteome/Post-tra
 ## Prerequisites
 * [Java version J2SE-1.5](https://www.oracle.com/technetwork/java/javase/)
 
-(A possibly incomplete list of) Required R script libraries:
+Required R script libraries (possibly an incomplete list)
 | Packages  | version |
 | ------------- | ------------- |
 | limma  |   |
@@ -54,15 +54,18 @@ DRPPM is a toolbox for processing integrated datasets.
 optional arguments:
   -h, --help   show this help message and exit
 
-### Inputs
-The inputs for DRPPM are defined in the parameter for each program. To see list of programs type drppm -[program]
+### Search for a program
+type drppm -Find [keyword]
+
+### Inputs and Outputs
+The inputs for DRPPM are defined. To see the list of inputs, type drppm -[program]
 
 ### Outputs
-The outputs for DRPPM are also defined in the parameter. See list of program in drppm -[program]
+The outputs for DRPPM are also defined in the parameter. To see the list of outputs in drppm -[program]
 
 ```
 ## Reference
-Timothy I. Shaw. DRPPM: integrated software for processing OMICS data. 2020.
+Timothy I. Shaw. DRPPM: an integrated software for processing omics data. 2020.
 
 ## Example Publications
 KH Lee, P Zhang, HJ Kim et al. C9orf72 Dipeptide Repeats Impair the Assembly, Dynamics, and Function of Membrane-Less Organelles. Cell 167 (3), 774-788. e17
