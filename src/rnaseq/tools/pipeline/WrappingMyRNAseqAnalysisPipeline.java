@@ -52,6 +52,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String OPTITYPE_PROGRAM = "NA";
 	private static boolean RSEQC_NOWIG = false;
 	
+	
+	private static boolean IS_PAIRED = true;
 	private static boolean SKIP_BAM2FASTQ = false;
 	private static boolean SKIP_STAR = false;
 	private static boolean SKIP_FASTQC = false;

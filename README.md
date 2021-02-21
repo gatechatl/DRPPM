@@ -43,8 +43,8 @@ Required R script libraries (possibly an incomplete list)
 
 
 
-## Download an executable Jar pacakge
-* [jar package] (https://github.com/gatechatl/DRPPM/blob/master/export/DRPPM_20190829_newmachine.jar)
+## Current downloadable release
+* [jar package] (https://github.com/gatechatl/DRPPM/blob/master/export/DRPPM_20210211_newmachine.jar)
 
 ## Usage
 ```$ drppm 
