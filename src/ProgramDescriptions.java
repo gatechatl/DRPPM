@@ -233,6 +233,7 @@ import graph.interactive.javascript.barplot.GenerateBatchBarPlotHtmls;
 import graph.interactive.javascript.barplot.GenerateHorizontalBarPlotJavaScript;
 import graph.interactive.javascript.barplot.GenerateStackedBarPlotJavaScript;
 import graph.interactive.javascript.barplot.GenerateVerticalBarPlotJavaScript;
+import graph.interactive.javascript.heatmap.GenerateExonExpressionHeatmapJavaScript;
 import graph.interactive.javascript.heatmap.GenerateHeatmapJavaScript;
 import graph.interactive.javascript.heatmap.GenerateHeatmapZscoreSSGSEAJavaScript;
 import graph.interactive.javascript.heatmap.GenerateHeatmapZscoreWithOriginalValuesJavaScript;
@@ -417,6 +418,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExon
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
 import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
 import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
+import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
@@ -1661,6 +1663,9 @@ public class ProgramDescriptions {
 		if (GenerateHeatmapJavaScript.type().equals(type)) {
 			result += "GenerateHeatmapJavaScript: " + GenerateHeatmapJavaScript.description() + "\n";
 		}
+		if (GenerateExonExpressionHeatmapJavaScript.type().equals(type)) {
+			result += "GenerateExonExpressionHeatmapJavaScript: " + GenerateExonExpressionHeatmapJavaScript.description() + "\n";
+		}
 		if (MatrixZscoreNormalization.type().equals(type)) {
 			result += "MatrixZscoreNormalization: " + MatrixZscoreNormalization.description() + "\n";
 		}
@@ -2805,9 +2810,12 @@ public class ProgramDescriptions {
 		if (GenerateInputMatrixIllumina.type().equals(type)) {
 			result += "GenerateInputMatrixIllumina: " + GenerateInputMatrixIllumina.description() + "\n";
 		}
+		if (CSIMinerGenerateCustomHeatmapFromPercentileMatrix.type().equals(type)) {
+			result += "CSIMinerGenerateCustomHeatmapFromPercentileMatrix: " + CSIMinerGenerateCustomHeatmapFromPercentileMatrix.description() + "\n";
+		}
 		return result;
 	}	
 
-	public static String VERSION = "2021-0211A";
+	public static String VERSION = "2021-0222A";
 	
 }

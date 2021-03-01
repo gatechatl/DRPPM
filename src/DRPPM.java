@@ -90,6 +90,7 @@ import graph.interactive.javascript.barplot.GenerateBatchBarPlotHtmls;
 import graph.interactive.javascript.barplot.GenerateHorizontalBarPlotJavaScript;
 import graph.interactive.javascript.barplot.GenerateStackedBarPlotJavaScript;
 import graph.interactive.javascript.barplot.GenerateVerticalBarPlotJavaScript;
+import graph.interactive.javascript.heatmap.GenerateExonExpressionHeatmapJavaScript;
 import graph.interactive.javascript.heatmap.GenerateHeatmapJavaScript;
 import graph.interactive.javascript.heatmap.GenerateHeatmapZscoreSSGSEAJavaScript;
 import graph.interactive.javascript.heatmap.GenerateHeatmapZscoreWithOriginalValuesJavaScript;
@@ -645,6 +646,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGene
 import rnaseq.splicing.csiminer.CSIMinerAnnotateExonBasedOnTheSpliceGraph;
 import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
 import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
+import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
 import rnaseq.splicing.mats308.AddGeneName2MATS;
@@ -1135,7 +1137,17 @@ public class DRPPM {
 				}
 				GenerateHeatmapJavaScript.execute(args_remain);
 				System.exit(0);
-				// MatrixZscoreNormalization
+				// GenerateExonExpressionHeatmapJavaScript
+			} else if (type.equalsIgnoreCase("-GenerateExonExpressionHeatmapJavaScript")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateExonExpressionHeatmapJavaScript "
+							+ GenerateExonExpressionHeatmapJavaScript.parameter_info());
+					System.exit(0);
+				}
+				GenerateExonExpressionHeatmapJavaScript.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-MatrixZscoreNormalization")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
@@ -11651,6 +11663,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				GenerateInputMatrixIllumina.execute(args_remain);
+				System.exit(0);
+				// CSIMinerGenerateCustomHeatmapFromPercentileMatrix
+			} else if (type.equalsIgnoreCase("-CSIMinerGenerateCustomHeatmapFromPercentileMatrix")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerGenerateCustomHeatmapFromPercentileMatrix "
+							+ CSIMinerGenerateCustomHeatmapFromPercentileMatrix.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerGenerateCustomHeatmapFromPercentileMatrix.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {
