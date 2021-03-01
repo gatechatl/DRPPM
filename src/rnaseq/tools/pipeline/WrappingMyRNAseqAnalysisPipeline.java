@@ -763,7 +763,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
 							string_buffer.append("## Splicing Deficiency calculation ##\n");
 							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/splicingdeficiency/" + "\n");					
-							string_buffer.append("drppm -IntronRetentionPipelineWrapper " + sampleName_bam_lst + " " + SPLICING_DEFICIENCY_CONFIG + " 101 " + sampleName + "\n");
+							string_buffer.append("drppm -IntronRetentionPipelineWrapper " + sampleName_bam_lst + " " + SPLICING_DEFICIENCY_CONFIG + " " + read_length_map.get(sampleName) + " " + sampleName + "\n");
 							string_buffer.append("sh step1_" + sampleName + ".run_this_first.sh" + "\n");
 							string_buffer.append("sh " + sampleName + ".sh" + "\n");
 							string_buffer.append("drppm -CleanEnsemblGeneID2GeneName " + sampleName + ".STAR.Aligned.sortedByCoord.out.bam.bed_SD.txt " + PRIMARY_GTF_REF + " " + sampleName + ".STAR.Aligned.sortedByCoord.out.bam.bed_SD_geneName.txt" + "\n");
