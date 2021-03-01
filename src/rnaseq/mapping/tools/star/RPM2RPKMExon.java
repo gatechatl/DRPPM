@@ -147,8 +147,9 @@ public class RPM2RPKMExon {
 	public static String grabMeta(String text, String id) {
 		String returnval = "";
 		if (text.contains(id)) {
-			if (text.split(id).length > 1) {
-				String val = text.split(id)[1].split(";")[0].trim();
+			String[] split = text.split(id);
+			if (split.length > 1) {
+				String val = split[1].split(";")[0].trim();
 				val = val.replaceAll("\"", "");
 				val.trim();
 				returnval = val;

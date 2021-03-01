@@ -30,8 +30,8 @@ public class RPM2RPKMTranscript {
 			
 			File f = new File(outputFile);
 			if (f.exists()) {
-				System.out.println(outputFile + " exists already. Please remove the file before running.");
-				System.exit(0);
+				//System.out.println(outputFile + " exists already. Please remove the file before running.");
+				//System.exit(0);
 			}
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);			
@@ -103,10 +103,13 @@ public class RPM2RPKMTranscript {
 	public static String grabMeta(String text, String id) {
 		String returnval = "";
 		if (text.contains(id)) {
-			String val = text.split(id)[1].split(";")[0].trim();
-			val = val.replaceAll("\"", "");
-			val.trim();
-			returnval = val;
+			String[] split = text.split(id);
+			if (split.length > 1) {
+				String val = split[1].split(";")[0].trim();
+				val = val.replaceAll("\"", "");
+				val.trim();
+				returnval = val;
+			}
 		}
 		return returnval;
 	}

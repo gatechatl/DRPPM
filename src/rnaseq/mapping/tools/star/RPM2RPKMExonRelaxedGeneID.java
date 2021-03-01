@@ -32,7 +32,7 @@ public class RPM2RPKMExonRelaxedGeneID {
 			
 			File f = new File(outputFile);
 			if (f.exists()) {
-				System.out.println(outputFile + " exists already. Please remove the file before running.");
+				System.out.println(outputFile + " exists already. Will override file.");
 			}
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);			
@@ -145,10 +145,13 @@ public class RPM2RPKMExonRelaxedGeneID {
 	public static String grabMeta(String text, String id) {
 		String returnval = "";
 		if (text.contains(id)) {
-			String val = text.split(id)[1].split(";")[0].trim();
-			val = val.replaceAll("\"", "");
-			val.trim();
-			returnval = val;
+			String[] split = text.split(id);
+			if (split.length > 1) {
+				String val = split[1].split(";")[0].trim();
+				val = val.replaceAll("\"", "");
+				val.trim();
+				returnval = val;
+			}
 		}
 		return returnval;
 	}
