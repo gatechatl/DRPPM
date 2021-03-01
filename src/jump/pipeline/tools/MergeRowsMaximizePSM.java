@@ -97,7 +97,7 @@ public class MergeRowsMaximizePSM {
 						if (map.containsKey(geneName)) {
 							String line = (String)map.get(geneName);
 							String[] split_line = line.split("\t");
-							int old_psm = new Integer(split_line[4]);
+							int old_psm = new Integer(split_line[psm_index]);
 							if (new_psm > old_psm) {
 								map.put(geneName, str);
 							}
