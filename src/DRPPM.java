@@ -264,8 +264,8 @@ import misc.RemoveQuotations;
 import misc.ReorderSampleFast;
 import misc.ReorderSamples;
 import misc.RunRScript;
-import misc.SplitFilesCols;
-import misc.SplitFilesRows;
+import misc.SplitFileByCols;
+import misc.SplitFileByRows;
 import misc.stjude.fileprocessing.CleanupStJudeSampleName;
 import misc.test.ReadEnsemblGTFFile;
 import misc.test.Test;
@@ -644,11 +644,14 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerComb
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
 import rnaseq.splicing.csiminer.CSIMinerAnnotateExonBasedOnTheSpliceGraph;
+import rnaseq.splicing.csiminer.CSIMinerAnnotatePrioritizedExons;
 import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
 import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
+import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
+import rnaseq.splicing.csiminer.reference.CSIMinerCandidateRegion2Fasta;
 import rnaseq.splicing.mats308.AddGeneName2MATS;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
@@ -3220,11 +3223,22 @@ public class DRPPM {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {					
 					System.out.println("drppm -SplitFilesRows "
-							+ SplitFilesRows.parameter_info());
-					System.out.println("Description: " + SplitFilesRows.description());
+							+ SplitFileByRows.parameter_info());
+					System.out.println("Description: " + SplitFileByRows.description());
 					System.exit(0);
 				}
-				SplitFilesRows.execute(args_remain);
+				SplitFileByRows.execute(args_remain);
+				System.exit(0);
+				//  ConvertssGSEAMatrix2BoxplotMatrix
+			} else if (type.equalsIgnoreCase("-SplitFileByRows")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {					
+					System.out.println("drppm -SplitFileByRows "
+							+ SplitFileByRows.parameter_info());
+					System.out.println("Description: " + SplitFileByRows.description());
+					System.exit(0);
+				}
+				SplitFileByRows.execute(args_remain);
 				System.exit(0);
 				//  ConvertssGSEAMatrix2BoxplotMatrix
 			} else if (type.equalsIgnoreCase("-ConvertssGSEAMatrix2BoxplotMatrix")) {
@@ -3341,11 +3355,22 @@ public class DRPPM {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {					
 					System.out.println("drppm -SplitFilesCols "
-							+ SplitFilesCols.parameter_info());
-					System.out.println("Description: " + SplitFilesCols.description());
+							+ SplitFileByCols.parameter_info());
+					System.out.println("Description: " + SplitFileByCols.description());
 					System.exit(0);
 				}
-				SplitFilesCols.execute(args_remain);
+				SplitFileByCols.execute(args_remain);
+				System.exit(0);
+				// ListOfFiles2Matrix
+			} else if (type.equalsIgnoreCase("-SplitFileByCols")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {					
+					System.out.println("drppm -SplitFileByCols "
+							+ SplitFileByCols.parameter_info());
+					System.out.println("Description: " + SplitFileByCols.description());
+					System.exit(0);
+				}
+				SplitFileByCols.execute(args_remain);
 				System.exit(0);
 				// ListOfFiles2Matrix
 			} else if (type.equalsIgnoreCase("-ListOfFiles2Matrix")) {
@@ -11654,7 +11679,37 @@ public class DRPPM {
 				}
 				CSIMinerPipeline.execute(args_remain);
 				System.exit(0);
-				// GenerateInputMatrixIllumina
+				// CSIMinerAnnotatePrioritizedExons
+			} else if (type.equalsIgnoreCase("-CSIMinerAnnotatePrioritizedExons")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerAnnotatePrioritizedExons "
+							+ CSIMinerAnnotatePrioritizedExons.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerAnnotatePrioritizedExons.execute(args_remain);
+				System.exit(0);
+				// CSIMinerCandidateRegion2Fasta
+			} else if (type.equalsIgnoreCase("-CSIMinerCandidateRegion2Fasta")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerCandidateRegion2Fasta "
+							+ CSIMinerCandidateRegion2Fasta.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerCandidateRegion2Fasta.execute(args_remain);
+				System.exit(0);
+				// CSIMinerAppendTMHMMAnnotation2Candidate
+			} else if (type.equalsIgnoreCase("-CSIMinerAppendTMHMMAnnotation2Candidate")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerAppendTMHMMAnnotation2Candidate "
+							+ CSIMinerAppendTMHMMAnnotation2Candidate.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerAppendTMHMMAnnotation2Candidate.execute(args_remain);
+				System.exit(0);
+				// CSIMinerCandidateRegion2Fasta CSIMinerAppendTMHMMAnnotation2Candidate
 			} else if (type.equalsIgnoreCase("-GenerateInputMatrixIllumina")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {

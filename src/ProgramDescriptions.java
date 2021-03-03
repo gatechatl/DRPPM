@@ -66,8 +66,8 @@ import misc.MergeGeneNameMAXFast;
 import misc.OverlapTwoFiles;
 import misc.RemoveChrYGenesBasedOnGTF;
 import misc.RemoveQuotations;
-import misc.SplitFilesCols;
-import misc.SplitFilesRows;
+import misc.SplitFileByCols;
+import misc.SplitFileByRows;
 import misc.stjude.fileprocessing.CleanupStJudeSampleName;
 import misc.textmining.software.annotation.WebTextMining;
 import idconversion.cross_species.AppendHuman2Mouse;
@@ -421,6 +421,8 @@ import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
+import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
+import rnaseq.splicing.csiminer.reference.CSIMinerCandidateRegion2Fasta;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
 import rnaseq.splicing.mats308.SummarizeMATSSummary;
@@ -2297,8 +2299,8 @@ public class ProgramDescriptions {
 		if (STARMappingScriptGeneratorV253a.type().equals(type)) {
 			result += "STARMappingScriptGeneratorV253a: " + STARMappingScriptGeneratorV253a.description() + "\n";
 		}
-		if (SplitFilesRows.type().equals(type)) {
-			result += "SplitFilesRows: " + SplitFilesRows.description() + "\n";
+		if (SplitFileByRows.type().equals(type)) {
+			result += "SplitFilesRows: " + SplitFileByRows.description() + "\n";
 		}
 		if (ConvertssGSEAMatrix2BoxplotMatrix.type().equals(type)) {
 			result += "ConvertssGSEAMatrix2BoxplotMatrix: " + ConvertssGSEAMatrix2BoxplotMatrix.description() + "\n";
@@ -2324,8 +2326,8 @@ public class ProgramDescriptions {
 		if (CustomFilterSpladderHardFilter.type().equals(type)) {
 			result += "CustomFilterSpladderHardFilter: " + CustomFilterSpladderHardFilter.description() + "\n";
 		}
-		if (SplitFilesCols.type().equals(type)) {
-			result += "SplitFilesCols: " + SplitFilesCols.description() + "\n";
+		if (SplitFileByCols.type().equals(type)) {
+			result += "SplitFilesCols: " + SplitFileByCols.description() + "\n";
 		}
 		if (ListOfFiles2Matrix.type().equals(type)) {
 			result += "ListOfFiles2Matrix: " + ListOfFiles2Matrix.description() + "\n";
@@ -2813,9 +2815,15 @@ public class ProgramDescriptions {
 		if (CSIMinerGenerateCustomHeatmapFromPercentileMatrix.type().equals(type)) {
 			result += "CSIMinerGenerateCustomHeatmapFromPercentileMatrix: " + CSIMinerGenerateCustomHeatmapFromPercentileMatrix.description() + "\n";
 		}
+		if (CSIMinerCandidateRegion2Fasta.type().equals(type)) {
+			result += "CSIMinerCandidateRegion2Fasta: " + CSIMinerCandidateRegion2Fasta.description() + "\n";
+		}
+		if (CSIMinerAppendTMHMMAnnotation2Candidate.type().equals(type)) {
+			result += "CSIMinerAppendTMHMMAnnotation2Candidate: " + CSIMinerAppendTMHMMAnnotation2Candidate.description() + "\n";
+		}
 		return result;
 	}	
 
-	public static String VERSION = "2021-0301B";
+	public static String VERSION = "2021-0303A";
 	
 }

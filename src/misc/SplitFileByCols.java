@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
 
-public class SplitFilesCols {
+public class SplitFileByCols {
 
 	public static String type() {
 		return "MISC";
