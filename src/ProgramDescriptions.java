@@ -422,6 +422,7 @@ import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatri
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
+import rnaseq.splicing.csiminer.reference.CSIMinerCandidate2BED;
 import rnaseq.splicing.csiminer.reference.CSIMinerCandidateRegion2Fasta;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
@@ -2820,6 +2821,9 @@ public class ProgramDescriptions {
 		}
 		if (CSIMinerAppendTMHMMAnnotation2Candidate.type().equals(type)) {
 			result += "CSIMinerAppendTMHMMAnnotation2Candidate: " + CSIMinerAppendTMHMMAnnotation2Candidate.description() + "\n";
+		}
+		if (CSIMinerCandidate2BED.type().equals(type)) {
+			result += "CSIMinerCandidate2BED: " + CSIMinerCandidate2BED.description() + "\n";
 		}
 		return result;
 	}	

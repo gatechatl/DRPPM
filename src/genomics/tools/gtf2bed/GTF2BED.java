@@ -253,14 +253,46 @@ public class GTF2BED {
 	        CommandLine.executeCommand(sort_gene_bed_script);
 	        
 
-	        String mv_sort_exon_bed_script = "cp " + outputPrefix + ".exon.sorted.bed " + outputPrefix + ".exon.bed";
+	        clean_files(outputPrefix + ".exon.sorted.bed" , outputPrefix + ".exon.bed");
+	        String mv_sort_exon_bed_script = "cp " + outputPrefix + ".exon.bed " + outputPrefix + ".exon.sorted.bed";
 	        CommandLine.executeCommand(mv_sort_exon_bed_script);
-	        String mv_sort_intron_bed_script = "cp " + outputPrefix + ".intron.sorted.bed " + outputPrefix + ".intron.bed";
+	        
+	        // remove ERCC here
+	        clean_files(outputPrefix + ".intron.sorted.bed" , outputPrefix + ".intron.bed");
+	        String mv_sort_intron_bed_script = "cp " + outputPrefix + ".intron.bed " + outputPrefix + ".intron.sorted.bed";
 	        CommandLine.executeCommand(mv_sort_intron_bed_script);
-	        String mv_sort_gene_bed_script = "cp " + outputPrefix + ".gene.sorted.bed " + outputPrefix + ".gene.bed";
+	        
+	        clean_files(outputPrefix + ".gene.sorted.bed" , outputPrefix + ".gene.bed");	        
+	        //String mv_sort_gene_bed_script = "cp " + outputPrefix + ".gene.sorted.bed " + outputPrefix + ".gene.bed";
+	        String mv_sort_gene_bed_script = "cp " + outputPrefix + ".gene.bed " + outputPrefix + ".gene.sorted.bed";
 	        CommandLine.executeCommand(mv_sort_gene_bed_script);
 
 	        
+	        
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void clean_files(String input, String output) {
+
+		try {
+			FileWriter fwriter_intron_bed = new FileWriter(output);
+			BufferedWriter out_intron_bed = new BufferedWriter(fwriter_intron_bed);
+			
+			FileInputStream fstream = new FileInputStream(input);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));	
+			while (in.ready()) {
+				String str = in.readLine();
+				String[] split = str.split("\t");
+				if (split.length == 6) {
+					out_intron_bed.write(str + "\n");
+				}
+			}
+			in.close();
+			out_intron_bed.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
