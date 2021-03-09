@@ -646,6 +646,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGene
 import rnaseq.splicing.csiminer.CSIMinerAnnotateExonBasedOnTheSpliceGraph;
 import rnaseq.splicing.csiminer.CSIMinerAnnotatePrioritizedExons;
 import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
+import rnaseq.splicing.csiminer.CSIMinerConsolidateInputs;
 import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
@@ -988,7 +989,7 @@ import worddocgenerator.kinasesummary.GenerateWordKinaseSummary;
 /**
  * Collection of scripts and pipelines for DNA RNA Proteomics Phosphoproteomics
  * and Metabolomic and Metagenomics This is the centralized jar class for
- * combining all datatype Last updated 2017-06-29
+ * combining all datatype Last updated 2021-03-09
  * 
  * @author Timothy Shaw
  * 
@@ -11740,6 +11741,16 @@ public class DRPPM {
 				}
 				CSIMinerCandidate2BED.execute(args_remain);
 				System.exit(0);
+				// CSIMinerConsolidateInputs
+			} else if (type.equalsIgnoreCase("-CSIMinerConsolidateInputs")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerConsolidateInputs "
+							+ CSIMinerConsolidateInputs.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerConsolidateInputs.execute(args_remain);
+				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {
 				String[] args_remain = getRemaining(args);
@@ -11749,6 +11760,7 @@ public class DRPPM {
 					System.out.println("drppm -Find [Input your program name]");					
 				}
 				System.exit(0);
+				// 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

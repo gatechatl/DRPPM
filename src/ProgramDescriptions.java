@@ -417,6 +417,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerComb
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
 import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
+import rnaseq.splicing.csiminer.CSIMinerConsolidateInputs;
 import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
@@ -2825,9 +2826,12 @@ public class ProgramDescriptions {
 		if (CSIMinerCandidate2BED.type().equals(type)) {
 			result += "CSIMinerCandidate2BED: " + CSIMinerCandidate2BED.description() + "\n";
 		}
+		if (CSIMinerConsolidateInputs.type().equals(type)) {
+			result += "CSIMinerConsolidateInputs: " + CSIMinerConsolidateInputs.description() + "\n";
+		}
 		return result;
 	}	
 
-	public static String VERSION = "2021-0303A";
+	public static String VERSION = "2021-0309A";
 	
 }
