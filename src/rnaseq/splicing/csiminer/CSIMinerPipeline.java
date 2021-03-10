@@ -158,14 +158,19 @@ public class CSIMinerPipeline {
 			
 			String cancer_exon_matrix_gene_filter = outputIntermediateFolder + "/" + CANCER_PREFIX + ".exon.matrix.genefilter.txt";
 			String cancer_exon_matrix_gene_filter_precleaned = outputIntermediateFolder + "/" + CANCER_PREFIX + ".exon.matrix.genefilter.precleaned.txt";
+			
 			String cancer_exon_matrix_gene_filter_cleaned = outputIntermediateFolder + "/" + CANCER_PREFIX + ".exon.matrix.genefilter.cleaned.txt";
+			
+			String cancer_exon_matrix_gene_filter_cleaned2 = outputIntermediateFolder + "/" + CANCER_PREFIX + ".exon.matrix.genefilter.cleaned2.txt";
 			String cancer_exon_matrix_percentile = outputIntermediateFolder + "/" + CANCER_PREFIX + ".exon.matrix.percentile.txt";
 			String cancer_exon_matrix_binned = outputIntermediateFolder + "/" + CANCER_PREFIX + ".exon.matrix.binned.txt";
 
 
 			String norm_exon_matrix_gene_filter = outputIntermediateFolder + "/" + NORM_PREFIX + ".exon.matrix.genefilter.txt";
 			String norm_exon_matrix_gene_filter_precleaned = outputIntermediateFolder + "/" + NORM_PREFIX + ".exon.matrix.genefilter.precleaned.txt";
+			
 			String norm_exon_matrix_gene_filter_cleaned = outputIntermediateFolder + "/" + NORM_PREFIX + ".exon.matrix.genefilter.cleaned.txt";
+			String norm_exon_matrix_gene_filter_cleaned2 = outputIntermediateFolder + "/" + NORM_PREFIX + ".exon.matrix.genefilter.cleaned2.txt";
 			String norm_exon_matrix_percentile = outputIntermediateFolder + "/" + NORM_PREFIX + ".exon.matrix.percentile.txt";
 			String norm_exon_matrix_binned = outputIntermediateFolder + "/" + NORM_PREFIX + ".exon.matrix.binned.txt";
 
@@ -183,7 +188,9 @@ public class CSIMinerPipeline {
 			
 			string_buffer.append("## CSI-miner processing of cancer samples ##\n");
 			//out.write("cd " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + "\n");
-			string_buffer.append("drppm -CSIMinerFilterExonMatrixByGeneSymbol " + CANCER_EXON_MATRIX + " " + QUERY_GENELIST + " " + cancer_exon_matrix_gene_filter + "\n");
+			string_buffer.append("drppm -CSIMinerConsolidateInputs " + CANCER_EXON_MATRIX + " " + NORM_EXON_MATRIX + " " + CANCER_EXON_MATRIX + ".consolidate " + NORM_EXON_MATRIX + ".consolidate");
+			
+			string_buffer.append("drppm -CSIMinerFilterExonMatrixByGeneSymbol " + CANCER_EXON_MATRIX + ".consolidate " + QUERY_GENELIST + " " + cancer_exon_matrix_gene_filter + "\n");
 			string_buffer.append("drppm -RemoveColumnsFromMatrix " + cancer_exon_matrix_gene_filter + " 1,2,3,4,5,6 " + cancer_exon_matrix_gene_filter_precleaned + "\n");
 			string_buffer.append("drppm -SampleFilter " + cancer_exon_matrix_gene_filter_precleaned + " Annotation " + cancer_exon_matrix_gene_filter_cleaned + " no\n");
 			
@@ -191,9 +198,10 @@ public class CSIMinerPipeline {
 			
 			string_buffer.append("drppm -CSIMinerSplitMatrixCandidates " + cancer_exon_matrix_gene_filter_cleaned + " " + CANCER_SAMPLE2DISEASETYPE + " " + CANCER_PREFIX + "\n");
 			
-			string_buffer.append("drppm -CSIMinerFilterExonMatrixByGeneSymbol " + NORM_EXON_MATRIX + " " + QUERY_GENELIST + " " + norm_exon_matrix_gene_filter + "\n");
+			string_buffer.append("drppm -CSIMinerFilterExonMatrixByGeneSymbol " + NORM_EXON_MATRIX + ".consolidate " + QUERY_GENELIST + " " + norm_exon_matrix_gene_filter + "\n");
 			string_buffer.append("drppm -RemoveColumnsFromMatrix " + norm_exon_matrix_gene_filter + " 1,2,3,4,5,6 " + norm_exon_matrix_gene_filter_precleaned + "\n");
 			string_buffer.append("drppm -SampleFilter " + norm_exon_matrix_gene_filter_precleaned + " Annotation " + norm_exon_matrix_gene_filter_cleaned + " no\n");
+			
 			
 			string_buffer.append("drppm -CSIMinerCalculatePercentileCutoff " + norm_exon_matrix_gene_filter_cleaned + " " + norm_exon_matrix_percentile + " " + norm_exon_matrix_binned + "\n");
 			string_buffer.append("drppm -CSIMinerSplitMatrixCandidates " + norm_exon_matrix_gene_filter_cleaned + " " + NORM_SAMPLE2TISSUETYPE + " " + NORM_PREFIX + "\n");
