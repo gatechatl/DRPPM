@@ -68,7 +68,11 @@ public class CSIMinerConsolidateInputs {
 				String new_exon = split[0].replaceAll("_ECM_", "_").replaceAll("_NovelExon_", "_").replaceAll("_KnownExon_", "_").replaceAll("_Pecan_", "_");
 				
 				if (map.containsKey(new_exon)) {
-					out2.write(str + "\n");
+					out2.write(new_exon);
+					for (int i = 1; i < split.length; i++) {
+						out2.write("\t" + split[i]);
+					}
+					out2.write("\n");
 					map2.put(new_exon, new_exon);
 				}
 			}
@@ -86,7 +90,11 @@ public class CSIMinerConsolidateInputs {
 				String[] split = str.split("\t");
 				String new_exon = split[0].replaceAll("_ECM_", "_").replaceAll("_NovelExon_", "_").replaceAll("_KnownExon_", "_").replaceAll("_Pecan_", "_");				
 				if (map2.containsKey(new_exon)) {
-					out1.write(str + "\n");
+					out1.write(new_exon);
+					for (int i = 1; i < split.length; i++) {
+						out1.write("\t" + split[i]);
+					}
+					out1.write("\n");
 				}
 			}
 			in.close();
