@@ -711,6 +711,7 @@ import rnaseq.tools.genelengthanalysis.GTFAnnotateExonLength;
 import rnaseq.tools.genelengthanalysis.GTFAnnotateGeneLength;
 import rnaseq.tools.genelengthanalysis.GTFAnnotateNumExon;
 import rnaseq.tools.genelengthanalysis.GTFAnnotationSimple;
+import rnaseq.tools.genelengthanalysis.GenerateExonLengthReference;
 import rnaseq.tools.genelengthanalysis.TranscriptLengthSlidingWindow;
 import rnaseq.tools.genelengthanalysis.TranscriptLengthSlidingWindowInhibitedGenes;
 import rnaseq.tools.metadata.AppendMetadataTag2RNAseqMatrixSampleName;
@@ -10489,7 +10490,17 @@ public class DRPPM {
 				}
 				GTFFileAddRemoveChr.execute(args_remain);
 				System.exit(0);
-				// FastaAddRemoveChr
+				// GenerateExonLengthReference
+			} else if (type.equalsIgnoreCase("-GenerateExonLengthReference")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateExonLengthReference "
+							+ GenerateExonLengthReference.parameter_info());
+					System.exit(0);
+				}
+				GenerateExonLengthReference.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-FastaAddRemoveChr")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {

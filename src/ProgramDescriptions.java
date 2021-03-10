@@ -455,6 +455,7 @@ import rnaseq.tools.ercc.GenerateERCCgtffile;
 import rnaseq.tools.exonjunction.JunctionVsGeneJunc;
 import rnaseq.tools.exonjunction.OverlapLIMMAAndExonJunctionCount;
 import rnaseq.tools.genelengthanalysis.AppendGeneLength;
+import rnaseq.tools.genelengthanalysis.GenerateExonLengthReference;
 import rnaseq.tools.genelengthanalysis.TranscriptLengthSlidingWindow;
 import rnaseq.tools.genelengthanalysis.TranscriptLengthSlidingWindowInhibitedGenes;
 import rnaseq.tools.metadata.AppendMetadataTag2RNAseqMatrixSampleName;
@@ -2829,9 +2830,12 @@ public class ProgramDescriptions {
 		if (CSIMinerConsolidateInputs.type().equals(type)) {
 			result += "CSIMinerConsolidateInputs: " + CSIMinerConsolidateInputs.description() + "\n";
 		}
+		if (GenerateExonLengthReference.type().equals(type)) {
+			result += "GenerateExonLengthReference: " + GenerateExonLengthReference.description() + "\n";
+		}
 		return result;
 	}	
 
-	public static String VERSION = "2021-0310B";
+	public static String VERSION = "2021-0310C";
 	
 }
