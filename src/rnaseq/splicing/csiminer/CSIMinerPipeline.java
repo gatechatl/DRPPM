@@ -33,6 +33,14 @@ public class CSIMinerPipeline {
 	
 	private static String CANCER_PREFIX = "NA";
 	private static String NORM_PREFIX = "NA";
+	
+	private static String MATRIXDB_CORE = "NA";
+	private static String THERAPEUTIC_TARGET = "NA";
+	private static String SURFACEOME = "NA";
+	
+	private static String PRIMARY_ASSEMBLY_FASTA = "NA";
+	private static String UNIPROT_FASTA = "NA";
+	
 	public static void execute(String[] args) {
 		
 		try {
@@ -97,6 +105,24 @@ public class CSIMinerPipeline {
 							}
 							if (split[0].equalsIgnoreCase("NORM_PREFIX")) {
 								NORM_PREFIX = split[1];
+							}
+							
+							if (split[0].equalsIgnoreCase("MATRIXDB_CORE")) {
+								MATRIXDB_CORE = split[1];
+							}
+							if (split[0].equalsIgnoreCase("THERAPEUTIC_TARGET")) {
+								THERAPEUTIC_TARGET = split[1];
+							}
+							if (split[0].equalsIgnoreCase("SURFACEOME")) {
+								SURFACEOME = split[1];
+							}
+							
+							if (split[0].equalsIgnoreCase("PRIMARY_ASSEMBLY_FASTA")) {
+								PRIMARY_ASSEMBLY_FASTA = split[1];
+							}
+							
+							if (split[0].equalsIgnoreCase("UNIPROT_FASTA")) {
+								UNIPROT_FASTA = split[1];
 							}
 							/*
 							if (split[0].equalsIgnoreCase("RSEQC_REFSEQ_BED")) {
@@ -180,6 +206,12 @@ public class CSIMinerPipeline {
 			String summarize_meta_analysis_result = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT.txt";
 			String summarize_weighted_meta_analysis_result = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT.txt";
 
+			String summarize_meta_analysis_result_annotation = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt";
+			
+			String summarize_meta_analysis_result_annotation_bed = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt.bed";
+			String summarize_meta_analysis_result_annotation_bed_fasta = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt.bed.fasta";
+			String summarize_meta_analysis_result_annotation_bed_translation = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt.bed.translation.txt";
+			
 			StringBuffer string_buffer = new StringBuffer();
 			
 			//out.write("## bam2fastq conversion ##\n");
@@ -207,6 +239,13 @@ public class CSIMinerPipeline {
 			string_buffer.append("drppm -CSIMinerSplitMatrixCandidates " + norm_exon_matrix_gene_filter_cleaned + " " + NORM_SAMPLE2TISSUETYPE + " " + NORM_PREFIX + "\n");
 			string_buffer.append("drppm -JuncSalvagerWilcoxonTestRank " + CANCER_PREFIX + " " + CANCER_SAMPLE2DISEASETYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + wilcoxon_result + " " + meta_analysis + "\n");
 			string_buffer.append("drppm -JuncSalvagerWilcoxTestPostProcessing " + wilcoxon_result + " " + CANCER_PREFIX + " " + CANCER_SAMPLE2DISEASETYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + summarize_meta_analysis_result + " " + summarize_weighted_meta_analysis_result + "\n");
+			
+			
+			string_buffer.append("drppm -CSIMinerAnnotatePrioritizedExons " + summarize_meta_analysis_result + " " + MATRIXDB_CORE + " " + THERAPEUTIC_TARGET + " " + SURFACEOME + " " + summarize_meta_analysis_result_annotation + "\n");
+			
+			string_buffer.append("drppm -CSIMinerCandidate2BED " + summarize_meta_analysis_result_annotation + " " + summarize_meta_analysis_result_annotation_bed + "\n");
+			string_buffer.append("bedtools getfasta -bed  " + summarize_meta_analysis_result_annotation_bed + " -fi " + PRIMARY_ASSEMBLY_FASTA + " -fo " + summarize_meta_analysis_result_annotation_bed_fasta + " -name " + "\n");
+			string_buffer.append("drppm -JinghuiZhangBedFasta2Peptide " + summarize_meta_analysis_result_annotation_bed_fasta + " " + UNIPROT_FASTA + " " + summarize_meta_analysis_result_annotation_bed_translation + "\n");			
 			
 			// need to generate plots and other stuff
 			
