@@ -76,8 +76,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			String runtime_config_file = args[3];			
 			String outputFolder_prefix = args[4];
 			String outputShellScript = args[5];
-			String outputIntermediateFolder_prefix = "Intermediate";
-			
+			String outputIntermediateFolder_prefix = "Intermediate";			
 			String current_working_dir = System.getProperty("user.dir");
 			
 			String outputFolder = current_working_dir + "/" + outputFolder_prefix;
@@ -180,6 +179,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							}
 							if (split[0].equalsIgnoreCase("SKIP_OPTITYPE")) {
 								SKIP_OPTITYPE = new Boolean(split[1]);
+							}
+							if (split[0].equalsIgnoreCase("SKIP_RNAEDIT")) {
+								SKIP_RNAEDIT = new Boolean(split[1]);
 							}
 						}
 					}
@@ -895,12 +897,13 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".htseq.cpm.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.cpm.geneName.txt\n");
 							string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".htseq.tpm.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.tpm.geneName.txt\n");
 							string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".htseq.fpkm.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.fpkm.geneName.txt\n");
-							string_buffer.append("drppm -MergeGeneName " + sampleName + ".htseq.fpkm.ganeName.txt MAX " + sampleName + ".htseq.fpkm.geneName.max.txt\n");
-							string_buffer.append("drppm -MergeGeneName " + sampleName + ".htseq.cpm.ganeName.txt MAX " + sampleName + ".htseq.cpm.geneName.max.txt\n");
-							string_buffer.append("drppm -MergeGeneName " + sampleName + ".htseq.tpm.ganeName.txt MAX " + sampleName + ".htseq.tpm.geneName.max.txt\n");
+							string_buffer.append("drppm -MergeGeneNameMaxFast " + sampleName + ".htseq.fpkm.ganeName.txt " + sampleName + ".htseq.fpkm.geneName.max.txt\n");
+							string_buffer.append("drppm -MergeGeneNameMaxFast " + sampleName + ".htseq.cpm.ganeName.txt " + sampleName + ".htseq.cpm.geneName.max.txt\n");
+							string_buffer.append("drppm -MergeGeneNameMaxFast " + sampleName + ".htseq.tpm.ganeName.txt " + sampleName + ".htseq.tpm.geneName.max.txt\n");
 							
 							string_buffer.append("cd " + current_working_dir + "\n");
-							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level/counts." + sampleName + ".htseq.rawcount.txt " + outputFolder + "/" + sampleName + "/htseq_exon_level/\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level/counts." + sampleName + ".htseq.rawcount.txt " + outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level/\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.count.txt " + outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level/\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level/*" + " " + outputFolder + "/" + sampleName + "/htseq_gene_level/\n");
 							string_buffer.append("## END HTSEQ Gene Level  ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
@@ -970,6 +973,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (SKIP_HTSEQ_GENE) {
 								string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t exon " + bam_file_path + " " + PRIMARY_GTF_REF + " > counts." + sampleName + ".htseq.rawcount.txt\n");
 								string_buffer.append("drppm -CombineHTSEQResultRaw " + sampleName + ".htseq.lst " + sampleName + ".htseq.count.txt\n");
+							} else {
+								
 							}
 							
 							string_buffer.append("drppm -CombineHTSEQResultRaw " + sampleName + ".exon.htseq.lst " + sampleName + ".exon.htseq.count.txt\n");
