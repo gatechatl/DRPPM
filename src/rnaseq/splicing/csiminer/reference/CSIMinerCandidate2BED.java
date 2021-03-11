@@ -41,7 +41,7 @@ public class CSIMinerCandidate2BED {
 				str = str.replaceAll("_PanCan_", "_");
 				str = str.replaceAll("_ECM_", "_");
 				String[] split = str.split("\t");
-				if (split.length > 4) {
+				if (split[0].split("_").length > 4) {
 					String chr = split[0].split("_")[1];
 					String start = split[0].split("_")[2];
 					String end = split[0].split("_")[3];
