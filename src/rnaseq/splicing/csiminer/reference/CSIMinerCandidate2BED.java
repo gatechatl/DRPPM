@@ -41,14 +41,15 @@ public class CSIMinerCandidate2BED {
 				str = str.replaceAll("_PanCan_", "_");
 				str = str.replaceAll("_ECM_", "_");
 				String[] split = str.split("\t");
-				String chr = split[0].split("_")[1];
-				String start = split[0].split("_")[2];
-				String end = split[0].split("_")[3];
-				String tag = split[0];
-				String type = "1.0";
-				String direction = split[0].split("_")[4];
-				out_bed.write(chr + "\t" + start + "\t" + end + "\t" + tag + "\t" + 1 + "\t" + direction + "\n");
-				
+				if (split.length > 4) {
+					String chr = split[0].split("_")[1];
+					String start = split[0].split("_")[2];
+					String end = split[0].split("_")[3];
+					String tag = split[0];
+					String type = "1.0";
+					String direction = split[0].split("_")[4];
+					out_bed.write(chr + "\t" + start + "\t" + end + "\t" + tag + "\t" + 1 + "\t" + direction + "\n");
+				}
 			}
 			in.close();
 			out_bed.close();
