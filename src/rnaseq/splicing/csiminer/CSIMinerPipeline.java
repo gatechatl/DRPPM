@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 /**
  * Comprehensive pipeline for performing the cancer specific isoform prioritization
@@ -239,13 +242,31 @@ public class CSIMinerPipeline {
 			string_buffer.append("drppm -CSIMinerSplitMatrixCandidates " + norm_exon_matrix_gene_filter_cleaned + " " + NORM_SAMPLE2TISSUETYPE + " " + NORM_PREFIX + "\n");
 			string_buffer.append("drppm -JuncSalvagerWilcoxonTestRank " + CANCER_PREFIX + " " + CANCER_SAMPLE2DISEASETYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + wilcoxon_result + " " + meta_analysis + "\n");
 			string_buffer.append("drppm -JuncSalvagerWilcoxTestPostProcessing " + wilcoxon_result + " " + CANCER_PREFIX + " " + CANCER_SAMPLE2DISEASETYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + summarize_meta_analysis_result + " " + summarize_weighted_meta_analysis_result + "\n");
-			
-			
-			string_buffer.append("drppm -CSIMinerAnnotatePrioritizedExons " + summarize_meta_analysis_result + " " + MATRIXDB_CORE + " " + THERAPEUTIC_TARGET + " " + SURFACEOME + " " + summarize_meta_analysis_result_annotation + "\n");
-			
+
+			string_buffer.append("drppm -CSIMinerAnnotatePrioritizedExons " + summarize_meta_analysis_result + " " + MATRIXDB_CORE + " " + THERAPEUTIC_TARGET + " " + SURFACEOME + " " + summarize_meta_analysis_result_annotation + "\n");			
 			string_buffer.append("drppm -CSIMinerCandidate2BED " + summarize_meta_analysis_result_annotation + " " + summarize_meta_analysis_result_annotation_bed + "\n");
 			string_buffer.append("bedtools getfasta -bed  " + summarize_meta_analysis_result_annotation_bed + " -fi " + PRIMARY_ASSEMBLY_FASTA + " -fo " + summarize_meta_analysis_result_annotation_bed_fasta + " -name " + "\n");
 			string_buffer.append("drppm -JinghuiZhangBedFasta2Peptide " + summarize_meta_analysis_result_annotation_bed_fasta + " " + UNIPROT_FASTA + " " + summarize_meta_analysis_result_annotation_bed_translation + "\n");			
+			
+						
+			// Generate prioritization for each disease type
+			string_buffer.append("## Generate prioritization for each disease type" + "\n");
+			File disease_type_file = new File(CANCER_SAMPLE2DISEASETYPE); 
+			if (disease_type_file.exists()) {
+				HashMap diseases = generate_disease_metaFile(CANCER_SAMPLE2DISEASETYPE, outputIntermediateFolder + "/");
+				Iterator itr = diseases.keySet().iterator();
+				while (itr.hasNext()) {										
+					String disease_name = (String)itr.next();
+					string_buffer.append("## Generate prioritization for " + disease_name + "\n");
+					String SPECIFIC_DISEASE_TYPE = (String)diseases.get(disease_name);					
+					string_buffer.append("drppm -JuncSalvagerWilcoxTestPostProcessing " + wilcoxon_result + " " + CANCER_PREFIX + " " + SPECIFIC_DISEASE_TYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + disease_name + "_" + summarize_meta_analysis_result + " " + disease_name + "_" + summarize_weighted_meta_analysis_result + "\n");
+					string_buffer.append("drppm -CSIMinerAnnotatePrioritizedExons " + disease_name + "_" + summarize_meta_analysis_result + " " + MATRIXDB_CORE + " " + THERAPEUTIC_TARGET + " " + SURFACEOME + " " + disease_name + "_" + summarize_meta_analysis_result_annotation + "\n");			
+					string_buffer.append("drppm -CSIMinerCandidate2BED " + disease_name + "_" + summarize_meta_analysis_result_annotation + " " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed + "\n");
+					string_buffer.append("bedtools getfasta -bed  " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed + " -fi " + PRIMARY_ASSEMBLY_FASTA + " -fo " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed_fasta + " -name " + "\n");
+					string_buffer.append("drppm -JinghuiZhangBedFasta2Peptide " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed_fasta + " " + UNIPROT_FASTA + " " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed_translation + "\n");			
+					
+				}
+			}
 			
 			// need to generate plots and other stuff
 			
@@ -263,5 +284,55 @@ public class CSIMinerPipeline {
 		}
 	}
 	
+	public static HashMap generate_disease_metaFile(String cancer_sample_disease_type_file, String intermediate_folder) {
+		HashMap map = new HashMap();
+		
+		try {			
+			// parsing the runtime config file
+			FileInputStream fstream = new FileInputStream(cancer_sample_disease_type_file);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));
+			String header = in.readLine();
+			while (in.ready()) {
+				String str = in.readLine().trim();
+				String[] split = str.split("\t");
+				map.put(split[1], split[1]);
+			}
+			in.close();			
+			File f = new File(cancer_sample_disease_type_file);
+			String fileName = f.getName();
+			HashMap copy_map = map;
+			Iterator itr = copy_map.keySet().iterator();
+			while (itr.hasNext()) {
+				String disease = (String)itr.next();
+				
+				String outputFile = intermediate_folder + "/" + disease + "_" + fileName;
+				FileWriter fwriter = new FileWriter(outputFile);
+				BufferedWriter out = new BufferedWriter(fwriter);	
+				
+				map.put(disease, outputFile);
+				fstream = new FileInputStream(cancer_sample_disease_type_file);
+				din = new DataInputStream(fstream);
+				in = new BufferedReader(new InputStreamReader(din));
+				header = in.readLine();
+				out.write(header + "\n");
+				while (in.ready()) {
+					String str = in.readLine().trim();
+					String[] split = str.split("\t");
+					if (split[1].equals(disease)) {
+						out.write(str + "\n");
+					}
+				}
+				in.close();
+				out.write("\n");
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return map;
+	}
 	
+
 }
