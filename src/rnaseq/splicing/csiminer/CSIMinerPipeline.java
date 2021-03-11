@@ -299,14 +299,17 @@ public class CSIMinerPipeline {
 				map.put(split[1], split[1]);
 			}
 			in.close();			
+			
+			
 			File f = new File(cancer_sample_disease_type_file);
 			String fileName = f.getName();
-			HashMap copy_map = map;
+			HashMap copy_map = (HashMap)map.clone();
 			Iterator itr = copy_map.keySet().iterator();
 			while (itr.hasNext()) {
 				String disease = (String)itr.next();
-				
 				String outputFile = intermediate_folder + "/" + disease + "_" + fileName;
+				System.out.println(disease + "\t" + fileName + "\t" + intermediate_folder + "\t" + outputFile);
+				/*
 				FileWriter fwriter = new FileWriter(outputFile);
 				BufferedWriter out = new BufferedWriter(fwriter);	
 				
@@ -324,9 +327,9 @@ public class CSIMinerPipeline {
 					}
 				}
 				in.close();
-				out.write("\n");
-			}
-			
+				out.close();
+				*/
+			}			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
