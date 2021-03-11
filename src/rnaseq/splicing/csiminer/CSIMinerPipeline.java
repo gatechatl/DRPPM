@@ -308,7 +308,7 @@ public class CSIMinerPipeline {
 			while (itr.hasNext()) {
 				String disease = (String)itr.next();
 				String outputFile = intermediate_folder + "/" + disease + "_" + fileName;
-				//System.out.println(disease + "\t" + fileName + "\t" + intermediate_folder + "\t" + outputFile);
+				System.out.println("Generate File: " + outputFile);
 				
 				FileWriter fwriter = new FileWriter(outputFile);
 				BufferedWriter out = new BufferedWriter(fwriter);	
