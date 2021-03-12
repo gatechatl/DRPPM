@@ -108,7 +108,7 @@ public class WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide {
 							
 							out.close();
 						} else {
-							System.out.println("Missing: " + path + "/NovelExons.txt");
+							System.out.println("Missing: " + new_f.getPath() + "/NovelExons.txt");
 						}
 						
 					}
