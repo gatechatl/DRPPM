@@ -67,51 +67,51 @@ public class WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide {
 			for (File sampleFolder_file: sample_files) {
 				if (sampleFolder_file.isDirectory()) {
 					File[] gene_files = sampleFolder_file.listFiles();
-					for (File geneFolder_file: gene_files) {
-						String path = geneFolder_file.getPath();
+					//for (File geneFolder_file: gene_files) {
+					String path = sampleFolder_file.getPath();
+					
+					File f = new File(path + "/juncsalvager/result");
+					File new_f = f;
+					if (f.exists()) {
+						new_f = f.listFiles()[0];
+					}
+					f = new File(new_f.getPath() + "/NovelExons.txt");
+					if (f.exists()) {
 						
-						File f = new File(path + "/juncsalvager/result");
-						File new_f = f;
-						if (f.exists()) {
-							new_f = f.listFiles()[0];
-						}
-						f = new File(new_f.getPath() + "/NovelExons.txt");
-						if (f.exists()) {
-							
-							FileWriter fwriter = new FileWriter(path + "/NovelExons.Filtered.bed");
-							BufferedWriter out = new BufferedWriter(fwriter);
-							
-							fstream = new FileInputStream(f.getPath());
-							din = new DataInputStream(fstream);
-							in = new BufferedReader(new InputStreamReader(din));
-							String header = in.readLine();
-							while (in.ready()) {
-								String str = in.readLine();
-								String[] split = str.split("\t");
-								if (!exons.containsKey(split[1] + "\t" + split[2] + "\t" + split[3])) {
-									out.write(split[1] + "\t" + split[2] + "\t" + split[3] + "\t" + split[0] + ":" + split[5] + ":" + sampleFolder_file.getName() + "\t0\t" + split[4] + "\n");
-									String exon_coord = split[1] + "\t" + split[2] + "\t" + split[3] + "\t" + split[0] + ":" + split[5] + "\t0\t" + split[4];
-									if (all_novel_exons_summary.containsKey(exon_coord)) {
-										LinkedList sample_list = (LinkedList)all_novel_exons_summary.get(exon_coord);
-										if (!sample_list.contains(sampleFolder_file.getName())) {
-											sample_list.add(sampleFolder_file.getName());
-										}
-										all_novel_exons_summary.put(exon_coord, sample_list);
-									} else {
-										LinkedList sample_list = new LinkedList();
+						FileWriter fwriter = new FileWriter(path + "/NovelExons.Filtered.bed");
+						BufferedWriter out = new BufferedWriter(fwriter);
+						
+						fstream = new FileInputStream(f.getPath());
+						din = new DataInputStream(fstream);
+						in = new BufferedReader(new InputStreamReader(din));
+						String header = in.readLine();
+						while (in.ready()) {
+							String str = in.readLine();
+							String[] split = str.split("\t");
+							if (!exons.containsKey(split[1] + "\t" + split[2] + "\t" + split[3])) {
+								out.write(split[1] + "\t" + split[2] + "\t" + split[3] + "\t" + split[0] + ":" + split[5] + ":" + sampleFolder_file.getName() + "\t0\t" + split[4] + "\n");
+								String exon_coord = split[1] + "\t" + split[2] + "\t" + split[3] + "\t" + split[0] + ":" + split[5] + "\t0\t" + split[4];
+								if (all_novel_exons_summary.containsKey(exon_coord)) {
+									LinkedList sample_list = (LinkedList)all_novel_exons_summary.get(exon_coord);
+									if (!sample_list.contains(sampleFolder_file.getName())) {
 										sample_list.add(sampleFolder_file.getName());
-										all_novel_exons_summary.put(exon_coord, sample_list);
 									}
+									all_novel_exons_summary.put(exon_coord, sample_list);
+								} else {
+									LinkedList sample_list = new LinkedList();
+									sample_list.add(sampleFolder_file.getName());
+									all_novel_exons_summary.put(exon_coord, sample_list);
 								}
 							}
-							in.close();
-							
-							out.close();
-						} else {
-							System.out.println("Missing: " + new_f.getPath() + "/NovelExons.txt");
 						}
+						in.close();
 						
+						out.close();
+					} else {
+						System.out.println("Missing: " + new_f.getPath() + "/NovelExons.txt");
 					}
+						
+					//}
 				}
 			}
 			
