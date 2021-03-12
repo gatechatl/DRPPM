@@ -422,6 +422,7 @@ import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
+import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
 import rnaseq.splicing.csiminer.reference.CSIMinerCandidate2BED;
 import rnaseq.splicing.csiminer.reference.CSIMinerCandidateRegion2Fasta;
@@ -2833,9 +2834,12 @@ public class ProgramDescriptions {
 		if (GenerateExonLengthReference.type().equals(type)) {
 			result += "GenerateExonLengthReference: " + GenerateExonLengthReference.description() + "\n";
 		}
+		if (CSIMinerAppendAnnotatedInformation.type().equals(type)) {
+			result += "CSIMinerAppendAnnotatedInformation: " + CSIMinerAppendAnnotatedInformation.description() + "\n";
+		}
 		return result;
 	}	
 
-	public static String VERSION = "2021-0311E";
+	public static String VERSION = "2021-0312A";
 	
 }

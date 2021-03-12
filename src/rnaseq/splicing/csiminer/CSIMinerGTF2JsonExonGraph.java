@@ -35,6 +35,11 @@ public class CSIMinerGTF2JsonExonGraph {
 			String outputFolder = "/home/gatechatl/CSI-Miner/Graph/Gene";
 			//String outputJSON = "/home/gatechatl/CSI-Miner/Graph/graph.json"; //args[4];
 			
+			String outputExonAnnotation = "/home/gatechatl/CSI-Miner/Gencode36_Ensembl102_ApprisExonAnnotation.txt";
+			
+			FileWriter fwriter_exon_annotation = new FileWriter(outputExonAnnotation);
+			BufferedWriter out_exon_annotation = new BufferedWriter(fwriter_exon_annotation);	
+			
 			HashMap principal_transcript = new HashMap();
 			HashMap alternative_transcript = new HashMap();
 			FileInputStream fstream = new FileInputStream(appris_transcript_annotation);
@@ -205,6 +210,7 @@ public class CSIMinerGTF2JsonExonGraph {
 						} else {
 							out.write("," + line);
 						}
+						out_exon_annotation.write(exon_name + "\t" + transcript_type + "\n");
 					}
 					
 					HashMap write_once = new HashMap();
@@ -239,6 +245,8 @@ public class CSIMinerGTF2JsonExonGraph {
 				out.write("],\"attributes\":{}}");
 				out.close();
 			}
+			
+			out_exon_annotation.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
