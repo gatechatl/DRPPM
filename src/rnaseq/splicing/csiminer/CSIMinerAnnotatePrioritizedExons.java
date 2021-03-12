@@ -42,7 +42,7 @@ public class CSIMinerAnnotatePrioritizedExons {
 			File f = new File(outputFile);
 			if (f.exists()) {
 				System.out.println("Please delete the output file");
-				System.exit(0);
+				//System.exit(0);
 			}
 			FileInputStream fstream = new FileInputStream(inputMatrixCoreFile);
 			DataInputStream din = new DataInputStream(fstream);
