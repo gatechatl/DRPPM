@@ -41,7 +41,7 @@ public class CSIMinerAnnotatePrioritizedExons {
 			
 			File f = new File(outputFile);
 			if (f.exists()) {
-				System.out.println("Please delete the output file");
+				System.out.println("File exists. Will override existing file.");
 				//System.exit(0);
 			}
 			FileInputStream fstream = new FileInputStream(inputMatrixCoreFile);
