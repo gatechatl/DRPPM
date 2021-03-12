@@ -41,6 +41,9 @@ public class CSIMinerPipeline {
 	private static String THERAPEUTIC_TARGET = "NA";
 	private static String SURFACEOME = "NA";
 	
+	private static String EXON_APPRIS = "NA";
+	private static String OTHER_EXON_ANNOTATION = "NA";
+	
 	private static String PRIMARY_ASSEMBLY_FASTA = "NA";
 	private static String UNIPROT_FASTA = "NA";
 	
@@ -127,6 +130,13 @@ public class CSIMinerPipeline {
 							if (split[0].equalsIgnoreCase("UNIPROT_FASTA")) {
 								UNIPROT_FASTA = split[1];
 							}
+							
+							if (split[0].equalsIgnoreCase("EXON_APPRIS")) {
+								EXON_APPRIS = split[1];
+							}
+							if (split[0].equalsIgnoreCase("OTHER_EXON_ANNOTATION")) {
+								OTHER_EXON_ANNOTATION = split[1];
+							}
 							/*
 							if (split[0].equalsIgnoreCase("RSEQC_REFSEQ_BED")) {
 								RSEQC_REFSEQ_BED = split[1];
@@ -209,6 +219,8 @@ public class CSIMinerPipeline {
 			String summarize_meta_analysis_result = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT.txt";
 			String summarize_weighted_meta_analysis_result = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT.txt";
 
+			String summarize_meta_analysis_result_annotation_pre1 = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_PREANNOTATE1.txt";
+			String summarize_meta_analysis_result_annotation_pre2 = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_PREANNOTATE2.txt";
 			String summarize_meta_analysis_result_annotation = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt";
 			
 			String summarize_meta_analysis_result_annotation_bed = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt.bed";
@@ -245,7 +257,11 @@ public class CSIMinerPipeline {
 			string_buffer.append("drppm -JuncSalvagerWilcoxonTestRank " + CANCER_PREFIX + " " + CANCER_SAMPLE2DISEASETYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + wilcoxon_result + " " + meta_analysis + "\n");
 			string_buffer.append("drppm -JuncSalvagerWilcoxTestPostProcessing " + wilcoxon_result + " " + CANCER_PREFIX + " " + CANCER_SAMPLE2DISEASETYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + summarize_meta_analysis_result + " " + summarize_weighted_meta_analysis_result + "\n");
 
-			string_buffer.append("drppm -CSIMinerAnnotatePrioritizedExons " + summarize_meta_analysis_result + " " + MATRIXDB_CORE + " " + THERAPEUTIC_TARGET + " " + SURFACEOME + " " + summarize_meta_analysis_result_annotation + "\n");			
+			string_buffer.append("drppm -CSIMinerAnnotatePrioritizedExons " + summarize_meta_analysis_result + " " + MATRIXDB_CORE + " " + THERAPEUTIC_TARGET + " " + SURFACEOME + " " + summarize_meta_analysis_result_annotation_pre1 + "\n");
+			
+			string_buffer.append("drppm -CSIMinerAppendAnnotatedInformation " + summarize_meta_analysis_result_annotation_pre1 + " " + EXON_APPRIS + " " + summarize_meta_analysis_result_annotation_pre2 + "\n");
+			string_buffer.append("drppm -CSIMinerAppendAnnotatedInformation " + summarize_meta_analysis_result_annotation_pre2 + " " + OTHER_EXON_ANNOTATION + " " + summarize_meta_analysis_result_annotation + "\n");					
+			
 			string_buffer.append("drppm -CSIMinerCandidate2BED " + summarize_meta_analysis_result_annotation + " " + summarize_meta_analysis_result_annotation_bed + "\n");
 			string_buffer.append("bedtools getfasta -bed  " + summarize_meta_analysis_result_annotation_bed + " -fi " + PRIMARY_ASSEMBLY_FASTA + " -fo " + summarize_meta_analysis_result_annotation_bed_fasta + " -name " + "\n");
 			string_buffer.append("drppm -JinghuiZhangBedFasta2Peptide " + summarize_meta_analysis_result_annotation_bed_fasta + " " + UNIPROT_FASTA + " " + summarize_meta_analysis_result_annotation_bed_translation + "\n");			
@@ -262,7 +278,11 @@ public class CSIMinerPipeline {
 					string_buffer.append("## Generate prioritization for " + disease_name + "\n");
 					String SPECIFIC_DISEASE_TYPE = (String)diseases.get(disease_name);					
 					string_buffer.append("drppm -JuncSalvagerWilcoxTestPostProcessing " + wilcoxon_result + " " + CANCER_PREFIX + " " + SPECIFIC_DISEASE_TYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + disease_name + "_" + summarize_meta_analysis_result + " " + disease_name + "_" + summarize_weighted_meta_analysis_result + "\n");
-					string_buffer.append("drppm -CSIMinerAnnotatePrioritizedExons " + disease_name + "_" + summarize_meta_analysis_result + " " + MATRIXDB_CORE + " " + THERAPEUTIC_TARGET + " " + SURFACEOME + " " + disease_name + "_" + summarize_meta_analysis_result_annotation + "\n");			
+					
+					string_buffer.append("drppm -CSIMinerAnnotatePrioritizedExons " + disease_name + "_" + summarize_meta_analysis_result + " " + MATRIXDB_CORE + " " + THERAPEUTIC_TARGET + " " + SURFACEOME + " " + disease_name + "_" + summarize_meta_analysis_result_annotation_pre1 + "\n");
+					string_buffer.append("drppm -CSIMinerAppendAnnotatedInformation " + disease_name + "_" + summarize_meta_analysis_result_annotation_pre1 + " " + EXON_APPRIS + " " + disease_name + "_" + summarize_meta_analysis_result_annotation_pre2 + "\n");
+					string_buffer.append("drppm -CSIMinerAppendAnnotatedInformation " + disease_name + "_" + summarize_meta_analysis_result_annotation_pre2 + " " + OTHER_EXON_ANNOTATION + " " + disease_name + "_" + summarize_meta_analysis_result_annotation + "\n");					
+					
 					string_buffer.append("drppm -CSIMinerCandidate2BED " + disease_name + "_" + summarize_meta_analysis_result_annotation + " " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed + "\n");
 					string_buffer.append("bedtools getfasta -bed  " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed + " -fi " + PRIMARY_ASSEMBLY_FASTA + " -fo " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed_fasta + " -name " + "\n");
 					string_buffer.append("drppm -JinghuiZhangBedFasta2Peptide " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed_fasta + " " + UNIPROT_FASTA + " " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed_translation + "\n");			
