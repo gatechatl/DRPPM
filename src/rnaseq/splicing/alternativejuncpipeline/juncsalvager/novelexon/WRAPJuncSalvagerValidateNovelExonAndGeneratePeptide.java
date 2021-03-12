@@ -20,7 +20,7 @@ import rnaseq.splicing.rnapeg.EXON;
  * @author gatechatl
  *
  */
-public class JuncSalvagerValidateNovelExonAndGeneratePeptide {
+public class WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide {
 
 
 	public static String type() {
@@ -70,8 +70,12 @@ public class JuncSalvagerValidateNovelExonAndGeneratePeptide {
 					for (File geneFolder_file: gene_files) {
 						String path = geneFolder_file.getPath();
 						
-						
-						File f = new File(path + "/NovelExons.txt");
+						File f = new File(path + "/juncsalvager/result");
+						File new_f = f;
+						if (f.exists()) {
+							new_f = f.listFiles()[0];
+						}
+						f = new File(new_f.getPath() + "/NovelExons.txt");
 						if (f.exists()) {
 							
 							FileWriter fwriter = new FileWriter(path + "/NovelExons.Filtered.bed");
@@ -149,3 +153,4 @@ public class JuncSalvagerValidateNovelExonAndGeneratePeptide {
 		}
 	}
 }
+

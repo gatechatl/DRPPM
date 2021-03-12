@@ -639,6 +639,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.SummarizeNovelExonSi
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerConvert2GTFFriendlyBED;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerTranslateFasta;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerValidateNovelExonAndGeneratePeptide;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvager5prime3primeUsagePSI;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
@@ -11543,7 +11544,17 @@ public class DRPPM {
 				}
 				JuncSalvagerValidateNovelExonAndGeneratePeptide.execute(args_remain);
 				System.exit(0);
-				// JuncSalvagerTranslateFasta
+				// WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide
+			} else if (type.equalsIgnoreCase("-WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide "
+							+ WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide.parameter_info());
+					System.exit(0);
+				}
+				WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-JuncSalvagerTranslateFasta")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {

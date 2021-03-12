@@ -25,7 +25,7 @@ public class GenerateScatterPlotJavaScriptUserInputCustomColorMetaComplex {
 		return "JAVASCRIPT";
 	}
 	public static String parameter_info() {
-		return "[inputMatrix] [name_index] [x_axis_index] [y_axis_index] [meta_index] [x_logFC_cutoff] [y_logFC_cutoff] [xaxis_title] [yaxis_title] [meta_title] [SkipHeaderFlag:true/false] [writeNameFlag:true/false";
+		return "[inputMatrix] [name_index] [x_axis_index] [y_axis_index] [meta_index: example: 3,4,5] [x_logFC_cutoff] [y_logFC_cutoff] [xaxis_title] [yaxis_title] [meta_title Ex: diseasetype,antigenexpr,marker] [SkipHeaderFlag:true/false] [writeNameFlag:true/false";
 	}
 	public static void execute(String[] args) {
 		
