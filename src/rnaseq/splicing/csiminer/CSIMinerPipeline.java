@@ -223,9 +223,10 @@ public class CSIMinerPipeline {
 			
 			string_buffer.append("## CSI-miner processing of cancer samples ##\n");
 			//out.write("cd " + outputIntermediateFolder + "/" + sampleName + "/fastq/" + "\n");
-			string_buffer.append("drppm -CSIMinerConsolidateInputs " + CANCER_EXON_MATRIX + " " + NORM_EXON_MATRIX + " " + CANCER_EXON_MATRIX + ".consolidate " + NORM_EXON_MATRIX + ".consolidate\n");
+			//string_buffer.append("drppm -CSIMinerConsolidateInputs " + CANCER_EXON_MATRIX + " " + NORM_EXON_MATRIX + " " + CANCER_EXON_MATRIX + ".consolidate " + NORM_EXON_MATRIX + ".consolidate\n");
 			
-			string_buffer.append("drppm -CSIMinerFilterExonMatrixByGeneSymbol " + CANCER_EXON_MATRIX + ".consolidate " + QUERY_GENELIST + " " + cancer_exon_matrix_gene_filter + "\n");
+			//string_buffer.append("drppm -CSIMinerFilterExonMatrixByGeneSymbol " + CANCER_EXON_MATRIX + ".consolidate " + QUERY_GENELIST + " " + cancer_exon_matrix_gene_filter + "\n");
+			string_buffer.append("drppm -CSIMinerFilterExonMatrixByGeneSymbol " + CANCER_EXON_MATRIX + QUERY_GENELIST + " " + cancer_exon_matrix_gene_filter + "\n");
 			string_buffer.append("drppm -RemoveColumnsFromMatrix " + cancer_exon_matrix_gene_filter + " 1,2,3,4,5,6 " + cancer_exon_matrix_gene_filter_precleaned + "\n");
 			string_buffer.append("drppm -SampleFilter " + cancer_exon_matrix_gene_filter_precleaned + " Annotation " + cancer_exon_matrix_gene_filter_cleaned + " no\n");
 			
@@ -233,7 +234,8 @@ public class CSIMinerPipeline {
 			
 			string_buffer.append("drppm -CSIMinerSplitMatrixCandidates " + cancer_exon_matrix_gene_filter_cleaned + " " + CANCER_SAMPLE2DISEASETYPE + " " + CANCER_PREFIX + "\n");
 			
-			string_buffer.append("drppm -CSIMinerFilterExonMatrixByGeneSymbol " + NORM_EXON_MATRIX + ".consolidate " + QUERY_GENELIST + " " + norm_exon_matrix_gene_filter + "\n");
+			//string_buffer.append("drppm -CSIMinerFilterExonMatrixByGeneSymbol " + NORM_EXON_MATRIX + ".consolidate " + QUERY_GENELIST + " " + norm_exon_matrix_gene_filter + "\n");
+			string_buffer.append("drppm -CSIMinerFilterExonMatrixByGeneSymbol " + NORM_EXON_MATRIX + QUERY_GENELIST + " " + norm_exon_matrix_gene_filter + "\n");
 			string_buffer.append("drppm -RemoveColumnsFromMatrix " + norm_exon_matrix_gene_filter + " 1,2,3,4,5,6 " + norm_exon_matrix_gene_filter_precleaned + "\n");
 			string_buffer.append("drppm -SampleFilter " + norm_exon_matrix_gene_filter_precleaned + " Annotation " + norm_exon_matrix_gene_filter_cleaned + " no\n");
 			
