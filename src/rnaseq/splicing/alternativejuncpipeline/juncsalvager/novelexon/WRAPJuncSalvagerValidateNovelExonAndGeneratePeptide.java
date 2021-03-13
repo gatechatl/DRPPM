@@ -62,20 +62,21 @@ public class WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide {
 			}
 			in.close();
 			
-			File f = new File(exonFolder + "/juncsalvager/result");
-			File new_f = f;
+			//File f = new File(exonFolder + "/juncsalvager/result");
+			/*File new_f = f;
 			if (f.exists()) {
 				new_f = f.listFiles()[0];
-			}
+			}*/
 			
-			File outputFolder_file = new File(new_f.getPath());
+			File outputFolder_file = new File(exonFolder);
 			File[] sample_files = outputFolder_file.listFiles();
 			for (File sampleFolder_file: sample_files) {
-				if (sampleFolder_file.isDirectory()) {										
-					File[] gene_files = sampleFolder_file.listFiles();
+				if (sampleFolder_file.isDirectory()) {		
+					File new_file = new File(sampleFolder_file.getPath() + "/" + "juncsalvager/result");
+					File[] gene_files = new_file.listFiles();
 					for (File geneFolder_file: gene_files) {
 					String path = sampleFolder_file.getPath();					
-						f = new File(path + "/NovelExons.txt");
+						File f = new File(path + "/NovelExons.txt");
 						if (f.exists()) {
 							
 							FileWriter fwriter = new FileWriter(path + "/NovelExons.Filtered.bed");
@@ -108,7 +109,7 @@ public class WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide {
 							
 							out.close();
 						} else {
-							System.out.println("Missing: " + new_f.getPath() + "/NovelExons.txt");
+							System.out.println("Missing: " + path + "/NovelExons.txt");
 						}
 							
 					}
