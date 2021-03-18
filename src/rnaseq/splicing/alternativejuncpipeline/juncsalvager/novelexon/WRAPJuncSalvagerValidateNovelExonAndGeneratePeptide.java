@@ -71,8 +71,10 @@ public class WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide {
 			File outputFolder_file = new File(exonFolder);
 			File[] sample_files = outputFolder_file.listFiles();
 			for (File sampleFolder_file: sample_files) {
-				if (sampleFolder_file.isDirectory()) {		
-					File new_file = new File(sampleFolder_file.getPath() + "/" + "juncsalvager/result");
+				if (sampleFolder_file.isDirectory()) {
+					
+					File new_file = new File(sampleFolder_file.getPath() + "/" + "juncsalvager/result/" + sampleFolder_file.getName());
+					
 					if (new_file.exists()) {
 						File[] gene_files = new_file.listFiles();
 						for (File geneFolder_file: gene_files) {
