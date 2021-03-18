@@ -76,7 +76,7 @@ public class WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide {
 					if (new_file.exists()) {
 						File[] gene_files = new_file.listFiles();
 						for (File geneFolder_file: gene_files) {
-						String path = sampleFolder_file.getPath();					
+							String path = geneFolder_file.getPath();					
 							File f = new File(path + "/NovelExons.txt");
 							if (f.exists()) {
 								
