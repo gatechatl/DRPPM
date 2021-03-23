@@ -743,6 +743,13 @@ public class SearchProgram {
 		search_program.add("CombineMultipleMatrixTogetherButSkipLeftNCols");
 		search_program.add("CSIMinerPipeline");
 		search_program.add("GenerateInputMatrixIllumina");
-
+		search_program.add("CSIMinerGenerateCustomHeatmapFromPercentileMatrix");
+		search_program.add("CSIMinerCandidateRegion2Fasta");
+		search_program.add("CSIMinerAppendTMHMMAnnotation2Candidate");
+		search_program.add("CSIMinerCandidate2BED");
+		search_program.add("CSIMinerConsolidateInputs");
+		search_program.add("GenerateExonLengthReference");
+		search_program.add("CSIMinerAppendAnnotatedInformation");
+		
 	}
 }
