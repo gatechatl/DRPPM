@@ -126,6 +126,9 @@ public class RPM2RPKMExon {
 				if (length > 0) {
 					out.write(geneID);
 					for (int i = 1; i < split.length; i++) {
+						if (length < 100) {
+							length = 100;
+						}
 						double value = new Double(split[i]) * 1000 / length;
 						out.write("\t" + value);
 					}

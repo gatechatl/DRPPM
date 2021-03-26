@@ -82,6 +82,9 @@ public class RPM2RPKMTranscript {
 					length = (Integer)transcripts.get(geneID);
 					out.write(geneID);
 					for (int i = 1; i < split.length; i++) {
+						if (length < 100) {
+							length = 100;
+						}
 						double value = new Double(split[i]) * 1000/ length;
 						out.write("\t" + value);
 					}

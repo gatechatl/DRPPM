@@ -98,6 +98,9 @@ public class RPM2RPKMWithLengthReference {
 					length = (Integer)geneName2length.get(geneID);
 				
 					for (int i = 1; i < split.length; i++) {
+						if (length < 100) {
+							length = 100;
+						}
 						double value = new Double(split[i]) * 1000 / length;
 						out.write("\t" + value);
 					}
