@@ -1004,7 +1004,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level/" + "\n");					
 							string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t exon --nonunique all " + bam_file_path + " " + PRIMARY_GTF_EXON_REF + " > counts." + sampleName + ".exon.htseq.rawcount.txt\n");
 							
-							File htseq_gene_file = new File(outputFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.rawcount.txt");
+							File htseq_gene_file = new File(outputFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.count.txt");
 							if (htseq_gene_file.exists()) {
 								string_buffer.append("cp " + outputFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.count.txt " + sampleName + ".htseq.count.txt\n");
 							} else {
