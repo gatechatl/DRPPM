@@ -465,6 +465,7 @@ import rnaseq.tools.metadata.AppendMetadataTag2RNAseqMatrixSampleName;
 import rnaseq.tools.pipeline.ExpandGeneListAfterLIMMA;
 import rnaseq.tools.pipeline.GenerateLIMMAComparisonScript;
 import rnaseq.tools.pipeline.WrappingMyRNAseqAnalysisPipeline;
+import rnaseq.tools.pipeline.htseqexon.WRAPCombineFilesIntoMatrix;
 import rnaseq.tools.qc.SetupInferExperimentPipeline;
 import rnaseq.tools.qc.star_2_7_1a.ExtractQCMetricsSTAR271a;
 import rnaseq.tools.quantification.CalculateExonRPKM;
@@ -2844,6 +2845,9 @@ public class ProgramDescriptions {
 		}
 		if (WRAPJuncSalvagerValidateAltStartAndGeneratePeptide.type().equals(type)) {
 			result += "WRAPJuncSalvagerValidateAltStartAndGeneratePeptide: " + WRAPJuncSalvagerValidateAltStartAndGeneratePeptide.description() + "\n";
+		}
+		if (WRAPCombineFilesIntoMatrix.type().equals(type)) {
+			result += "WRAPCombineFilesIntoMatrix: " + WRAPCombineFilesIntoMatrix.description() + "\n";
 		}
 		return result;
 	}	

@@ -50,6 +50,11 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String RNAEDITING_VARIANTS = "NA";
 	private static String PRIMARY_FASTA = "NA";
 	private static String OPTITYPE_PROGRAM = "NA";
+	
+	private static String OUTPUT_RSEQC_FILELST = "NA";
+	private static String OUTPUT_HTSEQGENE_FILELST = "NA";
+	private static String OUTPUT_HTSEQEXON_FILELST = "NA";
+	
 	private static boolean RSEQC_NOWIG = false;
 	
 	
@@ -67,6 +72,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static boolean SKIP_KNOWNVARIANTS = false;
 	private static boolean SKIP_RNAINDEL = false;
 	private static boolean SKIP_OPTITYPE = false;
+	
+	
 	public static void execute(String[] args) {
 		
 		try {
@@ -92,7 +99,16 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			
 			FileWriter fwriter = new FileWriter(outputShellScript);
 			BufferedWriter out = new BufferedWriter(fwriter);						
-								
+			
+			FileWriter fwriter_OUTPUT_HTSEQEXON_FILELST = new FileWriter(OUTPUT_HTSEQEXON_FILELST);
+			BufferedWriter out_OUTPUT_HTSEQEXON_FILELST = new BufferedWriter(fwriter_OUTPUT_HTSEQEXON_FILELST);						
+
+			FileWriter fwriter_OUTPUT_RSEQC_FILELST = new FileWriter(OUTPUT_RSEQC_FILELST);
+			BufferedWriter out_OUTPUT_RSEQC_FILELST = new BufferedWriter(fwriter_OUTPUT_RSEQC_FILELST);						
+
+			FileWriter fwriter_OUTPUT_HTSEQGENE_FILELST = new FileWriter(OUTPUT_HTSEQGENE_FILELST);
+			BufferedWriter out_OUTPUT_HTSEQGENE_FILELST = new BufferedWriter(fwriter_OUTPUT_HTSEQGENE_FILELST);											
+			
 			// parsing the runtime config file
 			FileInputStream fstream = new FileInputStream(runtime_config_file);
 			DataInputStream din = new DataInputStream(fstream);
@@ -150,6 +166,18 @@ public class WrappingMyRNAseqAnalysisPipeline {
 								RSEQC_NOWIG = new Boolean(split[1]);
 							}
 							
+							if (split[0].equalsIgnoreCase("OUTPUT_RSEQC_FILELST")) {
+								OUTPUT_RSEQC_FILELST = split[1];
+							}
+							
+							if (split[0].equalsIgnoreCase("OUTPUT_HTSEQGENE_FILELST")) {
+								OUTPUT_HTSEQGENE_FILELST = split[1];
+							}
+							
+							if (split[0].equalsIgnoreCase("OUTPUT_HTSEQEXON_FILELST")) {
+								OUTPUT_HTSEQEXON_FILELST = split[1];
+							}
+							
 							if (split[0].equalsIgnoreCase("SKIP_BAM2FASTQ")) {
 								SKIP_BAM2FASTQ = new Boolean(split[1]);
 							}
@@ -183,6 +211,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (split[0].equalsIgnoreCase("SKIP_RNAEDIT")) {
 								SKIP_RNAEDIT = new Boolean(split[1]);
 							}
+							
+							
 						}
 					}
 				}
@@ -905,6 +935,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level/counts." + sampleName + ".htseq.rawcount.txt " + outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level/\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.count.txt " + outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level/\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level/*" + " " + outputFolder + "/" + sampleName + "/htseq_gene_level/\n");
+							
+							out_OUTPUT_HTSEQGENE_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.fpkm.txt" + "\t" + outputFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.rawcount.txt" + "\n");
+							
 							string_buffer.append("## END HTSEQ Gene Level  ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
 						}
@@ -1004,6 +1037,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							
 							string_buffer.append("cd " + current_working_dir + "\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level/*" + " " + outputFolder + "/" + sampleName + "/htseq_exon_level/\n");
+							
+							out_OUTPUT_HTSEQEXON_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/htseq_exon_level/" + sampleName + ".exon.htseq.fpkm.txt" + "\t" + outputFolder + "/" + sampleName + "/htseq_exon_level/" + sampleName + ".htseq.total.count.txt" + "\n");
+							
 							string_buffer.append("## END HTSEQ Exon Quant ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
 						}
@@ -1127,7 +1163,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			}
 			out.close();
 			
-			
+			out_OUTPUT_HTSEQEXON_FILELST.close();
+			out_OUTPUT_HTSEQGENE_FILELST.close();
+			out_OUTPUT_RSEQC_FILELST.close();
 			
 		} catch (Exception e) { 
 			e.printStackTrace();

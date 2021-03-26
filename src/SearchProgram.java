@@ -751,5 +751,6 @@ public class SearchProgram {
 		search_program.add("GenerateExonLengthReference");
 		search_program.add("CSIMinerAppendAnnotatedInformation");
 		search_program.add("WRAPJuncSalvagerValidateAltStartAndGeneratePeptide");
+		search_program.add("WRAPCombineFilesIntoMatrix");
 	}
 }
