@@ -54,7 +54,7 @@ public class WRAPCombineFilesIntoMatrix {
 					String header = in2.readLine();
 					out.write(header.split("\t")[0]);
 					while (in2.ready()) {
-						String str2 = in.readLine();
+						String str2 = in2.readLine();
 						String[] split2 = str2.split("\t");
 						out.write("\t" + split2[0]);					
 					}
