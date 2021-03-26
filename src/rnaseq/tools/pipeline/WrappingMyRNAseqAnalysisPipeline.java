@@ -1004,11 +1004,16 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level/" + "\n");					
 							string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t exon --nonunique all " + bam_file_path + " " + PRIMARY_GTF_EXON_REF + " > counts." + sampleName + ".exon.htseq.rawcount.txt\n");
 							
-							if (SKIP_HTSEQ_GENE) {
-								string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t exon " + bam_file_path + " " + PRIMARY_GTF_REF + " > counts." + sampleName + ".htseq.rawcount.txt\n");
-								string_buffer.append("drppm -CombineHTSEQResultRaw " + sampleName + ".htseq.lst " + sampleName + ".htseq.count.txt\n");
-							} else {								
+							File htseq_gene_file = new File(outputFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.rawcount.txt");
+							if (htseq_gene_file.exists()) {
 								string_buffer.append("cp " + outputFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.rawcount.txt " + sampleName + ".htseq.count.txt\n");
+							} else {
+								if (SKIP_HTSEQ_GENE) {
+									string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t exon " + bam_file_path + " " + PRIMARY_GTF_REF + " > counts." + sampleName + ".htseq.rawcount.txt\n");
+									string_buffer.append("drppm -CombineHTSEQResultRaw " + sampleName + ".htseq.lst " + sampleName + ".htseq.count.txt\n");
+								} else {								
+									string_buffer.append("cp " + outputFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.rawcount.txt " + sampleName + ".htseq.count.txt\n");
+								}
 							}
 							
 							string_buffer.append("drppm -CombineHTSEQResultRaw " + sampleName + ".exon.htseq.lst " + sampleName + ".exon.htseq.count.txt\n");
