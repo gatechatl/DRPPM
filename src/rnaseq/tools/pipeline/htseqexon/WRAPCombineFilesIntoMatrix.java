@@ -36,6 +36,8 @@ public class WRAPCombineFilesIntoMatrix {
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);						
 			
+			int length = 0;
+			
 			boolean header_flag = true;
 			FileInputStream fstream = new FileInputStream(inputFileLst);
 			DataInputStream din = new DataInputStream(fstream);
@@ -47,6 +49,7 @@ public class WRAPCombineFilesIntoMatrix {
 				String sampleName = split[0];
 				String inputFile = split[index];
 				
+				
 				if (header_flag) {
 					FileInputStream fstream2 = new FileInputStream(inputFile);
 					DataInputStream din2 = new DataInputStream(fstream2);
@@ -56,27 +59,37 @@ public class WRAPCombineFilesIntoMatrix {
 					while (in2.ready()) {
 						String str2 = in2.readLine();
 						String[] split2 = str2.split("\t");
-						out.write("\t" + split2[0]);					
+						out.write("\t" + split2[0]);
+						length++;
 					}
 					in2.close();
 					header_flag = false;
 					out.write("\n");
+					
 				}
 
+				int check_lines = 0;
+				StringBuffer buffer = new StringBuffer();
 				FileInputStream fstream2 = new FileInputStream(inputFile);
 				DataInputStream din2 = new DataInputStream(fstream2);
 				BufferedReader in2 = new BufferedReader(new InputStreamReader(din2));
 				String header = in2.readLine();
-				out.write(sampleName);
+				buffer.append(sampleName);
+				//out.write(sampleName);
 				while (in2.ready()) {
-					String str2 = in.readLine();
+					String str2 = in2.readLine();
 					String[] split2 = str2.split("\t");
-					out.write("\t" + split2[index]);					
+					//out.write("\t" + split2[index]);
+					buffer.append("\t" + split2[index]);
+					check_lines++;
 				}
 				in2.close();
 				header_flag = false;
-				out.write("\n");				
-				
+				buffer.append("\n");
+				//out.write("\n");				
+				if (length == check_lines) {
+					out.write(buffer.toString());
+				}
 			}
 			in.close();
 			out.close();
