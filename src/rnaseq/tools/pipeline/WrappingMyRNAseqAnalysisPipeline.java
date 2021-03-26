@@ -99,16 +99,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			
 			FileWriter fwriter = new FileWriter(outputShellScript);
 			BufferedWriter out = new BufferedWriter(fwriter);						
-			
-			FileWriter fwriter_OUTPUT_HTSEQEXON_FILELST = new FileWriter(OUTPUT_HTSEQEXON_FILELST);
-			BufferedWriter out_OUTPUT_HTSEQEXON_FILELST = new BufferedWriter(fwriter_OUTPUT_HTSEQEXON_FILELST);						
 
-			FileWriter fwriter_OUTPUT_RSEQC_FILELST = new FileWriter(OUTPUT_RSEQC_FILELST);
-			BufferedWriter out_OUTPUT_RSEQC_FILELST = new BufferedWriter(fwriter_OUTPUT_RSEQC_FILELST);						
-
-			FileWriter fwriter_OUTPUT_HTSEQGENE_FILELST = new FileWriter(OUTPUT_HTSEQGENE_FILELST);
-			BufferedWriter out_OUTPUT_HTSEQGENE_FILELST = new BufferedWriter(fwriter_OUTPUT_HTSEQGENE_FILELST);											
-			
 			// parsing the runtime config file
 			FileInputStream fstream = new FileInputStream(runtime_config_file);
 			DataInputStream din = new DataInputStream(fstream);
@@ -218,6 +209,16 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				}
 			}
 			in.close();
+
+			
+			FileWriter fwriter_OUTPUT_HTSEQEXON_FILELST = new FileWriter(OUTPUT_HTSEQEXON_FILELST);
+			BufferedWriter out_OUTPUT_HTSEQEXON_FILELST = new BufferedWriter(fwriter_OUTPUT_HTSEQEXON_FILELST);						
+
+			FileWriter fwriter_OUTPUT_RSEQC_FILELST = new FileWriter(OUTPUT_RSEQC_FILELST);
+			BufferedWriter out_OUTPUT_RSEQC_FILELST = new BufferedWriter(fwriter_OUTPUT_RSEQC_FILELST);						
+
+			FileWriter fwriter_OUTPUT_HTSEQGENE_FILELST = new FileWriter(OUTPUT_HTSEQGENE_FILELST);
+			BufferedWriter out_OUTPUT_HTSEQGENE_FILELST = new BufferedWriter(fwriter_OUTPUT_HTSEQGENE_FILELST);											
 			
 			// need to add code to check for whether all the files are present
 			
