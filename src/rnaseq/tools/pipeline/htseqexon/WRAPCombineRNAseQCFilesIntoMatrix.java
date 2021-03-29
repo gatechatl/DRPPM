@@ -71,7 +71,6 @@ public class WRAPCombineRNAseQCFilesIntoMatrix {
 				header = in2.readLine();
 				header = in2.readLine();
 				header = in2.readLine();
-				header = in2.readLine();
 				String totalSplicingReads = in2.readLine().split(": ")[1];
 				out.write("\t" + totalSplicingReads);
 				String knownSplicingReads = in2.readLine().split(": ")[1];
