@@ -63,6 +63,7 @@ public class WRAPCombineRNAseQCFilesIntoMatrix {
 				}
 				in2.close();
 				
+				System.out.println(inputJunctionAnnotationFile);
 				fstream2 = new FileInputStream(inputJunctionAnnotationFile);
 				din2 = new DataInputStream(fstream2);
 				in2 = new BufferedReader(new InputStreamReader(din2));
@@ -71,24 +72,24 @@ public class WRAPCombineRNAseQCFilesIntoMatrix {
 				header = in2.readLine();
 				header = in2.readLine();
 				header = in2.readLine();
-				String totalSplicingReads = in2.readLine().split(": ")[1];
+				String totalSplicingReads = in2.readLine().split("\t")[1];
 				out.write("\t" + totalSplicingReads);
-				String knownSplicingReads = in2.readLine().split(": ")[1];
+				String knownSplicingReads = in2.readLine().split("\t")[1];
 				out.write("\t" + knownSplicingReads);
-				String partialNovelSplicingReads = in2.readLine().split(": ")[1];
+				String partialNovelSplicingReads = in2.readLine().split("\t")[1];
 				out.write("\t" + partialNovelSplicingReads);
-				String novelSplicingReads = in2.readLine().split(": ")[1];
+				String novelSplicingReads = in2.readLine().split("\t")[1];
 				out.write("\t" + novelSplicingReads);
-				String filteredSplicingReads = in2.readLine().split(": ")[1];
+				String filteredSplicingReads = in2.readLine().split("\t")[1];
 				out.write("\t" + filteredSplicingReads);
 				in2.readLine();
-				String totalSplicingJunctions = in2.readLine().split(": ")[1];
+				String totalSplicingJunctions = in2.readLine().split("\t")[1];
 				out.write("\t" + totalSplicingJunctions);
-				String knownSplicingJunctions = in2.readLine().split(": ")[1];
+				String knownSplicingJunctions = in2.readLine().split("\t")[1];
 				out.write("\t" + knownSplicingJunctions);
-				String partialNovelSplicingJunctions = in2.readLine().split(": ")[1];
+				String partialNovelSplicingJunctions = in2.readLine().split("\t")[1];
 				out.write("\t" + partialNovelSplicingJunctions);
-				String novelSplicingJunctions = in2.readLine().split(": ")[1];
+				String novelSplicingJunctions = in2.readLine().split("\t")[1];
 				out.write("\t" + novelSplicingJunctions);				
 				in2.close();
 				out.write("\n");
