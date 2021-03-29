@@ -726,6 +726,7 @@ import rnaseq.tools.pipeline.ExpandGeneListAfterLIMMA;
 import rnaseq.tools.pipeline.GenerateLIMMAComparisonScript;
 import rnaseq.tools.pipeline.WrappingMyRNAseqAnalysisPipeline;
 import rnaseq.tools.pipeline.htseqexon.WRAPCombineFilesIntoMatrix;
+import rnaseq.tools.pipeline.htseqexon.WRAPCombineRNAseQCFilesIntoMatrix;
 import rnaseq.tools.qc.SetupInferExperimentPipeline;
 import rnaseq.tools.qc.star_2_7_1a.ExtractQCMetricsSTAR271a;
 import rnaseq.tools.quantification.CalculateExonRPKM;
@@ -11816,6 +11817,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				WRAPCombineFilesIntoMatrix.execute(args_remain);
+				System.exit(0);
+				// WRAPCombineRNAseQCFilesIntoMatrix
+			} else if (type.equalsIgnoreCase("-WRAPCombineRNAseQCFilesIntoMatrix")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -WRAPCombineRNAseQCFilesIntoMatrix "
+							+ WRAPCombineRNAseQCFilesIntoMatrix.parameter_info());
+					System.exit(0);
+				}
+				WRAPCombineRNAseQCFilesIntoMatrix.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

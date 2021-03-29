@@ -747,7 +747,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							
 							File f = new File(bam_file_path);
 							String new_name = f.getName().replaceAll(".bam", "");
-							out_OUTPUT_RSEQC_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/rseqc/" + new_name + ".summary.txt" + "\n");
+							out_OUTPUT_RSEQC_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/rseqc/" + new_name + ".summary.txt" + "\t" + outputFolder + "/" + sampleName + "/rseqc/" + sampleName + "_junction_annotation_summary_more.txt" + "\n");
 							
 							
 							string_buffer_map.put(sampleName, string_buffer);
