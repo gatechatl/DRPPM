@@ -54,10 +54,11 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String OUTPUT_RSEQC_FILELST = "NA";
 	private static String OUTPUT_HTSEQGENE_FILELST = "NA";
 	private static String OUTPUT_HTSEQEXON_FILELST = "NA";
-	
-	private static boolean RSEQC_NOWIG = false;
-	
-	
+	private static String OUTPUT_STARfinalout_FILELST = "NA";
+	private static String OUTPUT_SPLICING_DEFICIENCY_FILELST = "NA";
+	private static String OUTPUT_PSI_PSO_CALC_FILELST = "NA";	
+		
+	private static boolean RSEQC_NOWIG = false;		
 	private static boolean IS_PAIRED = true;
 	private static boolean SKIP_BAM2FASTQ = false;
 	private static boolean SKIP_STAR = false;
@@ -168,6 +169,16 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (split[0].equalsIgnoreCase("OUTPUT_HTSEQEXON_FILELST")) {
 								OUTPUT_HTSEQEXON_FILELST = split[1];
 							}
+							if (split[0].equalsIgnoreCase("OUTPUT_SPLICING_DEFICIENCY_FILELST")) {
+								OUTPUT_SPLICING_DEFICIENCY_FILELST = split[1];
+							}
+							if (split[0].equalsIgnoreCase("OUTPUT_PSI_PSO_CALC_FILELST")) {
+								OUTPUT_PSI_PSO_CALC_FILELST = split[1];
+							}
+							if (split[0].equalsIgnoreCase("OUTPUT_STARfinalout_FILELST")) {
+								OUTPUT_STARfinalout_FILELST = split[1];
+							}
+							
 							
 							if (split[0].equalsIgnoreCase("SKIP_BAM2FASTQ")) {
 								SKIP_BAM2FASTQ = new Boolean(split[1]);
@@ -201,24 +212,52 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							}
 							if (split[0].equalsIgnoreCase("SKIP_RNAEDIT")) {
 								SKIP_RNAEDIT = new Boolean(split[1]);
-							}
-							
-							
+							}														
 						}
 					}
 				}
 			}
 			in.close();
 
+			FileWriter fwriter_OUTPUT_HTSEQEXON_FILELST = null;
+			BufferedWriter out_OUTPUT_HTSEQEXON_FILELST = null; 
+			if (!SKIP_HTSEQ_EXON_QUANT) {
+				fwriter_OUTPUT_HTSEQEXON_FILELST = new FileWriter(OUTPUT_HTSEQEXON_FILELST);
+				out_OUTPUT_HTSEQEXON_FILELST = new BufferedWriter(fwriter_OUTPUT_HTSEQEXON_FILELST);						
+			}
+			FileWriter fwriter_OUTPUT_RSEQC_FILELST = null;
+			BufferedWriter out_OUTPUT_RSEQC_FILELST = null;
+			if (!SKIP_RSEQC) {
+				fwriter_OUTPUT_RSEQC_FILELST = new FileWriter(OUTPUT_RSEQC_FILELST);
+				out_OUTPUT_RSEQC_FILELST = new BufferedWriter(fwriter_OUTPUT_RSEQC_FILELST);						
+			}
+			FileWriter fwriter_OUTPUT_HTSEQGENE_FILELST = null;
+			BufferedWriter out_OUTPUT_HTSEQGENE_FILELST = null;
+			if (!SKIP_HTSEQ_GENE) {
+				fwriter_OUTPUT_HTSEQGENE_FILELST = new FileWriter(OUTPUT_HTSEQGENE_FILELST);
+				out_OUTPUT_HTSEQGENE_FILELST = new BufferedWriter(fwriter_OUTPUT_HTSEQGENE_FILELST);
+			}
 			
-			FileWriter fwriter_OUTPUT_HTSEQEXON_FILELST = new FileWriter(OUTPUT_HTSEQEXON_FILELST);
-			BufferedWriter out_OUTPUT_HTSEQEXON_FILELST = new BufferedWriter(fwriter_OUTPUT_HTSEQEXON_FILELST);						
-
-			FileWriter fwriter_OUTPUT_RSEQC_FILELST = new FileWriter(OUTPUT_RSEQC_FILELST);
-			BufferedWriter out_OUTPUT_RSEQC_FILELST = new BufferedWriter(fwriter_OUTPUT_RSEQC_FILELST);						
-
-			FileWriter fwriter_OUTPUT_HTSEQGENE_FILELST = new FileWriter(OUTPUT_HTSEQGENE_FILELST);
-			BufferedWriter out_OUTPUT_HTSEQGENE_FILELST = new BufferedWriter(fwriter_OUTPUT_HTSEQGENE_FILELST);											
+			FileWriter fwriter_OUTPUT_STARfinalout_FILELST = null;
+			BufferedWriter out_OUTPUT_STARfinalout_FILELST = null;
+			if (!SKIP_STAR) {
+				fwriter_OUTPUT_STARfinalout_FILELST = new FileWriter(OUTPUT_STARfinalout_FILELST);
+				out_OUTPUT_STARfinalout_FILELST = new BufferedWriter(fwriter_OUTPUT_STARfinalout_FILELST);											
+			}
+			
+			FileWriter fwriter_OUTPUT_SPLICING_DEFICIENCY_FILELST = null;
+			BufferedWriter out_OUTPUT_SPLICING_DEFICIENCY_FILELST = null;
+			if (!SKIP_SPLICING_DEFICIENCY) {
+				fwriter_OUTPUT_SPLICING_DEFICIENCY_FILELST = new FileWriter(OUTPUT_SPLICING_DEFICIENCY_FILELST);
+				out_OUTPUT_SPLICING_DEFICIENCY_FILELST = new BufferedWriter(fwriter_OUTPUT_SPLICING_DEFICIENCY_FILELST);											
+			}
+			
+			FileWriter fwriter_OUTPUT_PSI_PSO_CALC_FILELST = null;
+			BufferedWriter out_OUTPUT_PSI_PSO_CALC_FILELST = null;
+			if (!SKIP_PSI_PSO_CALC) {
+				fwriter_OUTPUT_PSI_PSO_CALC_FILELST = new FileWriter(OUTPUT_PSI_PSO_CALC_FILELST);
+				out_OUTPUT_PSI_PSO_CALC_FILELST = new BufferedWriter(fwriter_OUTPUT_PSI_PSO_CALC_FILELST);											
+			}
 			
 			// need to add code to check for whether all the files are present
 			
@@ -428,6 +467,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							//out.write("## end bam2fastq conversion ##\n\n");
 							string_buffer.append("## end bam2fastq conversion ##\n\n");								
 							
+							
 							string_buffer_map.put(sampleName, string_buffer);
 						}
 						fq1_path_map.put(sampleName, fastq_folder + "/" + sampleName + ".R1.fastq");
@@ -560,9 +600,12 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							
 							//out.write("## End STAR Mapping ##\n\n");
 							string_buffer.append("## End STAR Mapping ##\n\n");
-							string_buffer_map.put(sampleName, string_buffer);	
+							string_buffer_map.put(sampleName, string_buffer);
+							String bam_star_finalout = outputFolder + "/" + sampleName + "/star/" + sampleName + ".STAR.Log.final.out";
+							out_OUTPUT_STARfinalout_FILELST.write(sampleName + "\t" + bam_star_finalout + "\n");
 						}
 						String bam_file_path = outputFolder + "/" + sampleName + "/star/" + sampleName + ".STAR.Aligned.sortedByCoord.out.bam";
+						 
 						if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
 							bam_path_map.put(sampleName, bam_file_path);
 						} else {
@@ -573,6 +616,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 						} else {						
 							sj_path_map.put(sampleName, "NA");
 						}
+						
+						
 					}			
 				}			
 		
@@ -694,10 +739,16 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("junction_annotation.py -i " + bam_file_path + " -o " + sampleName + "_junction_annotation -r " + RSEQC_REFSEQ_BED + " > " + sampleName + "_junction_annotation_summary.txt 2> " + sampleName + "_junction_annotation_summary_more.txt\n");
 							string_buffer.append("junction_saturation.py -i " + bam_file_path + " -r " + RSEQC_REFSEQ_BED + " -o " + sampleName + "_junction_saturation > " + sampleName + "_junction_saturation_summary.txt 2> " + sampleName + "_junction_saturation_summary_more.txt\n");
 							string_buffer.append("tin.py -i " + bam_file_path + " -r " + RSEQC_RIBOSOME_BED + "\n");
+							
 							//string_buffer.append(rseqc_script_generation(sampleName, bam_file_path, CHR_NAME_LENGTH_FILE, RSEQC_HOUSE_KEEPING_GENE_BED, RSEQC_REFSEQ_BED, RSEQC_RIBOSOME_BED) + "\n");
 							string_buffer.append("cd " + current_working_dir + "\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/rseqc/*" + " " + outputFolder + "/" + sampleName + "/rseqc/\n"); // need to specify the files to copy in the future...
 							string_buffer.append("## END RSEQC mapping ##\n\n");
+							
+							File f = new File(bam_file_path);
+							String new_name = f.getName().replaceAll(".bam", "");
+							out_OUTPUT_RSEQC_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/rseqc/" + new_name + ".summary.txt");
+							
 							
 							string_buffer_map.put(sampleName, string_buffer);
 						}
@@ -748,6 +799,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/psipso/psi_pso_output/*" + " " + outputFolder + "/" + sampleName + "/psipso/\n"); // need to specify the files to copy in the future...
 							string_buffer.append("## END PSI PSO calculation ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
+							
+							out_OUTPUT_PSI_PSO_CALC_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.psi.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.pso.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab..txt" + "\n");
 						}
 						
 
@@ -807,6 +860,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/splicingdeficiency/*_SD_geneName.txt" + " " + outputFolder + "/" + sampleName + "/splicingdeficiency/\n");
 							string_buffer.append("## END Splicing Deficiency calculation ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
+							
+							out_OUTPUT_SPLICING_DEFICIENCY_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/splicingdeficiency/" + sampleName + ".STAR.Aligned.sortedByCoord.out.bam.bed_SD.txt" + "\t" + outputFolder + "/" + sampleName + "/splicingdeficiency/" + sampleName + ".STAR.Aligned.sortedByCoord.out.bam.bed_SD_geneName.txt\n");
 						}
 					} else {
 						if (!SKIP_SPLICING_DEFICIENCY) {
@@ -1169,9 +1224,24 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			}
 			out.close();
 			
-			out_OUTPUT_HTSEQEXON_FILELST.close();
-			out_OUTPUT_HTSEQGENE_FILELST.close();
-			out_OUTPUT_RSEQC_FILELST.close();
+			if (!SKIP_HTSEQ_EXON_QUANT) {
+				out_OUTPUT_HTSEQEXON_FILELST.close();
+			}
+			if (!SKIP_HTSEQ_GENE) {
+				out_OUTPUT_HTSEQGENE_FILELST.close();
+			}
+			if (!SKIP_RSEQC) {
+				out_OUTPUT_RSEQC_FILELST.close();
+			}
+			if (!SKIP_STAR) {
+				out_OUTPUT_STARfinalout_FILELST.close();
+			}
+			if (!SKIP_SPLICING_DEFICIENCY) {
+				out_OUTPUT_SPLICING_DEFICIENCY_FILELST.close();
+			}
+			if (!SKIP_PSI_PSO_CALC) {
+				out_OUTPUT_PSI_PSO_CALC_FILELST.close();
+			}
 			
 		} catch (Exception e) { 
 			e.printStackTrace();
