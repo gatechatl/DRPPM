@@ -68,6 +68,8 @@ public class Txt2Excel {
 
         final org.slf4j.Logger log = LoggerFactory.getLogger(App.class);
         */
+		
+		/*
 		//String inputFile = "C:/Users/tshaw/Desktop/PROTEOMICS/WordExample/test.txt";
 		//String outputfilepath = "C:/Users/tshaw/Desktop/PROTEOMICS/WordExample/example.xlsx";
 		String inputFile = args[0]; //"C:/Users/tshaw/Desktop/PROTEOMICS/WordExample/test.txt";
@@ -87,6 +89,7 @@ public class Txt2Excel {
 		//saver.save(outputfilepath);
 				
 		System.out.println("\n\n done .. " + outputfilepath);	
+		*/
 	}
 	
 	private static void addContent(String inputFile, WorksheetPart sheet) {
