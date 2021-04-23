@@ -428,6 +428,8 @@ import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
 import rnaseq.splicing.csiminer.reference.CSIMinerCandidate2BED;
 import rnaseq.splicing.csiminer.reference.CSIMinerCandidateRegion2Fasta;
+import rnaseq.splicing.csiminer.reference.tmhmmdb.CSIMinerExonAnnotateTMHMM;
+import rnaseq.splicing.csiminer.reference.tmhmmdb.CSIMinerGeneNameUniprotProtein;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
 import rnaseq.splicing.mats308.SummarizeMATSSummary;
@@ -2849,7 +2851,13 @@ public class ProgramDescriptions {
 		if (WRAPCombineFilesIntoMatrix.type().equals(type)) {
 			result += "WRAPCombineFilesIntoMatrix: " + WRAPCombineFilesIntoMatrix.description() + "\n";
 		}
+		if (CSIMinerGeneNameUniprotProtein.type().equals(type)) {
+			result += "CSIMinerGeneNameUniprotProtein: " + CSIMinerGeneNameUniprotProtein.description() + "\n";
+		}
+		if (CSIMinerExonAnnotateTMHMM.type().equals(type)) {
+			result += "CSIMinerExonAnnotateTMHMM: " + CSIMinerExonAnnotateTMHMM.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2021-0421B";	
+	public static String VERSION = "2021-0423A";	
 }

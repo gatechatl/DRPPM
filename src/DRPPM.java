@@ -658,6 +658,8 @@ import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
 import rnaseq.splicing.csiminer.reference.CSIMinerCandidate2BED;
 import rnaseq.splicing.csiminer.reference.CSIMinerCandidateRegion2Fasta;
+import rnaseq.splicing.csiminer.reference.tmhmmdb.CSIMinerExonAnnotateTMHMM;
+import rnaseq.splicing.csiminer.reference.tmhmmdb.CSIMinerGeneNameUniprotProtein;
 import rnaseq.splicing.mats308.AddGeneName2MATS;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
@@ -11827,6 +11829,26 @@ public class DRPPM {
 					System.exit(0);
 				}
 				WRAPCombineRNAseQCFilesIntoMatrix.execute(args_remain);
+				System.exit(0);
+				// CSIMinerGeneNameUniprotProtein
+			} else if (type.equalsIgnoreCase("-CSIMinerGeneNameUniprotProtein")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerGeneNameUniprotProtein "
+							+ CSIMinerGeneNameUniprotProtein.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerGeneNameUniprotProtein.execute(args_remain);
+				System.exit(0);
+				// CSIMinerExonAnnotateTMHMM
+			} else if (type.equalsIgnoreCase("-CSIMinerExonAnnotateTMHMM")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerExonAnnotateTMHMM "
+							+ CSIMinerExonAnnotateTMHMM.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerExonAnnotateTMHMM.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {
