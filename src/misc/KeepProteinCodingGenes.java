@@ -46,8 +46,9 @@ public class KeepProteinCodingGenes {
 				String geneName = split[0].split(",")[0].split(";")[0];
 				if (proteinCodingGenes.containsKey(geneName)) {
 					out.write(str + "\n");
-				}
-				
+				} else if (proteinCodingGenes.containsKey(geneName.split("\\.")[0])) {
+					out.write(str + "\n");
+				}				
 			}
 			in.close();
 			out.close();

@@ -17,8 +17,11 @@ public class PauloRodriguezCleanGeneName {
 			HashMap sample_list = new HashMap();
 			String melanoma_type = "UVM";
 			
-			String inputMatrix = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/SKCM_EBPlusPlusAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.tsv";
-			String outputMatrix = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/SKCM_EBPlusPlusAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.clean.tsv";
+			//String inputMatrix = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/SKCM_EBPlusPlusAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.tsv";
+			//String outputMatrix = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/SKCM_EBPlusPlusAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.clean.tsv";
+			
+			String inputMatrix = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/EBPlusPlusAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.tsv";
+			String outputMatrix = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/EBPlusPlusAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.clean.tsv";
 			
 			FileWriter fwriter = new FileWriter(outputMatrix);
 			BufferedWriter out = new BufferedWriter(fwriter);			
@@ -43,12 +46,13 @@ public class PauloRodriguezCleanGeneName {
 			in.close();
 			out.close();
 			
-			
+			/*
 			
 			sample_list = new HashMap();
 			
 			inputMatrix = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/SKCM_BRAFV700E_EBPlusPlusAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.tsv";
 			outputMatrix = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/SKCM_BRAFV700E_EBPlusPlusAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.clean.tsv";
+			
 			
 			fwriter = new FileWriter(outputMatrix);
 			out = new BufferedWriter(fwriter);			
@@ -72,6 +76,8 @@ public class PauloRodriguezCleanGeneName {
 			}
 			in.close();
 			out.close();
+			
+			*/
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
