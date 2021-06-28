@@ -50,6 +50,11 @@ public class CalculateXBP1sFeatures {
 				String sampleName = split[0];
 				String path = split[1];
 				
+				double xbp1_exon3exon4_junc1 = 0;					
+				double xbp1_skipexon4_junc = 0;
+				double xbp1s_stress_junc = 0;
+				double xbp1_exon4exon5_junc = 0;
+				
 				FileInputStream fstream2 = new FileInputStream(path);
 				DataInputStream din2 = new DataInputStream(fstream2);
 				BufferedReader in2 = new BufferedReader(new InputStreamReader(din2));
@@ -60,10 +65,7 @@ public class CalculateXBP1sFeatures {
 					String start = split2[1];
 					String end = split2[2];
 					String uniq_read = split2[6];
-					double xbp1_exon3exon4_junc1 = 0;					
-					double xbp1_skipexon4_junc = 0;
-					double xbp1s_stress_junc = 0;
-					double xbp1_exon4exon5_junc = 0;
+
 					if (chr.equals("chr22") && start.equals("28795733") && end.equals("28796046")) {
 						xbp1_exon3exon4_junc1 = new Double(uniq_read);
 					}
@@ -76,12 +78,14 @@ public class CalculateXBP1sFeatures {
 					if (chr.equals("chr22") && start.equals("28796193") && end.equals("28797076")) {
 						xbp1_exon4exon5_junc = new Double(uniq_read);
 					}
-					double psi_score = (xbp1s_stress_junc + 0.01) / (xbp1_exon3exon4_junc1 + xbp1_exon4exon5_junc + xbp1s_stress_junc + 0.01);
-					double exon4_skipping = (xbp1_skipexon4_junc + 0.01) / (xbp1_exon3exon4_junc1 + xbp1_exon4exon5_junc + xbp1_skipexon4_junc + 0.01);
-					out.write(sampleName + "\t" + xbp1s_stress_junc + "\t" + xbp1_exon3exon4_junc1 + "\t" + xbp1_exon4exon5_junc + "\t" + xbp1_skipexon4_junc + "\t" + psi_score + "\t" + exon4_skipping + "\n");
+					
 				}
 				in2.close();
 				
+				double psi_score = (xbp1s_stress_junc + 0.01) / (xbp1_exon3exon4_junc1 + xbp1_exon4exon5_junc + xbp1s_stress_junc + 0.01);
+				double exon4_skipping = (xbp1_skipexon4_junc + 0.01) / (xbp1_exon3exon4_junc1 + xbp1_exon4exon5_junc + xbp1_skipexon4_junc + 0.01);
+			
+				out.write(sampleName + "\t" + xbp1s_stress_junc + "\t" + xbp1_exon3exon4_junc1 + "\t" + xbp1_exon4exon5_junc + "\t" + xbp1_skipexon4_junc + "\t" + psi_score + "\t" + exon4_skipping + "\n");
 			}
 			in.close();
 			out.close();
