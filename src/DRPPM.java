@@ -646,6 +646,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvager5pri
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
+import rnaseq.splicing.alternativejuncpipeline.xbp1.CalculateXBP1sFeatures;
 import rnaseq.splicing.csiminer.CSIMinerAnnotateExonBasedOnTheSpliceGraph;
 import rnaseq.splicing.csiminer.CSIMinerAnnotatePrioritizedExons;
 import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
@@ -11850,7 +11851,17 @@ public class DRPPM {
 				}
 				CSIMinerExonAnnotateTMHMM.execute(args_remain);
 				System.exit(0);
-				// 
+				// CalculateXBP1sFeatures
+			} else if (type.equalsIgnoreCase("-CalculateXBP1sFeatures")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CalculateXBP1sFeatures "
+							+ CalculateXBP1sFeatures.parameter_info());
+					System.exit(0);
+				}
+				CalculateXBP1sFeatures.execute(args_remain);
+				System.exit(0);
+				// CalculateXBP1sFeatures
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length >= 1) {					
@@ -11859,7 +11870,7 @@ public class DRPPM {
 					System.out.println("drppm -Find [Input your program name]");					
 				}
 				System.exit(0);
-				// 
+				// CalculateXBP1sFeatures
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

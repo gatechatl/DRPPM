@@ -50,7 +50,8 @@ public class PauloRodriguezGenerateTCGAFormattedFiles {
 			out.close();
 			
 			HashMap braf_cases = new HashMap();
-			String braf_cases_file = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/patient_with_BRAF_V600E.txt";
+			//String braf_cases_file = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/patient_with_BRAF_V600E.txt";
+			String braf_cases_file = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/added_cbioportal_BRAF_annotation.txt";
 			fstream = new FileInputStream(braf_cases_file);
 			din = new DataInputStream(fstream);
 			in = new BufferedReader(new InputStreamReader(din));
@@ -66,10 +67,15 @@ public class PauloRodriguezGenerateTCGAFormattedFiles {
 			FileWriter fwriter_sampleName = new FileWriter(outputSampleNames);
 			BufferedWriter out_sampleName = new BufferedWriter(fwriter_sampleName);			
 
+			/*
 			String outputSampleNamesBraf = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/" + melanoma_type + "_sampleList_with_BRAFV700E.txt";		
 			FileWriter fwriter_sampleNameBraf = new FileWriter(outputSampleNamesBraf);
 			BufferedWriter out_sampleNameBraf = new BufferedWriter(fwriter_sampleNameBraf);			
-	
+			*/
+
+			String outputSampleNamesBraf = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/" + melanoma_type + "_sampleList_with_BRAFevents.txt";		
+			FileWriter fwriter_sampleNameBraf = new FileWriter(outputSampleNamesBraf);
+			BufferedWriter out_sampleNameBraf = new BufferedWriter(fwriter_sampleNameBraf);			
 			
 			String expression_matrix = "/home/gatechatl/Projects/PauloProjects/TCGAPanCanAtlas/EBPlusPlusAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.tsv";
 			fstream = new FileInputStream(expression_matrix);

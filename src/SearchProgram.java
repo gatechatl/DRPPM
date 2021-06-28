@@ -753,5 +753,6 @@ public class SearchProgram {
 		search_program.add("WRAPJuncSalvagerValidateAltStartAndGeneratePeptide");
 		search_program.add("WRAPCombineFilesIntoMatrix");
 		search_program.add("CSIMinerExonAnnotateTMHMM");
+		search_program.add("CalculateXBP1sFeatures");
 	}
 }
