@@ -144,15 +144,16 @@ public class CSIMinerAppendProteinHits {
 							String peptide = split_result[2];
 							int ref_start = new Integer(ref_accession_start_end.split("\t")[1]);
 							int ref_end = new Integer(ref_accession_start_end.split("\t")[2]);
-							System.out.println("PSM Fasta: " + ref_start + "\t" + ref_end + "\t" + peptide);
-							System.out.println("CSI peptide: " + split[index] + "\t" + split[index + 1]);
-							System.out.println();
-							if (MathTools.overlap(start,  end, ref_start, ref_end)) {
 
+							if (MathTools.overlap(start,  end, ref_start, ref_end)) {
+								
 								if (new Double(split_result[4]) > score) {
 									score = new Double(split_result[4]);
 									hit_result = "true\t" + result;
 								}
+								System.out.println("PSM Fasta: " + ref_start + "\t" + ref_end + "\t" + split_result[4] + "\t" + peptide);
+								System.out.println("CSI peptide: " + split[index] + "\t" + score + "\t" + split[index + 1]);
+								System.out.println(hit_result);
 							}
 						}
 					}
