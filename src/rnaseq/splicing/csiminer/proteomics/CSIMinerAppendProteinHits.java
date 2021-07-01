@@ -98,15 +98,14 @@ public class CSIMinerAppendProteinHits {
 											if (peptidePSM.containsKey(accession)) {
 												HashMap position2peptide = (HashMap)peptidePSM.get(accession);		
 												if (position2peptide.containsKey(accession + "\t" + start + "\t" + end)) {
-													String prev_result = (String)position2peptide.get(accession);
+													String prev_result = (String)position2peptide.get(accession + "\t" + start + "\t" + end);
 													String[] split_prev_result = prev_result.split("\t");
 													double prev_score = new Double(split_prev_result[4]);													
 													if (score > prev_score) {
 														position2peptide.put(accession + "\t" + start + "\t" + end, result);
 														peptidePSM.put(accession, position2peptide);
 													}
-												} else {
-													
+												} else {													
 													position2peptide.put(accession + "\t" + start + "\t" + end, result);
 													peptidePSM.put(accession, position2peptide);
 												}
