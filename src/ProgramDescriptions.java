@@ -425,6 +425,7 @@ import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
+import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
 import rnaseq.splicing.csiminer.reference.CSIMinerCandidate2BED;
@@ -2861,7 +2862,10 @@ public class ProgramDescriptions {
 		if (CalculateXBP1sFeatures.type().equals(type)) {
 			result += "CalculateXBP1sFeatures: " + CalculateXBP1sFeatures.description() + "\n";
 		}
+		if (CSIMinerAppendProteinHits.type().equals(type)) {
+			result += "CSIMinerAppendProteinHits: " + CSIMinerAppendProteinHits.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2021-0628B";	
+	public static String VERSION = "2021-0630A";	
 }

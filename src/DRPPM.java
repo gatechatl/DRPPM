@@ -655,6 +655,7 @@ import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
+import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
 import rnaseq.splicing.csiminer.reference.CSIMinerCandidate2BED;
@@ -11861,7 +11862,17 @@ public class DRPPM {
 				}
 				CalculateXBP1sFeatures.execute(args_remain);
 				System.exit(0);
-				// CalculateXBP1sFeatures
+				// CSIMinerAppendProteinHits
+			} else if (type.equalsIgnoreCase("-CSIMinerAppendProteinHits")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerAppendProteinHits "
+							+ CSIMinerAppendProteinHits.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerAppendProteinHits.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length >= 1) {					
