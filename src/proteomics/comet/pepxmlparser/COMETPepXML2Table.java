@@ -41,8 +41,8 @@ public class COMETPepXML2Table {
 	public static void execute(String[] args) {
 		
 		try {
-			String pepXML = "/home/gatechatl/Projects/Proteomics/pepxml2table/NCI-11plex-1-F1-f10268.pep.xml"; //args[0];
-			String outputTable = "/home/gatechatl/Projects/Proteomics/pepxml2table/NCI-11plex-1-F1-f10268.pep.output.table.txt"; //args[1];
+			String pepXML = args[0]; //"/home/gatechatl/Projects/Proteomics/pepxml2table/NCI-11plex-1-F1-f10268.pep.xml"; //args[0];
+			String outputTable = args[1]; //"/home/gatechatl/Projects/Proteomics/pepxml2table/NCI-11plex-1-F1-f10268.pep.output.table.txt"; //args[1];
 						
 			FileWriter fwriter = new FileWriter(outputTable);
 			BufferedWriter out = new BufferedWriter(fwriter);
