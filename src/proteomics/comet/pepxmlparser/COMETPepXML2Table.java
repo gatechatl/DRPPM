@@ -66,7 +66,7 @@ public class COMETPepXML2Table {
 							target_decoy = "decoy";
 						}
 						if (!current_spectrum.NUM_PROTEIN.equals("") || !current_spectrum.CALC_NEUTRAL_PEP_MASS.equals("") || !current_spectrum.NUM_MISSED_CLEAVAGE.equals("")) {
-							System.out.println(current_spectrum.SPECTRUM + "\t"
+							/*System.out.println(current_spectrum.SPECTRUM + "\t"
 									+ current_spectrum.CHARGE + "\t"
 									+ current_spectrum.NUM_TOL_TERM + "\t"
 									+ current_spectrum.NUM_MISSED_CLEAVAGE + "\t"
@@ -83,7 +83,7 @@ public class COMETPepXML2Table {
 									+ current_spectrum.RT + "\t"
 									+ current_spectrum.START_SCAN + "\t"
 									+ current_spectrum.END_SCAN + "\n");
-							
+							*/
 							out.write(current_spectrum.SPECTRUM + "\t"
 									+ current_spectrum.CHARGE + "\t"
 									+ current_spectrum.NUM_TOL_TERM + "\t"
@@ -107,7 +107,7 @@ public class COMETPepXML2Table {
 					}
 					first = false;
 					current_spectrum = new QUERY_SPECTRUM();
-					System.out.println("spectrum_query" + str);
+					//System.out.println("spectrum_query" + str);
 					for (int i = 0; i < split.length; i++) {
 						if (split[i].contains("spectrum=")) {
 							current_spectrum.SPECTRUM = split[i].split("spectrum=")[1].replaceAll("\"", "").replaceAll(">",  "").replaceAll("\\/", "");							
@@ -132,7 +132,7 @@ public class COMETPepXML2Table {
 					in.readLine();
 					str = in.readLine();
 					if (str.contains("<search_hit hit_rank=\"1\"")) {
-						System.out.println("search_hit_rank" + str);
+						//System.out.println("search_hit_rank" + str);
 						split = str.split(" ");
 						for (int i = 0; i < split.length; i++) {
 							if (split[i].contains("peptide=")) {
