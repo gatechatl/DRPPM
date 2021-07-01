@@ -96,9 +96,20 @@ public class CSIMinerAppendProteinHits {
 										}
 										if (start > -1 && end > -1) {
 											if (peptidePSM.containsKey(accession)) {
-												HashMap position2peptide = (HashMap)peptidePSM.get(accession);
-												position2peptide.put(accession + "\t" + start + "\t" + end, result);
-												peptidePSM.put(accession, position2peptide);
+												HashMap position2peptide = (HashMap)peptidePSM.get(accession);		
+												if (position2peptide.containsKey(accession + "\t" + start + "\t" + end)) {
+													String prev_result = (String)position2peptide.get(accession);
+													String[] split_prev_result = prev_result.split("\t");
+													double prev_score = new Double(split_prev_result[4]);													
+													if (score > prev_score) {
+														position2peptide.put(accession + "\t" + start + "\t" + end, result);
+														peptidePSM.put(accession, position2peptide);
+													}
+												} else {
+													
+													position2peptide.put(accession + "\t" + start + "\t" + end, result);
+													peptidePSM.put(accession, position2peptide);
+												}
 											} else {
 												HashMap position2peptide = new HashMap();
 												position2peptide.put(accession + "\t" + start + "\t" + end, result);
@@ -133,7 +144,7 @@ public class CSIMinerAppendProteinHits {
 				if (split[index].contains("_")) {
 					String[] split_peptide_info = split[index].split("_");
 					String accession = split_peptide_info[0];
-					int start = new Integer(split_peptide_info[1]);
+					int start = new Integer(split_peptide_info[1]) + 1; // I noticed the index is off by 1 adding 1 to compensate
 					int end = new Integer(split_peptide_info[2]);
 					double score = 0;
 					String hit_result = "false\tNA\tNA\tNA\tNA\tNA\tNA";
