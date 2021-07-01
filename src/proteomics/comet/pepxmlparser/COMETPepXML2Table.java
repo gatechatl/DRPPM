@@ -187,6 +187,49 @@ public class COMETPepXML2Table {
 				}
 			}
 			in.close();
+			
+			String target_decoy = "target";
+			if (current_spectrum.PROTEIN.contains("decoy") || current_spectrum.ALT_PROTEIN.contains("decoy")) {
+				target_decoy = "decoy";
+			}
+			if (!current_spectrum.NUM_PROTEIN.equals("") || !current_spectrum.CALC_NEUTRAL_PEP_MASS.equals("") || !current_spectrum.NUM_MISSED_CLEAVAGE.equals("")) {
+				/*System.out.println(current_spectrum.SPECTRUM + "\t"
+						+ current_spectrum.CHARGE + "\t"
+						+ current_spectrum.NUM_TOL_TERM + "\t"
+						+ current_spectrum.NUM_MISSED_CLEAVAGE + "\t"
+						+ current_spectrum.XCORR + "\t"
+						+ current_spectrum.DELTACN + "\t"
+						+ current_spectrum.PRECURSOR_NEUTRAL_MASS + "\t"
+						+ current_spectrum.CALC_NEUTRAL_PEP_MASS + "\t"
+						+ current_spectrum.PEPTIDE_PREV_AA + "." + current_spectrum.PEPTIDE + "." + current_spectrum.PEPTIDE_NEXT_AA + "\t"
+						+ current_spectrum.PEPTIDE.length() + "\t"
+						+ current_spectrum.PROTEIN + "\t"
+						+ target_decoy + "\t"
+						+ current_spectrum.NUM_PROTEIN + "\t"
+						+ current_spectrum.ALT_PROTEIN + "\t"
+						+ current_spectrum.RT + "\t"
+						+ current_spectrum.START_SCAN + "\t"
+						+ current_spectrum.END_SCAN + "\n");
+				*/
+				out.write(current_spectrum.SPECTRUM + "\t"
+						+ current_spectrum.CHARGE + "\t"
+						+ current_spectrum.NUM_TOL_TERM + "\t"
+						+ current_spectrum.NUM_MISSED_CLEAVAGE + "\t"
+						+ current_spectrum.XCORR + "\t"
+						+ current_spectrum.DELTACN + "\t"
+						+ current_spectrum.PRECURSOR_NEUTRAL_MASS + "\t"
+						+ current_spectrum.CALC_NEUTRAL_PEP_MASS + "\t"
+						+ current_spectrum.PEPTIDE_PREV_AA + "." + current_spectrum.PEPTIDE + "." + current_spectrum.PEPTIDE_NEXT_AA + "\t"
+						+ current_spectrum.PEPTIDE.length() + "\t"
+						+ current_spectrum.PROTEIN + "\t"
+						+ target_decoy + "\t"
+						+ current_spectrum.NUM_PROTEIN + "\t"
+						+ current_spectrum.ALT_PROTEIN + "\t"
+						+ current_spectrum.RT + "\t"
+						+ current_spectrum.START_SCAN + "\t"
+						+ current_spectrum.END_SCAN + "\n");
+				
+			}
 			out.close();
 			
 		} catch (Exception e) {
