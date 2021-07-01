@@ -125,32 +125,37 @@ public class CSIMinerAppendProteinHits {
 			while (in.ready()) {
 				String str = in.readLine();	
 				String[] split = str.split("\t");
-				String[] split_peptide_info = split[index].split("_");
-				String accession = split_peptide_info[0];
-				int start = new Integer(split_peptide_info[1]);
-				int end = new Integer(split_peptide_info[2]);
-				double score = 0;
-				String hit_result = "false\tNA\tNA\tNA\tNA\tNA\tNA";
-				
-				if (peptidePSM.containsKey(accession)) {
-					HashMap position2peptide = (HashMap)peptidePSM.get(accession);
-					Iterator itr = position2peptide.keySet().iterator();
-					while (itr.hasNext()) {
-						String ref_accession_start_end = (String)itr.next();
-						String ref_accession = ref_accession_start_end.split("\t")[0];
-						int ref_start = new Integer(ref_accession_start_end.split("\t")[1]);
-						int ref_end = new Integer(ref_accession_start_end.split("\t")[2]);
-						if (MathTools.overlap(start,  end, ref_start, ref_end)) {
-							String result = (String)position2peptide.get(ref_accession_start_end);
-							String[] split_result = result.split("\t");
-							if (new Double(split_result[4]) > score) {
-								score = new Double(split_result[4]);
-								hit_result = "true\t" + result;
+				if (split[index].contains("_")) {
+					String[] split_peptide_info = split[index].split("_");
+					String accession = split_peptide_info[0];
+					int start = new Integer(split_peptide_info[1]);
+					int end = new Integer(split_peptide_info[2]);
+					double score = 0;
+					String hit_result = "false\tNA\tNA\tNA\tNA\tNA\tNA";
+					
+					if (peptidePSM.containsKey(accession)) {
+						HashMap position2peptide = (HashMap)peptidePSM.get(accession);
+						Iterator itr = position2peptide.keySet().iterator();
+						while (itr.hasNext()) {
+							String ref_accession_start_end = (String)itr.next();
+							String ref_accession = ref_accession_start_end.split("\t")[0];
+							int ref_start = new Integer(ref_accession_start_end.split("\t")[1]);
+							int ref_end = new Integer(ref_accession_start_end.split("\t")[2]);
+							if (MathTools.overlap(start,  end, ref_start, ref_end)) {
+								String result = (String)position2peptide.get(ref_accession_start_end);
+								String[] split_result = result.split("\t");
+								if (new Double(split_result[4]) > score) {
+									score = new Double(split_result[4]);
+									hit_result = "true\t" + result;
+								}
 							}
 						}
 					}
+					out.write(str + "\t" + hit_result + "\n");
+				} else {
+					String hit_result = "false\tNA\tNA\tNA\tNA\tNA\tNA";
+					out.write(str + "\t" + hit_result + "\n");
 				}
-				out.write(str + "\t" + hit_result + "\n");
 			}
 			in.close();
 			out.close();
