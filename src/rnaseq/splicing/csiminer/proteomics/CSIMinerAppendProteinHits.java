@@ -92,16 +92,17 @@ public class CSIMinerAppendProteinHits {
 									}
 								}
 							}
-							if (peptidePSM.containsKey(accession)) {
-								HashMap position2peptide = (HashMap)peptidePSM.get(accession);
-								position2peptide.put(accession + "\t" + start + "\t" + end, result);
-								peptidePSM.put(accession, position2peptide);
-							} else {
-								HashMap position2peptide = new HashMap();
-								position2peptide.put(accession + "\t" + start + "\t" + end, result);
-								peptidePSM.put(accession, position2peptide);
+							if (start > -1 && end > -1) {
+								if (peptidePSM.containsKey(accession)) {
+									HashMap position2peptide = (HashMap)peptidePSM.get(accession);
+									position2peptide.put(accession + "\t" + start + "\t" + end, result);
+									peptidePSM.put(accession, position2peptide);
+								} else {
+									HashMap position2peptide = new HashMap();
+									position2peptide.put(accession + "\t" + start + "\t" + end, result);
+									peptidePSM.put(accession, position2peptide);
+								}
 							}
-							
 							//System.out.println(peptide + "\t" + accession + "\t" + start + "\t" + end);
 						}
 					}
