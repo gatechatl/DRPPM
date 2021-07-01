@@ -27,7 +27,7 @@ public class CSIMinerAppendProteinHits {
 		return "Append peptide hit to the CSIMiner Report.";
 	}
 	public static String parameter_info() {
-		return "[inputCSI Report] [inputPeptidePSM] [Fasta DB File] [outputFile]";
+		return "[inputCSI Report] [protein_col_name] [inputPeptidePSM] [Fasta DB File] [outputFile]";
 	}
 	/*public static void main(String[] args) {
 		String peptide = "D.W!@#$%^&*E$R@^#WE.F";
@@ -40,9 +40,9 @@ public class CSIMinerAppendProteinHits {
 			
 			String inputCSIreport = args[0];
 			String protein_col_name = args[1];
-			String inputPeptidePSMFile = args[1];
-			String inputFastaFile = args[2];
-			String outputFile = args[3];
+			String inputPeptidePSMFile = args[2];
+			String inputFastaFile = args[3];
+			String outputFile = args[4];
 
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);	
