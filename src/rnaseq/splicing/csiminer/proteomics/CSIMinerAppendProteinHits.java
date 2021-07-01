@@ -71,35 +71,37 @@ public class CSIMinerAppendProteinHits {
 				
 				String result = outfilename + "\t" + charge + "\t" + peptide + "\t" + protein + "\t" + score + "\t" + deltaScore; 
 				if (target_decoy.equals("target") && score > 2 && deltaScore > 0.1) {
-					String accession = protein.split("\\|")[1];
-					String query_seq = peptide.replaceAll("\\*", "").replaceAll("\\!",  "").replaceAll("\\.",  "").replaceAll("\\&",  "").replaceAll("\\^",  "").replaceAll("\\$",  "").replaceAll("\\#",  "").replaceAll("\\@",  "").replaceAll("\\%",  "");
-					boolean found = false;
-					int start = -1;
-					int end = -1;
-					if (ref.containsKey(accession)) {
-						String ref_seq = (String)ref.get(accession);
-						//System.out.println(query_seq + "\t" + ref_seq);
-						for (int i = 0; i < ref_seq.length() - query_seq.length() + 1; i++) {
-							String subseq = ref_seq.substring(i, i + query_seq.length() - 1);
-							if (query_seq.substring(0, query_seq.length() - 1).equals(subseq)) {
-								found = true;
-								start = i + 1;
-								end = i + query_seq.length() - 1;
-								break;
+					if (protein.split("\\|").length >= 2) {
+						String accession = protein.split("\\|")[1];
+						String query_seq = peptide.replaceAll("\\*", "").replaceAll("\\!",  "").replaceAll("\\.",  "").replaceAll("\\&",  "").replaceAll("\\^",  "").replaceAll("\\$",  "").replaceAll("\\#",  "").replaceAll("\\@",  "").replaceAll("\\%",  "");
+						boolean found = false;
+						int start = -1;
+						int end = -1;
+						if (ref.containsKey(accession)) {
+							String ref_seq = (String)ref.get(accession);
+							//System.out.println(query_seq + "\t" + ref_seq);
+							for (int i = 0; i < ref_seq.length() - query_seq.length() + 1; i++) {
+								String subseq = ref_seq.substring(i, i + query_seq.length() - 1);
+								if (query_seq.substring(0, query_seq.length() - 1).equals(subseq)) {
+									found = true;
+									start = i + 1;
+									end = i + query_seq.length() - 1;
+									break;
+								}
 							}
 						}
+						if (peptidePSM.containsKey(accession)) {
+							HashMap position2peptide = (HashMap)peptidePSM.get(accession);
+							position2peptide.put(accession + "\t" + start + "\t" + end, result);
+							peptidePSM.put(accession, position2peptide);
+						} else {
+							HashMap position2peptide = new HashMap();
+							position2peptide.put(accession + "\t" + start + "\t" + end, result);
+							peptidePSM.put(accession, position2peptide);
+						}
+						
+						//System.out.println(peptide + "\t" + accession + "\t" + start + "\t" + end);
 					}
-					if (peptidePSM.containsKey(accession)) {
-						HashMap position2peptide = (HashMap)peptidePSM.get(accession);
-						position2peptide.put(accession + "\t" + start + "\t" + end, result);
-						peptidePSM.put(accession, position2peptide);
-					} else {
-						HashMap position2peptide = new HashMap();
-						position2peptide.put(accession + "\t" + start + "\t" + end, result);
-						peptidePSM.put(accession, position2peptide);
-					}
-					
-					//System.out.println(peptide + "\t" + accession + "\t" + start + "\t" + end);
 				}
 			}
 			in.close();
