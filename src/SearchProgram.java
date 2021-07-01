@@ -755,5 +755,6 @@ public class SearchProgram {
 		search_program.add("CSIMinerExonAnnotateTMHMM");
 		search_program.add("CalculateXBP1sFeatures");
 		search_program.add("CSIMinerAppendProteinHits");
+		search_program.add("COMETPepXML2Table");
 	}
 }

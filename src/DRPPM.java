@@ -413,6 +413,7 @@ import proteomics.annotation.uniprot.GenerateIDConversionMasterTable;
 import proteomics.apms.saint.CalculateGeneLengthSaintInputFile;
 import proteomics.apms.saint.GenerateInteractionFileForSaint;
 import proteomics.apms.saint.GeneratePreyGeneLength;
+import proteomics.comet.pepxmlparser.COMETPepXML2Table;
 import proteomics.phospho.kinaseactivity.pipeline.AssignKnownKinaseSubstrateRelationship;
 import proteomics.phospho.kinaseactivity.pipeline.AssignKnownKinaseSubstrateRelationshipFlex;
 import proteomics.phospho.kinaseactivity.pipeline.CleanWhlProteome;
@@ -11871,6 +11872,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				CSIMinerAppendProteinHits.execute(args_remain);
+				System.exit(0);
+				// COMETPepXML2Table
+			} else if (type.equalsIgnoreCase("-COMETPepXML2Table")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -COMETPepXML2Table "
+							+ COMETPepXML2Table.parameter_info());
+					System.exit(0);
+				}
+				COMETPepXML2Table.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

@@ -36,9 +36,9 @@ public class COMETPepXML2Table {
 		return "pepXML";
 	}
 	public static String description() {		
-		return "Calculate the gene length for the SAINT input file";
+		return "Convert COMET pepxml to an output table.";
 	}
-	public static void main(String[] args) {
+	public static void execute(String[] args) {
 		
 		try {
 			String pepXML = "/home/gatechatl/Projects/Proteomics/pepxml2table/NCI-11plex-1-F1-f10268.pep.xml"; //args[0];

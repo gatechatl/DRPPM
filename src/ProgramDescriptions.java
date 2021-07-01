@@ -285,6 +285,7 @@ import proteomics.annotation.uniprot.GenerateIDConversionMasterTable;
 import proteomics.apms.saint.CalculateGeneLengthSaintInputFile;
 import proteomics.apms.saint.GenerateInteractionFileForSaint;
 import proteomics.apms.saint.GeneratePreyGeneLength;
+import proteomics.comet.pepxmlparser.COMETPepXML2Table;
 import proteomics.phospho.kinaseactivity.pipeline.AssignKnownKinaseSubstrateRelationship;
 import proteomics.phospho.kinaseactivity.pipeline.AssignKnownKinaseSubstrateRelationshipFlex;
 import proteomics.phospho.kinaseactivity.pipeline.CleanWhlProteome;
@@ -2865,7 +2866,10 @@ public class ProgramDescriptions {
 		if (CSIMinerAppendProteinHits.type().equals(type)) {
 			result += "CSIMinerAppendProteinHits: " + CSIMinerAppendProteinHits.description() + "\n";
 		}
+		if (COMETPepXML2Table.type().equals(type)) {
+			result += "COMETPepXML2Table: " + COMETPepXML2Table.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2021-0701C";	
+	public static String VERSION = "2021-0701D";	
 }
