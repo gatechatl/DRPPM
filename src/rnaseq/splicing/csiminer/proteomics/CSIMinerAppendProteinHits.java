@@ -133,17 +133,22 @@ public class CSIMinerAppendProteinHits {
 					double score = 0;
 					String hit_result = "false\tNA\tNA\tNA\tNA\tNA\tNA";
 					
-					if (peptidePSM.containsKey(accession)) {
+					if (peptidePSM.containsKey(accession) && accession.equals("P24821")) {
 						HashMap position2peptide = (HashMap)peptidePSM.get(accession);
 						Iterator itr = position2peptide.keySet().iterator();
 						while (itr.hasNext()) {
 							String ref_accession_start_end = (String)itr.next();
 							String ref_accession = ref_accession_start_end.split("\t")[0];
+							String result = (String)position2peptide.get(ref_accession_start_end);
+							String[] split_result = result.split("\t");
+							String peptide = split_result[2];
 							int ref_start = new Integer(ref_accession_start_end.split("\t")[1]);
 							int ref_end = new Integer(ref_accession_start_end.split("\t")[2]);
+							System.out.println("PSM Fasta: " + ref_start + "\t" + ref_end + "\t" + peptide);
+							System.out.println("CSI peptide: " + split[index] + "\t" + split[index + 1]);
+							System.out.println();
 							if (MathTools.overlap(start,  end, ref_start, ref_end)) {
-								String result = (String)position2peptide.get(ref_accession_start_end);
-								String[] split_result = result.split("\t");
+
 								if (new Double(split_result[4]) > score) {
 									score = new Double(split_result[4]);
 									hit_result = "true\t" + result;
