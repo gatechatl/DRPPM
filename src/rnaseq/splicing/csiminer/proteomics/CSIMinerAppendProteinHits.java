@@ -133,7 +133,8 @@ public class CSIMinerAppendProteinHits {
 					double score = 0;
 					String hit_result = "false\tNA\tNA\tNA\tNA\tNA\tNA";
 					
-					if (peptidePSM.containsKey(accession) && accession.equals("P24821")) {
+					//if (peptidePSM.containsKey(accession) && accession.equals("P24821")) {
+					if (peptidePSM.containsKey(accession)) {
 						HashMap position2peptide = (HashMap)peptidePSM.get(accession);
 						Iterator itr = position2peptide.keySet().iterator();
 						while (itr.hasNext()) {
@@ -147,13 +148,13 @@ public class CSIMinerAppendProteinHits {
 
 							if (MathTools.overlap(start,  end, ref_start, ref_end)) {
 								
-								if (new Double(split_result[4]) > score) {
+								if (new Double(split_result[4]) >= score) {
 									score = new Double(split_result[4]);
 									hit_result = "true\t" + result;
 								}
-								System.out.println("PSM Fasta: " + ref_start + "\t" + ref_end + "\t" + split_result[4] + "\t" + peptide);
-								System.out.println("CSI peptide: " + split[index] + "\t" + score + "\t" + split[index + 1]);
-								System.out.println(hit_result);
+								//System.out.println("PSM Fasta: " + ref_start + "\t" + ref_end + "\t" + split_result[4] + "\t" + peptide);
+								//System.out.println("CSI peptide: " + split[index] + "\t" + score + "\t" + split[index + 1]);
+								//System.out.println(hit_result);
 							}
 						}
 					}
