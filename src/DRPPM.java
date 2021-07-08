@@ -654,6 +654,7 @@ import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
 import rnaseq.splicing.csiminer.CSIMinerConsolidateInputs;
 import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
+import rnaseq.splicing.csiminer.CSIMinerGenerateViolinAndBarPlotDataTable;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
 import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
@@ -11882,6 +11883,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				COMETPepXML2Table.execute(args_remain);
+				System.exit(0);
+				// CSIMinerGenerateViolinAndBarPlotDataTable
+			} else if (type.equalsIgnoreCase("-CSIMinerGenerateViolinAndBarPlotDataTable")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerGenerateViolinAndBarPlotDataTable "
+							+ CSIMinerGenerateViolinAndBarPlotDataTable.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerGenerateViolinAndBarPlotDataTable.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

@@ -424,6 +424,7 @@ import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
 import rnaseq.splicing.csiminer.CSIMinerConsolidateInputs;
 import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
+import rnaseq.splicing.csiminer.CSIMinerGenerateViolinAndBarPlotDataTable;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
 import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
@@ -2869,7 +2870,10 @@ public class ProgramDescriptions {
 		if (COMETPepXML2Table.type().equals(type)) {
 			result += "COMETPepXML2Table: " + COMETPepXML2Table.description() + "\n";
 		}
+		if (CSIMinerGenerateViolinAndBarPlotDataTable.type().equals(type)) {
+			result += "CSIMinerGenerateViolinAndBarPlotDataTable: " + CSIMinerGenerateViolinAndBarPlotDataTable.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2021-0701I";	
+	public static String VERSION = "2021-0708A";	
 }
