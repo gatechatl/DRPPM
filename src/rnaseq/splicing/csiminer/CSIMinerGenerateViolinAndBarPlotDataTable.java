@@ -112,13 +112,13 @@ public class CSIMinerGenerateViolinAndBarPlotDataTable {
 						int fourth_quartile = 0;
 						for (int i = 1; i < split2.length; i++) {
 							if (!blackList.containsKey(split_header2[i])) {
-								if (new Integer(split[i]) == 0) {
+								if (new Integer(split2[i]) == 0) {
 									first_quartile++;
-								} else if (new Integer(split[i]) == 1) {
+								} else if (new Integer(split2[i]) == 1) {
 									second_quartile++;
-								} else if (new Integer(split[i]) == 2) {
+								} else if (new Integer(split2[i]) == 2) {
 									third_quartile++;
-								} else if (new Integer(split[i]) == 3) {
+								} else if (new Integer(split2[i]) == 3) {
 									fourth_quartile++;
 								}
 							}
