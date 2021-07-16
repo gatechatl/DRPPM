@@ -630,6 +630,7 @@ import stjude.projects.leventaki.High20ToTHETA;
 import stjude.projects.leventaki.LeventakiAddChrBW;
 import stjude.projects.leventaki.LeventakiCalculateGeneCoordinate;
 import stjude.projects.leventaki.LeventakiCombineCNSResult;
+import stjude.projects.leventaki.LeventakiExpr2MethylSpearmanRankCorrelation;
 import stjude.projects.leventaki.LeventakiExtractProbeCoordinate;
 import stjude.projects.leventaki.LeventakiGenerateVCFPlot;
 import stjude.projects.leventaki.SummarizeLeventakiProject;
@@ -2872,6 +2873,9 @@ public class ProgramDescriptions {
 		}
 		if (CSIMinerGenerateViolinAndBarPlotDataTable.type().equals(type)) {
 			result += "CSIMinerGenerateViolinAndBarPlotDataTable: " + CSIMinerGenerateViolinAndBarPlotDataTable.description() + "\n";
+		}
+		if (LeventakiExpr2MethylSpearmanRankCorrelation.type().equals(type)) {
+			result += "LeventakiExpr2MethylSpearmanRankCorrelation: " + LeventakiExpr2MethylSpearmanRankCorrelation.description() + "\n";
 		}
 		return result;
 	}	

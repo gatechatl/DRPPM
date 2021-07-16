@@ -914,6 +914,7 @@ import stjude.projects.leventaki.High20ToTHETA;
 import stjude.projects.leventaki.LeventakiAddChrBW;
 import stjude.projects.leventaki.LeventakiCalculateGeneCoordinate;
 import stjude.projects.leventaki.LeventakiCombineCNSResult;
+import stjude.projects.leventaki.LeventakiExpr2MethylSpearmanRankCorrelation;
 import stjude.projects.leventaki.LeventakiExtractProbeCoordinate;
 import stjude.projects.leventaki.LeventakiGenerateVCFPlot;
 import stjude.projects.leventaki.SummarizeLeventakiProject;
@@ -11894,6 +11895,16 @@ public class DRPPM {
 				}
 				CSIMinerGenerateViolinAndBarPlotDataTable.execute(args_remain);
 				System.exit(0);
+				// LeventakiExpr2MethylSpearmanRankCorrelation
+			} else if (type.equalsIgnoreCase("-LeventakiExpr2MethylSpearmanRankCorrelation")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -LeventakiExpr2MethylSpearmanRankCorrelation "
+							+ LeventakiExpr2MethylSpearmanRankCorrelation.parameter_info());
+					System.exit(0);
+				}
+				LeventakiExpr2MethylSpearmanRankCorrelation.execute(args_remain);
+				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {
 				String[] args_remain = getRemaining(args);
@@ -11903,7 +11914,7 @@ public class DRPPM {
 					System.out.println("drppm -Find [Input your program name]");					
 				}
 				System.exit(0);
-				// CalculateXBP1sFeatures
+				// 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
