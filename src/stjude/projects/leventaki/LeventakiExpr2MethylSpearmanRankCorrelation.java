@@ -25,7 +25,7 @@ public class LeventakiExpr2MethylSpearmanRankCorrelation {
 		return "LEVENTAKI";
 	}
 	public static String parameter_info() {
-		return "[inputSampleFile] [inputRNAseqFile] [inputMethylFile] [query_gene] [outputFile]";
+		return "[inputSampleFile] [inputRNAseqFile] [inputMethylFile] [query_gene] [rho_cutoff] [outputFile]";
 	}
 	public static void execute(String[] args) {
 		
@@ -36,7 +36,8 @@ public class LeventakiExpr2MethylSpearmanRankCorrelation {
 			String inputRNAseqFile = args[1]; //"Z:\\ResearchHome\\ProjectSpace\\leventgrp\\LeventakiSpliceCell\\cmpb\\ALCL_RNASEQ_ANALYSIS\\FinalAnalysisPipeline\\1_FPKM\\SJALCL_RNAseq_Exon_Read_Count_gene_unique_fpkm_final_totalstranded.txt";
 			String inputMethylFile = args[2]; //"Z:\\ResearchHome\\ProjectSpace\\leventgrp\\LeventakiSpliceCell\\common\\CMPB\\BioinfoCore\\Biostats\\Methylation\\ProbeCorrection\\Leventaki_850K_108399_methylation_table_appendGeneInfo_normalized.txt";
 			String query_gene = args[3]; // insert the gene symbol to correlate with.
-			String outputFile = args[4]; //"Z:\\ResearchHome\\ProjectSpace\\leventgrp\\LeventakiSpliceCell\\common\\CMPB\\BioinfoCore\\Biostats\\Methylation\\ProbeCorrection\\Leventaki_methylation_rnaseq_spearman_rho_20180211.txt";			
+			double rho_cutoff = new Double(args[4]);
+			String outputFile = args[5]; //"Z:\\ResearchHome\\ProjectSpace\\leventgrp\\LeventakiSpliceCell\\common\\CMPB\\BioinfoCore\\Biostats\\Methylation\\ProbeCorrection\\Leventaki_methylation_rnaseq_spearman_rho_20180211.txt";			
 
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
@@ -162,10 +163,10 @@ public class LeventakiExpr2MethylSpearmanRankCorrelation {
 								double[] methyl_array = MathTools.convertListStr2Double(methyl_values);
 								double[] rna_array = MathTools.convertListStr2Double(rna_values);
 								rho = MathTools.SpearmanRank(methyl_array, rna_array);
-								//if (Math.abs(rho) > 0.7) {
+								if (Math.abs(rho) >= rho_cutoff) {
 									out.write(gene_name + "\t" + rho + rna_values_str + "\t" + str + "\n");
 									//System.out.println(gene_name);
-								//}
+								}
 							}
 						}
 					}
