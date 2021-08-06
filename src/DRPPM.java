@@ -413,6 +413,7 @@ import proteomics.annotation.uniprot.GenerateIDConversionMasterTable;
 import proteomics.apms.saint.CalculateGeneLengthSaintInputFile;
 import proteomics.apms.saint.GenerateInteractionFileForSaint;
 import proteomics.apms.saint.GeneratePreyGeneLength;
+import proteomics.comet.pepxmlparser.COMETPepXML2Table;
 import proteomics.phospho.kinaseactivity.pipeline.AssignKnownKinaseSubstrateRelationship;
 import proteomics.phospho.kinaseactivity.pipeline.AssignKnownKinaseSubstrateRelationshipFlex;
 import proteomics.phospho.kinaseactivity.pipeline.CleanWhlProteome;
@@ -646,18 +647,23 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvager5pri
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
+import rnaseq.splicing.alternativejuncpipeline.xbp1.CalculateXBP1sFeatures;
 import rnaseq.splicing.csiminer.CSIMinerAnnotateExonBasedOnTheSpliceGraph;
 import rnaseq.splicing.csiminer.CSIMinerAnnotatePrioritizedExons;
 import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
 import rnaseq.splicing.csiminer.CSIMinerConsolidateInputs;
 import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
+import rnaseq.splicing.csiminer.CSIMinerGenerateViolinAndBarPlotDataTable;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
+import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
 import rnaseq.splicing.csiminer.reference.CSIMinerCandidate2BED;
 import rnaseq.splicing.csiminer.reference.CSIMinerCandidateRegion2Fasta;
+import rnaseq.splicing.csiminer.reference.tmhmmdb.CSIMinerExonAnnotateTMHMM;
+import rnaseq.splicing.csiminer.reference.tmhmmdb.CSIMinerGeneNameUniprotProtein;
 import rnaseq.splicing.mats308.AddGeneName2MATS;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
@@ -908,6 +914,7 @@ import stjude.projects.leventaki.High20ToTHETA;
 import stjude.projects.leventaki.LeventakiAddChrBW;
 import stjude.projects.leventaki.LeventakiCalculateGeneCoordinate;
 import stjude.projects.leventaki.LeventakiCombineCNSResult;
+import stjude.projects.leventaki.LeventakiExpr2MethylSpearmanRankCorrelation;
 import stjude.projects.leventaki.LeventakiExtractProbeCoordinate;
 import stjude.projects.leventaki.LeventakiGenerateVCFPlot;
 import stjude.projects.leventaki.SummarizeLeventakiProject;
@@ -11827,6 +11834,76 @@ public class DRPPM {
 					System.exit(0);
 				}
 				WRAPCombineRNAseQCFilesIntoMatrix.execute(args_remain);
+				System.exit(0);
+				// CSIMinerGeneNameUniprotProtein
+			} else if (type.equalsIgnoreCase("-CSIMinerGeneNameUniprotProtein")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerGeneNameUniprotProtein "
+							+ CSIMinerGeneNameUniprotProtein.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerGeneNameUniprotProtein.execute(args_remain);
+				System.exit(0);
+				// CSIMinerExonAnnotateTMHMM
+			} else if (type.equalsIgnoreCase("-CSIMinerExonAnnotateTMHMM")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerExonAnnotateTMHMM "
+							+ CSIMinerExonAnnotateTMHMM.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerExonAnnotateTMHMM.execute(args_remain);
+				System.exit(0);
+				// CalculateXBP1sFeatures
+			} else if (type.equalsIgnoreCase("-CalculateXBP1sFeatures")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CalculateXBP1sFeatures "
+							+ CalculateXBP1sFeatures.parameter_info());
+					System.exit(0);
+				}
+				CalculateXBP1sFeatures.execute(args_remain);
+				System.exit(0);
+				// CSIMinerAppendProteinHits
+			} else if (type.equalsIgnoreCase("-CSIMinerAppendProteinHits")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerAppendProteinHits "
+							+ CSIMinerAppendProteinHits.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerAppendProteinHits.execute(args_remain);
+				System.exit(0);
+				// COMETPepXML2Table
+			} else if (type.equalsIgnoreCase("-COMETPepXML2Table")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -COMETPepXML2Table "
+							+ COMETPepXML2Table.parameter_info());
+					System.exit(0);
+				}
+				COMETPepXML2Table.execute(args_remain);
+				System.exit(0);
+				// CSIMinerGenerateViolinAndBarPlotDataTable
+			} else if (type.equalsIgnoreCase("-CSIMinerGenerateViolinAndBarPlotDataTable")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerGenerateViolinAndBarPlotDataTable "
+							+ CSIMinerGenerateViolinAndBarPlotDataTable.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerGenerateViolinAndBarPlotDataTable.execute(args_remain);
+				System.exit(0);
+				// LeventakiExpr2MethylSpearmanRankCorrelation
+			} else if (type.equalsIgnoreCase("-LeventakiExpr2MethylSpearmanRankCorrelation")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -LeventakiExpr2MethylSpearmanRankCorrelation "
+							+ LeventakiExpr2MethylSpearmanRankCorrelation.parameter_info());
+					System.exit(0);
+				}
+				LeventakiExpr2MethylSpearmanRankCorrelation.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

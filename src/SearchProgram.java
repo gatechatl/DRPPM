@@ -752,5 +752,11 @@ public class SearchProgram {
 		search_program.add("CSIMinerAppendAnnotatedInformation");
 		search_program.add("WRAPJuncSalvagerValidateAltStartAndGeneratePeptide");
 		search_program.add("WRAPCombineFilesIntoMatrix");
+		search_program.add("CSIMinerExonAnnotateTMHMM");
+		search_program.add("CalculateXBP1sFeatures");
+		search_program.add("CSIMinerAppendProteinHits");
+		search_program.add("COMETPepXML2Table");
+		search_program.add("CSIMinerGenerateViolinAndBarPlotDataTable");
+		search_program.add("LeventakiExpr2MethylSpearmanRankCorrelation");
 	}
 }

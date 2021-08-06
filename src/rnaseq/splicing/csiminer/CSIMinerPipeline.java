@@ -214,19 +214,19 @@ public class CSIMinerPipeline {
 			String norm_exon_matrix_percentile = outputIntermediateFolder + "/" + NORM_PREFIX + ".exon.matrix.percentile.txt";
 			String norm_exon_matrix_binned = outputIntermediateFolder + "/" + NORM_PREFIX + ".exon.matrix.binned.txt";
 
-			String wilcoxon_result = CANCER_PREFIX + "_" + NORM_PREFIX + "_WILCOX_RESULT.txt";
-			String meta_analysis = CANCER_PREFIX + "_" + NORM_PREFIX + "_RAW_METAANALYSIS_RESULT.txt";
+			String wilcoxon_result = outputFolder + "/" + CANCER_PREFIX + "_" + NORM_PREFIX + "_WILCOX_RESULT.txt";
+			String meta_analysis = outputFolder + "/" + CANCER_PREFIX + "_" + NORM_PREFIX + "_RAW_METAANALYSIS_RESULT.txt";
 
-			String summarize_meta_analysis_result = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT.txt";
-			String summarize_weighted_meta_analysis_result = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT.txt";
+			String summarize_meta_analysis_result = outputFolder + "/" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT.txt";
+			String summarize_weighted_meta_analysis_result = outputFolder + "/" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_WEIGHTED.txt";
 
-			String summarize_meta_analysis_result_annotation_pre1 = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_PREANNOTATE1.txt";
-			String summarize_meta_analysis_result_annotation_pre2 = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_PREANNOTATE2.txt";
-			String summarize_meta_analysis_result_annotation = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt";
+			String summarize_meta_analysis_result_annotation_pre1 = outputIntermediateFolder + "/" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_PREANNOTATE1.txt";
+			String summarize_meta_analysis_result_annotation_pre2 = outputIntermediateFolder + "/" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_PREANNOTATE2.txt";
+			String summarize_meta_analysis_result_annotation = outputFolder + "/" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt";
 			
-			String summarize_meta_analysis_result_annotation_bed = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt.bed";
-			String summarize_meta_analysis_result_annotation_bed_fasta = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt.bed.fasta";
-			String summarize_meta_analysis_result_annotation_bed_translation = CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt.bed.translation.txt";
+			String summarize_meta_analysis_result_annotation_bed = outputIntermediateFolder + "/" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt.bed";
+			String summarize_meta_analysis_result_annotation_bed_fasta = outputIntermediateFolder + "/" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt.bed.fasta";
+			String summarize_meta_analysis_result_annotation_bed_translation = outputIntermediateFolder + "/" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt.bed.translation.txt";
 			
 			StringBuffer string_buffer = new StringBuffer();
 			
@@ -258,7 +258,7 @@ public class CSIMinerPipeline {
 			string_buffer.append("drppm -JuncSalvagerWilcoxonTestRank " + CANCER_PREFIX + " " + CANCER_SAMPLE2DISEASETYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + wilcoxon_result + " " + meta_analysis + "\n");
 			string_buffer.append("drppm -JuncSalvagerWilcoxTestPostProcessing " + wilcoxon_result + " " + CANCER_PREFIX + " " + CANCER_SAMPLE2DISEASETYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + summarize_meta_analysis_result + " " + summarize_weighted_meta_analysis_result + "\n");
 
-			string_buffer.append("drppm -CSIMinerAnnotatePrioritizedExons " + summarize_meta_analysis_result + " " + MATRIXDB_CORE + " " + THERAPEUTIC_TARGET + " " + SURFACEOME + " " + summarize_meta_analysis_result_annotation_pre1 + "\n");
+			string_buffer.append("drppm -CSIMinerAnnotatePrioritizedExons " + summarize_weighted_meta_analysis_result + " " + MATRIXDB_CORE + " " + THERAPEUTIC_TARGET + " " + SURFACEOME + " " + summarize_meta_analysis_result_annotation_pre1 + "\n");
 			
 			string_buffer.append("drppm -CSIMinerAppendAnnotatedInformation " + summarize_meta_analysis_result_annotation_pre1 + " " + EXON_APPRIS + " " + summarize_meta_analysis_result_annotation_pre2 + "\n");
 			string_buffer.append("drppm -CSIMinerAppendAnnotatedInformation " + summarize_meta_analysis_result_annotation_pre2 + " " + OTHER_EXON_ANNOTATION + " " + summarize_meta_analysis_result_annotation + "\n");					
@@ -278,16 +278,39 @@ public class CSIMinerPipeline {
 					String disease_name = (String)itr.next();
 					string_buffer.append("## Generate prioritization for " + disease_name + "\n");
 					String SPECIFIC_DISEASE_TYPE = (String)diseases.get(disease_name);					
-					string_buffer.append("drppm -JuncSalvagerWilcoxTestPostProcessing " + wilcoxon_result + " " + CANCER_PREFIX + " " + SPECIFIC_DISEASE_TYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + disease_name + "_" + summarize_meta_analysis_result + " " + disease_name + "_" + summarize_weighted_meta_analysis_result + "\n");
 					
-					string_buffer.append("drppm -CSIMinerAnnotatePrioritizedExons " + disease_name + "_" + summarize_meta_analysis_result + " " + MATRIXDB_CORE + " " + THERAPEUTIC_TARGET + " " + SURFACEOME + " " + disease_name + "_" + summarize_meta_analysis_result_annotation_pre1 + "\n");
+
+					String disease_name_summarize_meta_analysis_result = outputFolder + "/" + disease_name + "_" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT.txt";
+					String disease_name_summarize_weighted_meta_analysis_result = outputFolder + "/" + disease_name + "_" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_WEIGHTED.txt";
+
+					String disease_name_summarize_meta_analysis_result_annotation_pre1 = outputIntermediateFolder + "/" + disease_name + "_" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_PREANNOTATE1.txt";
+					String disease_name_summarize_meta_analysis_result_annotation_pre2 = outputIntermediateFolder + "/" + disease_name + "_" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_PREANNOTATE2.txt";
+					String disease_name_summarize_meta_analysis_result_annotation = outputFolder + "/" + disease_name + "_" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt";
+					
+					String disease_name_summarize_meta_analysis_result_annotation_bed = outputIntermediateFolder + "/" + disease_name + "_" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt.bed";
+					String disease_name_summarize_meta_analysis_result_annotation_bed_fasta = outputIntermediateFolder + "/" + disease_name + "_" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt.bed.fasta";
+					String disease_name_summarize_meta_analysis_result_annotation_bed_translation = outputIntermediateFolder + "/" + disease_name + "_" + CANCER_PREFIX + "_" + NORM_PREFIX + "_SUMMARIZED_METAANALYSIS_RESULT_ANNOTATION.txt.bed.translation.txt";
+
+					
+					string_buffer.append("drppm -JuncSalvagerWilcoxTestPostProcessing " + wilcoxon_result + " " + CANCER_PREFIX + " " + SPECIFIC_DISEASE_TYPE + " " + NORM_PREFIX + " " + NORM_SAMPLE2TISSUETYPE + " " + disease_name_summarize_meta_analysis_result + " " + disease_name_summarize_weighted_meta_analysis_result + "\n");
+					
+
+					string_buffer.append("drppm -CSIMinerAnnotatePrioritizedExons " + disease_name_summarize_weighted_meta_analysis_result + " " + MATRIXDB_CORE + " " + THERAPEUTIC_TARGET + " " + SURFACEOME + " " + disease_name_summarize_meta_analysis_result_annotation_pre1 + "\n");
+					string_buffer.append("drppm -CSIMinerAppendAnnotatedInformation " + disease_name_summarize_meta_analysis_result_annotation_pre1 + " " + EXON_APPRIS + " " + disease_name_summarize_meta_analysis_result_annotation_pre2 + "\n");
+					string_buffer.append("drppm -CSIMinerAppendAnnotatedInformation " + disease_name_summarize_meta_analysis_result_annotation_pre2 + " " + OTHER_EXON_ANNOTATION + " " + disease_name_summarize_meta_analysis_result_annotation + "\n");					
+					
+					string_buffer.append("drppm -CSIMinerCandidate2BED " + disease_name_summarize_meta_analysis_result_annotation + " " + disease_name_summarize_meta_analysis_result_annotation_bed + "\n");
+					string_buffer.append("bedtools getfasta -bed  " + disease_name_summarize_meta_analysis_result_annotation_bed + " -fi " + PRIMARY_ASSEMBLY_FASTA + " -fo " + disease_name_summarize_meta_analysis_result_annotation_bed_fasta + " -name " + "\n");
+					string_buffer.append("drppm -JinghuiZhangBedFasta2Peptide " + disease_name_summarize_meta_analysis_result_annotation_bed_fasta + " " + UNIPROT_FASTA + " " + disease_name_summarize_meta_analysis_result_annotation_bed_translation + "\n");			
+					/*
+					string_buffer.append("drppm -CSIMinerAnnotatePrioritizedExons " + disease_name + "_" + summarize_weighted_meta_analysis_result + " " + MATRIXDB_CORE + " " + THERAPEUTIC_TARGET + " " + SURFACEOME + " " + disease_name + "_" + summarize_meta_analysis_result_annotation_pre1 + "\n");
 					string_buffer.append("drppm -CSIMinerAppendAnnotatedInformation " + disease_name + "_" + summarize_meta_analysis_result_annotation_pre1 + " " + EXON_APPRIS + " " + disease_name + "_" + summarize_meta_analysis_result_annotation_pre2 + "\n");
 					string_buffer.append("drppm -CSIMinerAppendAnnotatedInformation " + disease_name + "_" + summarize_meta_analysis_result_annotation_pre2 + " " + OTHER_EXON_ANNOTATION + " " + disease_name + "_" + summarize_meta_analysis_result_annotation + "\n");					
 					
 					string_buffer.append("drppm -CSIMinerCandidate2BED " + disease_name + "_" + summarize_meta_analysis_result_annotation + " " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed + "\n");
 					string_buffer.append("bedtools getfasta -bed  " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed + " -fi " + PRIMARY_ASSEMBLY_FASTA + " -fo " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed_fasta + " -name " + "\n");
 					string_buffer.append("drppm -JinghuiZhangBedFasta2Peptide " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed_fasta + " " + UNIPROT_FASTA + " " + disease_name + "_" + summarize_meta_analysis_result_annotation_bed_translation + "\n");			
-					
+					*/
 				}
 			}
 			

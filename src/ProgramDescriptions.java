@@ -285,6 +285,7 @@ import proteomics.annotation.uniprot.GenerateIDConversionMasterTable;
 import proteomics.apms.saint.CalculateGeneLengthSaintInputFile;
 import proteomics.apms.saint.GenerateInteractionFileForSaint;
 import proteomics.apms.saint.GeneratePreyGeneLength;
+import proteomics.comet.pepxmlparser.COMETPepXML2Table;
 import proteomics.phospho.kinaseactivity.pipeline.AssignKnownKinaseSubstrateRelationship;
 import proteomics.phospho.kinaseactivity.pipeline.AssignKnownKinaseSubstrateRelationshipFlex;
 import proteomics.phospho.kinaseactivity.pipeline.CleanWhlProteome;
@@ -418,16 +419,21 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvag
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
+import rnaseq.splicing.alternativejuncpipeline.xbp1.CalculateXBP1sFeatures;
 import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
 import rnaseq.splicing.csiminer.CSIMinerConsolidateInputs;
 import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
 import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
+import rnaseq.splicing.csiminer.CSIMinerGenerateViolinAndBarPlotDataTable;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
+import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
 import rnaseq.splicing.csiminer.reference.CSIMinerCandidate2BED;
 import rnaseq.splicing.csiminer.reference.CSIMinerCandidateRegion2Fasta;
+import rnaseq.splicing.csiminer.reference.tmhmmdb.CSIMinerExonAnnotateTMHMM;
+import rnaseq.splicing.csiminer.reference.tmhmmdb.CSIMinerGeneNameUniprotProtein;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
 import rnaseq.splicing.mats308.SummarizeMATSSummary;
@@ -624,6 +630,7 @@ import stjude.projects.leventaki.High20ToTHETA;
 import stjude.projects.leventaki.LeventakiAddChrBW;
 import stjude.projects.leventaki.LeventakiCalculateGeneCoordinate;
 import stjude.projects.leventaki.LeventakiCombineCNSResult;
+import stjude.projects.leventaki.LeventakiExpr2MethylSpearmanRankCorrelation;
 import stjude.projects.leventaki.LeventakiExtractProbeCoordinate;
 import stjude.projects.leventaki.LeventakiGenerateVCFPlot;
 import stjude.projects.leventaki.SummarizeLeventakiProject;
@@ -2849,7 +2856,28 @@ public class ProgramDescriptions {
 		if (WRAPCombineFilesIntoMatrix.type().equals(type)) {
 			result += "WRAPCombineFilesIntoMatrix: " + WRAPCombineFilesIntoMatrix.description() + "\n";
 		}
+		if (CSIMinerGeneNameUniprotProtein.type().equals(type)) {
+			result += "CSIMinerGeneNameUniprotProtein: " + CSIMinerGeneNameUniprotProtein.description() + "\n";
+		}
+		if (CSIMinerExonAnnotateTMHMM.type().equals(type)) {
+			result += "CSIMinerExonAnnotateTMHMM: " + CSIMinerExonAnnotateTMHMM.description() + "\n";
+		}
+		if (CalculateXBP1sFeatures.type().equals(type)) {
+			result += "CalculateXBP1sFeatures: " + CalculateXBP1sFeatures.description() + "\n";
+		}
+		if (CSIMinerAppendProteinHits.type().equals(type)) {
+			result += "CSIMinerAppendProteinHits: " + CSIMinerAppendProteinHits.description() + "\n";
+		}
+		if (COMETPepXML2Table.type().equals(type)) {
+			result += "COMETPepXML2Table: " + COMETPepXML2Table.description() + "\n";
+		}
+		if (CSIMinerGenerateViolinAndBarPlotDataTable.type().equals(type)) {
+			result += "CSIMinerGenerateViolinAndBarPlotDataTable: " + CSIMinerGenerateViolinAndBarPlotDataTable.description() + "\n";
+		}
+		if (LeventakiExpr2MethylSpearmanRankCorrelation.type().equals(type)) {
+			result += "LeventakiExpr2MethylSpearmanRankCorrelation: " + LeventakiExpr2MethylSpearmanRankCorrelation.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2021-0421B";	
+	public static String VERSION = "2021-0806A";	
 }
