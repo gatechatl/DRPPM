@@ -96,7 +96,10 @@ public class CSIMinerGenerateViolinAndBarPlotDataTable {
 					System.out.println(sampleName + ": " + f.getName() + " doesn't exist... Exiting");
 					System.exit(0);
 				}
-				// read the rankMedianFile				
+				// read the rankMedianFile			
+				
+				
+				
 				FileInputStream fstream2 = new FileInputStream(rankQuartileFile);
 				DataInputStream din2 = new DataInputStream(fstream2);
 				BufferedReader in2 = new BufferedReader(new InputStreamReader(din2));
@@ -167,12 +170,18 @@ public class CSIMinerGenerateViolinAndBarPlotDataTable {
 				din = new DataInputStream(fstream);
 				in = new BufferedReader(new InputStreamReader(din));
 				header = in.readLine();
+				String[] split_header = header.split("\t");
 				while (in.ready()) {
 					String str = in.readLine();
 					String[] split = str.split("\t");
-					String sampleName = split[0];					
-					String line = (String)quartile_result.get(sampleName + "\t" + exon_name);
-					out_barplot.write("\t" + line);
+					String sampleName = split[0];			
+					if (quartile_result.containsKey(sampleName + "\t" + exon_name)) {
+						String line = (String)quartile_result.get(sampleName + "\t" + exon_name);
+						out_barplot.write("\t" + line);
+					} else {
+						out_barplot.write("\t" + 0 + "\t" + 0 + "\t" + 0 + "\t" + 0);
+					}
+					
 				}
 				in.close();
 				out_barplot.write("\n");

@@ -197,8 +197,12 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 					String str = in.readLine();
 					String[] split = str.split("\t");
 					String sampleName = split[0];					
-					String line = (String)quartile_result.get(sampleName + "\t" + exon_name);
-					out_barplot.write("\t" + line);
+					if (quartile_result.containsKey(sampleName + "\t" + exon_name)) {
+						String line = (String)quartile_result.get(sampleName + "\t" + exon_name);
+						out_barplot.write("\t" + line);
+					} else {
+						out_barplot.write("\t" + 0 + "\t" + 0 + "\t" + 0 + "\t" + 0);
+					}
 				}
 				in.close();
 				out_barplot.write("\n");
