@@ -657,6 +657,7 @@ import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatri
 import rnaseq.splicing.csiminer.CSIMinerGenerateViolinAndBarPlotDataTable;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
+import rnaseq.splicing.csiminer.CSIMinerViolinAndBarPlotDataTableIndexed;
 import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
@@ -11895,7 +11896,17 @@ public class DRPPM {
 				}
 				CSIMinerGenerateViolinAndBarPlotDataTable.execute(args_remain);
 				System.exit(0);
-				// LeventakiExpr2MethylSpearmanRankCorrelation
+				// CSIMinerGenerateViolinAndBarPlotDataTableIndexed
+			} else if (type.equalsIgnoreCase("-CSIMinerViolinAndBarPlotDataTableIndexed")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerViolinAndBarPlotDataTableIndexed "
+							+ CSIMinerViolinAndBarPlotDataTableIndexed.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerViolinAndBarPlotDataTableIndexed.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-LeventakiExpr2MethylSpearmanRankCorrelation")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {

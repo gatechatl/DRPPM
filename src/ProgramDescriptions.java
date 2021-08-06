@@ -427,6 +427,7 @@ import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatri
 import rnaseq.splicing.csiminer.CSIMinerGenerateViolinAndBarPlotDataTable;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
+import rnaseq.splicing.csiminer.CSIMinerViolinAndBarPlotDataTableIndexed;
 import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
@@ -2877,7 +2878,10 @@ public class ProgramDescriptions {
 		if (LeventakiExpr2MethylSpearmanRankCorrelation.type().equals(type)) {
 			result += "LeventakiExpr2MethylSpearmanRankCorrelation: " + LeventakiExpr2MethylSpearmanRankCorrelation.description() + "\n";
 		}
+		if (CSIMinerViolinAndBarPlotDataTableIndexed.type().equals(type)) {
+			result += "CSIMinerViolinAndBarPlotDataTableIndexed: " + CSIMinerViolinAndBarPlotDataTableIndexed.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2021-0806B";	
+	public static String VERSION = "2021-0806C";	
 }
