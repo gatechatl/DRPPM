@@ -139,7 +139,7 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 				}
 				in2.close();
 				
-				
+				HashMap found_exon_list = new HashMap();
 				// read the rankExpressionFile				
 				FileInputStream fstream3 = new FileInputStream(rankFPKMFile);
 				DataInputStream din3 = new DataInputStream(fstream3);
@@ -150,6 +150,7 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 					String str3 = in3.readLine();
 					String[] split3 = str3.split("\t");
 					if (exonlist.containsKey(split3[0])) {
+						found_exon_list.put(split3[0], "");
 						for (int i = 1; i < split3.length; i++) {
 							if (!blackList.containsKey(split_header3[i])) {
 								
@@ -177,6 +178,31 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 				}
 				in3.close();
 				
+				Iterator itr = exonlist.keySet().iterator();
+				while (itr.hasNext()) {
+					String exon = (String)itr.next();
+					if (!found_exon_list.containsKey(exon)) {
+						String[] split3 = exon.split("\t");
+						String geneName = split3[0].split("_")[0];
+						File gene_boxplotfile = new File(outputBoxPlotFolder + "/" + geneName + ".txt");
+						if (gene_boxplotfile.exists() ) {
+							FileWriter fwriter_boxplot = new FileWriter(outputBoxPlotFolder + "/" + geneName + ".txt", true);
+							BufferedWriter out_boxplot = new BufferedWriter(fwriter_boxplot);		
+							for (int i = 0; i < split_header3.length; i++) {
+								out_boxplot.write(split3[0] + "\t" + 0.0 + "\t" + sampleName + "\n");
+							}
+							out_boxplot.close();
+						} else {
+							FileWriter fwriter_boxplot = new FileWriter(outputBoxPlotFolder + "/" + geneName + ".txt");
+							BufferedWriter out_boxplot = new BufferedWriter(fwriter_boxplot);
+							out_boxplot.write("exon_name\texpr\tdisease_type\n");
+							for (int i = 0; i < split_header3.length; i++) {
+								out_boxplot.write(split3[0] + "\t" + 0.0 + "\t" + sampleName + "\n");
+							}
+							out_boxplot.close();
+						}
+					}
+				}
 				
 			}
 			in.close();
