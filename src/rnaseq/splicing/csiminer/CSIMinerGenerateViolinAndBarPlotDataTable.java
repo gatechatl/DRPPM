@@ -179,7 +179,7 @@ public class CSIMinerGenerateViolinAndBarPlotDataTable {
 						String line = (String)quartile_result.get(sampleName + "\t" + exon_name);
 						out_barplot.write("\t" + line);
 					} else {
-						out_barplot.write("\t" + 0 + "\t" + 0 + "\t" + 0 + "\t" + 0);
+						out_barplot.write("\t" + 1 + "\t" + 0 + "\t" + 0 + "\t" + 0);
 					}
 					
 				}

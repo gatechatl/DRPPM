@@ -139,6 +139,7 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 				}
 				in2.close();
 				
+				
 				// read the rankExpressionFile				
 				FileInputStream fstream3 = new FileInputStream(rankFPKMFile);
 				DataInputStream din3 = new DataInputStream(fstream3);
@@ -154,13 +155,7 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 								
 								String geneName = split3[0].split("_")[0];
 								
-								
-								
-								/*File gene_boxplotFolder = new File(outputBoxPlotFolder + "/" + geneName);
-								if (!gene_boxplotFolder.exists() ) {
-									gene_boxplotFolder.mkdir();
-								}*/
-								
+							
 								File gene_boxplotfile = new File(outputBoxPlotFolder + "/" + geneName + ".txt");
 								if (gene_boxplotfile.exists() ) {
 									FileWriter fwriter_boxplot = new FileWriter(outputBoxPlotFolder + "/" + geneName + ".txt", true);
@@ -181,8 +176,12 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 					}
 				}
 				in3.close();
+				
+				
 			}
 			in.close();
+			
+			
 			out_barplot.write("\n");
 			
 			Iterator itr = exonlist.keySet().iterator();
@@ -201,7 +200,7 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 						String line = (String)quartile_result.get(sampleName + "\t" + exon_name);
 						out_barplot.write("\t" + line);
 					} else {
-						out_barplot.write("\t" + 0 + "\t" + 0 + "\t" + 0 + "\t" + 0);
+						out_barplot.write("\t" + 1 + "\t" + 0 + "\t" + 0 + "\t" + 0);
 					}
 				}
 				in.close();
