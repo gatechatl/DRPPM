@@ -98,7 +98,8 @@ public class JinghuiZhangSTARMappingFromYaweiUpdated {
 		line += "     --outWigType wiggle \\\n";
 		line += "     --outWigStrand Stranded \\\n";
 		line += "     --outWigNorm RPM \\\n";
-		line += "     --limitBAMsortRAM 100672447591\\\n";
+		//line += "     --limitBAMsortRAM 100672447591\\\n";
+		line += "     --limitBAMsortRAM 31744190143\\\n";
 		if (gzip_flag) {
 			line += "     --readFilesCommand zcat\\\n";
 		} else if (inputR1.endsWith("gz") && inputR2.endsWith("gz")) {
