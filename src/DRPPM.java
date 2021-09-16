@@ -5435,8 +5435,7 @@ public class DRPPM {
 					System.out.println("The list of terms");
 					System.exit(0);
 				}
-				SampleFilter.execute(args_remain);
-				;
+				SampleFilter.execute(args_remain);				
 				System.exit(0);
 	
 			} else if (type.equalsIgnoreCase("-FilterSample")) {

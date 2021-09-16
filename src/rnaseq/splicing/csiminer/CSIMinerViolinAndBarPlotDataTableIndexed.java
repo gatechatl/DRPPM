@@ -19,7 +19,7 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 		return "CSI-Miner";
 	}
 	public static String parameter_info() {
-		return "[inputExonList] [inputDiseaseFiles] [sampleBlackList] [outputBarPlotFile] [outputBoxplotFolder]";
+		return "[inputExonList] [inputDiseaseFiles] [sampleBlackList] [outputBarPlotFile] [outputBarPlotFracFile] [outputBoxplotFolder]";
 	}
 	public static void execute(String[] args) {
 		
@@ -29,10 +29,15 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 			String inputDiseaseFiles = args[1]; // tab separated file sampleName\trank_quartile\trank_percentage.
 			String inputSampleBlackList = args[2];
 			String outputBarPlotFile = args[3];
-			String outputBoxPlotFolder = args[4];
+			String outputBarPlotFracFile = args[4];
+			String outputBoxPlotFolder = args[5];
 			
 			FileWriter fwriter_barplot = new FileWriter(outputBarPlotFile);
 			BufferedWriter out_barplot = new BufferedWriter(fwriter_barplot);
+			
+
+			FileWriter fwriter_barplot_frac = new FileWriter(outputBarPlotFracFile);
+			BufferedWriter out_barplot_frac = new BufferedWriter(fwriter_barplot_frac);
 			
 			// create folder
 			File boxplotFolder = new File(outputBoxPlotFolder);
@@ -64,6 +69,7 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 			in.close();
 			
 			out_barplot.write("ExonName");
+			out_barplot_frac.write("ExonName");
 			fstream = new FileInputStream(inputDiseaseFiles);
 			din = new DataInputStream(fstream);
 			in = new BufferedReader(new InputStreamReader(din));
@@ -80,6 +86,7 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 			
 			
 			HashMap quartile_result = new HashMap();
+			HashMap quartile_result_frac = new HashMap();
 			fstream = new FileInputStream(inputDiseaseFiles);
 			din = new DataInputStream(fstream);
 			in = new BufferedReader(new InputStreamReader(din));
@@ -94,6 +101,7 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 				File f = new File(rankQuartileFile);
 				if (f.exists()) {
 					out_barplot.write("\t" + sampleName + "_0" + "\t" + sampleName + "_1" + "\t" + sampleName + "_2" + "\t" + sampleName + "_3");
+					out_barplot_frac.write("\t" + sampleName + "_0" + "\t" + sampleName + "_1" + "\t" + sampleName + "_2" + "\t" + sampleName + "_3");
 				} else {
 					System.out.println(sampleName + ": " + f.getName() + " doesn't exist... Exiting");
 					System.exit(0);
@@ -135,6 +143,17 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 							quartile_result.put(sampleName, exon_quartile);
 						}*/
 						quartile_result.put(sampleName + "\t" + split2[0], first_quartile + "\t" + second_quartile + "\t" + third_quartile + "\t" + fourth_quartile);
+						double total = (first_quartile + second_quartile + third_quartile + fourth_quartile) ;
+						if (total > 0) {
+							double first_quartile_frac = first_quartile / total;
+							double second_quartile_frac = second_quartile / total;
+							double third_quartile_frac = third_quartile / total;
+							double fourth_quartile_frac = fourth_quartile / total;
+							
+							quartile_result_frac.put(sampleName + "\t" + split2[0], first_quartile_frac + "\t" + second_quartile_frac + "\t" + third_quartile_frac + "\t" + fourth_quartile_frac);
+						} else {
+							quartile_result_frac.put(sampleName + "\t" + split2[0], "0\t0\t0\t0");
+						}
 					}
 				}
 				in2.close();
@@ -209,11 +228,13 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 			
 			
 			out_barplot.write("\n");
+			out_barplot_frac.write("\n");
 			
 			Iterator itr = exonlist.keySet().iterator();
 			while (itr.hasNext()) {
 				String exon_name = (String)itr.next();
 				out_barplot.write(exon_name);
+				out_barplot_frac.write(exon_name);
 				fstream = new FileInputStream(inputDiseaseFiles);
 				din = new DataInputStream(fstream);
 				in = new BufferedReader(new InputStreamReader(din));
@@ -228,12 +249,20 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 					} else {
 						out_barplot.write("\t" + 1 + "\t" + 0 + "\t" + 0 + "\t" + 0);
 					}
+					if (quartile_result_frac.containsKey(sampleName + "\t" + exon_name)) {
+						String line = (String)quartile_result_frac.get(sampleName + "\t" + exon_name);
+						out_barplot_frac.write("\t" + line);
+					} else {
+						out_barplot_frac.write("\t" + 1 + "\t" + 0 + "\t" + 0 + "\t" + 0);
+					}
 				}
 				in.close();
 				out_barplot.write("\n");
+				out_barplot_frac.write("\n");
 			}
 			
 			out_barplot.close();
+			out_barplot_frac.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

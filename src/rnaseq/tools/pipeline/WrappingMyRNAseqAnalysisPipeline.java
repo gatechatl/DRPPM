@@ -42,6 +42,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String RSEQC_HOUSE_KEEPING_GENE_BED = "NA";
 	private static String RSEQC_REFSEQ_BED = "NA";
 	private static String RSEQC_RIBOSOME_BED = "NA";
+	private static String RSEQC_GTF = "NA";
+	private static String RSEQC_GENEINFO_TSV = "NA";
+	
 	private static String PRIMARY_GTF_REF = "NA";
 	private static String PRIMARY_GTF_EXON_REF = "NA";
 	private static String PRIMARY_GTF_EXON_LENGTH = "NA";
@@ -50,6 +53,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String RNAEDITING_VARIANTS = "NA";
 	private static String PRIMARY_FASTA = "NA";
 	private static String OPTITYPE_PROGRAM = "NA";
+	
 	
 	private static String OUTPUT_RSEQC_FILELST = "NA";
 	private static String OUTPUT_HTSEQGENE_FILELST = "NA";
@@ -129,6 +133,12 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							}
 							if (split[0].equalsIgnoreCase("RSEQC_RIBOSOME_BED")) {
 								RSEQC_RIBOSOME_BED = split[1];
+							}
+							if (split[0].equalsIgnoreCase("RSEQC_GTF")) {
+								RSEQC_GTF = split[1];
+							}
+							if (split[0].equalsIgnoreCase("RSEQC_GENEINFO_TSV")) {
+								RSEQC_GENEINFO_TSV = split[1];
 							}
 							if (split[0].equalsIgnoreCase("SPLICING_DEFICIENCY_CONFIG")) {
 								SPLICING_DEFICIENCY_CONFIG = split[1];
@@ -983,9 +993,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".htseq.cpm.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.cpm.geneName.txt\n");
 							string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".htseq.tpm.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.tpm.geneName.txt\n");
 							string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".htseq.fpkm.txt " + PRIMARY_GTF_REF + " " + sampleName + ".htseq.fpkm.geneName.txt\n");
-							string_buffer.append("drppm -MergeGeneNameMaxFast " + sampleName + ".htseq.fpkm.ganeName.txt " + sampleName + ".htseq.fpkm.geneName.max.txt\n");
-							string_buffer.append("drppm -MergeGeneNameMaxFast " + sampleName + ".htseq.cpm.ganeName.txt " + sampleName + ".htseq.cpm.geneName.max.txt\n");
-							string_buffer.append("drppm -MergeGeneNameMaxFast " + sampleName + ".htseq.tpm.ganeName.txt " + sampleName + ".htseq.tpm.geneName.max.txt\n");
+							string_buffer.append("drppm -MergeGeneNameMaxFast " + sampleName + ".htseq.fpkm.geneName.txt " + sampleName + ".htseq.fpkm.geneName.max.txt\n");
+							string_buffer.append("drppm -MergeGeneNameMaxFast " + sampleName + ".htseq.cpm.geneName.txt " + sampleName + ".htseq.cpm.geneName.max.txt\n");
+							string_buffer.append("drppm -MergeGeneNameMaxFast " + sampleName + ".htseq.tpm.geneName.txt " + sampleName + ".htseq.tpm.geneName.max.txt\n");
 							
 							string_buffer.append("cd " + current_working_dir + "\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_gene_level/counts." + sampleName + ".htseq.rawcount.txt " + outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level/\n");
@@ -1258,6 +1268,51 @@ public class WrappingMyRNAseqAnalysisPipeline {
 		script += "junction_annotation.py -i " + bam_file + " -o " + sampleName + "_junction_annotation -r " + refseq_bed + " > " + sampleName + "_junction_annotation_summary.txt 2> " + sampleName + "_junction_annotation_summary_more.txt\n";
 		script += "junction_saturation.py -i " + bam_file + " -r " + refseq_bed + " -o " + sampleName + "_junction_saturation > " + sampleName + "_junction_saturation_summary.txt 2> " + sampleName + "_junction_saturation_summary_more.txt\n";
 		script += "tin.py -i " + bam_file + " -r " + ribosome_bed + "\n";
+
+
+
+		/*string_buffer.append("clipping_profile.py -i " + bam_file_path + " -s 'PE' -o " + sampleName + "_clipping_profile > " + sampleName + "_clipping_profile.txt\n");
+string_buffer.append("deletion_profile.py -i " + bam_file_path + " -l 151 -o " + sampleName + "_deletion_profile > " + sampleName + "_deletion_profile.txt\n");
+string_buffer.append("divide_bam.py -i " + bam_file_path + " -o " + sampleName + "_divide_bam > " + sampleName + "_divide_bam.txt\n");
+string_buffer.append("FPKM_count.py -i " + bam_file_path + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " -o " + sampleName + "_FPKM_count > " + sampleName + "_FPKM_count.txt\n");
+string_buffer.append("infer_experiment.py -i " + bam_file_path + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " > " + sampleName + "_infer_experiment.txt\n");
+string_buffer.append("inner_distance.py -i " + bam_file_path + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " -o " + sampleName + "_inner_distance > " + sampleName + "_inner_distance.txt\n");
+string_buffer.append("insertion_profile.py -i " + bam_file_path + " -s 'PE' -o " + sampleName + "_insertion_profile > " + sampleName + "_insertion_profile.txt\n");
+string_buffer.append("mismatch_profile.py -i " + bam_file_path + " -l 151 -o " + sampleName + "_mismatch_prfile > " + sampleName + "_mismatch_profile.txt\n");
+string_buffer.append("read_distribution.py -i " + bam_file_path + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " > " + sampleName + "_read_distribution.txt\n");
+string_buffer.append("read_duplication.py -i " + bam_file_path + " -o " + sampleName + "_read_duplication > " + sampleName + "_read_duplication.txt\n");
+string_buffer.append("read_GC.py -i " + bam_file_path + " -o " + sampleName + "_read_GC > " + sampleName + "_read_GC.txt\n");
+string_buffer.append("read_NVC.py -i " + bam_file_path + " -x -o " + sampleName + "_read_NVC > " + sampleName + "_read_NVC.txt\n");
+string_buffer.append("read_quality.py -i " + bam_file_path + " -o " + sampleName + "_read_quality > " + sampleName + "_read_quality\n");
+string_buffer.append("RNA_fragment_size.py -i " + bam_file_path + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " > " + sampleName + "_RNA_fragment_size.txt\n");
+string_buffer.append("RPKM_saturation.py -i " + bam_file_path + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " -o " + sampleName + "_RPKM_saturation > " + sampleName + "_RPKM_saturation.txt\n");
+string_buffer.append("split_paired_bam.py -i " + bam_file_path + " -o " + sampleName + "_split_paired_bam > " + sampleName + "_split_paired_bam.txt\n");
+
+string_buffer.append("geneBody_coverage2.py -i " + sampleName + "_bam2wig.bw -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " -o " + sampleName + "_geneBody_coverage2 > " + sampleName + "geneBody_coverage2.txt\n");
+string_buffer.append("normalize_bigwig.py -i " sampleName + "_bam2wig.bw" + " -s " + CHR_NAME_LENGTH_FILE + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED+ " -o " + sampleName + "_normalize_bigwig > " + sampleName + "_normalize_bigwig.txt\n");
+*/
+
+
+		script += "clipping_profile.py -i " + bam_file + " -s 'PE' -o " + sampleName + "_clipping_profile > " + sampleName + "_clipping_profile.txt\n";
+		script += "deletion_profile.py -i " + bam_file + " -l 151 -o " + sampleName + "_deletion_profile > " + sampleName + "_deletion_profile.txt\n";
+		script += "#divide_bam.py -i " + bam_file + " -o " + sampleName + "_divide_bam > " + sampleName + "_divide_bam.stdout.txt\n";
+		script += "FPKM_count.py -i " + bam_file + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " -o " + sampleName + "_FPKM_count > " + sampleName + "_FPKM_count.stdout.txt\n";
+		script += "FPKM-UQ.py -i " + bam_file + " --gtf " + RSEQC_GTF + " --info " + RSEQC_GENEINFO_TSV + " -o " + sampleName + "_FPKM_UQ > " + sampleName + "_FPKM_count.stdout.txt\n";
+		script += "infer_experiment.py -i " + bam_file + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " > " + sampleName + "_infer_experiment.stdout.txt\n";
+		script += "inner_distance.py -i " + bam_file + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " -o " + sampleName + "_inner_distance > " + sampleName + "_inner_distance.stdout.txt\n";
+		script += "insertion_profile.py -i " + bam_file + " -s 'PE' -o " + sampleName + "_insertion_profile > " + sampleName + "_insertion_profile.stdout.txt\n";
+		script += "mismatch_profile.py -i " + bam_file + " -l 151 -o " + sampleName + "_mismatch_prfile > " + sampleName + "_mismatch_profile.stdout.txt\n";
+		script += "read_distribution.py -i " + bam_file + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " > " + sampleName + "_read_distribution.stdout.txt\n";
+		script += "read_duplication.py -i " + bam_file + " -o " + sampleName + "_read_duplication > " + sampleName + "_read_duplication.stdout.txt\n";
+		script += "read_GC.py -i " + bam_file + " -o " + sampleName + "_read_GC > " + sampleName + "_read_GC.stdout.txt\n";
+		script += "read_NVC.py -i " + bam_file + " -x -o " + sampleName + "_read_NVC > " + sampleName + "_read_NVC.stdout.txt\n";
+		script += "read_quality.py -i " + bam_file + " -o " + sampleName + "_read_quality > " + sampleName + "_read_quality.stdout.txt\n";
+		script += "RNA_fragment_size.py -i " + bam_file + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " > " + sampleName + "_RNA_fragment_size.stdout.txt\n";
+		script += "#RPKM_saturation.py -i " + bam_file + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " -o " + sampleName + "_RPKM_saturation > " + sampleName + "_RPKM_saturation.stdout.txt\n";
+		script += "#split_paired_bam.py -i " + bam_file + " -o " + sampleName + "_split_paired_bam > " + sampleName + "_split_paired_bam.stdout.txt\n";
+		script += "geneBody_coverage2.py -i " + sampleName + "_bam2wig.bw -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " -o " + sampleName + "_geneBody_coverage2 > " + sampleName + "geneBody_coverage2.stdout.txt\n";
+		script += "normalize_bigwig.py -i " + sampleName + "_bam2wig.bw" + " -s " + CHR_NAME_LENGTH_FILE + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED+ " -o " + sampleName + "_normalize_bigwig > " + sampleName + "_normalize_bigwig.stdout.txt\n";		
+
 		return script;
 	}
 			

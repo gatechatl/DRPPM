@@ -16,10 +16,10 @@ public class GenerateRNASEQCoverageStatistics {
 		return "RNASEQ";
 	}
 	public static String description() {
-		return "Calculate the percent of gene that is covered at 1X 2X 5X 10X 20X 30X";
+		return "Calculate the percent of reads that is covered at 1X 2X 5X 10X 20X 30X";
 	}
 	public static String parameter_info() {
-		return "[inputCoverageBed]";
+		return "[inputCoverageBed] [outputCoverageResult]";
 	}
 	public static void execute(String[] args) {
 		
@@ -99,6 +99,12 @@ public class GenerateRNASEQCoverageStatistics {
 					if (reads >= 30) {
 						thirtyX += geneLength;
 					}
+					if (reads >= 40) {
+						fourtyX += geneLength;
+					}
+					if (reads >= 50) {
+						fiftyX += geneLength;
+					}
 				}
 				//}
 				prev_chr = chr;
@@ -106,7 +112,7 @@ public class GenerateRNASEQCoverageStatistics {
 				prev_end = end;
 			}
 			in.close();		
-			System.out.println(inputFile + "\t" + (oneX / total_size) + "\t" + (twoX / total_size) + "\t" + (fiveX / total_size) + "\t" + (tenX / total_size) + "\t" + (twentyX / total_size) + "\t" + (thirtyX / total_size));
+			System.out.println(inputFile + "\t" + (oneX / total_size) + "\t" + (twoX / total_size) + "\t" + (fiveX / total_size) + "\t" + (tenX / total_size) + "\t" + (twentyX / total_size) + "\t" + (thirtyX / total_size) + "\t" + (fourtyX / total_size) + "\t" + (fiftyX / total_size));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

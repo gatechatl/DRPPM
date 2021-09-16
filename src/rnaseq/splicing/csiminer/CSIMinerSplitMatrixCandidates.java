@@ -72,29 +72,7 @@ public class CSIMinerSplitMatrixCandidates {
 					pcgp_annotation.put(split[1], list);
 				}
 			}
-			in.close();
-			
-			/*
-			HashMap gtex_annotation = new HashMap();
-			fstream = new FileInputStream(inputGTExAnnotationFile);
-			din = new DataInputStream(fstream);
-			in = new BufferedReader(new InputStreamReader(din));
-			header = in.readLine();
-			while (in.ready()) {
-				String str = in.readLine();
-				String[] split = str.split("\t");
-				if (gtex_annotation.containsKey(split[1])) {
-					LinkedList list = (LinkedList)gtex_annotation.get(split[1]);
-					list.add(split[0]);
-					gtex_annotation.put(split[1], list);
-				} else {
-					LinkedList list = new LinkedList();
-					list.add(split[0]);
-					gtex_annotation.put(split[1], list);
-				}
-			}
-			in.close();
-			*/
+			in.close();			
 			
 			Iterator itr = pcgp_annotation.keySet().iterator();
 			while (itr.hasNext()) {
@@ -104,7 +82,7 @@ public class CSIMinerSplitMatrixCandidates {
 				out.write("ExonID");
 				LinkedList samples = (LinkedList)pcgp_annotation.get(disease);
 				LinkedList ids = new LinkedList();
-				
+				HashMap dup_add_once = new HashMap();
 				fstream = new FileInputStream(inputPCGPMatrix);
 				din = new DataInputStream(fstream);
 				in = new BufferedReader(new InputStreamReader(din));
@@ -112,8 +90,11 @@ public class CSIMinerSplitMatrixCandidates {
 				String[] split_header = header.split("\t");
 				for (int i = 2; i < split_header.length; i++) {
 					if (samples.contains(split_header[i])) {
-						ids.add(i);
-						out.write("\t" + split_header[i]);
+						if (!dup_add_once.containsKey(split_header[i])) {
+							ids.add(i);
+							out.write("\t" + split_header[i]);
+							dup_add_once.put(split_header[i], split_header[i]);
+						}
 					}
 				}
 				out.write("\n");
@@ -174,46 +155,7 @@ public class CSIMinerSplitMatrixCandidates {
 				}
 				
 			}
-			
-			
-			
-			/*
-			itr = gtex_annotation.keySet().iterator();
-			while (itr.hasNext()) {
-				String histology = (String)itr.next();
-				FileWriter fwriter = new FileWriter(outputFolderGTEx + "/" + histology + ".txt");
-				BufferedWriter out = new BufferedWriter(fwriter);
-				out.write("ExonID");
-				LinkedList samples = (LinkedList)gtex_annotation.get(histology);
-				LinkedList ids = new LinkedList();
-				
-				fstream = new FileInputStream(inputGTExMatrix);
-				din = new DataInputStream(fstream);
-				in = new BufferedReader(new InputStreamReader(din));
-				header = in.readLine();
-				String[] split_header = header.split("\t");
-				for (int i = 2; i < split_header.length; i++) {outputFolderPCGP
-					if (samples.contains(split_header[i])) {
-						ids.add(i);
-						out.write("\t" + split_header[i]);
-					}
-				}
-				out.write("\n");
-				while (in.ready()) {
-					String str = in.readLine();
-					String[] split = str.split("\t");
-					out.write(split[0]);
-					Iterator itr2 = ids.iterator();
-					while (itr2.hasNext()) {
-						int id = (Integer)itr2.next();
-						out.write("\t" + split[id]);
-					}
-					out.write("\n");
-				}
-				in.close();
-				out.close();
-			}
-			*/
+						
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
