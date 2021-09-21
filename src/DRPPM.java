@@ -730,6 +730,9 @@ import rnaseq.tools.mousemodel.qc.FPKMBoxPlotOfGeneKO;
 import rnaseq.tools.mousemodel.qc.FPKMBoxPlotOfGeneKOSampleSpecific;
 import rnaseq.tools.mousemodel.qc.RenameSampleForBoxPlot;
 import rnaseq.tools.pipeline.ExpandGeneListAfterLIMMA;
+import rnaseq.tools.pipeline.GenerateAlyssaPythonSummaryScript;
+import rnaseq.tools.pipeline.GenerateAlyssaRGlobalSummaryScript;
+import rnaseq.tools.pipeline.GenerateAlyssaSampleCheck;
 import rnaseq.tools.pipeline.GenerateLIMMAComparisonScript;
 import rnaseq.tools.pipeline.WrappingMyRNAseqAnalysisPipeline;
 import rnaseq.tools.pipeline.htseqexon.WRAPCombineFilesIntoMatrix;
@@ -11914,6 +11917,36 @@ public class DRPPM {
 					System.exit(0);
 				}
 				LeventakiExpr2MethylSpearmanRankCorrelation.execute(args_remain);
+				System.exit(0);
+				// GenerateAlyssaPythonSummaryScript
+			} else if (type.equalsIgnoreCase("-GenerateAlyssaPythonSummaryScript")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateAlyssaPythonSummaryScript "
+							+ GenerateAlyssaPythonSummaryScript.parameter_info());
+					System.exit(0);
+				}
+				GenerateAlyssaPythonSummaryScript.execute(args_remain);
+				System.exit(0);
+				// GenerateAlyssaRGlobalSummaryScript
+			} else if (type.equalsIgnoreCase("-GenerateAlyssaRGlobalSummaryScript")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateAlyssaRGlobalSummaryScript "
+							+ GenerateAlyssaRGlobalSummaryScript.parameter_info());
+					System.exit(0);
+				}
+				GenerateAlyssaRGlobalSummaryScript.execute(args_remain);
+				System.exit(0);
+				// GenerateAlyssaSampleCheck
+			} else if (type.equalsIgnoreCase("-GenerateAlyssaSampleCheck")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GenerateAlyssaSampleCheck "
+							+ GenerateAlyssaSampleCheck.parameter_info());
+					System.exit(0);
+				}
+				GenerateAlyssaSampleCheck.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

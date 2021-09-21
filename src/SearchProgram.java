@@ -759,5 +759,8 @@ public class SearchProgram {
 		search_program.add("CSIMinerGenerateViolinAndBarPlotDataTable");
 		search_program.add("CSIMinerViolinAndBarPlotDataTableIndexed");
 		search_program.add("LeventakiExpr2MethylSpearmanRankCorrelation");
+		search_program.add("GenerateAlyssaPythonSummaryScript");
+		search_program.add("GenerateAlyssaRGlobalSummaryScript");
+		search_program.add("GenerateAlyssaSampleCheck");
 	}
 }

@@ -470,6 +470,9 @@ import rnaseq.tools.genelengthanalysis.TranscriptLengthSlidingWindow;
 import rnaseq.tools.genelengthanalysis.TranscriptLengthSlidingWindowInhibitedGenes;
 import rnaseq.tools.metadata.AppendMetadataTag2RNAseqMatrixSampleName;
 import rnaseq.tools.pipeline.ExpandGeneListAfterLIMMA;
+import rnaseq.tools.pipeline.GenerateAlyssaPythonSummaryScript;
+import rnaseq.tools.pipeline.GenerateAlyssaRGlobalSummaryScript;
+import rnaseq.tools.pipeline.GenerateAlyssaSampleCheck;
 import rnaseq.tools.pipeline.GenerateLIMMAComparisonScript;
 import rnaseq.tools.pipeline.WrappingMyRNAseqAnalysisPipeline;
 import rnaseq.tools.pipeline.htseqexon.WRAPCombineFilesIntoMatrix;
@@ -2881,7 +2884,16 @@ public class ProgramDescriptions {
 		if (CSIMinerViolinAndBarPlotDataTableIndexed.type().equals(type)) {
 			result += "CSIMinerViolinAndBarPlotDataTableIndexed: " + CSIMinerViolinAndBarPlotDataTableIndexed.description() + "\n";
 		}
+		if (GenerateAlyssaPythonSummaryScript.type().equals(type)) {
+			result += "GenerateAlyssaPythonSummaryScript: " + GenerateAlyssaPythonSummaryScript.description() + "\n";
+		}
+		if (GenerateAlyssaRGlobalSummaryScript.type().equals(type)) {
+			result += "GenerateAlyssaRGlobalSummaryScript: " + GenerateAlyssaRGlobalSummaryScript.description() + "\n";
+		}
+		if (GenerateAlyssaSampleCheck.type().equals(type)) {
+			result += "GenerateAlyssaSampleCheck: " + GenerateAlyssaSampleCheck.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2021-0916A";	
+	public static String VERSION = "2021-0921A";	
 }
