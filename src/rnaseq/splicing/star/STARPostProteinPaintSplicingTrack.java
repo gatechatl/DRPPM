@@ -28,6 +28,9 @@ public class STARPostProteinPaintSplicingTrack {
 			String sj_out_tab_file = args[0];
 			String output6coltab = args[1];
 			
+			FileWriter fwriter_uniq = new FileWriter(output6coltab + "uniq");
+			BufferedWriter out_uniq = new BufferedWriter(fwriter_uniq);
+			
 			FileWriter fwriter = new FileWriter(output6coltab);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			
@@ -70,12 +73,19 @@ public class STARPostProteinPaintSplicingTrack {
 					known = "known";
 				}
 				
-				String count = split[6];
-				out.write(chr + "\t" + junction1_position + "\t" + junction2_position + "\t" + junction1_direction + "\t" + type + "_" + known + "\t" + count + "\n");
+				String count_uniq = split[6];
+				String count_multi = split[7];
+				out_uniq.write(chr + "\t" + junction1_position + "\t" + junction2_position + "\t" + junction1_direction + "\t" + type + "_" + known + "\t" + count_uniq + "\n");
+				out.write(chr + "\t" + junction1_position + "\t" + junction2_position + "\t" + junction1_direction + "\t" + type + "_" + known + "\t" + count_multi + "\n");
 				
 			}
 			in2.close();
 			out.close();
+			out_uniq.close();
+			
+			CommandLine.executeCommand("sort -k1,1 -k2,2n " + output6coltab + "uniq" + " > " + output6coltab + "uniq" + ".sorted");
+			CommandLine.executeCommand("bgzip " + output6coltab + "uniq" + ".sorted");
+			CommandLine.executeCommand("tabix -p bed " + output6coltab + "uniq" + ".sorted.gz");
 			
 			CommandLine.executeCommand("sort -k1,1 -k2,2n " + output6coltab + " > " + output6coltab + ".sorted");
 			CommandLine.executeCommand("bgzip " + output6coltab + ".sorted");
