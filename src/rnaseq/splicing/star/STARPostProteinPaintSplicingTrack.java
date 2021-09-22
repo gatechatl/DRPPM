@@ -88,11 +88,11 @@ public class STARPostProteinPaintSplicingTrack {
 			out_uniq.close();
 			
 			out_shell.write("sort -k1,1 -k2,2n " + output6coltab + "uniq" + " > " + output6coltab + "uniq" + ".sorted" + "\n");
-			out_shell.write("bgzip " + output6coltab + "uniq" + ".sorted" + "\n");
-			out_shell.write("tabix -p bed " + output6coltab + "uniq" + ".sorted.gz" + "\n");
+			out_shell.write("bgzip -f " + output6coltab + "uniq" + ".sorted" + "\n");
+			out_shell.write("tabix -f -p bed " + output6coltab + "uniq" + ".sorted.gz" + "\n");
 			out_shell.write("sort -k1,1 -k2,2n " + output6coltab + " > " + output6coltab + ".sorted" + "\n");
-			out_shell.write("bgzip " + output6coltab + ".sorted" + "\n");
-			out_shell.write("tabix -p bed " + output6coltab + ".sorted.gz" + "\n");
+			out_shell.write("bgzip -f " + output6coltab + ".sorted" + "\n");
+			out_shell.write("tabix -f -p bed " + output6coltab + ".sorted.gz" + "\n");
 			out_shell.close();
 			CommandLine.executeCommand("sh " + output6coltab + ".sh");
 			
