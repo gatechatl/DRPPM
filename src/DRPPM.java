@@ -706,6 +706,8 @@ import rnaseq.splicing.splicefactor.enrichment.SpliceFactorMotifFisherExact;
 import rnaseq.splicing.splicefactor.enrichment.SpliceFactorMotifScanner;
 import rnaseq.splicing.star.JuncSalvagerExaminePutativeExons;
 import rnaseq.splicing.star.STARPostProcessingMatrix;
+import rnaseq.splicing.star.STARPostProteinPaintSplicingTrack;
+import rnaseq.splicing.star.STARPostProteinPaintSplicingTrackGenerateScript;
 import rnaseq.splicing.summary.AppendExpressionToMATSOutput;
 import rnaseq.tools.ercc.GenerateERCCgtffile;
 import rnaseq.tools.exonjunction.CompareDifferentialAnalysis;
@@ -11947,6 +11949,26 @@ public class DRPPM {
 					System.exit(0);
 				}
 				GenerateAlyssaSampleCheck.execute(args_remain);
+				System.exit(0);
+				// STARPostProteinPaintSplicingTrack
+			} else if (type.equalsIgnoreCase("-STARPostProteinPaintSplicingTrack")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -STARPostProteinPaintSplicingTrack "
+							+ STARPostProteinPaintSplicingTrack.parameter_info());
+					System.exit(0);
+				}
+				STARPostProteinPaintSplicingTrack.execute(args_remain);
+				System.exit(0);
+				// STARPostProteinPaintSplicingTrackGenerateScript
+			} else if (type.equalsIgnoreCase("-STARPostProteinPaintSplicingTrackGenerateScript")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -STARPostProteinPaintSplicingTrackGenerateScript "
+							+ STARPostProteinPaintSplicingTrackGenerateScript.parameter_info());
+					System.exit(0);
+				}
+				STARPostProteinPaintSplicingTrackGenerateScript.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

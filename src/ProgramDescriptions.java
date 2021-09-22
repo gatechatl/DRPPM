@@ -460,6 +460,8 @@ import rnaseq.splicing.spladder.SpladderScriptGenerator;
 import rnaseq.splicing.spladder.SpladderSummarizeOutput;
 import rnaseq.splicing.star.JuncSalvagerExaminePutativeExons;
 import rnaseq.splicing.star.STARPostProcessingMatrix;
+import rnaseq.splicing.star.STARPostProteinPaintSplicingTrack;
+import rnaseq.splicing.star.STARPostProteinPaintSplicingTrackGenerateScript;
 import rnaseq.splicing.summary.AppendExpressionToMATSOutput;
 import rnaseq.tools.ercc.GenerateERCCgtffile;
 import rnaseq.tools.exonjunction.JunctionVsGeneJunc;
@@ -2893,7 +2895,13 @@ public class ProgramDescriptions {
 		if (GenerateAlyssaSampleCheck.type().equals(type)) {
 			result += "GenerateAlyssaSampleCheck: " + GenerateAlyssaSampleCheck.description() + "\n";
 		}
+		if (STARPostProteinPaintSplicingTrack.type().equals(type)) {
+			result += "STARPostProteinPaintSplicingTrack: " + STARPostProteinPaintSplicingTrack.description() + "\n";
+		}
+		if (STARPostProteinPaintSplicingTrackGenerateScript.type().equals(type)) {
+			result += "STARPostProteinPaintSplicingTrackGenerateScript: " + STARPostProteinPaintSplicingTrackGenerateScript.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2021-0921A";	
+	public static String VERSION = "2021-0922C";	
 }

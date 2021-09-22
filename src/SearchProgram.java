@@ -762,5 +762,7 @@ public class SearchProgram {
 		search_program.add("GenerateAlyssaPythonSummaryScript");
 		search_program.add("GenerateAlyssaRGlobalSummaryScript");
 		search_program.add("GenerateAlyssaSampleCheck");
+		search_program.add("STARPostProteinPaintSplicingTrack");
+		search_program.add("STARPostProteinPaintSplicingTrackGenerateScript");
 	}
 }

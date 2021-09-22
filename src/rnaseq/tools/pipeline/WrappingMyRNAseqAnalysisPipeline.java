@@ -1282,7 +1282,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("## QC SUMMARY ##\n");							
 							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/qc_summary/" + "\n");							
 							string_buffer.append("drppm -GenerateAlyssaPythonSummaryScript\n");
-							string_buffer.append("")
+							string_buffer.append("");
 							string_buffer.append("cd " + current_working_dir + "\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/qc_summary/*" + " " + outputFolder + "/" + sampleName + "/qc_summary/\n");							
 							string_buffer.append("## END OPTITYPING ##\n\n");
