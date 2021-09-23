@@ -24,7 +24,7 @@ public class JuncSalvagerExonSkippingPSI {
 		return "Calculate the psi value for each exon in the gtf file using STAR SJ file.\n";
 	}
 	public static String parameter_info() {
-		return "[inputSTARSJ] [gtfFile] [outputFile_SpliceOut] [outputFile_SpliceIn]";
+		return "[inputSTARSJ] [gtfFile] [outputFile_SpliceOut] [outputFile_SpliceIn] [default uniq read; set true if multi-mapped-read]";
 	}
 	public static void main(String[] args) {
 		int start = 53019384;
@@ -40,7 +40,10 @@ public class JuncSalvagerExonSkippingPSI {
 			int buffer = new Integer(args[2]);
 			String outputFile = args[3];
 			String outputFile2 = args[4];
-			
+			boolean include_multi_mapped_false = false;
+			if (args.length > 5) {
+				include_multi_mapped_false = new Boolean(args[5]);
+			}
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			out.write("chr\tstart\tend\tpso\tleft_read\tright_read\tskip_read\n");
@@ -113,17 +116,28 @@ public class JuncSalvagerExonSkippingPSI {
 				int intron_left = new Integer(split[1]) - 1;
 				int intron_right = new Integer(split[2]) + 1;
 				int uniq_read = new Integer(split[6]);
+				int multi_read = new Integer(split[7]);
+				int total_read = uniq_read + multi_read;
+				
 				for (int i = 0; i <= buffer; i++) {
 					if (exon_left.containsKey(chr + "\t" + (intron_right + i))) {
 						int prev_read = (Integer)exon_left.get(chr + "\t" + (intron_right + i));
-						prev_read += uniq_read;
+						if (include_multi_mapped_false) {
+							prev_read += total_read;
+						} else {
+							prev_read += uniq_read;
+						}
 						exon_left.put(chr + "\t" + (intron_right + i), prev_read);
 					}
 				}
 				for (int i = 0; i <= buffer; i++) {
 					if (exon_right.containsKey(chr + "\t" + (intron_left - i))) {
 						int prev_read = (Integer)exon_right.get(chr + "\t" + (intron_left - i));
-						prev_read += uniq_read;
+						if (include_multi_mapped_false) {
+							prev_read += total_read;
+						} else {
+							prev_read += uniq_read;
+						}
 						exon_right.put(chr + "\t" + (intron_left - i), prev_read);
 					}
 				}
@@ -142,7 +156,11 @@ public class JuncSalvagerExonSkippingPSI {
 							int exon_end = new Integer(start_end.split("\t")[1]);
 							if (intron_left < exon_start && exon_end < intron_right) {
 								int count = (Integer)exon_skip.get(chr + "\t" + exon_start + "\t" + exon_end);
-								count += uniq_read;
+								if (include_multi_mapped_false) {
+									count += total_read;
+								} else {
+									count += uniq_read;
+								}
 								exon_skip.put(chr + "\t" + exon_start + "\t" + exon_end, count);								
 							}
 						}
@@ -156,7 +174,11 @@ public class JuncSalvagerExonSkippingPSI {
 							int exon_end = new Integer(start_end.split("\t")[1]);
 							if (intron_left <= (exon_start - buffer) && (exon_end + buffer) <= intron_right) {
 								int count = (Integer)exon_skip.get(chr + "\t" + exon_start + "\t" + exon_end);
-								count += uniq_read;
+								if (include_multi_mapped_false) {
+									count += total_read;
+								} else {
+									count += uniq_read;
+								}
 								exon_skip.put(chr + "\t" + exon_start + "\t" + exon_end, count);								
 							}
 						}
@@ -170,7 +192,11 @@ public class JuncSalvagerExonSkippingPSI {
 							int exon_end = new Integer(start_end.split("\t")[1]);
 							if (intron_left <= (exon_start - buffer) && (exon_end + buffer) <= intron_right) {
 								int count = (Integer)exon_skip.get(chr + "\t" + exon_start + "\t" + exon_end);
-								count += uniq_read;
+								if (include_multi_mapped_false) {
+									count += total_read;
+								} else {
+									count += uniq_read;
+								}
 								exon_skip.put(chr + "\t" + exon_start + "\t" + exon_end, count);								
 							}
 						}

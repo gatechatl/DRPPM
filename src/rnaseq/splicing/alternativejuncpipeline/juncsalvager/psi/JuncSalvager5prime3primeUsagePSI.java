@@ -18,7 +18,7 @@ public class JuncSalvager5prime3primeUsagePSI {
 		return "Calculate the psi value for 3' and 5' alternative splice site STAR SJ file.\n";
 	}
 	public static String parameter_info() {
-		return "[inputSTARSJ] [gtfFile] [outputFile_SpliceOut] [outputFile_SpliceIn]";
+		return "[inputSTARSJ] [gtfFile] [outputFile_SpliceIn/Out] [default uniq read; set true if multi-mapped-read]";
 	}
 	public static void main(String[] args) {
 		int start = 53019384;
@@ -33,7 +33,10 @@ public class JuncSalvager5prime3primeUsagePSI {
 			String GTFFile = args[1];
 			int buffer = new Integer(args[2]);
 			String outputFile = args[3];
-			
+			boolean include_multi_mapped_false = false;
+			if (args.length > 4) {
+				include_multi_mapped_false = new Boolean(args[4]);
+			}
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			out.write("chr\tstart\tend\tdirection\tPSI_5'AltSplice\tPSI_3'AltSplice\tFound_Read_5'End\tAlt_Read_5'End\tFound_Read_3'End\tAlt_Read_3'End\n");
@@ -104,17 +107,28 @@ public class JuncSalvager5prime3primeUsagePSI {
 				int intron_left = new Integer(split[1]) - 1;
 				int intron_right = new Integer(split[2]) + 1;
 				int uniq_read = new Integer(split[6]);
+				int multi_read = new Integer(split[7]);
+				int total_reads = uniq_read + multi_read;
+				
 				for (int i = 0; i <= buffer; i++) {
 					if (exon_left.containsKey(chr + "\t" + (intron_right + i))) {
 						int prev_read = (Integer)exon_left.get(chr + "\t" + (intron_right + i));
-						prev_read += uniq_read;
+						if (include_multi_mapped_false) {
+							prev_read += total_reads;
+						} else {
+							prev_read += uniq_read;
+						}
 						exon_left.put(chr + "\t" + (intron_right + i), prev_read);
 					}
 				}
 				for (int i = 0; i <= buffer; i++) {
 					if (exon_right.containsKey(chr + "\t" + (intron_left - i))) {
 						int prev_read = (Integer)exon_right.get(chr + "\t" + (intron_left - i));
-						prev_read += uniq_read;
+						if (include_multi_mapped_false) {
+							prev_read += total_reads;
+						} else {
+							prev_read += uniq_read;
+						}
 						exon_right.put(chr + "\t" + (intron_left - i), prev_read);
 					}
 				}				

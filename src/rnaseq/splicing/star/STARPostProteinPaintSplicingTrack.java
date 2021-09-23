@@ -76,13 +76,14 @@ public class STARPostProteinPaintSplicingTrack {
 					known = "known";
 				}
 				
-				String count_uniq = split[6];
-				String count_multi = split[7];
+				String count_uniq = split[7];
+				String count_multi = split[8];
+				int total_reads = new Integer(count_uniq) + new Integer(count_multi);
 				if (new Double(count_uniq) > 0) {
 					out_uniq.write(chr + "\t" + junction1_position + "\t" + junction2_position + "\t" + junction1_direction + "\t" + type + "_" + known + "\t" + count_uniq + "\n");
 				}
-				if (new Double(count_multi) > 0) {
-					out.write(chr + "\t" + junction1_position + "\t" + junction2_position + "\t" + junction1_direction + "\t" + type + "_" + known + "\t" + count_multi + "\n");
+				if (total_reads > 0) {
+					out.write(chr + "\t" + junction1_position + "\t" + junction2_position + "\t" + junction1_direction + "\t" + type + "_" + known + "\t" + total_reads + "\n");
 				}
 				
 			}
