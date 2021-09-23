@@ -644,7 +644,11 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvag
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerValidateNovelExonAndGeneratePeptide;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvager5prime3primeUsagePSI;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombine3primePSIMatrixIndex;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombine5primePSIMatrixIndex;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrixIndex;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombineSTARSJTABIndex;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
 import rnaseq.splicing.alternativejuncpipeline.xbp1.CalculateXBP1sFeatures;
@@ -11969,6 +11973,46 @@ public class DRPPM {
 					System.exit(0);
 				}
 				STARPostProteinPaintSplicingTrackGenerateScript.execute(args_remain);
+				System.exit(0);
+				// JuncSalvagerCombinePSIMatrixIndex
+			} else if (type.equalsIgnoreCase("-JuncSalvagerCombinePSIMatrixIndex")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvagerCombinePSIMatrixIndex "
+							+ JuncSalvagerCombinePSIMatrixIndex.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvagerCombinePSIMatrixIndex.execute(args_remain);
+				System.exit(0);
+				// JuncSalvagerCombine5primePSIMatrixIndex
+			} else if (type.equalsIgnoreCase("-JuncSalvagerCombine5primePSIMatrixIndex")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvagerCombine5primePSIMatrixIndex "
+							+ JuncSalvagerCombine5primePSIMatrixIndex.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvagerCombine5primePSIMatrixIndex.execute(args_remain);
+				System.exit(0);
+				// JuncSalvagerCombine3primePSIMatrixIndex
+			} else if (type.equalsIgnoreCase("-JuncSalvagerCombine3primePSIMatrixIndex")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvagerCombine3primePSIMatrixIndex "
+							+ JuncSalvagerCombine3primePSIMatrixIndex.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvagerCombine3primePSIMatrixIndex.execute(args_remain);
+				System.exit(0);
+				// JuncSalvagerCombineSTARSJTABIndex
+			} else if (type.equalsIgnoreCase("-JuncSalvagerCombineSTARSJTABIndex")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvagerCombineSTARSJTABIndex "
+							+ JuncSalvagerCombineSTARSJTABIndex.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvagerCombineSTARSJTABIndex.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

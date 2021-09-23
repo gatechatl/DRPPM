@@ -53,16 +53,21 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String RNAEDITING_VARIANTS = "NA";
 	private static String PRIMARY_FASTA = "NA";
 	private static String OPTITYPE_PROGRAM = "NA";
+	
 	private static String QC_SUMMARY = "NA";
 	
-	private static String OUTPUT_RSEQC_FILELST = "NA";
-	private static String OUTPUT_HTSEQGENE_FILELST = "NA";
-	private static String OUTPUT_HTSEQEXON_FILELST = "NA";
-	private static String OUTPUT_STARfinalout_FILELST = "NA";
-	private static String OUTPUT_SPLICING_DEFICIENCY_FILELST = "NA";
-	private static String OUTPUT_PSI_PSO_CALC_FILELST = "NA";	
-	private static String OUTPUT_ALYSSA_SUMMARY_FILELST = "NA";
-		
+	private static String OUTPUT_BAM_FILELST = "bam_files.lst";
+	private static String OUTPUT_RSEQC_FILELST = "rseqc_files.lst";
+	private static String OUTPUT_HTSEQGENE_FILELST = "htseq_genelevel_files.lst";
+	private static String OUTPUT_HTSEQEXON_FILELST = "htseq_exon_files.lst";
+	private static String OUTPUT_STARfinalout_FILELST = "star_finalout_files.lst";
+	private static String OUTPUT_SPLICING_DEFICIENCY_FILELST = "splicing_deficiency_files.lst";
+	private static String OUTPUT_PSI_PSO_CALC_FILELST = "psi_pso_files.lst";	
+	private static String OUTPUT_ALYSSA_SUMMARY_FILELST = "alyssa_summary_files.lst";
+	
+	private static String OUTPUT_TO_MATRIX_SHELL_SCRIPT = "output2matrix.sh";
+	private static String PIPELINE_POSTPROCESSING_SCRIPT = "postprocess.sh";
+	
 	private static boolean RSEQC_NOWIG = false;		
 	private static boolean IS_PAIRED = true;
 	private static boolean SKIP_BAM2FASTQ = false;
@@ -79,6 +84,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static boolean SKIP_RNAINDEL = false;
 	private static boolean SKIP_OPTITYPE = false;
 	private static boolean SKIP_QC_SUMMARY = false;
+	private static boolean SKIP_BAM2BW = false;
+			
+	private static boolean SKIP_MATRIX_GENERATION = false;
 	
 	
 	public static void execute(String[] args) {
@@ -173,6 +181,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 								RSEQC_NOWIG = new Boolean(split[1]);
 							}
 							
+							if (split[0].equalsIgnoreCase("OUTPUT_BAM_FILELST")) {
+								OUTPUT_BAM_FILELST = split[1];
+							}
 							if (split[0].equalsIgnoreCase("OUTPUT_RSEQC_FILELST")) {
 								OUTPUT_RSEQC_FILELST = split[1];
 							}
@@ -197,6 +208,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 								OUTPUT_ALYSSA_SUMMARY_FILELST = split[1];
 							}
 							
+							if (split[0].equalsIgnoreCase("OUTPUT_TO_MATRIX_SHELL_SCRIPT")) {
+								OUTPUT_TO_MATRIX_SHELL_SCRIPT = split[1];
+							}
 							
 							if (split[0].equalsIgnoreCase("SKIP_BAM2FASTQ")) {
 								SKIP_BAM2FASTQ = new Boolean(split[1]);
@@ -233,6 +247,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							}				
 							if (split[0].equalsIgnoreCase("SKIP_QC_SUMMARY")) {
 								SKIP_QC_SUMMARY = new Boolean(split[1]);
+							}
+							if (split[0].equalsIgnoreCase("SKIP_MATRIX_GENERATION")) {
+								SKIP_MATRIX_GENERATION = new Boolean(split[1]);
 							}
 						}
 					}
@@ -285,6 +302,13 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			if (!SKIP_QC_SUMMARY) {
 				fwriter_OUTPUT_ALYSSA_SUMMARY_FILELST = new FileWriter(OUTPUT_ALYSSA_SUMMARY_FILELST);
 				out_OUTPUT_ALYSSA_SUMMARY_FILELST = new BufferedWriter(fwriter_OUTPUT_ALYSSA_SUMMARY_FILELST);											
+			}
+			
+			FileWriter fwriter_OUTPUT_TO_MATRIX_SHELL_SCRIPT = null;
+			BufferedWriter out_OUTPUT_TO_MATRIX_SHELL_SCRIPT = null;
+			if (!SKIP_MATRIX_GENERATION) {
+				fwriter_OUTPUT_TO_MATRIX_SHELL_SCRIPT = new FileWriter(OUTPUT_TO_MATRIX_SHELL_SCRIPT);
+				out_OUTPUT_TO_MATRIX_SHELL_SCRIPT = new BufferedWriter(fwriter_OUTPUT_TO_MATRIX_SHELL_SCRIPT);											
 			}
 			// need to add code to check for whether all the files are present
 			
@@ -629,7 +653,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("## End STAR Mapping ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
 							String bam_star_finalout = outputFolder + "/" + sampleName + "/star/" + sampleName + ".STAR.Log.final.out";
-							out_OUTPUT_STARfinalout_FILELST.write(sampleName + "\t" + bam_star_finalout + "\n");
+							String sj_tab = bam_star_finalout.replaceAll(".Log.final.out", ".SJ.out.tab");
+							out_OUTPUT_STARfinalout_FILELST.write(sampleName + "\t" + bam_star_finalout + "\t" + sj_tab + "\n");
 						}
 						String bam_file_path = outputFolder + "/" + sampleName + "/star/" + sampleName + ".STAR.Aligned.sortedByCoord.out.bam";
 						 
@@ -847,7 +872,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("## END PSI PSO calculation ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
 							
-							out_OUTPUT_PSI_PSO_CALC_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.psi.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.pso.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab..txt" + "\n");
+							out_OUTPUT_PSI_PSO_CALC_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.psi.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.pso.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.5to3AltSplice.psi.txt" + "\n");
 						}
 						
 
@@ -1258,41 +1283,104 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			
 			// Generate the script for the QC SUMMARY
 			// 
+			String global_qc_summary_folder = outputFolder + "/global_qc_summary";
+			File global_qc_summary_folder_f = new File(global_qc_summary_folder);
+			if (!global_qc_summary_folder_f.exists()) {
+				global_qc_summary_folder_f.mkdir();
+			}
+			String global_qc_summary_input_folder = outputFolder + "/" + "/global_qc_summary/input";
+			File global_qc_summary_input_folder_f = new File(global_qc_summary_input_folder);
+			if (!global_qc_summary_input_folder_f.exists()) {
+				global_qc_summary_input_folder_f.mkdir();
+			}
+			
 			itr = sampleName_linkedList.iterator();
 			while (itr.hasNext()) {
 				String sampleName = (String)itr.next();
 				if (fq1_path_map.containsKey(sampleName)) {
 					String fq1_file_path = (String)fq1_path_map.get(sampleName);
 					if ((new File(fq1_file_path)).exists()) {
-						String optitype_folder = outputFolder + "/" + sampleName + "/qc_summary";
-						File optitype_folder_f = new File(optitype_folder);
-						if (!optitype_folder_f.exists()) {
-							optitype_folder_f.mkdir();
+						String qc_summary_folder = outputFolder + "/" + sampleName + "/qc_summary";
+						File qc_summary_folder_f = new File(qc_summary_folder);
+						if (!qc_summary_folder_f.exists()) {
+							qc_summary_folder_f.mkdir();
 						}
+						
+						
 			
-						String optitype_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/qc_summary";
-						File optitype_intermediate_folder_f = new File(optitype_intermediate_folder);
-						if (!optitype_intermediate_folder_f.exists()) {
-							optitype_intermediate_folder_f.mkdir();
+			
+						String qc_summary_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/qc_summary";
+						File qc_summary_intermediate_folder_f = new File(qc_summary_intermediate_folder);
+						if (!qc_summary_intermediate_folder_f.exists()) {
+							qc_summary_intermediate_folder_f.mkdir();
 						}
 					
+						
 
 						if (!SKIP_QC_SUMMARY) {
 							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
-							string_buffer.append("## QC SUMMARY ##\n");							
-							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/qc_summary/" + "\n");							
+							string_buffer.append("## QC SUMMARY ##\n");
+							String dash_t_star_summary_file = outputFolder + "/" + sampleName + "/star/" + sampleName + ".STAR.Aligned.sortedByCoord.out.summary.txt";
+							String dash_j_junction_annotation_summary_file = outputFolder + "/" + sampleName + "/rseqc/" + sampleName + "_junction_annotation_summary_more.txt";
+							String dash_b_bam_stat_report_file = outputFolder + "/" + sampleName + "/rseqc/" + sampleName + "_rseqc_bam_stat_report.txt";
+							String dash_l_STAR_log_final_out = outputFolder + "/" + sampleName + "/star/" + sampleName + ".STAR.Log.final.out";
+							String dash_e_infer_experiment = outputFolder + "/" + sampleName + "/rseqc/" + sampleName + "_infer_experiment.stdout.txt";
+							String dash_d_inner_distance = outputFolder + "/" + sampleName + "/rseqc/" + sampleName + "_inner_distance.stdout.txt";
+							String dash_r_read_distribution = outputFolder + "/" + sampleName + "/rseqc/" + sampleName + "_read_distribution.stdout.txt";
+							String dash_n_intron_summary = outputFolder + "/" + sampleName + "/splicingdeficiency/" + sampleName + "_intron_summary.txt";
+							
+							
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/qc_summary/" + "\n");		
+							// Copy files to the current directory.
+							
+							//python summarygen.py -t JK_A2_6_ERCC_S31.STAR.Aligned.sortedByCoord.out.summary.txt -j JK_A2_6_ERCC_S31_junction_annotation_summary_more.txt -b rseqc_bam_stat_report_S31.txt -l JK_A2_6_ERCC_S31.STAR.Log.final.out -e JK_A2_6_ERCC_S31_infer_experiment.txt -d JK_A2_6_ERCC_S31_inner_distance.txt -r JK_A2_6_ERCC_S31_read_distribution.txt -n JK_A2_6_ERCC_S31_intron_summary.txt
 							string_buffer.append("drppm -GenerateAlyssaPythonSummaryScript\n");
-							string_buffer.append("");
+							string_buffer.append("python summarygen.py -t " + dash_t_star_summary_file + " -j " + dash_j_junction_annotation_summary_file 
+									+ " -b " + dash_b_bam_stat_report_file + " -l " + dash_l_STAR_log_final_out + " -e " + dash_e_infer_experiment 
+									+ " -d " + dash_d_inner_distance + " -r " + dash_r_read_distribution + " -n " + dash_n_intron_summary
+									+ " -s " + sampleName);
 							string_buffer.append("cd " + current_working_dir + "\n");
-							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/qc_summary/*" + " " + outputFolder + "/" + sampleName + "/qc_summary/\n");							
-							string_buffer.append("## END OPTITYPING ##\n\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/qc_summary/*tsv" + " " + outputFolder + "/" + sampleName + "/qc_summary/\n");
+							string_buffer.append("ln -s " + outputFolder + "/" + sampleName + "/qc_summary/" + sampleName + "_summary_col.tsv " + global_qc_summary_input_folder);
+							string_buffer.append("ln -s " + outputFolder + "/" + sampleName + "/qc_summary/" + sampleName + "_summary_row.tsv " + global_qc_summary_input_folder);
+							
+							string_buffer.append("## END QC SUMMARY ##\n\n");
+							
 							string_buffer_map.put(sampleName, string_buffer);
 						}
 					}
 				}
 			}
 			// 
-
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -ExtractQCMetricsSTAR271a " + OUTPUT_STARfinalout_FILELST + " " + outputFolder + "/star271a_qc_metric.txt\n");
+			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -GenerateAlyssaRGlobalSummaryScript " + outputFolder + "/" + "/global_qc_summary/input" + outputFolder + "/analysis_qc_summary\n");
+			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQGENE_FILELST + " 1 1 " + outputFolder + "/htseq_gene_level_fpkm.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -TransposeMatrixPython " + outputFolder + "/htseq_gene_level_fpkm.txt" + " " + outputFolder + "/htseq_gene_level_fpkm_T.txt transpose.py\n");
+			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQGENE_FILELST + " 2 1 " + outputFolder + "htseq_gene_level_count.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -TransposeMatrixPython " + outputFolder + "/htseq_gene_level_count.txt" + " " + outputFolder + "/htseq_gene_level_count_T.txt transpose.py\n");
+			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQEXON_FILELST + " 1 1 " + outputFolder + "/htseq_exon_level_fpkm.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -TransposeMatrixPython " + outputFolder + "/htseq_exon_level_fpkm.txt" + " " + outputFolder + "/htseq_exon_level_fpkm_T.txt transpose.py\n");
+			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQEXON_FILELST + " 2 1 " + outputFolder + "htseq_exon_level_count.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -TransposeMatrixPython " + outputFolder + "/htseq_exon_level_count.txt" + " " + outputFolder + "/htseq_exon_level_count_T.txt transpose.py\n");
+			
+			// 
+			
+			// assumes all psi are spliced in
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -JuncSalvagerCombinePSIMatrixIndex " + OUTPUT_PSI_PSO_CALC_FILELST + " 1 1.0 0.3 " + outputFolder + "/psi_output.txt " + outputFolder + "/psi_blacklist_output.txt " + outputFolder + "/psi_output_final.txt\n");
+			
+			// assumes all pso are spliced in
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -JuncSalvagerCombinePSIMatrixIndex " + OUTPUT_PSI_PSO_CALC_FILELST + " 2 0.0 0.3 " + outputFolder + "/pso_output.txt " + outputFolder + "/pso_blacklist_output.txt " + outputFolder + "/pso_output_final.txt\n");
+						
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -JuncSalvagerCombine5primePSIMatrixIndex " + OUTPUT_PSI_PSO_CALC_FILELST + " 3 0.0 0.3 " + outputFolder + "/5prime_output.txt " + outputFolder + "/5prime_blacklist_output.txt " + outputFolder + "/5prime_output_final.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -JuncSalvagerCombine3primePSIMatrixIndex " + OUTPUT_PSI_PSO_CALC_FILELST + " 3 0.0 0.3 " + outputFolder + "/3prime_output.txt " + outputFolder + "/3prime_blacklist_output.txt " + outputFolder + "/3prime_output_final.txt\n");
+			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -JuncSalvagerCombineSTARSJTABIndex " + OUTPUT_STARfinalout_FILELST + " 2 0.0 0.3 " + outputFolder + "/junctioncount_output.txt " + outputFolder + "/junctioncount_blacklist_output.txt " + outputFolder + "/junctioncount_output_final.txt\n");
+			
 			// finally write out the shell script
 			itr = sampleName_linkedList.iterator();
 			while (itr.hasNext()) {
@@ -1326,6 +1414,11 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				out_OUTPUT_PSI_PSO_CALC_FILELST.close();
 			}
 			
+			if (!SKIP_MATRIX_GENERATION) {
+				out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.close();
+			}
+			// write out shell commands for summarizing STAR, HTSEQ GENE, PSIPSO
+			
 		} catch (Exception e) { 
 			e.printStackTrace();
 		}
@@ -1337,7 +1430,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 		script += "bam2wig.py -s " + chrNameLengthFile + " -i " + bam_file + " -o " + sampleName + "_bam2wig -u \n";
 		script += "wigToBigWig " + sampleName + "_bam2wig.wig " + chrNameLengthFile + " " + sampleName + "_bam2wig.bw -clip \n";
 		script += "geneBody_coverage.py -r " + houseKeepingGenebed + " -i " + bam_file + " -o " + sampleName + "_geneBody_coverage > " + sampleName + "_geneBody_coverage.txt\n";
-		script += "bam_stat.py -i " + bam_file + " > rseqc_bam_stat_report.txt 2> rseqc_bam_stat_report_more.txt\n";
+		script += "bam_stat.py -i " + bam_file + " > " + sampleName + "_rseqc_bam_stat_report.txt 2 > " + sampleName + "rseqc_bam_stat_report_more.txt\n";
 		script += "junction_annotation.py -i " + bam_file + " -o " + sampleName + "_junction_annotation -r " + refseq_bed + " > " + sampleName + "_junction_annotation_summary.txt 2> " + sampleName + "_junction_annotation_summary_more.txt\n";
 		script += "junction_saturation.py -i " + bam_file + " -r " + refseq_bed + " -o " + sampleName + "_junction_saturation > " + sampleName + "_junction_saturation_summary.txt 2> " + sampleName + "_junction_saturation_summary_more.txt\n";
 		script += "tin.py -i " + bam_file + " -r " + ribosome_bed + "\n";

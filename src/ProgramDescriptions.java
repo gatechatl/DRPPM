@@ -416,7 +416,11 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelaltstart.WRAPJu
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerConvert2GTFFriendlyBED;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerTranslateFasta;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerValidateNovelExonAndGeneratePeptide;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombine3primePSIMatrixIndex;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombine5primePSIMatrixIndex;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrixIndex;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombineSTARSJTABIndex;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
 import rnaseq.splicing.alternativejuncpipeline.xbp1.CalculateXBP1sFeatures;
@@ -2900,6 +2904,18 @@ public class ProgramDescriptions {
 		}
 		if (STARPostProteinPaintSplicingTrackGenerateScript.type().equals(type)) {
 			result += "STARPostProteinPaintSplicingTrackGenerateScript: " + STARPostProteinPaintSplicingTrackGenerateScript.description() + "\n";
+		}
+		if (JuncSalvagerCombinePSIMatrixIndex.type().equals(type)) {
+			result += "JuncSalvagerCombinePSIMatrixIndex: " + JuncSalvagerCombinePSIMatrixIndex.description() + "\n";
+		}
+		if (JuncSalvagerCombine5primePSIMatrixIndex.type().equals(type)) {
+			result += "JuncSalvagerCombine5primePSIMatrixIndex: " + JuncSalvagerCombine5primePSIMatrixIndex.description() + "\n";
+		}
+		if (JuncSalvagerCombine3primePSIMatrixIndex.type().equals(type)) {
+			result += "JuncSalvagerCombine3primePSIMatrixIndex: " + JuncSalvagerCombine3primePSIMatrixIndex.description() + "\n";
+		}
+		if (JuncSalvagerCombineSTARSJTABIndex.type().equals(type)) {
+			result += "JuncSalvagerCombineSTARSJTABIndex: " + JuncSalvagerCombineSTARSJTABIndex.description() + "\n";
 		}
 		return result;
 	}	

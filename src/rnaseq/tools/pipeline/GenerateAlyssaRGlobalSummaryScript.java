@@ -13,7 +13,7 @@ public class GenerateAlyssaRGlobalSummaryScript {
 		return "Generate python script to summarize the RseQC";
 	}
 	public static String parameter_info() {
-		return "[ no parameters... ]";
+		return "[inputFolder] [outputFilePrefix]";
 	}
 	public static void execute(String[] args) {
 		

@@ -22,7 +22,7 @@ public class WRAPCombineFilesIntoMatrix {
 		return "WRAP combine pipeline output as a matrix.";
 	}
 	public static String parameter_info() {
-		return "[inputFileLst] [index-to-grab] [outputFile]";
+		return "[inputFileLst] [index-to-grab-filelst] [index-to-grab-matrix-column] [outputFile]";
 	}
 	
 	public static void execute(String[] args) {
@@ -30,8 +30,9 @@ public class WRAPCombineFilesIntoMatrix {
 		try {
 			
 			String inputFileLst = args[0];
-			int index = new Integer(args[1]);
-			String outputFile = args[2];
+			int index_in_filelst = new Integer(args[1]);
+			int index_in_matrix = new Integer(args[2]);
+			String outputFile = args[3];
 			
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);						
@@ -47,7 +48,7 @@ public class WRAPCombineFilesIntoMatrix {
 				String[] split = str.split("\t");
 				
 				String sampleName = split[0];
-				String inputFile = split[index];
+				String inputFile = split[index_in_filelst];
 				
 				
 				if (header_flag) {
@@ -80,7 +81,7 @@ public class WRAPCombineFilesIntoMatrix {
 					String str2 = in2.readLine();
 					String[] split2 = str2.split("\t");
 					//out.write("\t" + split2[index]);
-					buffer.append("\t" + split2[index]);
+					buffer.append("\t" + split2[index_in_matrix]);
 					check_lines++;
 				}
 				in2.close();

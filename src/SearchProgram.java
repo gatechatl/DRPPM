@@ -764,5 +764,9 @@ public class SearchProgram {
 		search_program.add("GenerateAlyssaSampleCheck");
 		search_program.add("STARPostProteinPaintSplicingTrack");
 		search_program.add("STARPostProteinPaintSplicingTrackGenerateScript");
+		search_program.add("JuncSalvagerCombinePSIMatrixIndex");
+		search_program.add("JuncSalvagerCombine5primePSIMatrixIndex");
+		search_program.add("JuncSalvagerCombine3primePSIMatrixIndex");
+		search_program.add("JuncSalvagerCombineSTARSJTABIndex");
 	}
 }
