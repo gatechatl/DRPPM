@@ -1379,7 +1379,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -JuncSalvagerCombine5primePSIMatrixIndex " + OUTPUT_PSI_PSO_CALC_FILELST + " 3 0.0 0.3 " + outputFolder + "/5prime_output.txt " + outputFolder + "/5prime_blacklist_output.txt " + outputFolder + "/5prime_output_final.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -JuncSalvagerCombine3primePSIMatrixIndex " + OUTPUT_PSI_PSO_CALC_FILELST + " 3 0.0 0.3 " + outputFolder + "/3prime_output.txt " + outputFolder + "/3prime_blacklist_output.txt " + outputFolder + "/3prime_output_final.txt\n");
 			
-			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -JuncSalvagerCombineSTARSJTABIndex " + OUTPUT_STARfinalout_FILELST + " 2 0.0 0.3 " + outputFolder + "/junctioncount_output.txt " + outputFolder + "/junctioncount_blacklist_output.txt " + outputFolder + "/junctioncount_output_final.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -JuncSalvagerCombineSTARSJTABIndex " + OUTPUT_STARfinalout_FILELST + " 2 0.0 0.3 false " + outputFolder + "/junctioncount_output.txt " + outputFolder + "/junctioncount_blacklist_output.txt " + outputFolder + "/junctioncount_output_final.txt\n");
 			
 			// finally write out the shell script
 			itr = sampleName_linkedList.iterator();

@@ -27,7 +27,7 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 		return "Combine the junction count value. Replace NaN with user defined value. Generate a blacklist for those with > X% junction with 0.\n";
 	}
 	public static String parameter_info() {
-		return "[inputFileLst] [index of the fileLst 1: is ] [replaceNaNwithThis] [outputFile] [double: proportion_samples_black_list_to_filter][outputFileBlackList] [final_outputFile]";
+		return "[inputFileLst] [index of the fileLst 1: is ] [replaceNaNwithThis] [double: proportion_samples_black_list_to_filter] [boolean: uniq_mapped_reads] [outputFile] [outputFileBlackList] [final_outputFile]";
 	}
 	public static void execute(String[] args) {
 		
@@ -36,9 +36,9 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 			String inputFileLst = args[0];
 			int indexFileLst = new Integer(args[1]);
 			String replaceNaNwithThis = args[2];
-			String outputFile = args[3];
-			double proportion_samples_black_list_to_filter = new Double(args[4]);
-			boolean uniq_mapped_reads = new Boolean(args[5]);
+			double proportion_samples_black_list_to_filter = new Double(args[3]);
+			boolean uniq_mapped_reads = new Boolean(args[4]);
+			String outputFile = args[5];						
 			String outputFileBlackList = args[6];
 			String final_outputFile = args[7];
 			int count = 0;
