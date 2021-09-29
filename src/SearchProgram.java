@@ -349,6 +349,7 @@ public class SearchProgram {
 		search_program.add("GenerateFoldchangeGeneLengthPlot");
 		search_program.add("MergeBamFilesAfterSTAR");
 		search_program.add("Bam2BW");
+		search_program.add("Bam2BWBinSize");
 		search_program.add("RawCount2RPMSkipFirstTwoColumns");
 		search_program.add("RawCount2RPM");
 		search_program.add("GMTHuman2Mouse");

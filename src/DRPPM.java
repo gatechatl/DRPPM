@@ -545,6 +545,7 @@ import rnaseq.exon.quantification.GenerateGTFFileWithExonID;
 import rnaseq.expression.tools.CombineFPKMFiles;
 import rnaseq.expression.tools.ExpressionNormalization;
 import rnaseq.mapping.tools.bw.Bam2BW;
+import rnaseq.mapping.tools.bw.Bam2BWBinSize;
 import rnaseq.mapping.tools.bw.Bam2StrandedBW;
 import rnaseq.mapping.tools.cufflinks.ExtractDifferentiatedTranscriptOnly;
 import rnaseq.mapping.tools.cufflinks.ExtractFPKM;
@@ -12013,6 +12014,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				JuncSalvagerCombineSTARSJTABIndex.execute(args_remain);
+				System.exit(0);
+				// Bam2BWBinSize
+			} else if (type.equalsIgnoreCase("-Bam2BWBinSize")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -Bam2BWBinSize "
+							+ Bam2BWBinSize.parameter_info());
+					System.exit(0);
+				}
+				Bam2BWBinSize.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

@@ -346,6 +346,7 @@ import references.gtf.statistics.GTFSummaryStatistics;
 import rnaseq.bed.coverage.circos.GenerateCircosCoverageBed;
 import rnaseq.exon.quantification.GenerateGTFFileWithExonID;
 import rnaseq.mapping.tools.bw.Bam2BW;
+import rnaseq.mapping.tools.bw.Bam2BWBinSize;
 import rnaseq.mapping.tools.bw.Bam2StrandedBW;
 import rnaseq.mapping.tools.flagstat.SummarizeFlagStat;
 import rnaseq.mapping.tools.star.Bam2FqMouseERCC;
@@ -1647,6 +1648,9 @@ public class ProgramDescriptions {
 		if (Bam2BW.type().equals(type)) {
 			result += "Bam2BW: " + Bam2BW.description() + "\n";
 		}
+		if (Bam2BWBinSize.type().equals(type)) {
+			result += "Bam2BWBinSize: " + Bam2BWBinSize.description() + "\n";
+		}
 		if (RawCount2RPMSkipFirstTwoColumns.type().equals(type)) {
 			result += "RawCount2RPMSkipFirstTwoColumns: " + RawCount2RPMSkipFirstTwoColumns.description() + "\n";
 		}
@@ -2917,7 +2921,8 @@ public class ProgramDescriptions {
 		if (JuncSalvagerCombineSTARSJTABIndex.type().equals(type)) {
 			result += "JuncSalvagerCombineSTARSJTABIndex: " + JuncSalvagerCombineSTARSJTABIndex.description() + "\n";
 		}
+		
 		return result;
 	}	
-	public static String VERSION = "2021-0928A";	
+	public static String VERSION = "2021-0928B";	
 }
