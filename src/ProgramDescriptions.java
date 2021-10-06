@@ -481,6 +481,7 @@ import rnaseq.tools.pipeline.GenerateAlyssaPythonSummaryScript;
 import rnaseq.tools.pipeline.GenerateAlyssaRGlobalSummaryScript;
 import rnaseq.tools.pipeline.GenerateAlyssaSampleCheck;
 import rnaseq.tools.pipeline.GenerateLIMMAComparisonScript;
+import rnaseq.tools.pipeline.WRAPConfigGenerator;
 import rnaseq.tools.pipeline.WrappingMyRNAseqAnalysisPipeline;
 import rnaseq.tools.pipeline.htseqexon.WRAPCombineFilesIntoMatrix;
 import rnaseq.tools.qc.SetupInferExperimentPipeline;
@@ -2921,8 +2922,11 @@ public class ProgramDescriptions {
 		if (JuncSalvagerCombineSTARSJTABIndex.type().equals(type)) {
 			result += "JuncSalvagerCombineSTARSJTABIndex: " + JuncSalvagerCombineSTARSJTABIndex.description() + "\n";
 		}
+		if (WRAPConfigGenerator.type().equals(type)) {
+			result += "WRAPConfigGenerator: " + WRAPConfigGenerator.description() + "\n";
+		}
 		
 		return result;
 	}	
-	public static String VERSION = "2021-0929A";	
+	public static String VERSION = "2021-1006A";	
 }

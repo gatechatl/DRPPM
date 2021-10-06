@@ -53,6 +53,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String RNAEDITING_VARIANTS = "NA";
 	private static String PRIMARY_FASTA = "NA";
 	private static String OPTITYPE_PROGRAM = "NA";
+	private static String WIG2BIGWIG_PATH = "wigToBigWig";
 	
 	private static String QC_SUMMARY = "NA";
 	
@@ -179,6 +180,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							}
 							if (split[0].equalsIgnoreCase("RSEQC_NOWIG")) {
 								RSEQC_NOWIG = new Boolean(split[1]);
+							}
+							if (split[0].equalsIgnoreCase("WIG2BIGWIG_PATH")) {
+								WIG2BIGWIG_PATH = split[1];
 							}
 							
 							if (split[0].equalsIgnoreCase("OUTPUT_BAM_FILELST")) {
@@ -1320,9 +1324,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 						if (!SKIP_QC_SUMMARY) {
 							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
 							string_buffer.append("## QC SUMMARY ##\n");
-							String dash_t_star_summary_file = outputFolder + "/" + sampleName + "/star/" + sampleName + ".STAR.Aligned.sortedByCoord.out.summary.txt";
+							String dash_t_star_summary_file = outputFolder + "/" + sampleName + "/rseqc/" + sampleName + ".STAR.Aligned.sortedByCoord.out.summary.txt";
 							String dash_j_junction_annotation_summary_file = outputFolder + "/" + sampleName + "/rseqc/" + sampleName + "_junction_annotation_summary_more.txt";
-							String dash_b_bam_stat_report_file = outputFolder + "/" + sampleName + "/rseqc/" + sampleName + "_rseqc_bam_stat_report.txt";
+							String dash_b_bam_stat_report_file = outputFolder + "/" + sampleName + "/rseqc/rseqc_bam_stat_report.txt";
 							String dash_l_STAR_log_final_out = outputFolder + "/" + sampleName + "/star/" + sampleName + ".STAR.Log.final.out";
 							String dash_e_infer_experiment = outputFolder + "/" + sampleName + "/rseqc/" + sampleName + "_infer_experiment.stdout.txt";
 							String dash_d_inner_distance = outputFolder + "/" + sampleName + "/rseqc/" + sampleName + "_inner_distance.stdout.txt";
@@ -1338,7 +1342,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("python summarygen.py -t " + dash_t_star_summary_file + " -j " + dash_j_junction_annotation_summary_file 
 									+ " -b " + dash_b_bam_stat_report_file + " -l " + dash_l_STAR_log_final_out + " -e " + dash_e_infer_experiment 
 									+ " -d " + dash_d_inner_distance + " -r " + dash_r_read_distribution + " -n " + dash_n_intron_summary
-									+ " -s " + sampleName);
+									+ " -s " + sampleName + "\n");
 							string_buffer.append("cd " + current_working_dir + "\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/qc_summary/*tsv" + " " + outputFolder + "/" + sampleName + "/qc_summary/\n");
 							string_buffer.append("ln -s " + outputFolder + "/" + sampleName + "/qc_summary/" + sampleName + "_summary_col.tsv " + global_qc_summary_input_folder);
@@ -1436,7 +1440,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	public static String rseqc_script_generation(String sampleName, String bam_file, String chrNameLengthFile, String houseKeepingGenebed, String refseq_bed, String ribosome_bed) {
 		String script = "";
 		script += "bam2wig.py -s " + chrNameLengthFile + " -i " + bam_file + " -o " + sampleName + "_bam2wig -u \n";
-		script += "wigToBigWig " + sampleName + "_bam2wig.wig " + chrNameLengthFile + " " + sampleName + "_bam2wig.bw -clip \n";
+		script += WIG2BIGWIG_PATH + " " + sampleName + "_bam2wig.wig " + chrNameLengthFile + " " + sampleName + "_bam2wig.bw -clip \n";
 		script += "geneBody_coverage.py -r " + houseKeepingGenebed + " -i " + bam_file + " -o " + sampleName + "_geneBody_coverage > " + sampleName + "_geneBody_coverage.txt\n";
 		script += "bam_stat.py -i " + bam_file + " > " + sampleName + "_rseqc_bam_stat_report.txt 2 > " + sampleName + "rseqc_bam_stat_report_more.txt\n";
 		script += "junction_annotation.py -i " + bam_file + " -o " + sampleName + "_junction_annotation -r " + refseq_bed + " > " + sampleName + "_junction_annotation_summary.txt 2> " + sampleName + "_junction_annotation_summary_more.txt\n";

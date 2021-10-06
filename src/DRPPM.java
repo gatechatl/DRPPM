@@ -741,6 +741,7 @@ import rnaseq.tools.pipeline.GenerateAlyssaPythonSummaryScript;
 import rnaseq.tools.pipeline.GenerateAlyssaRGlobalSummaryScript;
 import rnaseq.tools.pipeline.GenerateAlyssaSampleCheck;
 import rnaseq.tools.pipeline.GenerateLIMMAComparisonScript;
+import rnaseq.tools.pipeline.WRAPConfigGenerator;
 import rnaseq.tools.pipeline.WrappingMyRNAseqAnalysisPipeline;
 import rnaseq.tools.pipeline.htseqexon.WRAPCombineFilesIntoMatrix;
 import rnaseq.tools.pipeline.htseqexon.WRAPCombineRNAseQCFilesIntoMatrix;
@@ -11928,11 +11929,11 @@ public class DRPPM {
 				// GenerateAlyssaPythonSummaryScript
 			} else if (type.equalsIgnoreCase("-GenerateAlyssaPythonSummaryScript")) {
 				String[] args_remain = getRemaining(args);
-				if (args_remain.length == 0) {
+				/*if (args_remain.length == 0) {
 					System.out.println("drppm -GenerateAlyssaPythonSummaryScript "
 							+ GenerateAlyssaPythonSummaryScript.parameter_info());
 					System.exit(0);
-				}
+				}*/
 				GenerateAlyssaPythonSummaryScript.execute(args_remain);
 				System.exit(0);
 				// GenerateAlyssaRGlobalSummaryScript
@@ -12024,6 +12025,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				Bam2BWBinSize.execute(args_remain);
+				System.exit(0);
+				// WRAPConfigGenerator
+			} else if (type.equalsIgnoreCase("-WRAPConfigGenerator")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -WRAPConfigGenerator "
+							+ WRAPConfigGenerator.parameter_info());
+					System.exit(0);
+				}
+				WRAPConfigGenerator.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

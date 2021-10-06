@@ -234,9 +234,9 @@ public class GenerateAlyssaPythonSummaryScript {
 			string_buffer.append("mainheader=[s.replace(\")\",\"\") for s in mainheader]  #safe\n");
 			string_buffer.append("mainheader=[s.replace(\"/\",\"_\") for s in mainheader] #safe\n");
 			string_buffer.append("mainheader=[s.replace(\":\",\"_\") for s in mainheader] #safe\n");
-			string_buffer.append("mainheader=[s.replace(\"\\\"\",\"_\") for s in mainheader] #safe\n");
+			string_buffer.append("mainheader=[s.replace(\"\\\\\",\"_\") for s in mainheader] #safe\n");
 			string_buffer.append("mainheader=[s.replace(\"-\",\"_\") for s in mainheader] #safe\n");
-			string_buffer.append("mainheader=[s.replace(\",\\\",\"_\") for s in mainheader] #safe\n");
+			string_buffer.append("mainheader=[s.replace(\",\",\"_\") for s in mainheader] #safe\n");
 			string_buffer.append("\n");
 			string_buffer.append("## checks for no values and zeros and percentages turned to fractions\n");
 			string_buffer.append("for i,j in enumerate(mainstats):\n");

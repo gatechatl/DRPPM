@@ -737,6 +737,7 @@ public class SearchProgram {
 		search_program.add("JuncSalvagerSortSumColumn");
 		search_program.add("SortExonIntronBED");
 		search_program.add("WrappingMyRNAseqAnalysisPipeline");
+		search_program.add("WRAPConfigGenerator");
 		search_program.add("RawExonCount2CPMProteinFeatures");
 		search_program.add("RPM2RPKMWithLengthReference");
 		search_program.add("CSIMinerFilterExonMatrixByGeneSymbol");
