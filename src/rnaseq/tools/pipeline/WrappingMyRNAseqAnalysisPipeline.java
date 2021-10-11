@@ -788,9 +788,10 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/rseqc/" + "\n");
 							if (!RSEQC_NOWIG) {
 								string_buffer.append("bam2wig.py -s " + CHR_NAME_LENGTH_FILE + " -i " + bam_file_path + " -o " + sampleName + "_bam2wig -u \n");
-								string_buffer.append("wigToBigWig " + sampleName + "_bam2wig.wig " + CHR_NAME_LENGTH_FILE + " " + sampleName + "_bam2wig.bw -clip \n");
+								string_buffer.append(WIG2BIGWIG_PATH + " " + sampleName + "_bam2wig.wig " + CHR_NAME_LENGTH_FILE + " " + sampleName + "_bam2wig.bw -clip \n");
+								string_buffer.append("geneBody_coverage.py -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " -i " + sampleName + "_bam2wig.bw -o " + sampleName + "_geneBody_coverage > " + sampleName + "_geneBody_coverage.txt\n");
 							}
-							string_buffer.append("geneBody_coverage.py -r " + RSEQC_HOUSE_KEEPING_GENE_BED + " -i " + bam_file_path + " -o " + sampleName + "_geneBody_coverage > " + sampleName + "_geneBody_coverage.txt\n");
+							
 							string_buffer.append("bam_stat.py -i " + bam_file_path + " > rseqc_bam_stat_report.txt 2> rseqc_bam_stat_report_more.txt\n");
 							string_buffer.append("junction_annotation.py -i " + bam_file_path + " -o " + sampleName + "_junction_annotation -r " + RSEQC_REFSEQ_BED + " > " + sampleName + "_junction_annotation_summary.txt 2> " + sampleName + "_junction_annotation_summary_more.txt\n");
 							string_buffer.append("junction_saturation.py -i " + bam_file_path + " -r " + RSEQC_REFSEQ_BED + " -o " + sampleName + "_junction_saturation > " + sampleName + "_junction_saturation_summary.txt 2> " + sampleName + "_junction_saturation_summary_more.txt\n");
@@ -1437,6 +1438,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 		
 	}
 	
+	/*
+	 * Legacy code that should be removed...
 	public static String rseqc_script_generation(String sampleName, String bam_file, String chrNameLengthFile, String houseKeepingGenebed, String refseq_bed, String ribosome_bed) {
 		String script = "";
 		script += "bam2wig.py -s " + chrNameLengthFile + " -i " + bam_file + " -o " + sampleName + "_bam2wig -u \n";
@@ -1468,6 +1471,6 @@ public class WrappingMyRNAseqAnalysisPipeline {
 		script += "normalize_bigwig.py -i " + sampleName + "_bam2wig.bw" + " -s " + CHR_NAME_LENGTH_FILE + " -r " + RSEQC_HOUSE_KEEPING_GENE_BED+ " -o " + sampleName + "_normalize_bigwig > " + sampleName + "_normalize_bigwig.stdout.txt\n";		
 
 		return script;
-	}
+	}*/
 			
 }
