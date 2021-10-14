@@ -1346,8 +1346,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 									+ " -s " + sampleName + "\n");
 							string_buffer.append("cd " + current_working_dir + "\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/qc_summary/*tsv" + " " + outputFolder + "/" + sampleName + "/qc_summary/\n");
-							string_buffer.append("ln -s " + outputFolder + "/" + sampleName + "/qc_summary/" + sampleName + "_summary_col.tsv " + global_qc_summary_input_folder);
-							string_buffer.append("ln -s " + outputFolder + "/" + sampleName + "/qc_summary/" + sampleName + "_summary_row.tsv " + global_qc_summary_input_folder);
+							string_buffer.append("ln -s " + outputFolder + "/" + sampleName + "/qc_summary/" + sampleName + "_summary_col.tsv " + global_qc_summary_input_folder + "\n");
+							string_buffer.append("ln -s " + outputFolder + "/" + sampleName + "/qc_summary/" + sampleName + "_summary_row.tsv " + global_qc_summary_input_folder + "\n");
 							
 							string_buffer.append("## END QC SUMMARY ##\n\n");
 							
