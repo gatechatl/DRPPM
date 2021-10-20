@@ -42,7 +42,11 @@ public class RemoveColumnWithNaN {
 						map.put(i, i);
 					} else if (split[i].equals("nan")) {
 						map.put(i, i);
-					}  
+					} else if (split[i].equals("NaN")) {
+						map.put(i, i);
+					} else if (split[i].equals("NAN")) {
+						map.put(i, i);
+					}   
 				}
 			}
 			in.close();
