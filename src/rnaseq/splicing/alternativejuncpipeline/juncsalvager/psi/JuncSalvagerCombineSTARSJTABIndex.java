@@ -77,10 +77,6 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 			FileWriter fwriter_blacklist = new FileWriter(outputFileBlackList);
 			BufferedWriter out_blacklist = new BufferedWriter(fwriter_blacklist);
 			
-			
-			
-			
-			
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			out.write("Sample");
@@ -91,35 +87,40 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
-				
-				count++;
-				if (header_once) {
-					FileInputStream fstream_head = new FileInputStream(split[indexFileLst]);
+
+				File f = new File(split[indexFileLst]);
+				if (f.exists()) {
+					count++;
+				//	if (header_once) {
+					/*FileInputStream fstream_head = new FileInputStream(split[indexFileLst]);
 					DataInputStream din_head = new DataInputStream(fstream_head);
 					BufferedReader in_head = new BufferedReader(new InputStreamReader(din_head));
-					in_head.readLine();
+					//in_head.readLine();
 					while (in_head.ready()) {
 						String str_head = in_head.readLine();
 						String[] str_head_split = str_head.split("\t");
-						out.write("\t" + str_head_split[0] + "_" + str_head_split[1] + "_" + str_head_split[2]);
-						header_list.add(str_head_split[0] + "_" + str_head_split[1] + "_" + str_head_split[2]);
+						
 					}
-					in_head.close();
-					header_once = false;
-					out.write("\n");
-				}
+					in_head.close();*/
+					//header_once = false;					
+				//}
 				
-				File f = new File(str);
-				if (f.exists()) {
+
 					String sampleName = f.getName().replaceAll(".SJ.out.tab.txt", "");
-					out.write(sampleName);
-					FileInputStream fstream_sj = new FileInputStream(str);
+					//out.write(sampleName);
+					FileInputStream fstream_sj = new FileInputStream(split[indexFileLst]);
 					DataInputStream din_sj = new DataInputStream(fstream_sj);
 					BufferedReader in_sj = new BufferedReader(new InputStreamReader(din_sj));
 					in_sj.readLine();
 					while (in_sj.ready()) {
 						String str_sj = in_sj.readLine();
 						String[] split_sj = str_sj.split("\t");
+						String name = split_sj[0] + "_" + split_sj[1] + "_" + split_sj[2] + "_" + split_sj[3] + "_" + split_sj[4];
+						if (!header_list.contains(name)) {
+							out.write("\t" + name);
+							out.write("\n");
+							header_list.add(name);
+						}
 						String exon = split_sj[0] + "_" + split_sj[1] + "_" + split_sj[2] + "_" + split_sj[3] + "_" + split_sj[4];
 						if (new Double(split_sj[split_sj.length - read_index_buffer]) == 0.0 || (new Double(split_sj[split_sj.length - read_index_buffer]) < 5)) {
 							if (map.containsKey(exon)) {
@@ -130,10 +131,10 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 								map.put(exon, 1);
 							}
 						}
-						out.write("\t" + split_sj[split_sj.length - read_index_buffer].replaceAll("NaN", replaceNaNwithThis));
+						//out.write("\t" + split_sj[split_sj.length - read_index_buffer].replaceAll("NaN", replaceNaNwithThis));
 					}
 					in_sj.close();
-					out.write("\n");
+					//out.write("\n");
 				}
 			}
 			in.close();
@@ -144,7 +145,7 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 				String exon = (String)itr.next();
 				int black_list_count = (Integer)map.get(exon);
 				double score = new Double(black_list_count) / count;
-				if (score > proportion_samples_black_list_to_filter) {
+				if (score < proportion_samples_black_list_to_filter) {
 					out_blacklist.write(exon + "\n");
 					final_black_list.put(exon, exon);
 				}
@@ -159,12 +160,19 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 				if (final_black_list.containsKey(header)) {
 					black_list_index.put(index, index);
 				}
-			}
-
+			}			
 			
 			FileWriter fwriter_final = new FileWriter(final_outputFile);
 			BufferedWriter out_final = new BufferedWriter(fwriter_final);
 			out_final.write("Sample");
+			
+			Iterator itr2 = header_list.iterator();
+			while (itr2.hasNext()) {
+				String introns = (String)itr2.next();
+				out_final.write("\t" + introns);
+			}
+			out_final.write("\n");
+			
 			header_once = true;
 			fstream = new FileInputStream(inputFileLst + "_tmp");
 			din = new DataInputStream(fstream);
@@ -173,7 +181,7 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 				String str = in.readLine();
 				String[] split = str.split("\t");
 				count++;
-				if (header_once) {
+				/*if (header_once) {
 					int idx = 1;
 					FileInputStream fstream_head = new FileInputStream(split[indexFileLst]);
 					DataInputStream din_head = new DataInputStream(fstream_head);
@@ -190,13 +198,14 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 					in_head.close();
 					header_once = false;
 					out_final.write("\n");
-				}
+				}*/
 				
 				File f = new File(split[indexFileLst]);
 				if (f.exists()) {
 					String sampleName = f.getName().replaceAll(".SJ.out.tab.txt", "");
-					out_final.write(sampleName);
+					
 					int idx = 1;
+					HashMap junction_count = new HashMap();
 					FileInputStream fstream_sj = new FileInputStream(split[indexFileLst]);
 					DataInputStream din_sj = new DataInputStream(fstream_sj);
 					BufferedReader in_sj = new BufferedReader(new InputStreamReader(din_sj));
@@ -204,13 +213,26 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 					while (in_sj.ready()) {
 						String str_sj = in_sj.readLine();
 						String[] split_sj = str_sj.split("\t");
-						if (!black_list_index.containsKey(idx)) {
-							String exon = split_sj[0] + "_" + split_sj[1] + "_" + split_sj[2] + "_" + split_sj[3] + "_" + split_sj[4];							
-							out_final.write("\t" + split_sj[split_sj.length - read_index_buffer].replaceAll("NaN", replaceNaNwithThis));
-						}
-						idx++;
+						
+						//if (!black_list_index.containsKey(idx)) {
+						
+						String intron = split_sj[0] + "_" + split_sj[1] + "_" + split_sj[2] + "_" + split_sj[3] + "_" + split_sj[4];
+						junction_count.put(intron, split_sj[split_sj.length - read_index_buffer].replaceAll("NaN", replaceNaNwithThis));
+						//out_final.write("\t" + split_sj[split_sj.length - read_index_buffer].replaceAll("NaN", replaceNaNwithThis));
+						//}
+						//idx++;
 					}
 					in_sj.close();
+					out_final.write(sampleName);
+					itr2 = header_list.iterator();
+					while(itr2.hasNext()) {
+						String intron_query = (String)itr2.next();
+						if (junction_count.containsKey(intron_query)) {
+							out_final.write("\t" + junction_count.get(intron_query));
+						} else {
+							out_final.write("\t" + replaceNaNwithThis);
+						}
+					}
 					out_final.write("\n");
 				}
 			}
