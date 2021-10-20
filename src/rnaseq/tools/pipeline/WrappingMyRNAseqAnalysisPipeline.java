@@ -1360,11 +1360,13 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -ExtractQCMetricsSTAR271a " + OUTPUT_STARfinalout_FILELST + " " + outputFolder + "/star271a_qc_metric.txt\n");			
 			
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -GenerateAlyssaRGlobalSummaryScript " + outputFolder + "/" + "/global_qc_summary/input" + outputFolder + "/analysis_qc_summary\n");
-			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("## Combine HTSEQ Gene level quantification ##\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQGENE_FILELST + " 1 1 " + outputFolder + "/htseq_gene_level_fpkm.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -TransposeMatrixPython " + outputFolder + "/htseq_gene_level_fpkm.txt" + " " + outputFolder + "/htseq_gene_level_fpkm_T.txt transpose.py\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNAs " + outputFolder + "/htseq_gene_level_fpkm_T.txt" + " " + outputFolder + "/htseq_gene_level_fpkm_T_removeNA.txt\n");
-			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mv " + outputFolder + "/htseq_gene_level_fpkm_T_removeNA.txt" + " " + outputFolder + "/htseq_gene_level_fpkm_T.txt" + " " + "\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNaN " + outputFolder + "/htseq_gene_level_fpkm_T_removeNA.txt" + " " + outputFolder + "/htseq_gene_level_fpkm_T_removeNAN.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mv " + outputFolder + "/htseq_gene_level_fpkm_T_removeNAN.txt" + " " + outputFolder + "/htseq_gene_level_fpkm_T.txt" + " " + "\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -EnsemblGeneIDAppendAnnotationCoord " + outputFolder + "/htseq_gene_level_fpkm_T.txt " + PRIMARY_GTF_REF + " " + outputFolder + "/htseq_gene_level_fpkm_T_annot.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -CleanEnsemblGeneID2GeneName " + outputFolder + "/htseq_gene_level_fpkm_T.txt " + PRIMARY_GTF_REF + " " + outputFolder + "/htseq_gene_level_fpkm_T_geneName.txt\n");
 			
@@ -1374,18 +1376,25 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQGENE_FILELST + " 2 1 " + outputFolder + "/htseq_gene_level_count.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -TransposeMatrixPython " + outputFolder + "/htseq_gene_level_count.txt" + " " + outputFolder + "/htseq_gene_level_count_T.txt transpose.py\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNAs " + outputFolder + "/htseq_gene_level_count_T.txt" + " " + outputFolder + "/htseq_gene_level_count_T_removeNA.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNaN " + outputFolder + "/htseq_gene_level_count_T_removeNA.txt" + " " + outputFolder + "/htseq_gene_level_count_T_removeNAN.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mv " + outputFolder + "/htseq_gene_level_count_T_removeNA.txt" + " " + outputFolder + "/htseq_gene_level_count_T.txt" + " " + "\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -EnsemblGeneIDAppendAnnotationCoord " + outputFolder + "/htseq_gene_level_count_T.txt " + PRIMARY_GTF_REF + " " + outputFolder + "/htseq_gene_level_count_T_annot.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -CleanEnsemblGeneID2GeneName " + outputFolder + "/htseq_gene_level_count_T.txt " + PRIMARY_GTF_REF + " " + outputFolder + "/htseq_gene_level_count_T_geneName.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -MergeGeneNameMAXFast " + outputFolder + "/htseq_gene_level_count_T_geneName.txt " + outputFolder + "/htseq_gene_level_count_T_geneName_max.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -FilterMatrixExpression " + outputFolder + "/htseq_gene_level_count_T_geneName_max.txt 0.0 0.3 " + outputFolder + "/htseq_gene_level_count_T_geneName_max_1cutoff.txt\n");						
-			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("## Combine HTSEQ Exon level quantification ##\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQEXON_FILELST + " 1 1 " + outputFolder + "/htseq_exon_level_fpkm.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -TransposeMatrixPython " + outputFolder + "/htseq_exon_level_fpkm.txt" + " " + outputFolder + "/htseq_exon_level_fpkm_T.txt transpose.py\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNAs " + outputFolder + "/htseq_exon_level_fpkm_T.txt" + " " + outputFolder + "/htseq_exon_level_fpkm_T_removeNA.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNaN " + outputFolder + "/htseq_exon_level_fpkm_T_removeNA.txt" + " " + outputFolder + "/htseq_exon_level_fpkm_T_removeNAN.txt\n");			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mv " + outputFolder + "/htseq_exon_level_fpkm_T_removeNAN.txt" + " " + outputFolder + "/htseq_exon_level_fpkm_T.txt" + "\n");
 			
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQEXON_FILELST + " 2 1 " + outputFolder + "htseq_exon_level_count.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -TransposeMatrixPython " + outputFolder + "/htseq_exon_level_count.txt" + " " + outputFolder + "/htseq_exon_level_count_T.txt transpose.py\n");
-			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNAs " + outputFolder + "/htseq_exon_level_count_T.txt" + " " + outputFolder + "/htseq_exon_level_count_T_removeNA.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNaN " + outputFolder + "/htseq_exon_level_count_T_removeNA.txt" + " " + outputFolder + "/htseq_exon_level_count_T_removeNAN.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mv " + outputFolder + "/htseq_exon_level_count_T_removeNAN.txt" + " " + outputFolder + "/htseq_exon_level_count_T.txt" + "\n");
 			// 
 			
 			// assumes all psi are spliced in
