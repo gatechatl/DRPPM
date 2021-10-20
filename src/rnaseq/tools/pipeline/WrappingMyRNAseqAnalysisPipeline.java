@@ -1390,7 +1390,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNaN " + outputFolder + "/htseq_exon_level_fpkm_T_removeNA.txt" + " " + outputFolder + "/htseq_exon_level_fpkm_T_removeNAN.txt\n");			
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mv " + outputFolder + "/htseq_exon_level_fpkm_T_removeNAN.txt" + " " + outputFolder + "/htseq_exon_level_fpkm_T.txt" + "\n");
 			
-			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQEXON_FILELST + " 2 1 " + outputFolder + "htseq_exon_level_count.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQEXON_FILELST + " 2 1 " + outputFolder + "/htseq_exon_level_count.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -TransposeMatrixPython " + outputFolder + "/htseq_exon_level_count.txt" + " " + outputFolder + "/htseq_exon_level_count_T.txt transpose.py\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNAs " + outputFolder + "/htseq_exon_level_count_T.txt" + " " + outputFolder + "/htseq_exon_level_count_T_removeNA.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNaN " + outputFolder + "/htseq_exon_level_count_T_removeNA.txt" + " " + outputFolder + "/htseq_exon_level_count_T_removeNAN.txt\n");
