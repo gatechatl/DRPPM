@@ -105,7 +105,9 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 					//header_once = false;					
 				//}
 				
-
+					if (count % 50 == 0) {
+						System.out.println(count);
+					}
 					String sampleName = f.getName().replaceAll(".SJ.out.tab.txt", "");
 					//out.write(sampleName);
 					FileInputStream fstream_sj = new FileInputStream(split[indexFileLst]);
@@ -115,13 +117,13 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 					while (in_sj.ready()) {
 						String str_sj = in_sj.readLine();
 						String[] split_sj = str_sj.split("\t");
-						String name = split_sj[0] + "_" + split_sj[1] + "_" + split_sj[2] + "_" + split_sj[3] + "_" + split_sj[4];
+						String name = split_sj[0] + "_" + split_sj[1] + "_" + split_sj[2] + "_" + split_sj[3] + "_" + split_sj[4] + "_" + split_sj[5];
 						if (!header_list.contains(name)) {
 							out.write("\t" + name);
 							out.write("\n");
 							header_list.add(name);
 						}
-						String exon = split_sj[0] + "_" + split_sj[1] + "_" + split_sj[2] + "_" + split_sj[3] + "_" + split_sj[4];
+						String exon = split_sj[0] + "_" + split_sj[1] + "_" + split_sj[2] + "_" + split_sj[3] + "_" + split_sj[4] + "_" + split_sj[5];
 						if (new Double(split_sj[split_sj.length - read_index_buffer]) == 0.0 || (new Double(split_sj[split_sj.length - read_index_buffer]) < 5)) {
 							if (map.containsKey(exon)) {
 								int prev_count = (Integer)map.get(exon);
@@ -216,7 +218,7 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 						
 						//if (!black_list_index.containsKey(idx)) {
 						
-						String intron = split_sj[0] + "_" + split_sj[1] + "_" + split_sj[2] + "_" + split_sj[3] + "_" + split_sj[4];
+						String intron = split_sj[0] + "_" + split_sj[1] + "_" + split_sj[2] + "_" + split_sj[3] + "_" + split_sj[4] + "_" + split_sj[5];
 						junction_count.put(intron, split_sj[split_sj.length - read_index_buffer].replaceAll("NaN", replaceNaNwithThis));
 						//out_final.write("\t" + split_sj[split_sj.length - read_index_buffer].replaceAll("NaN", replaceNaNwithThis));
 						//}
