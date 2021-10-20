@@ -62,7 +62,8 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 				String str = in.readLine();
 				String[] split = str.split("\t");
 				File f = new File(split[1]);
-				if (f.exists()) {
+				File f2 = new File(split[2]);
+				if (f.exists() && f2.exists()) {
 					out_newInputFileLst.write(str + "\n");
 				} else {
 					System.out.println("Skipped... File Missing: " + split[1]);
