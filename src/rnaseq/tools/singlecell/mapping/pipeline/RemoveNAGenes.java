@@ -32,10 +32,10 @@ public class RemoveNAGenes {
 			String outputFile = args[1];
 
 			File f = new File(outputFile);
-			if (f.exists()) {
+			/*if (f.exists()) {
 				System.out.println(outputFile + " already exist. Please delete it before running.");
 				System.exit(0);
-			}
+			}*/
 			FileWriter fwriter = new FileWriter(outputFile);
             BufferedWriter out = new BufferedWriter(fwriter);
 
@@ -45,7 +45,7 @@ public class RemoveNAGenes {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
-				if (!(split.equals("NA") || split.equals("null"))) {
+				if (!(split[0].equals("NA") || split[0].equals("null"))) {
 					boolean good = true;
 					for (int i = 1; i < split.length; i++) {
 						if (split[i].equals("NaN")) {

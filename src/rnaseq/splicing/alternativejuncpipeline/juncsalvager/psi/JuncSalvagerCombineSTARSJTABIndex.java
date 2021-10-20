@@ -49,18 +49,44 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 			} else {
 				read_index_buffer = 2;
 			}
+			
+			// check whether the files exist... provide a warning if missing and continue processing the rest of the files.
+			FileWriter fwriter_newInputFileLst = new FileWriter(inputFileLst + "_tmp");
+			BufferedWriter out_newInputFileLst = new BufferedWriter(fwriter_newInputFileLst);
+			
+			
+			FileInputStream fstream = new FileInputStream(inputFileLst);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));
+			while (in.ready()) {
+				String str = in.readLine();
+				String[] split = str.split("\t");
+				File f = new File(split[1]);
+				if (f.exists()) {
+					out_newInputFileLst.write(str + "\n");
+				} else {
+					System.out.println("Skipped... File Missing: " + split[1]);
+				}
+			}
+			in.close();
+			out_newInputFileLst.close();
+			
 			LinkedList header_list = new LinkedList();
 			HashMap map = new HashMap();
 			FileWriter fwriter_blacklist = new FileWriter(outputFileBlackList);
 			BufferedWriter out_blacklist = new BufferedWriter(fwriter_blacklist);
 			
+			
+			
+			
+			
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
 			out.write("Sample");
 			boolean header_once = true;
-			FileInputStream fstream = new FileInputStream(inputFileLst);
-			DataInputStream din = new DataInputStream(fstream);
-			BufferedReader in = new BufferedReader(new InputStreamReader(din));
+			fstream = new FileInputStream(inputFileLst + "_tmp");
+			din = new DataInputStream(fstream);
+			in = new BufferedReader(new InputStreamReader(din));
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
@@ -139,7 +165,7 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 			BufferedWriter out_final = new BufferedWriter(fwriter_final);
 			out_final.write("Sample");
 			header_once = true;
-			fstream = new FileInputStream(inputFileLst);
+			fstream = new FileInputStream(inputFileLst + "_tmp");
 			din = new DataInputStream(fstream);
 			in = new BufferedReader(new InputStreamReader(din));
 			while (in.ready()) {
@@ -189,7 +215,12 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 			}
 			in.close();
 			out_final.close();
-
+			
+			File f = new File(inputFileLst + "_tmp");
+			if (f.exists()) {
+				f.delete();
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

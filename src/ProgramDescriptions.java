@@ -483,7 +483,7 @@ import rnaseq.tools.pipeline.GenerateAlyssaSampleCheck;
 import rnaseq.tools.pipeline.GenerateLIMMAComparisonScript;
 import rnaseq.tools.pipeline.WRAPConfigGenerator;
 import rnaseq.tools.pipeline.WrappingMyRNAseqAnalysisPipeline;
-import rnaseq.tools.pipeline.htseqexon.WRAPCombineFilesIntoMatrix;
+import rnaseq.tools.pipeline.matrix.WRAPCombineFilesIntoMatrix;
 import rnaseq.tools.qc.SetupInferExperimentPipeline;
 import rnaseq.tools.qc.star_2_7_1a.ExtractQCMetricsSTAR271a;
 import rnaseq.tools.quantification.CalculateExonRPKM;
@@ -2928,5 +2928,5 @@ public class ProgramDescriptions {
 		
 		return result;
 	}	
-	public static String VERSION = "2021-1014A";	
+	public static String VERSION = "2021-1020A";	
 }
