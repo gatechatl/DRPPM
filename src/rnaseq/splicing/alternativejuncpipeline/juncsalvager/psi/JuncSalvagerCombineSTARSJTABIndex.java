@@ -109,7 +109,7 @@ public class JuncSalvagerCombineSTARSJTABIndex {
 					out.write("\n");
 				}
 				
-				File f = new File(split[indexFileLst]);
+				File f = new File(str);
 				if (f.exists()) {
 					String sampleName = f.getName().replaceAll(".SJ.out.tab.txt", "");
 					out.write(sampleName);
