@@ -1176,7 +1176,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("cd " + current_working_dir + "\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_exon_level/*" + " " + outputFolder + "/" + sampleName + "/htseq_exon_level/\n");
 							
-							out_OUTPUT_HTSEQEXON_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/htseq_exon_level/" + sampleName + ".exon.htseq.fpkm.txt" + "\t" + outputFolder + "/" + sampleName + "/htseq_exon_level/" + sampleName + ".htseq.total.count.txt" + "\n");
+							out_OUTPUT_HTSEQEXON_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/htseq_exon_level/" + sampleName + ".exon.htseq.fpkm.txt" + "\t" + outputFolder + "/" + sampleName + "/htseq_exon_level/" + sampleName + ".htseq.count.txt" + "\t" + outputFolder + "/" + sampleName + "/htseq_exon_level/" + sampleName + ".htseq.total.count.txt" + "\n");
 							
 							string_buffer.append("## END HTSEQ Exon Quant ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
