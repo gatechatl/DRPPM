@@ -1396,7 +1396,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNaN " + outputFolder + "/htseq_exon_level_count_T_removeNA.txt" + " " + outputFolder + "/htseq_exon_level_count_T_removeNAN.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mv " + outputFolder + "/htseq_exon_level_count_T_removeNAN.txt" + " " + outputFolder + "/htseq_exon_level_count_T.txt" + "\n");
 			// 
-			
+
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("## Combine Splice Summary ##\n");
 			// assumes all psi are spliced in
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -JuncSalvagerCombinePSIMatrixIndex " + OUTPUT_PSI_PSO_CALC_FILELST + " 1 1.0 0.3 " + outputFolder + "/psi_output.txt " + outputFolder + "/psi_blacklist_output.txt " + outputFolder + "/psi_output_final.txt\n");
 			
