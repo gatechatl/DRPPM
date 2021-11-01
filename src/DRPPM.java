@@ -276,7 +276,7 @@ import enrichment.tool.go.ParseGeneOntology;
 import expression.matrix.summary.CalculateMatrixSampleSummary;
 import expression.matrix.summary.CheckIntegrityOfMatrix;
 import expression.matrix.summary.ConvertMatrix2BinnedValue;
-import expression.matrix.tools.AddGeneKO2Sample;
+import expression.matrix.tools.AddGeneKO2SampleName;
 import expression.matrix.tools.AppendAnnotation2SampleName;
 import expression.matrix.tools.AppendMADValue;
 import expression.matrix.tools.AppendMEDIANValue;
@@ -5398,10 +5398,11 @@ public class DRPPM {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out
-							.println("drppm -AddGeneKO2SampleName [input] [metafile] [outputfile] [yes]");
+							.println("drppm -AddGeneKO2SampleName "
+									+ AddGeneKO2SampleName.parameter_info());
 					System.exit(0);
 				}
-				AddGeneKO2Sample.execute(args_remain);
+				AddGeneKO2SampleName.execute(args_remain);
 				System.exit(0);
 				;
 	

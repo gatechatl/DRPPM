@@ -13,7 +13,15 @@ import java.util.LinkedList;
 
 public class ReorderSamples {
 
-	
+	public static String description() {
+		return "Reorder the samples.";
+	}
+	public static String type() {
+		return "MISC";
+	}
+	public static String parameter_info() {
+		return "[inputMatrixFile] [SampleOrder.txt] [outputMatrixFile]";
+	}
 	public static void execute(String[] args) {
 		
 		try {

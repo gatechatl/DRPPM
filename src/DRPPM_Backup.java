@@ -239,7 +239,7 @@ import misc.textmining.software.annotation.WebTextMining;
 import customScript.AppendChromosomeNumber;
 import customScript.ElenaConvertRefSeq2GeneName;
 import enrichment.tool.go.ParseGeneOntology;
-import expression.matrix.tools.AddGeneKO2Sample;
+import expression.matrix.tools.AddGeneKO2SampleName;
 import expression.matrix.tools.AppendMADValue;
 import expression.matrix.tools.AppendMatrixTogether;
 import expression.matrix.tools.CalculateCorrelationMatrix;
@@ -1320,7 +1320,7 @@ public class DRPPM_Backup {
 							.println("drppm -AddGeneKO2SampleName [input] [metafile] [outputfile] [yes]");
 					System.exit(0);
 				}
-				AddGeneKO2Sample.execute(args_remain);
+				AddGeneKO2SampleName.execute(args_remain);
 				;
 
 			} else if (type.equals("-GrabKeyword")) {

@@ -770,5 +770,7 @@ public class SearchProgram {
 		search_program.add("JuncSalvagerCombine5primePSIMatrixIndex");
 		search_program.add("JuncSalvagerCombine3primePSIMatrixIndex");
 		search_program.add("JuncSalvagerCombineSTARSJTABIndex");
+		search_program.add("ReorderSamples");
+		search_program.add("ReorderSampleFast");
 	}
 }
