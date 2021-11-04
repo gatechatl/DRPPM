@@ -17,7 +17,7 @@ public class PDB2SecondaryStructure {
             FileParsingParameters params = new FileParsingParameters();
             params.setParseSecStruc(true);
 
-            AtomCache cache = new AtomCache();
+            AtomCache cache = new AtomCache(null);
             cache.setFileParsingParams(params);
 
             Structure s = cache.getStructure("4hhb");
@@ -40,6 +40,8 @@ public class PDB2SecondaryStructure {
         } catch (Exception e) {
 
             e.printStackTrace();
-        }        
+        }
+    	
     }
+    
 }

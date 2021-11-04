@@ -307,7 +307,7 @@ public class GTFFile {
 				
 					
 					geneid2geneName.put(gene_id, gene_name); // convert gene id to gene name
-					geneid_clean2geneName.put(gene_id.split("\\.")[0], gene_name);
+					geneid_clean2geneName.put(gene_id.split("\\.")[0], gene_name);					
 					geneid2biotype.put(gene_id, biotype);
 					geneName2biotype.put(gene_name, biotype);
 					transcript2biotype.put(transcript_id, biotype);
