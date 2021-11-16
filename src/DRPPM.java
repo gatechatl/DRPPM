@@ -611,6 +611,7 @@ import rnaseq.splicing.alternativejuncpipeline.intronretention.Bam2BedConversion
 import rnaseq.splicing.alternativejuncpipeline.intronretention.CalculateCoverageBed;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.CalculateSplicingDeficiency;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.CalculateSplicingDeficiencyScript;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.CombineSplicingDeficiencyFlexIndex;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.CombineSplicingDeficiencyName;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.CombineSplicingDeficiencyNameMeta;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.CombineSplicingDeficiencyNameMetaHG38;
@@ -2916,6 +2917,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				CombineSplicingDeficiencyNameMetaHG38.execute(args_remain);
+				System.exit(0);
+				// CombineSplicingDeficiencyFlexIndex
+			} else if (type.equalsIgnoreCase("-CombineSplicingDeficiencyFlexIndex")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CombineSplicingDeficiencyFlexIndex "
+							+ CombineSplicingDeficiencyFlexIndex.parameter_info());
+					System.exit(0);
+				}
+				CombineSplicingDeficiencyFlexIndex.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-IntronRetentionPipelineWrapper")) {
@@ -12061,6 +12072,15 @@ public class DRPPM {
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length >= 1) {					
+					System.out.println(SearchProgram.searchName(args_remain[0]));
+				} else if (args_remain.length == 0) {
+					System.out.println("drppm -Find [Input your program name]");					
+				}
+				System.exit(0);
+				// 
+			} else if (type.equalsIgnoreCase("-FindDetail") || type.equalsIgnoreCase("-SearchDetail")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length >= 1) {					
 					System.out.println(SearchProgram.searchName(args_remain[0]));

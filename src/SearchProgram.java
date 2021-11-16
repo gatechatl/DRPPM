@@ -41,6 +41,35 @@ public class SearchProgram {
 		//}
 		return "No program's name matched the query name.";
 	}
+	public static String searchNameDetail(String query) {
+		search_program = new LinkedList();
+		setup_program();
+		LinkedList uppercase_search_program = new LinkedList();
+		
+		Iterator itr = search_program.iterator();
+		while (itr.hasNext()) {
+			String name = (String)itr.next();		
+			uppercase_search_program.add(name.toUpperCase());
+		}
+		//if (search_program.contains(query)) {
+		//	return query;
+		//} else {
+		String result = "";
+		int i = 0;
+		itr = uppercase_search_program.iterator();
+		while (itr.hasNext()) {
+			String name = (String)itr.next();
+			if (name.contains(query.toUpperCase())) {
+				result += "  drppm -" + search_program.get(i) + "\n";
+			}
+			i++;
+		}			
+		if (!result.equals("")) {
+			return result;
+		}
+		//}
+		return "No program's name matched the query name.";
+	}
 	public static String searchType(String query) {
 		return "No program's name matched the query name.";
 	}
@@ -774,5 +803,6 @@ public class SearchProgram {
 		search_program.add("ReorderSampleFast");
 		search_program.add("EnsemblProteinExtractMembraneProteins");
 		search_program.add("MakeFastaSingleLine");
+		search_program.add("CombineSplicingDeficiencyFlexIndex");
 	}
 }

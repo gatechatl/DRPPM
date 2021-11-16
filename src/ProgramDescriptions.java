@@ -396,6 +396,7 @@ import rnaseq.quantification.kallisto.KallistoGenerateCountFileWithReference;
 import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrix;
 import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrixSampleCol;
 import rnaseq.splicing.alternativejuncpipeline.exongtf.AlternativeJuncGTFFileGenerator;
+import rnaseq.splicing.alternativejuncpipeline.intronretention.CombineSplicingDeficiencyFlexIndex;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.CombineSplicingDeficiencyName;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.CombineSplicingDeficiencyNameMeta;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.CombineSplicingDeficiencyNameMetaHG38;
@@ -2937,7 +2938,10 @@ public class ProgramDescriptions {
 		if (FastaFilterSequenceLength.type().equals(type)) {
 			result += "FastaFilterSequenceLength: " + FastaFilterSequenceLength.description() + "\n";
 		}
+		if (CombineSplicingDeficiencyFlexIndex.type().equals(type)) {
+			result += "CombineSplicingDeficiencyFlexIndex: " + CombineSplicingDeficiencyFlexIndex.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2021-1114A";	
+	public static String VERSION = "2021-1116A";	
 }

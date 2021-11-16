@@ -76,38 +76,40 @@ public class CombineSplicingDeficiencyNameMetaHG38 {
 				while (in.ready()) {
 					String str = in.readLine();
 					String[] split = str.split("\t");
-					geneList.put(split[0], split[0]);
-					id2geneName.put(split[0], split[3]);
-					int num_intron_read = new Integer(split[5]);
-					int num_exon_read = new Integer(split[7]);
-					if (filtered_intron_count.containsKey(split[0])) {
-						int count = (Integer)filtered_intron_count.get(split[0]);
-						count += num_intron_read;
-						filtered_intron_count.put(split[0],  count);
-					} else {
-						filtered_intron_count.put(split[0],  num_intron_read);
+					if (!split[0].equals("GeneID")) {
+						geneList.put(split[0], split[0]);
+						id2geneName.put(split[0], split[3]);
+						int num_intron_read = new Integer(split[5]);
+						int num_exon_read = new Integer(split[7]);
+						if (filtered_intron_count.containsKey(split[0])) {
+							int count = (Integer)filtered_intron_count.get(split[0]);
+							count += num_intron_read;
+							filtered_intron_count.put(split[0],  count);
+						} else {
+							filtered_intron_count.put(split[0],  num_intron_read);
+						}
+						
+						if (num_intron_read < 5) {
+							//filteredGene.put(split[1], split[1]);						
+						}
+						if (num_exon_read < 5) {
+							//filteredGene.put(split[1], split[1]);						
+						}
+						
+						if (filtered_exon_count.containsKey(split[0])) {
+							int count = (Integer)filtered_exon_count.get(split[0]);
+							count += num_exon_read;
+							filtered_exon_count.put(split[0],  count);
+						} else {
+							filtered_exon_count.put(split[0],  num_exon_read);
+						}
+						
+						//String values = split[1];
+						/*for (int j = 2; j < split.length; j++) {
+							values += "\t" + split[j];
+						}*/
+						maps[i].put(split[0], split[4]);
 					}
-					
-					if (num_intron_read < 5) {
-						//filteredGene.put(split[1], split[1]);						
-					}
-					if (num_exon_read < 5) {
-						//filteredGene.put(split[1], split[1]);						
-					}
-					
-					if (filtered_exon_count.containsKey(split[0])) {
-						int count = (Integer)filtered_exon_count.get(split[0]);
-						count += num_exon_read;
-						filtered_exon_count.put(split[0],  count);
-					} else {
-						filtered_exon_count.put(split[0],  num_exon_read);
-					}
-					
-					//String values = split[1];
-					/*for (int j = 2; j < split.length; j++) {
-						values += "\t" + split[j];
-					}*/
-					maps[i].put(split[0], split[4]);
 				}
 				in.close();
 				i++;
