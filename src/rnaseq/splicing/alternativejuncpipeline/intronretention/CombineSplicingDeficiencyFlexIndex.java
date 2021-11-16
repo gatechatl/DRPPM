@@ -64,7 +64,7 @@ public class CombineSplicingDeficiencyFlexIndex {
 			}
 			int i = 0;
 			//System.out.print("GeneID\tGeneName");
-			out.write("GeneID\tGeneName");
+			out.write("GeneID");
 			Iterator itr = sampleList.iterator();
 			while (itr.hasNext()) {
 				String sampleName = (String)itr.next();
@@ -137,7 +137,7 @@ public class CombineSplicingDeficiencyFlexIndex {
 				
 				//if (!filteredGene.containsKey(geneID)) {
 				if (intron_count >= 5 && exon_count >= 5) {
-					String geneName = (String)id2geneName.get(geneID);
+					//String geneName = (String)id2geneName.get(geneID);
 					//System.out.print(geneID + "\t" + geneName);
 					
 					
@@ -158,7 +158,7 @@ public class CombineSplicingDeficiencyFlexIndex {
 					}	
 					//System.out.println(values);
 					if (!skip) {
-						out.write(geneID + "\t" + geneName);
+						out.write(geneID);
 						out.write(values + "\n");
 					}
 				}
