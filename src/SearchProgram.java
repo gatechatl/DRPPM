@@ -772,5 +772,7 @@ public class SearchProgram {
 		search_program.add("JuncSalvagerCombineSTARSJTABIndex");
 		search_program.add("ReorderSamples");
 		search_program.add("ReorderSampleFast");
+		search_program.add("EnsemblProteinExtractMembraneProteins");
+		search_program.add("MakeFastaSingleLine");
 	}
 }

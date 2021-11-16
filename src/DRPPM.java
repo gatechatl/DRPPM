@@ -381,6 +381,8 @@ import protein.features.combineresults.CombineAAFreqProteinFeature;
 import protein.features.combineresults.CombineProteinFeatures;
 import protein.features.combineresults.ProteinFeatureWithGRPRInfo;
 import protein.features.embosstools.ReadPepInfo;
+import protein.features.ensembl.membranebound.EnsemblProteinExtractMembraneProteins;
+import protein.features.ensembl.membranebound.FastaFilterSequenceLength;
 import protein.features.hydrophobicity.CalculateHydrophobicityFastaFile;
 import protein.features.lowcomplexitydomain.AppendUbiquitome;
 import protein.features.lowcomplexitydomain.GRPRReplaceAnnotationInformation;
@@ -12036,6 +12038,26 @@ public class DRPPM {
 					System.exit(0);
 				}
 				WRAPConfigGenerator.execute(args_remain);
+				System.exit(0);
+				// FastaFilterSequenceLength
+			} else if (type.equalsIgnoreCase("-FastaFilterSequenceLength")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -FastaFilterSequenceLength "
+							+ FastaFilterSequenceLength.parameter_info());
+					System.exit(0);
+				}
+				FastaFilterSequenceLength.execute(args_remain);
+				System.exit(0);
+				// 
+			} else if (type.equalsIgnoreCase("-EnsemblProteinExtractMembraneProteins")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -EnsemblProteinExtractMembraneProteins "
+							+ EnsemblProteinExtractMembraneProteins.parameter_info());
+					System.exit(0);
+				}
+				EnsemblProteinExtractMembraneProteins.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

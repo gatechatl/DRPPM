@@ -44,21 +44,23 @@ public class CombineSplicingDeficiencyName {
 				while (in.ready()) {
 					String str = in.readLine();
 					String[] split = str.split("\t");
-					geneList.put(split[0], split[0]);
-					id2geneName.put(split[0], split[1]);
-					int num_intron_read = new Integer(split[3]);
-					int num_exon_read = new Integer(split[5]);
-					if (num_intron_read < 5) {
-						filteredGene.put(split[0], split[0]);						
+					if (!split[0].equals("GeneID")) {
+						geneList.put(split[0], split[0]);
+						id2geneName.put(split[0], split[1]);
+						int num_intron_read = new Integer(split[3]);
+						int num_exon_read = new Integer(split[5]);
+						if (num_intron_read < 5) {
+							filteredGene.put(split[0], split[0]);						
+						}
+						if (num_exon_read < 5) {
+							filteredGene.put(split[0], split[0]);						
+						}
+						//String values = split[1];
+						/*for (int j = 2; j < split.length; j++) {
+							values += "\t" + split[j];
+						}*/
+						maps[i].put(split[0], split[2]);
 					}
-					if (num_exon_read < 5) {
-						filteredGene.put(split[0], split[0]);						
-					}
-					//String values = split[1];
-					/*for (int j = 2; j < split.length; j++) {
-						values += "\t" + split[j];
-					}*/
-					maps[i].put(split[0], split[2]);
 				}
 				in.close();
 				i++;

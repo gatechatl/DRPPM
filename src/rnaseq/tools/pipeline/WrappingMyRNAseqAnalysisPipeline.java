@@ -1410,6 +1410,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -JuncSalvagerCombineSTARSJTABIndex " + OUTPUT_STARfinalout_FILELST + " 2 0.0 0.3 false " + outputFolder + "/junctioncount_output.txt " + outputFolder + "/junctioncount_blacklist_output.txt " + outputFolder + "/junctioncount_output_final.txt\n");
 			
+			// combining all the splicing deficiency shell
+			
 			// finally write out the shell script
 			itr = sampleName_linkedList.iterator();
 			while (itr.hasNext()) {

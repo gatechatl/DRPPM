@@ -196,6 +196,7 @@ import functional.pathway.enrichr.ConvertEnrichR2GMTPathwayFolder;
 import functional.pathway.visualization.webcytoscape.DisplayJsonFileNetwork;
 import functional.pathway.visualization.webcytoscape.GenerateNodeMetaDataSize;
 import general.sequence.analysis.GCScanner;
+import general.sequence.blast.parse.nucleotide2protein.MakeFastaSingleLine;
 import genomics.exome.GenerateSNVTableFromMutationTable;
 import genomics.exome.circos.FromSV2CircosInput;
 import genomics.exome.circos.Indel2CircosInput;
@@ -272,6 +273,8 @@ import protein.features.charge.ConvertGene2Uniprot;
 import protein.features.charge.GenerateChargeGraph;
 import protein.features.charge.MatchFasta2Coordinate;
 import protein.features.combineresults.CombineAAFreqProteinFeature;
+import protein.features.ensembl.membranebound.EnsemblProteinExtractMembraneProteins;
+import protein.features.ensembl.membranebound.FastaFilterSequenceLength;
 import protein.features.hydrophobicity.CalculateHydrophobicityFastaFile;
 import protein.features.lowcomplexitydomain.AppendUbiquitome;
 import protein.features.lowcomplexitydomain.UniprotSEGPostProcessing;
@@ -2925,8 +2928,16 @@ public class ProgramDescriptions {
 		if (WRAPConfigGenerator.type().equals(type)) {
 			result += "WRAPConfigGenerator: " + WRAPConfigGenerator.description() + "\n";
 		}
-		
+		if (EnsemblProteinExtractMembraneProteins.type().equals(type)) {
+			result += "EnsemblProteinExtractMembraneProteins: " + EnsemblProteinExtractMembraneProteins.description() + "\n";
+		}
+		if (MakeFastaSingleLine.type().equals(type)) {
+			result += "MakeFastaSingleLine: " + MakeFastaSingleLine.description() + "\n";
+		}
+		if (FastaFilterSequenceLength.type().equals(type)) {
+			result += "FastaFilterSequenceLength: " + FastaFilterSequenceLength.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2021-1021A";	
+	public static String VERSION = "2021-1114A";	
 }

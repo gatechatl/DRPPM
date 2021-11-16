@@ -9,6 +9,15 @@ import java.io.InputStreamReader;
 
 public class MakeFastaSingleLine {
 
+	public static String description() {
+		return "Regenerate fasta file with a single sequence line";
+	}
+	public static String type() {
+		return "FASTA";
+	}
+	public static String parameter_info() {
+		return "[inputFastaFile] [outputFastaFile]";
+	}
 	public static void execute(String[] args) {
 		
 		try {
