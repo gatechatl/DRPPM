@@ -437,6 +437,10 @@ import rnaseq.splicing.csiminer.CSIMinerGenerateViolinAndBarPlotDataTable;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
 import rnaseq.splicing.csiminer.CSIMinerViolinAndBarPlotDataTableIndexed;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerAnnotationBasedOnBLATOutputPipeline;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerCheckGTExProteomicsHitsPipeline;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerExonAnnotateTMHMMPipeline;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerGenerateExonTranslationPipeline;
 import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
@@ -2941,7 +2945,19 @@ public class ProgramDescriptions {
 		if (CombineSplicingDeficiencyFlexIndex.type().equals(type)) {
 			result += "CombineSplicingDeficiencyFlexIndex: " + CombineSplicingDeficiencyFlexIndex.description() + "\n";
 		}
+		if (CSIMinerGenerateExonTranslationPipeline.type().equals(type)) {
+			result += "CSIMinerGenerateExonTranslationPipeline: " + CSIMinerGenerateExonTranslationPipeline.description() + "\n";
+		}
+		if (CSIMinerAnnotationBasedOnBLATOutputPipeline.type().equals(type)) {
+			result += "CSIMinerAnnotationBasedOnBLATOutputPipeline: " + CSIMinerAnnotationBasedOnBLATOutputPipeline.description() + "\n";
+		}
+		if (CSIMinerCheckGTExProteomicsHitsPipeline.type().equals(type)) {
+			result += "CSIMinerCheckGTExProteomicsHitsPipeline: " + CSIMinerCheckGTExProteomicsHitsPipeline.description() + "\n";
+		}
+		if (CSIMinerExonAnnotateTMHMMPipeline.type().equals(type)) {
+			result += "CSIMinerExonAnnotateTMHMMPipeline: " + CSIMinerExonAnnotateTMHMMPipeline.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2021-1116A";	
+	public static String VERSION = "2021-1117A";	
 }

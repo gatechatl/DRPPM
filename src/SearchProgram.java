@@ -804,5 +804,9 @@ public class SearchProgram {
 		search_program.add("EnsemblProteinExtractMembraneProteins");
 		search_program.add("MakeFastaSingleLine");
 		search_program.add("CombineSplicingDeficiencyFlexIndex");
+		search_program.add("CSIMinerGenerateExonTranslationPipeline");
+		search_program.add("CSIMinerAnnotationBasedOnBLATOutputPipeline");
+		search_program.add("CSIMinerCheckGTExProteomicsHitsPipeline");
+		search_program.add("CSIMinerExonAnnotateTMHMMPipeline");
 	}
 }

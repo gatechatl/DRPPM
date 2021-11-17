@@ -666,6 +666,10 @@ import rnaseq.splicing.csiminer.CSIMinerGenerateViolinAndBarPlotDataTable;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
 import rnaseq.splicing.csiminer.CSIMinerViolinAndBarPlotDataTableIndexed;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerAnnotationBasedOnBLATOutputPipeline;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerCheckGTExProteomicsHitsPipeline;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerExonAnnotateTMHMMPipeline;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerGenerateExonTranslationPipeline;
 import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
@@ -12069,6 +12073,46 @@ public class DRPPM {
 					System.exit(0);
 				}
 				EnsemblProteinExtractMembraneProteins.execute(args_remain);
+				System.exit(0);
+				// CSIMinerGenerateExonTranslationPipeline
+			} else if (type.equalsIgnoreCase("-CSIMinerGenerateExonTranslationPipeline")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerGenerateExonTranslationPipeline "
+							+ CSIMinerGenerateExonTranslationPipeline.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerGenerateExonTranslationPipeline.execute(args_remain);
+				System.exit(0);
+				// CSIMinerAnnotationBasedOnBLATOutputPipeline
+			} else if (type.equalsIgnoreCase("-CSIMinerAnnotationBasedOnBLATOutputPipeline")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerAnnotationBasedOnBLATOutputPipeline "
+							+ CSIMinerAnnotationBasedOnBLATOutputPipeline.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerAnnotationBasedOnBLATOutputPipeline.execute(args_remain);
+				System.exit(0);
+				// CSIMinerCheckGTExProteomicsHitsPipeline
+			} else if (type.equalsIgnoreCase("-CSIMinerCheckGTExProteomicsHitsPipeline")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerCheckGTExProteomicsHitsPipeline "
+							+ CSIMinerCheckGTExProteomicsHitsPipeline.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerCheckGTExProteomicsHitsPipeline.execute(args_remain);
+				System.exit(0);
+				// CSIMinerExonAnnotateTMHMMPipeline
+			} else if (type.equalsIgnoreCase("-CSIMinerExonAnnotateTMHMMPipeline")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerExonAnnotateTMHMMPipeline "
+							+ CSIMinerExonAnnotateTMHMMPipeline.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerExonAnnotateTMHMMPipeline.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {
