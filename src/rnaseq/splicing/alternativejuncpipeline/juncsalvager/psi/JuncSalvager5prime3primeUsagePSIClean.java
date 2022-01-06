@@ -33,14 +33,18 @@ public class JuncSalvager5prime3primeUsagePSIClean {
 			String GTFFile = args[1];
 			int buffer = new Integer(args[2]);
 			String outputFile = args[3];
+			String outputFile2 = args[4];
 			boolean include_multi_mapped_false = false;
-			if (args.length > 4) {
-				include_multi_mapped_false = new Boolean(args[4]);
+			if (args.length > 5) {
+				include_multi_mapped_false = new Boolean(args[5]);
 			}
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
-			out.write("chr\tstart\tend\tdirection\tPSI_5'AltSplice\tPSI_3'AltSplice\tFound_Read_5'End\tAlt_Read_5'End\tFound_Read_3'End\tAlt_Read_3'End\n");
+			out.write("ExonID\tpso\n");
 			
+			FileWriter fwriter2 = new FileWriter(outputFile2);
+			BufferedWriter out2 = new BufferedWriter(fwriter2);
+			out2.write("ExonID\tpso\n");
 			
 			HashMap exon_left = new HashMap();
 			HashMap exon_right = new HashMap();
@@ -68,6 +72,9 @@ public class JuncSalvager5prime3primeUsagePSIClean {
 						String gene_name = grabMeta(split[8], "gene_name");
 						
 						exon_direction.put(chr + "\t" + start + "\t" + end + "\t" + direction, "");						
+						
+						geneSymbol.put(chr + "\t" + start + "\t" + end, gene_name);
+						geneTranscript.put(chr + "\t" + start + "\t" + end, transcriptID);
 						
 						exon_left.put(chr + "\t" + start, 0);
 						exon_right.put(chr + "\t" + end, 0);
@@ -143,6 +150,7 @@ public class JuncSalvager5prime3primeUsagePSIClean {
 			Iterator itr = exon_direction.keySet().iterator();
 			while (itr.hasNext()) {
 				String coord = (String)itr.next();				
+				String gene = (String)geneSymbol.get(coord);
 				String[] split_coord = coord.split("\t");
 				String chr = split_coord[0];
 				String start = split_coord[1];
@@ -240,12 +248,17 @@ public class JuncSalvager5prime3primeUsagePSIClean {
 				double PSI_3_prime_alt_spice = new Double(orig_read_3prime) / new Double(alt_read_3prime + orig_read_3prime);
 				double PSI_5_prime_alt_spice = new Double(orig_read_5prime) / new Double(alt_read_5prime + orig_read_5prime);
 				
-				out.write(chr + "\t" + start + "\t" + end + "\t" + direction + "\t" + PSI_5_prime_alt_spice + "\t" + PSI_3_prime_alt_spice + "\t" + orig_read_5prime + "\t" + alt_read_5prime + "\t" + orig_read_3prime + "\t" + alt_read_3prime + "\n");
+				//out.write(chr + "\t" + start + "\t" + end + "\t" + direction + "\t" + PSI_5_prime_alt_spice + "\t" + PSI_3_prime_alt_spice + "\t" + orig_read_5prime + "\t" + alt_read_5prime + "\t" + orig_read_3prime + "\t" + alt_read_3prime + "\n");
+				
+				out.write(gene + "." + chr + "." + start + "." + end + "\t" + PSI_5_prime_alt_spice + "\n");
+				out2.write(gene + "." + chr + "." + start + "." + end + "\t" + PSI_3_prime_alt_spice + "\n");
+				
 				//out.write("chr\tstart\tend\tdirection\tPSI_5'AltSplice\tPSI_3'AltSplice\tFound_Read_5'End\tAlt_Read_5'End\tFound_Read_3'End\tAlt_Read_3'End\n");
 				
 			}
 
 			out.close();
+			out2.close();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

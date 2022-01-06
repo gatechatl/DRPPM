@@ -38,8 +38,8 @@ public class JuncSalvagerExonSkippingPSIClean {
 			String inputSTARSJ = args[0];
 			String GTFFile = args[1];
 			int buffer = new Integer(args[2]);
-			String outputFile = args[3];
-			String outputFile2 = args[4];
+			String outputFile = args[3]; // pso
+			String outputFile2 = args[4]; // psi
 			boolean include_multi_mapped_false = false;
 			if (args.length > 5) {
 				include_multi_mapped_false = new Boolean(args[5]);
@@ -106,7 +106,7 @@ public class JuncSalvagerExonSkippingPSIClean {
 						exon_left.put(chr + "\t" + start, 0);
 						exon_right.put(chr + "\t" + end, 0);
 						exon_skip.put(chr + "\t" + start + "\t" + end, 0);
-						geneSymbol.put(chr + "\t" + start + "\t" + end, geneSymbol);
+						geneSymbol.put(chr + "\t" + start + "\t" + end, gene_name);
 						geneTranscript.put(chr + "\t" + start + "\t" + end, transcriptID);
 					}			
 				}
