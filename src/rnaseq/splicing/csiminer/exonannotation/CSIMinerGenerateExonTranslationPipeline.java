@@ -68,7 +68,7 @@ public class CSIMinerGenerateExonTranslationPipeline {
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
 			String header = in.readLine();
-			out.write(header + "\n");
+			out.write(header + "\t" + "EnsemblPep" + "\t" + "EnsemblTranscript" + "\t" + "EnsemblProteinID" + "\n");
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");				

@@ -648,13 +648,16 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvag
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerValidateNovelExonAndGeneratePeptide;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvager5prime3primeUsagePSI;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvager5prime3primeUsagePSIClean;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombine3primePSIMatrixIndex;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombine5primePSIMatrixIndex;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrixIndex;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombineSTARSJTABIndex;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSIClean;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScriptClean;
 import rnaseq.splicing.alternativejuncpipeline.xbp1.CalculateXBP1sFeatures;
 import rnaseq.splicing.csiminer.CSIMinerAnnotateExonBasedOnTheSpliceGraph;
 import rnaseq.splicing.csiminer.CSIMinerAnnotatePrioritizedExons;
@@ -666,10 +669,13 @@ import rnaseq.splicing.csiminer.CSIMinerGenerateViolinAndBarPlotDataTable;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
 import rnaseq.splicing.csiminer.CSIMinerViolinAndBarPlotDataTableIndexed;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerAnnotateExonWithProteinAtlasPipeline;
 import rnaseq.splicing.csiminer.exonannotation.CSIMinerAnnotationBasedOnBLATOutputPipeline;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerAppendMembraneAnnotationPipeline;
 import rnaseq.splicing.csiminer.exonannotation.CSIMinerCheckGTExProteomicsHitsPipeline;
 import rnaseq.splicing.csiminer.exonannotation.CSIMinerExonAnnotateTMHMMPipeline;
 import rnaseq.splicing.csiminer.exonannotation.CSIMinerGenerateExonTranslationPipeline;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerManuscriptCombineSolidBrainResult;
 import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
@@ -1071,7 +1077,17 @@ public class DRPPM {
 				}
 				JuncSalvagerExonSkippingPSI.execute(args_remain);
 				System.exit(0);
-				// JuncSalvager5prime3primeUsagePSI
+				// JuncSalvagerExonSkippingPSIClean
+			} else if (type.equalsIgnoreCase("-JuncSalvagerExonSkippingPSIClean")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvagerExonSkippingPSIClean "
+							+ JuncSalvagerExonSkippingPSIClean.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvagerExonSkippingPSIClean.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-JuncSalvager5prime3primeUsagePSI")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
@@ -1080,6 +1096,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				JuncSalvager5prime3primeUsagePSI.execute(args_remain);
+				System.exit(0);
+				// JuncSalvager5prime3primeUsagePSIClean
+			} else if (type.equalsIgnoreCase("-JuncSalvager5prime3primeUsagePSIClean")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvager5prime3primeUsagePSIClean "
+							+ JuncSalvager5prime3primeUsagePSIClean.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvager5prime3primeUsagePSIClean.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-JuncSalvagerGeneratePSIScript")) {
@@ -1091,7 +1117,17 @@ public class DRPPM {
 				}
 				JuncSalvagerGeneratePSIScript.execute(args_remain);
 				System.exit(0);
-				// JuncSalvagerCombinePSIMatrix
+				// JuncSalvagerGeneratePSIScriptClean
+			} else if (type.equalsIgnoreCase("-JuncSalvagerGeneratePSIScriptClean")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -JuncSalvagerGeneratePSIScriptClean "
+							+ JuncSalvagerGeneratePSIScriptClean.parameter_info());
+					System.exit(0);
+				}
+				JuncSalvagerGeneratePSIScriptClean.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-JuncSalvagerCombinePSIMatrix")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
@@ -12113,6 +12149,36 @@ public class DRPPM {
 					System.exit(0);
 				}
 				CSIMinerExonAnnotateTMHMMPipeline.execute(args_remain);
+				System.exit(0);
+				// CSIMinerAnnotateExonWithProteinAtlasPipeline
+			} else if (type.equalsIgnoreCase("-CSIMinerAnnotateExonWithProteinAtlasPipeline")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerAnnotateExonWithProteinAtlasPipeline "
+							+ CSIMinerAnnotateExonWithProteinAtlasPipeline.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerAnnotateExonWithProteinAtlasPipeline.execute(args_remain);
+				System.exit(0);
+				// CSIMinerAppendMembraneAnnotationPipeline
+			} else if (type.equalsIgnoreCase("-CSIMinerAppendMembraneAnnotationPipeline")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerAppendMembraneAnnotationPipeline "
+							+ CSIMinerAppendMembraneAnnotationPipeline.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerAppendMembraneAnnotationPipeline.execute(args_remain);
+				System.exit(0);
+				// CSIMinerManuscriptCombineSolidBrainResult
+			} else if (type.equalsIgnoreCase("-CSIMinerManuscriptCombineSolidBrainResult")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSIMinerManuscriptCombineSolidBrainResult "
+							+ CSIMinerManuscriptCombineSolidBrainResult.parameter_info());
+					System.exit(0);
+				}
+				CSIMinerManuscriptCombineSolidBrainResult.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

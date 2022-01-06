@@ -13,6 +13,7 @@ import java.util.LinkedList;
 
 import mappingtools.Bam2Fastq;
 import misc.CommandLine;
+import statistics.general.MathTools;
 
 /**
  * Generates the entire script for the RNAseq analysis pipeline.
@@ -339,43 +340,82 @@ public class WrappingMyRNAseqAnalysisPipeline {
 						if (!str.substring(0, 1).equals("#")) {
 							String[] split = str.split("\t");
 							String sampleName = split[0];										
-							String fq1_path = split[1];					
-							String fq2_path = split[2];
+							String fq1_path = split[1];			
 							
-							// make sure that the line is not empty
-							if (!sampleName.equals("")) {
-								int read_length = 101; // default set to 101
-								if (split.length > 3) {
-									read_length = new Integer(split[3]);
+							if (MathTools.isNumeric(split[2])) {
+								// make sure that the line is not empty
+								if (!sampleName.equals("")) {
+									int read_length = 101; // default set to 101
+									if (split.length > 2) {
+										read_length = new Integer(split[2]);
+										
+									}								
+									String strand_direction = "NA";
+									if (split.length > 3) {
+										strand_direction = "unstranded"; // forward reverse unstranded
+									}
+									if (split.length > 4) {
+										String other_parameters = split[4];
+									}
+				
+									sampleName_linkedList.add(sampleName);
+									fq1_path_map.put(sampleName,  fq1_path);
+									fq2_path_map.put(sampleName,  fq1_path);
+									read_length_map.put(sampleName, read_length);
+									strand_direction_map.put(sampleName, strand_direction);
 									
+									// generate output sample folder
+									String sample_output_folder = outputFolder + "/" + sampleName;
+									File sample_output_folder_f = new File(sample_output_folder);
+									if (!sample_output_folder_f.exists()) {
+										sample_output_folder_f.mkdir();
+									}
+									
+									// generate output sample folder
+									String sample_outputIntermediateFolder = outputIntermediateFolder + "/" + sampleName;
+									File sample_outputIntermediateFolder_f = new File(sample_outputIntermediateFolder);
+									if (!sample_outputIntermediateFolder_f.exists()) {
+										sample_outputIntermediateFolder_f.mkdir();
+									}
 								}
+							} else {
+								String fq2_path = split[2];
 								
-								String strand_direction = "NA";
-								if (split.length > 4) {
-									strand_direction = split[4]; // forward reverse unstranded
-								}
-								if (split.length > 5) {
-									String other_parameters = split[5];
-								}
-			
-								sampleName_linkedList.add(sampleName);
-								fq1_path_map.put(sampleName,  fq1_path);
-								fq2_path_map.put(sampleName,  fq2_path);
-								read_length_map.put(sampleName, read_length);
-								strand_direction_map.put(sampleName, strand_direction);
-								
-								// generate output sample folder
-								String sample_output_folder = outputFolder + "/" + sampleName;
-								File sample_output_folder_f = new File(sample_output_folder);
-								if (!sample_output_folder_f.exists()) {
-									sample_output_folder_f.mkdir();
-								}
-								
-								// generate output sample folder
-								String sample_outputIntermediateFolder = outputIntermediateFolder + "/" + sampleName;
-								File sample_outputIntermediateFolder_f = new File(sample_outputIntermediateFolder);
-								if (!sample_outputIntermediateFolder_f.exists()) {
-									sample_outputIntermediateFolder_f.mkdir();
+								// make sure that the line is not empty
+								if (!sampleName.equals("")) {
+									int read_length = 101; // default set to 101
+									if (split.length > 3) {
+										read_length = new Integer(split[3]);
+										
+									}
+									
+									String strand_direction = "NA";
+									if (split.length > 4) {
+										strand_direction = split[4]; // forward reverse unstranded
+									}
+									if (split.length > 5) {
+										String other_parameters = split[5];
+									}
+				
+									sampleName_linkedList.add(sampleName);
+									fq1_path_map.put(sampleName,  fq1_path);
+									fq2_path_map.put(sampleName,  fq2_path);
+									read_length_map.put(sampleName, read_length);
+									strand_direction_map.put(sampleName, strand_direction);
+									
+									// generate output sample folder
+									String sample_output_folder = outputFolder + "/" + sampleName;
+									File sample_output_folder_f = new File(sample_output_folder);
+									if (!sample_output_folder_f.exists()) {
+										sample_output_folder_f.mkdir();
+									}
+									
+									// generate output sample folder
+									String sample_outputIntermediateFolder = outputIntermediateFolder + "/" + sampleName;
+									File sample_outputIntermediateFolder_f = new File(sample_outputIntermediateFolder);
+									if (!sample_outputIntermediateFolder_f.exists()) {
+										sample_outputIntermediateFolder_f.mkdir();
+									}
 								}
 							}
 						}
@@ -588,9 +628,12 @@ public class WrappingMyRNAseqAnalysisPipeline {
 								string_buffer.append("fastqc " + fq1_path + " -o " + fastqc_folder + "\n");
 							}
 							if (fq2_path_map.containsKey(sampleName)) {
+								String fq1_path = (String)fq1_path_map.get(sampleName);
 								String fq2_path = (String)fq2_path_map.get(sampleName);
+								if (!fq1_path.equals(fq2_path)) {
 								//out.write("fastqc " + fq2_path + " -o " + fastqc_intermediate_folder + "\n");
-								string_buffer.append("fastqc " + fq2_path + " -o " + fastqc_folder + "\n");
+									string_buffer.append("fastqc " + fq2_path + " -o " + fastqc_folder + "\n");
+								}
 							}
 							//out.write("cp -r " + fastqc_intermediate_folder + " " + fastqc_folder + "\n");
 							//string_buffer.append("cp -r " + fastqc_intermediate_folder + " " + fastqc_folder + "\n");
@@ -629,7 +672,11 @@ public class WrappingMyRNAseqAnalysisPipeline {
 						String sampleName_fq_star_lst = outputIntermediateFolder + "/" + sampleName + "/star/" + sampleName + "_star_file.lst";
 						FileWriter fwriter_sampleName_fq_star_lst = new FileWriter(sampleName_fq_star_lst);
 						BufferedWriter out_sampleName_fq_star_lst = new BufferedWriter(fwriter_sampleName_fq_star_lst);
-						out_sampleName_fq_star_lst.write(fq1 + "\t" + fq2 + "\t" + sampleName + "\n");
+						if (fq1.equals(fq2)) {
+							out_sampleName_fq_star_lst.write(fq1 + "\t" + sampleName + "\n");
+						} else {
+							out_sampleName_fq_star_lst.write(fq1 + "\t" + fq2 + "\t" + sampleName + "\n");
+						}
 						out_sampleName_fq_star_lst.close();
 						
 						
@@ -642,7 +689,12 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/star/" + "\n");
 							//out.write("drppm -JinghuiZhangSTARMappingFromYaweiUpdated " + sampleName_fq_star_lst + " " + STAR_INDEX_DIR + " 4 step2_execute.sh false" + "\n");
 							
-							string_buffer.append("drppm -JinghuiZhangSTARMappingFromYaweiUpdated " + sampleName_fq_star_lst + " " + STAR_INDEX_DIR + " 4 step2_execute.sh false" + "\n");
+							if (fq1.equals(fq2)) {								
+								string_buffer.append("drppm -JinghuiZhangSTARMappingFromYaweiSingleEnd " + sampleName_fq_star_lst + " " + STAR_INDEX_DIR + " 4 step2_execute.sh false" + "\n");
+							} else {
+								string_buffer.append("drppm -JinghuiZhangSTARMappingFromYaweiUpdated " + sampleName_fq_star_lst + " " + STAR_INDEX_DIR + " 4 step2_execute.sh false" + "\n");
+							}
+							
 							//out.write("sh step2_execute.sh\n");
 							string_buffer.append("sh step2_execute.sh\n");
 							//out.write("cd " + current_working_dir + "\n"); // change back to current directory

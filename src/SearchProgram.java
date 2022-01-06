@@ -75,6 +75,7 @@ public class SearchProgram {
 	}
 	
 	public static void setup_program() {
+		search_program.add("plotPHeatMap");
 		search_program.add("CalculateIntersectingGenes");
 		search_program.add("GTFFileGeneName");
 		search_program.add("CombineEnrichmentPathwayPvalues");
@@ -808,5 +809,10 @@ public class SearchProgram {
 		search_program.add("CSIMinerAnnotationBasedOnBLATOutputPipeline");
 		search_program.add("CSIMinerCheckGTExProteomicsHitsPipeline");
 		search_program.add("CSIMinerExonAnnotateTMHMMPipeline");
+		search_program.add("CSIMinerAnnotateExonWithProteinAtlasPipeline");
+		search_program.add("CSIMinerAppendMembraneAnnotationPipeline");
+		search_program.add("CSIMinerManuscriptCombineSolidBrainResult");
+		search_program.add("FilterColumnName");
+		search_program.add("FilterColumn");
 	}
 }

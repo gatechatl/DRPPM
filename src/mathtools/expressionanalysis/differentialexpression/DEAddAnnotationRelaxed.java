@@ -46,7 +46,7 @@ public class DEAddAnnotationRelaxed {
 				String str = in.readLine();
 				boolean isTRUE = false;
 				String[] split = str.split("\t");
-				String geneName = split[0].replaceAll("\"", "").split(":")[0].toUpperCase();
+				String geneName = split[0].replaceAll("\"", "").split("_")[0].split(":")[0].toUpperCase();
 				String annotation = "";
 				itr = tags.iterator();
 				while (itr.hasNext()) {

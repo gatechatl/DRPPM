@@ -62,17 +62,21 @@ public class CSIMinerExonAnnotateTMHMMPipeline {
 			fstream = new FileInputStream(membrane_annotation_file);
 			din = new DataInputStream(fstream);
 			in = new BufferedReader(new InputStreamReader(din));
-			header = in.readLine();
+			//header = in.readLine();
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
 				ensembl_pep_id = split[0].split("_")[0];
-				if (!split[5].equals("Topology=o")) {
-					membrane_annotation.put(ensembl_pep_id, "1" + split[5].replaceAll("Topology=", "") + split[1].replaceAll("len=", ""));
+				if (split.length > 5) {
+					//System.out.println(split[5]);
+					if (!split[5].equals("Topology=o")) {
+						membrane_annotation.put(ensembl_pep_id, "1" + split[5].replaceAll("Topology=", "") + split[1].replaceAll("len=", ""));
+					} else {
+						membrane_annotation.put(ensembl_pep_id, split[5].replaceAll("Topology=", ""));
+					}
 				} else {
-					membrane_annotation.put(ensembl_pep_id, split[5].replaceAll("Topology=", ""));
-				}
-				
+					System.out.println(str);
+				}				
 			}
 			in.close();
 	
@@ -92,12 +96,12 @@ public class CSIMinerExonAnnotateTMHMMPipeline {
 			while (in.ready()) {
 				String str = in.readLine();
 				String[] split = str.split("\t");
-				if (!split[4].equals("NA")) {
+				if (!split[5].equals("NA")) {
 					System.out.println(split[4]);
 					ensembl_pep_id = split[4].split("_")[0];
 					String seq = split[7].split(",")[0];
-					int start = new Integer(split[4].split(":")[1]);
-					int end = new Integer(split[4].split(":")[2]);
+					int start = new Integer(split[5].split(":")[1]);
+					int end = new Integer(split[5].split(":")[2]);
 					if (membrane_annotation.containsKey(ensembl_pep_id)) {
 						String annotation = (String)membrane_annotation.get(ensembl_pep_id);
 						if (annotation.equals("o")) {

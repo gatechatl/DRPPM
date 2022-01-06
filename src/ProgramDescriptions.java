@@ -437,10 +437,13 @@ import rnaseq.splicing.csiminer.CSIMinerGenerateViolinAndBarPlotDataTable;
 import rnaseq.splicing.csiminer.CSIMinerPipeline;
 import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
 import rnaseq.splicing.csiminer.CSIMinerViolinAndBarPlotDataTableIndexed;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerAnnotateExonWithProteinAtlasPipeline;
 import rnaseq.splicing.csiminer.exonannotation.CSIMinerAnnotationBasedOnBLATOutputPipeline;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerAppendMembraneAnnotationPipeline;
 import rnaseq.splicing.csiminer.exonannotation.CSIMinerCheckGTExProteomicsHitsPipeline;
 import rnaseq.splicing.csiminer.exonannotation.CSIMinerExonAnnotateTMHMMPipeline;
 import rnaseq.splicing.csiminer.exonannotation.CSIMinerGenerateExonTranslationPipeline;
+import rnaseq.splicing.csiminer.exonannotation.CSIMinerManuscriptCombineSolidBrainResult;
 import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
 import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
@@ -2957,7 +2960,16 @@ public class ProgramDescriptions {
 		if (CSIMinerExonAnnotateTMHMMPipeline.type().equals(type)) {
 			result += "CSIMinerExonAnnotateTMHMMPipeline: " + CSIMinerExonAnnotateTMHMMPipeline.description() + "\n";
 		}
+		if (CSIMinerAnnotateExonWithProteinAtlasPipeline.type().equals(type)) {
+			result += "CSIMinerAnnotateExonWithProteinAtlasPipeline: " + CSIMinerAnnotateExonWithProteinAtlasPipeline.description() + "\n";
+		}
+		if (CSIMinerAppendMembraneAnnotationPipeline.type().equals(type)) {
+			result += "CSIMinerAppendMembraneAnnotationPipeline: " + CSIMinerAppendMembraneAnnotationPipeline.description() + "\n";
+		}
+		if (CSIMinerManuscriptCombineSolidBrainResult.type().equals(type)) {
+			result += "CSIMinerManuscriptCombineSolidBrainResult: " + CSIMinerManuscriptCombineSolidBrainResult.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2021-1117A";	
+	public static String VERSION = "2021-1118A";	
 }
