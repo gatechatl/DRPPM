@@ -150,13 +150,14 @@ public class JuncSalvager5prime3primeUsagePSIClean {
 			Iterator itr = exon_direction.keySet().iterator();
 			while (itr.hasNext()) {
 				String coord = (String)itr.next();				
-				String gene = (String)geneSymbol.get(coord);
+				
 				String[] split_coord = coord.split("\t");
 				String chr = split_coord[0];
 				String start = split_coord[1];
 				String end = split_coord[2];
 				String direction = split_coord[3];
 			
+				String gene = (String)geneSymbol.get(chr + "\t" + start + "\t" + end);
 				int orig_read_5prime = 0;
 				int alt_read_5prime = 0;
 				

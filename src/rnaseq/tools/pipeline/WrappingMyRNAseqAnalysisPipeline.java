@@ -931,7 +931,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("## END PSI PSO calculation ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
 							
-							out_OUTPUT_PSI_PSO_CALC_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.psi.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.pso.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.5to3AltSplice.psi.txt" + "\n");
+							out_OUTPUT_PSI_PSO_CALC_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.psi.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.pso.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.5to3AltSplice.psi.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.psi.clean.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.pso.clean.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.PSI_3_prime_alt_spice.clean.txt" + "\t" + outputFolder + "/" + sampleName + "/psipso/" + sampleName + ".STAR.SJ.out.tab.PSI_5_prime_alt_spice.clean.txt" + "\n");
 						}
 						
 
@@ -1243,8 +1243,6 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				}
 			}
 
-			
-			
 			// generate script for RNAEDITING variants
 			itr = sampleName_linkedList.iterator();
 			while (itr.hasNext()) {
