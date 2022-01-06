@@ -925,6 +925,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("drppm -JuncSalvagerGeneratePSIScript " + sampleName_sj_lst + " " + PRIMARY_GTF_REF + " psi_pso_output step2_output_script.sh" + "\n");
 							string_buffer.append("drppm -JuncSalvagerGeneratePSIScriptClean " + sampleName_sj_lst + " " + PRIMARY_GTF_REF + " psi_pso_output step3_output_script.sh" + "\n");
 							string_buffer.append("sh step2_output_script.sh" + "\n");
+							string_buffer.append("sh step3_output_script.sh" + "\n");
 							string_buffer.append("cd " + current_working_dir + "\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/psipso/psi_pso_output/*" + " " + outputFolder + "/" + sampleName + "/psipso/\n"); // need to specify the files to copy in the future...
 							string_buffer.append("## END PSI PSO calculation ##\n\n");
