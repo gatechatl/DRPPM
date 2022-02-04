@@ -538,6 +538,7 @@ import proteomics.phospho.tools.summary.CalculatePhosphoStatistics;
 import proteomics.phospho.tools.summary.ExtractLineBasedOnList;
 import proteomics.phospho.tools.summary.PhosphoSummarizeKeepTopHit;
 import proteomics.phospho.tools.summary.PhosphoSummarizeResults;
+import proteomics.projects.gtex.preprocess.GTExProcessPSMPeptidesPipeline;
 import references.gtf.manipulation.Filter3PrimeGTFExon;
 import references.gtf.manipulation.xenograft.Mouse2GTF;
 import references.gtf.qc.GTFFileGeneName;
@@ -12179,6 +12180,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				CSIMinerManuscriptCombineSolidBrainResult.execute(args_remain);
+				System.exit(0);
+				// GTExProcessPSMPeptidesPipeline
+			} else if (type.equalsIgnoreCase("-GTExProcessPSMPeptidesPipeline")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -GTExProcessPSMPeptidesPipeline "
+							+ GTExProcessPSMPeptidesPipeline.parameter_info());
+					System.exit(0);
+				}
+				GTExProcessPSMPeptidesPipeline.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

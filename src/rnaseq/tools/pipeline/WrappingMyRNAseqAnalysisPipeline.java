@@ -1411,7 +1411,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			// 
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -ExtractQCMetricsSTAR271a " + OUTPUT_STARfinalout_FILELST + " " + outputFolder + "/star271a_qc_metric.txt\n");			
 			
-			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -GenerateAlyssaRGlobalSummaryScript " + outputFolder + "/" + "/global_qc_summary/input" + outputFolder + "/analysis_qc_summary\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -GenerateAlyssaRGlobalSummaryScript " + outputFolder + "/" + "/global_qc_summary/input " + outputFolder + "/analysis_qc_summary\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("## Combine HTSEQ Gene level quantification ##\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQGENE_FILELST + " 1 1 " + outputFolder + "/htseq_gene_level_fpkm.txt\n");

@@ -1,6 +1,8 @@
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import proteomics.projects.gtex.preprocess.GTExProcessPSMPeptidesPipeline;
+
 
 
 /**
@@ -814,5 +816,6 @@ public class SearchProgram {
 		search_program.add("CSIMinerManuscriptCombineSolidBrainResult");
 		search_program.add("FilterColumnName");
 		search_program.add("FilterColumn");
+		search_program.add("GTExProcessPSMPeptidesPipeline");
 	}
 }

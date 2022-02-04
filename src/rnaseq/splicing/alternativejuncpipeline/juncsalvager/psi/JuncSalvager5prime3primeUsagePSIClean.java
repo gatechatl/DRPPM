@@ -40,11 +40,11 @@ public class JuncSalvager5prime3primeUsagePSIClean {
 			}
 			FileWriter fwriter = new FileWriter(outputFile);
 			BufferedWriter out = new BufferedWriter(fwriter);
-			out.write("ExonID\tpso\n");
+			out.write("ExonID\tpsi\n");
 			
 			FileWriter fwriter2 = new FileWriter(outputFile2);
 			BufferedWriter out2 = new BufferedWriter(fwriter2);
-			out2.write("ExonID\tpso\n");
+			out2.write("ExonID\tpsi\n");
 			
 			HashMap exon_left = new HashMap();
 			HashMap exon_right = new HashMap();

@@ -342,6 +342,7 @@ import proteomics.phospho.tools.pssm.distribution.PSSMScoreDistribution;
 import proteomics.phospho.tools.pssm.distribution.PSSMScoreDistributionKinaseMotif;
 import proteomics.phospho.tools.pssm.distribution.RandomSelectionPSSM;
 import proteomics.phospho.tools.rarefractioncurve.EstimatingTotalCoverage;
+import proteomics.projects.gtex.preprocess.GTExProcessPSMPeptidesPipeline;
 import references.gtf.manipulation.Filter3PrimeGTFExon;
 import references.gtf.manipulation.xenograft.Mouse2GTF;
 import references.gtf.qc.GTFFileGeneName;
@@ -2969,7 +2970,10 @@ public class ProgramDescriptions {
 		if (CSIMinerManuscriptCombineSolidBrainResult.type().equals(type)) {
 			result += "CSIMinerManuscriptCombineSolidBrainResult: " + CSIMinerManuscriptCombineSolidBrainResult.description() + "\n";
 		}
+		if (GTExProcessPSMPeptidesPipeline.type().equals(type)) {
+			result += "GTExProcessPSMPeptidesPipeline: " + GTExProcessPSMPeptidesPipeline.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2022-0106E";	
+	public static String VERSION = "2022-0204A";	
 }
