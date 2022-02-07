@@ -37,11 +37,15 @@ public class WRAPConfigGenerator {
 			string_buffer.append("# PSIPSO");
 			string_buffer.append("PRIMARY_GTF_REF = /share/dept_bbsr/Projects/Shaw_Timothy/3352_Splicing_Pipeline_2021/references/hg38_release35_GRCh38.p13/GTF/gencode.v35.primary_assembly.annotation.gtf");
 			string_buffer.append("PRIMARY_GTF_EXON_REF = /share/dept_bbsr/Projects/Shaw_Timothy/3352_Splicing_Pipeline_2021/references/hg38_release35_GRCh38.p13/pipeline/ExonReference/gencode.v35.primary_assembly.annotation.exon.gtf");
+			string_buffer.append("PRIMARY_GTF_INTRON_REF = /share/dept_bbsr/Projects/Shaw_Timothy/3352_Splicing_Pipeline_2021/references/hg38_release35_GRCh38.p13/pipeline/IntronReference/gencode.v35.primary_assembly.intron.gtf");
+			
 			string_buffer.append("SPLICING_DEFICIENCY_CONFIG = /share/dept_bbsr/Projects/Shaw_Timothy/3352_Splicing_Pipeline_2021/references/hg38_release35_GRCh38.p13/pipeline/splicing_deficiency/splicing_deficiency.config");
 			string_buffer.append("# JUNCSALVAGER");
-			string_buffer.append("JUNCSALVAGER_GENELIST = /rgs01/resgen/dev/wc/tshaw/REFERENCE/WRAP/hg38/GTF/JUNCSALVAGER/short_gene_list.txt");
+			string_buffer.append("JUNCSALVAGER_GENELIST = /share/dept_bbsr/Projects/Shaw_Timothy/3352_Splicing_Pipeline_2021/references/hg38_release35_GRCh38.p13/pipeline/JUNCSALVAGER/gene_list.txt");
 			string_buffer.append("# EXON PIPELINE");
 			string_buffer.append("PRIMARY_GTF_EXON_LENGTH = /share/dept_bbsr/Projects/Shaw_Timothy/3352_Splicing_Pipeline_2021/references/hg38_release35_GRCh38.p13/pipeline/ExonReference/gencode.v35.primary_assembly.annotation.exon.length.txt");
+			string_buffer.append("# INTRON PIPELINE");
+			string_buffer.append("PRIMARY_GTF_INTRON_LENGTH = /share/dept_bbsr/Projects/Shaw_Timothy/3352_Splicing_Pipeline_2021/references/hg38_release35_GRCh38.p13/pipeline/IntronReference/gencode.v35.primary_assembly.intron.length.txt");
 			string_buffer.append("# OUTPUT Files");
 			string_buffer.append("OUTPUT_HTSEQGENE_FILELST = htseq_gene_files.lst");
 			string_buffer.append("OUTPUT_RSEQC_FILELST = rseqc_files.lst");

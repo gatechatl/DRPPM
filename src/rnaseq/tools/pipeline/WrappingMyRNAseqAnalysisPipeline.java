@@ -49,6 +49,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String PRIMARY_GTF_REF = "NA";
 	private static String PRIMARY_GTF_EXON_REF = "NA";
 	private static String PRIMARY_GTF_EXON_LENGTH = "NA";
+	private static String PRIMARY_GTF_INTRON_REF = "NA";
+	private static String PRIMARY_GTF_INTRON_LENGTH = "NA";
+	
 	private static String JUNCSALVAGER_GENELIST = "NA";
 	private static String JUNCSALVAGER_PARAM = "NA";	
 	private static String RNAEDITING_VARIANTS = "NA";
@@ -56,12 +59,16 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static String OPTITYPE_PROGRAM = "NA";
 	private static String WIG2BIGWIG_PATH = "wigToBigWig";
 	
+	private static String SUMMARY_SCRIPT_FOLDER_PATH = "NA";
+	
 	private static String QC_SUMMARY = "NA";
 	
 	private static String OUTPUT_BAM_FILELST = "bam_files.lst";
 	private static String OUTPUT_RSEQC_FILELST = "rseqc_files.lst";
 	private static String OUTPUT_HTSEQGENE_FILELST = "htseq_genelevel_files.lst";
 	private static String OUTPUT_HTSEQEXON_FILELST = "htseq_exon_files.lst";
+	private static String OUTPUT_HTSEQINTRON_FILELST = "htseq_intron_files.lst";
+	
 	private static String OUTPUT_STARfinalout_FILELST = "star_finalout_files.lst";
 	private static String OUTPUT_SPLICING_DEFICIENCY_FILELST = "splicing_deficiency_files.lst";
 	private static String OUTPUT_PSI_PSO_CALC_FILELST = "psi_pso_files.lst";	
@@ -79,6 +86,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 	private static boolean SKIP_PSI_PSO_CALC = false;
 	private static boolean SKIP_SPLICING_DEFICIENCY = false;
 	private static boolean SKIP_HTSEQ_EXON_QUANT = false;
+	private static boolean SKIP_HTSEQ_INTRON_QUANT = false;
 	private static boolean SKIP_HTSEQ_GENE = false;
 	private static boolean SKIP_JUNCSALVAGER = false;
 	private static boolean SKIP_RNAEDIT = false;
@@ -161,6 +169,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (split[0].equalsIgnoreCase("PRIMARY_GTF_EXON_REF")) {
 								PRIMARY_GTF_EXON_REF = split[1];
 							}
+							if (split[0].equalsIgnoreCase("PRIMARY_GTF_INTRON_REF")) {
+								PRIMARY_GTF_INTRON_REF = split[1];
+							}
 							if (split[0].equalsIgnoreCase("PRIMARY_FASTA")) {
 								PRIMARY_FASTA = split[1];
 							}
@@ -169,6 +180,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							}
 							if (split[0].equalsIgnoreCase("PRIMARY_GTF_EXON_LENGTH")) {
 								PRIMARY_GTF_EXON_LENGTH = split[1];
+							}
+							if (split[0].equalsIgnoreCase("PRIMARY_GTF_EXON_LENGTH")) {
+								PRIMARY_GTF_INTRON_LENGTH = split[1];
 							}
 							if (split[0].equalsIgnoreCase("RNAEDITING_VARIANTS")) {
 								RNAEDITING_VARIANTS = split[1];
@@ -185,7 +199,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (split[0].equalsIgnoreCase("WIG2BIGWIG_PATH")) {
 								WIG2BIGWIG_PATH = split[1];
 							}
-							
+							if (split[0].equalsIgnoreCase("SUMMARY_SCRIPT_FOLDER_PATH")) {
+								SUMMARY_SCRIPT_FOLDER_PATH = split[1];
+							}
 							if (split[0].equalsIgnoreCase("OUTPUT_BAM_FILELST")) {
 								OUTPUT_BAM_FILELST = split[1];
 							}
@@ -200,6 +216,11 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (split[0].equalsIgnoreCase("OUTPUT_HTSEQEXON_FILELST")) {
 								OUTPUT_HTSEQEXON_FILELST = split[1];
 							}
+							
+							if (split[0].equalsIgnoreCase("OUTPUT_HTSEQINTRON_FILELST")) {
+								OUTPUT_HTSEQINTRON_FILELST = split[1];
+							}
+							
 							if (split[0].equalsIgnoreCase("OUTPUT_SPLICING_DEFICIENCY_FILELST")) {
 								OUTPUT_SPLICING_DEFICIENCY_FILELST = split[1];
 							}
@@ -238,6 +259,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (split[0].equalsIgnoreCase("SKIP_HTSEQ_EXON_QUANT")) {
 								SKIP_HTSEQ_EXON_QUANT = new Boolean(split[1]);
 							}
+							if (split[0].equalsIgnoreCase("SKIP_HTSEQ_INTRON_QUANT")) {
+								SKIP_HTSEQ_INTRON_QUANT = new Boolean(split[1]);
+							}
 							if (split[0].equalsIgnoreCase("SKIP_HTSEQ_GENE")) {
 								SKIP_HTSEQ_GENE = new Boolean(split[1]);
 							}
@@ -268,6 +292,14 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				fwriter_OUTPUT_HTSEQEXON_FILELST = new FileWriter(OUTPUT_HTSEQEXON_FILELST);
 				out_OUTPUT_HTSEQEXON_FILELST = new BufferedWriter(fwriter_OUTPUT_HTSEQEXON_FILELST);						
 			}
+			
+			FileWriter fwriter_OUTPUT_HTSEQINTRON_FILELST = null;
+			BufferedWriter out_OUTPUT_HTSEQINTRON_FILELST = null; 
+			if (!SKIP_HTSEQ_INTRON_QUANT) {
+				fwriter_OUTPUT_HTSEQINTRON_FILELST = new FileWriter(OUTPUT_HTSEQINTRON_FILELST);
+				out_OUTPUT_HTSEQINTRON_FILELST = new BufferedWriter(fwriter_OUTPUT_HTSEQINTRON_FILELST);						
+			}
+			
 			FileWriter fwriter_OUTPUT_RSEQC_FILELST = null;
 			BufferedWriter out_OUTPUT_RSEQC_FILELST = null;
 			if (!SKIP_RSEQC) {
@@ -1243,6 +1275,112 @@ public class WrappingMyRNAseqAnalysisPipeline {
 				}
 			}
 
+			
+			// generate script for HTSEQ INTRON
+			itr = sampleName_linkedList.iterator();
+			while (itr.hasNext()) {
+				String sampleName = (String)itr.next();
+				if (bam_path_map.containsKey(sampleName)) {
+					String bam_file_path = (String)bam_path_map.get(sampleName);
+					
+					if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
+						String htseq_exon_level_folder = outputFolder + "/" + sampleName + "/htseq_exon_level";
+						File htseq_exon_level_folder_f = new File(htseq_exon_level_folder);
+						if (!htseq_exon_level_folder_f.exists()) {
+							htseq_exon_level_folder_f.mkdir();
+						}
+			
+						String htseq_exon_level_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/htseq_intron_level";
+						File htseq_exon_level_intermediate_folder_f = new File(htseq_exon_level_intermediate_folder);
+						if (!htseq_exon_level_intermediate_folder_f.exists()) {
+							htseq_exon_level_intermediate_folder_f.mkdir();
+						}
+
+						String sampleName_htseq_lst = outputIntermediateFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".htseq.lst";
+						FileWriter fwriter_sampleName_htseq_lst = new FileWriter(sampleName_htseq_lst);
+						BufferedWriter out_sampleName_htseq_lst = new BufferedWriter(fwriter_sampleName_htseq_lst);
+						out_sampleName_htseq_lst.write(sampleName + ".htseq.rawcount");
+						out_sampleName_htseq_lst.close(); 
+						
+						String sampleName_exon_htseq_lst = outputIntermediateFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".exon.htseq.lst";
+						FileWriter fwriter_exon_sampleName_htseq_lst = new FileWriter(sampleName_exon_htseq_lst);
+						BufferedWriter out_exon_sampleName_htseq_lst = new BufferedWriter(fwriter_exon_sampleName_htseq_lst);
+						out_exon_sampleName_htseq_lst.write(sampleName + ".intron.htseq.rawcount");
+						out_exon_sampleName_htseq_lst.close(); 
+						
+						if (!SKIP_HTSEQ_INTRON_QUANT) {
+							String strand_direction = (String)strand_direction_map.get(sampleName);
+							String orientation = "no";
+							if (strand_direction.equalsIgnoreCase("fr-firststrand")) {
+								orientation = "yes";
+							} else if (strand_direction.equalsIgnoreCase("fr-secondstrand")) {
+								orientation = "reverse";
+							}
+							if (strand_direction.equalsIgnoreCase("yes")) {
+								orientation = "yes";
+							} else if (strand_direction.equalsIgnoreCase("reverse")) {
+								orientation = "reverse";
+							}
+							
+							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
+							string_buffer.append("## HTSEQ Intron Quant ##\n");
+							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/htseq_intron_level/" + "\n");					
+							string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t intron --nonunique all " + bam_file_path + " " + PRIMARY_GTF_EXON_REF + " > counts." + sampleName + ".exon.htseq.rawcount.txt\n");
+							
+							File htseq_gene_file = new File(outputFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.count.txt");
+							if (htseq_gene_file.exists()) {
+								string_buffer.append("cp " + outputFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.count.txt " + sampleName + ".htseq.count.txt\n");
+							} else {
+								if (SKIP_HTSEQ_GENE) {
+									string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t exon " + bam_file_path + " " + PRIMARY_GTF_REF + " > counts." + sampleName + ".htseq.rawcount.txt\n");
+									string_buffer.append("drppm -CombineHTSEQResultRaw " + sampleName + ".htseq.lst " + sampleName + ".htseq.count.txt\n");
+								} else {								
+									string_buffer.append("cp " + outputFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.count.txt " + sampleName + ".htseq.count.txt\n");
+								}
+							}
+							
+							string_buffer.append("drppm -CombineHTSEQResultRaw " + sampleName + ".exon.htseq.lst " + sampleName + ".intron.htseq.count.txt\n");
+							string_buffer.append("drppm -RawExonCount2CPMProteinFeatures " + PRIMARY_GTF_REF + " " + sampleName + ".intron.htseq.count.txt " + sampleName + ".htseq.count.txt " + sampleName + ".exon.htseq.cpm.txt " + sampleName + ".htseq.total.count.txt \n");							
+							
+							string_buffer.append("drppm -RPM2RPKMWithLengthReference " + PRIMARY_GTF_INTRON_LENGTH + " " + sampleName + ".intron.htseq.cpm.txt " + sampleName + ".intron.htseq.fpkm.txt 0 1\n");
+							string_buffer.append("drppm -RPM2RPKMWithLengthReference " + PRIMARY_GTF_INTRON_LENGTH + " " + sampleName + ".intron.htseq.count.txt " + sampleName + ".intron.htseq.length.txt 0 1\n");
+							string_buffer.append("drppm -RawCount2RPM " + sampleName + ".intron.htseq.length.txt " + sampleName + ".intron.htseq.tpm.txt\n");							
+							
+							//string_buffer.append("drppm -CombineHTSEQResultTotalFeatures " + sampleName + ".exon.htseq.lst " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.cpm.txt\n");
+							//string_buffer.append("drppm -RPM2RPKMExon " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.cpm.txt " + sampleName + ".exon.htseq.fpkm.txt\n");
+							//string_buffer.append("drppm -RPM2RPKMTranscript " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.count.txt " + sampleName + ".exon.htseq.length.txt\n");
+							//string_buffer.append("drppm -RawCount2RPM " + sampleName + ".exon.htseq.length.txt " + sampleName + ".exon.htseq.tpm.txt\n");
+							
+							//string_buffer.append("drppm -EnsemblGeneIDAppendAnnotation " + sampleName + ".exon.htseq.count.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.count.annotation.txt\n");
+							//string_buffer.append("drppm -EnsemblGeneIDAppendAnnotation " + sampleName + ".exon.htseq.cpm.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.cpm.annotation.txt\n");
+							//string_buffer.append("drppm -EnsemblGeneIDAppendAnnotation " + sampleName + ".exon.htseq.tpm.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.tpm.annotation.txt\n");
+							//string_buffer.append("drppm -EnsemblGeneIDAppendAnnotation " + sampleName + ".exon.htseq.fpkm.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.fpkm.annotation.txt\n");
+
+							//string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".exon.htseq.count.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.count.geneName.txt\n");
+							//string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".exon.htseq.cpm.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.cpm.geneName.txt\n");
+							//string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".exon.htseq.tpm.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.tpm.geneName.txt\n");
+							//string_buffer.append("drppm -EnsemblGeneID2GeneName " + sampleName + ".exon.htseq.fpkm.txt " + PRIMARY_GTF_EXON_REF + " " + sampleName + ".exon.htseq.fpkm.geneName.txt\n");
+							//string_buffer.append("drppm -MergeGeneName " + sampleName + ".exon.htseq.fpkm.ganeName.txt MAX " + sampleName + ".exon.htseq.fpkm.geneName.max.txt\n");
+							//string_buffer.append("drppm -MergeGeneName " + sampleName + ".exon.htseq.cpm.ganeName.txt MAX " + sampleName + ".exon.htseq.cpm.geneName.max.txt\n");
+							//string_buffer.append("drppm -MergeGeneName " + sampleName + ".exon.htseq.tpm.ganeName.txt MAX " + sampleName + ".exon.htseq.tpm.geneName.max.txt\n");
+							
+							string_buffer.append("cd " + current_working_dir + "\n");
+							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_intron_level/*" + " " + outputFolder + "/" + sampleName + "/htseq_intron_level/\n");
+							
+							out_OUTPUT_HTSEQEXON_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".intron.htseq.fpkm.txt" + "\t" + outputFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".intron.htseq.count.txt" + "\t" + outputFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".htseq.total.count.txt" + "\n");
+							
+							string_buffer.append("## END HTSEQ Intron Quant ##\n\n");
+							string_buffer_map.put(sampleName, string_buffer);
+						}
+					} else {
+						if (!SKIP_HTSEQ_EXON_QUANT) {
+							System.out.println("bam file for " + sampleName + " is missing... skipping the htseq exon pipeline...");
+						}
+					}
+				}
+			}
+						
+						
 			// generate script for RNAEDITING variants
 			itr = sampleName_linkedList.iterator();
 			while (itr.hasNext()) {
@@ -1412,6 +1550,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -ExtractQCMetricsSTAR271a " + OUTPUT_STARfinalout_FILELST + " " + outputFolder + "/star271a_qc_metric.txt\n");			
 			
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -GenerateAlyssaRGlobalSummaryScript " + outputFolder + "/" + "/global_qc_summary/input " + outputFolder + "/analysis_qc_summary\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("R --vanilla < globalsumm_v2.r\n");
+			
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("## Combine HTSEQ Gene level quantification ##\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQGENE_FILELST + " 1 1 " + outputFolder + "/htseq_gene_level_fpkm.txt\n");
@@ -1447,10 +1587,51 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNAs " + outputFolder + "/htseq_exon_level_count_T.txt" + " " + outputFolder + "/htseq_exon_level_count_T_removeNA.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNaN " + outputFolder + "/htseq_exon_level_count_T_removeNA.txt" + " " + outputFolder + "/htseq_exon_level_count_T_removeNAN.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mv " + outputFolder + "/htseq_exon_level_count_T_removeNAN.txt" + " " + outputFolder + "/htseq_exon_level_count_T.txt" + "\n");
+			
+			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("## Combine HTSEQ Intron level quantification ##\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQINTRON_FILELST + " 1 1 " + outputFolder + "/htseq_intron_level_fpkm.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -TransposeMatrixPython " + outputFolder + "/htseq_intron_level_fpkm.txt" + " " + outputFolder + "/htseq_intron_level_fpkm_T.txt transpose.py\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNAs " + outputFolder + "/htseq_intron_level_fpkm_T.txt" + " " + outputFolder + "/htseq_intron_level_fpkm_T_removeNA.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNaN " + outputFolder + "/htseq_intron_level_fpkm_T_removeNA.txt" + " " + outputFolder + "/htseq_intron_level_fpkm_T_removeNAN.txt\n");			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mv " + outputFolder + "/htseq_intron_level_fpkm_T_removeNAN.txt" + " " + outputFolder + "/htseq_intron_level_fpkm_T.txt" + "\n");
+			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -WRAPCombineFilesIntoMatrix " + OUTPUT_HTSEQINTRON_FILELST + " 2 1 " + outputFolder + "/htseq_intron_level_count.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -TransposeMatrixPython " + outputFolder + "/htseq_intron_level_count.txt" + " " + outputFolder + "/htseq_intron_level_count_T.txt transpose.py\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNAs " + outputFolder + "/htseq_intron_level_count_T.txt" + " " + outputFolder + "/htseq_intron_level_count_T_removeNA.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -RemoveColumnWithNaN " + outputFolder + "/htseq_intron_level_count_T_removeNA.txt" + " " + outputFolder + "/htseq_intron_level_count_T_removeNAN.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mv " + outputFolder + "/htseq_intron_level_count_T_removeNAN.txt" + " " + outputFolder + "/htseq_intron_level_count_T.txt" + "\n");
+			
+			
 			// 
 
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("## Combine Splice Summary ##\n");
+			
+			//cd /share/Lab_Shaw/projects/ShawLab/USP7_shRNA_A_Project/WRAP_PIPELINE_TEST/
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("##Read Count summary script \n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/ReadCountSummary.py -ht htseq_gene_files.lst -e htseq_exon_files.lst -s splicing_deficiency_files.lst -p psi_pso_files.lst\n");
+			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mkdir PostProcess_Output \n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mv {HTSEQ_Counts_Summary_Ensemble.txt,HTSEQ_Counts_Summary_Symbol.txt,HTSEQ_Exon_Counts_Summary.txt,HTSEQ_Exon_FPKM_Summary.txt,HTSEQ_FPKM_Summary_Ensemble.txt,HTSEQ_FPKM_Summary_Symbol.txt,PSI_3_prime_alt_spice_Summary.txt,PSI_5_prime_alt_spice_Summary.txt,PSI_Summary.txt,PSO_Summary.txt,Splicing_Deficiency_Summary_Ensemble.txt,Splicing_Deficiency_Summary_Symbol.txt} PostProcess_Output/\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("##PSI/PSO filtering script\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/ps_PostProcess.py -p PostProcess_Output/PSI_Summary.txt -o PostProcess_Output/PSI\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/ps_PostProcess.py -p PostProcess_Output/PSO_Summary.txt -o PostProcess_Output/PSO\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/ps_PostProcess.py -p PostProcess_Output/PSI_3_prime_alt_spice_Summary.txt -o PostProcess_Output/PSI_3pAS\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/ps_PostProcess.py -p PostProcess_Output/PSI_5_prime_alt_spice_Summary.txt -o PostProcess_Output/PSI_5pAS\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("##HTSEQ and PSI/PSO post processing script\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("#HTSEQ counts\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/htseq_ps_PostProcess.py -ht PostProcess_Output/HTSEQ_Counts_Summary_Symbol.txt -p PostProcess_Output/PSI_Summary_filtered.txt -oh PostProcess_Output/HTSEQcounts_psiProcessed.txt -op PostProcess_Output/PSI_htseqCountsProcessed.txt -om PostProcess_Output/merged_PSI_htseqCountsProcessed.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/htseq_ps_PostProcess.py -ht PostProcess_Output/HTSEQ_Counts_Summary_Symbol.txt -p PostProcess_Output/PSO_Summary_filtered.txt -oh PostProcess_Output/HTSEQcounts_psoProcessed.txt -op PostProcess_Output/PSO_htseqCountsProcessed.txt -om PostProcess_Output/merged_PSO_htseqCountsProcessed.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/htseq_ps_PostProcess.py -ht PostProcess_Output/HTSEQ_Counts_Summary_Symbol.txt -p PostProcess_Output/PSI_3_prime_alt_spice_Summary.txt -oh PostProcess_Output/HTSEQcounts_psi3pASProcessed.txt -op PostProcess_Output/PSI3pAS_htseqCountsProcessed.txt -om PostProcess_Output/merged_PSI3pAS_htseqCountsProcessed.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/htseq_ps_PostProcess.py -ht PostProcess_Output/HTSEQ_Counts_Summary_Symbol.txt -p PostProcess_Output/PSI_5_prime_alt_spice_Summary.txt -oh PostProcess_Output/HTSEQcounts_psi5pASProcessed.txt -op PostProcess_Output/PSI5pAS_htseqCountsProcessed.txt -om PostProcess_Output/merged_PSI5pAS_htseqCountsProcessed.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("#HTSEQ FPKM\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/htseq_ps_PostProcess.py -ht PostProcess_Output/HTSEQ_FPKM_Summary_Symbol.txt -p PostProcess_Output/PSI_Summary_filtered.txt -oh PostProcess_Output/HTSEQfpkm_psiProcessed.txt -op PostProcess_Output/PSI_htseqFPKMProcessed.txt -om PostProcess_Output/merged_PSI_htseqFPKMProcessed.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/htseq_ps_PostProcess.py -ht PostProcess_Output/HTSEQ_FPKM_Summary_Symbol.txt -p PostProcess_Output/PSO_Summary_filtered.txt -oh PostProcess_Output/HTSEQfpkm_psoProcessed.txt -op PostProcess_Output/PSO_htseqFPKMProcessed.txt -om PostProcess_Output/merged_PSO_htseqFPKMProcessed.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/htseq_ps_PostProcess.py -ht PostProcess_Output/HTSEQ_FPKM_Summary_Symbol.txt -p PostProcess_Output/PSI_3_prime_alt_spice_Summary.txt -oh PostProcess_Output/HTSEQfpkm_psi3pASProcessed.txt -op PostProcess_Output/PSI3pAS_htseqFPKMProcessed.txt -om PostProcess_Output/merged_PSI3pAS_htseqFPKMProcessed.txt\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/htseq_ps_PostProcess.py -ht PostProcess_Output/HTSEQ_FPKM_Summary_Symbol.txt -p PostProcess_Output/PSI_5_prime_alt_spice_Summary.txt -oh PostProcess_Output/HTSEQfpkm_psi5pASProcessed.txt -op PostProcess_Output/PSI5pAS_htseqFPKMProcessed.txt -om PostProcess_Output/merged_PSI5pAS_htseqFPKMProcessed.txt\n");
+
+			/*
 			// assumes all psi are spliced in
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -JuncSalvagerCombinePSIMatrixIndex " + OUTPUT_PSI_PSO_CALC_FILELST + " 1 1.0 0.3 " + outputFolder + "/psi_output.txt " + outputFolder + "/psi_blacklist_output.txt " + outputFolder + "/psi_output_final.txt\n");
 			
@@ -1465,7 +1646,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -CombineSplicingDeficiencyFlexIndex " + OUTPUT_SPLICING_DEFICIENCY_FILELST + " 1 " + outputFolder + "/splicing_deficiency_matrix_geneName.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -CombineSplicingDeficiencyFlexIndex " + OUTPUT_SPLICING_DEFICIENCY_FILELST + " 2 " + outputFolder + "/splicing_deficiency_matrix_geneID.txt\n");
-			
+			*/
 			// combining all the splicing deficiency shell
 			
 			// finally write out the shell script
