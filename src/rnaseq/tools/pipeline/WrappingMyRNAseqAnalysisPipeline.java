@@ -181,7 +181,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							if (split[0].equalsIgnoreCase("PRIMARY_GTF_EXON_LENGTH")) {
 								PRIMARY_GTF_EXON_LENGTH = split[1];
 							}
-							if (split[0].equalsIgnoreCase("PRIMARY_GTF_EXON_LENGTH")) {
+							if (split[0].equalsIgnoreCase("PRIMARY_GTF_INTRON_LENGTH")) {
 								PRIMARY_GTF_INTRON_LENGTH = split[1];
 							}
 							if (split[0].equalsIgnoreCase("RNAEDITING_VARIANTS")) {
@@ -1339,8 +1339,8 @@ public class WrappingMyRNAseqAnalysisPipeline {
 								}
 							}
 							
-							string_buffer.append("drppm -CombineHTSEQResultRaw " + sampleName + ".exon.htseq.lst " + sampleName + ".intron.htseq.count.txt\n");
-							string_buffer.append("drppm -RawExonCount2CPMProteinFeatures " + PRIMARY_GTF_REF + " " + sampleName + ".intron.htseq.count.txt " + sampleName + ".htseq.count.txt " + sampleName + ".exon.htseq.cpm.txt " + sampleName + ".htseq.total.count.txt \n");							
+							string_buffer.append("drppm -CombineHTSEQResultRaw " + sampleName + ".intron.htseq.lst " + sampleName + ".intron.htseq.count.txt\n");
+							string_buffer.append("drppm -RawExonCount2CPMProteinFeatures " + PRIMARY_GTF_REF + " " + sampleName + ".intron.htseq.count.txt " + sampleName + ".htseq.count.txt " + sampleName + ".intron.htseq.cpm.txt " + sampleName + ".htseq.total.count.txt \n");							
 							
 							string_buffer.append("drppm -RPM2RPKMWithLengthReference " + PRIMARY_GTF_INTRON_LENGTH + " " + sampleName + ".intron.htseq.cpm.txt " + sampleName + ".intron.htseq.fpkm.txt 0 1\n");
 							string_buffer.append("drppm -RPM2RPKMWithLengthReference " + PRIMARY_GTF_INTRON_LENGTH + " " + sampleName + ".intron.htseq.count.txt " + sampleName + ".intron.htseq.length.txt 0 1\n");
