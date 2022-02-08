@@ -1284,16 +1284,16 @@ public class WrappingMyRNAseqAnalysisPipeline {
 					String bam_file_path = (String)bam_path_map.get(sampleName);
 					
 					if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
-						String htseq_exon_level_folder = outputFolder + "/" + sampleName + "/htseq_exon_level";
-						File htseq_exon_level_folder_f = new File(htseq_exon_level_folder);
-						if (!htseq_exon_level_folder_f.exists()) {
-							htseq_exon_level_folder_f.mkdir();
+						String htseq_intron_level_folder = outputFolder + "/" + sampleName + "/htseq_intron_level";
+						File htseq_intron_level_folder_f = new File(htseq_intron_level_folder);
+						if (!htseq_intron_level_folder_f.exists()) {
+							htseq_intron_level_folder_f.mkdir();
 						}
 			
-						String htseq_exon_level_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/htseq_intron_level";
-						File htseq_exon_level_intermediate_folder_f = new File(htseq_exon_level_intermediate_folder);
-						if (!htseq_exon_level_intermediate_folder_f.exists()) {
-							htseq_exon_level_intermediate_folder_f.mkdir();
+						String htseq_intron_level_intermediate_folder = outputIntermediateFolder + "/" + sampleName + "/htseq_intron_level";
+						File htseq_intron_level_intermediate_folder_f = new File(htseq_intron_level_intermediate_folder);
+						if (!htseq_intron_level_intermediate_folder_f.exists()) {
+							htseq_intron_level_intermediate_folder_f.mkdir();
 						}
 
 						String sampleName_htseq_lst = outputIntermediateFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".htseq.lst";
@@ -1302,11 +1302,11 @@ public class WrappingMyRNAseqAnalysisPipeline {
 						out_sampleName_htseq_lst.write(sampleName + ".htseq.rawcount");
 						out_sampleName_htseq_lst.close(); 
 						
-						String sampleName_exon_htseq_lst = outputIntermediateFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".exon.htseq.lst";
-						FileWriter fwriter_exon_sampleName_htseq_lst = new FileWriter(sampleName_exon_htseq_lst);
-						BufferedWriter out_exon_sampleName_htseq_lst = new BufferedWriter(fwriter_exon_sampleName_htseq_lst);
-						out_exon_sampleName_htseq_lst.write(sampleName + ".intron.htseq.rawcount");
-						out_exon_sampleName_htseq_lst.close(); 
+						String sampleName_intron_htseq_lst = outputIntermediateFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".intron.htseq.lst";
+						FileWriter fwriter_intron_sampleName_htseq_lst = new FileWriter(sampleName_intron_htseq_lst);
+						BufferedWriter out_intron_sampleName_htseq_lst = new BufferedWriter(fwriter_intron_sampleName_htseq_lst);
+						out_intron_sampleName_htseq_lst.write(sampleName + ".intron.htseq.rawcount");
+						out_intron_sampleName_htseq_lst.close(); 
 						
 						if (!SKIP_HTSEQ_INTRON_QUANT) {
 							String strand_direction = (String)strand_direction_map.get(sampleName);
