@@ -1325,7 +1325,7 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							StringBuffer string_buffer = (StringBuffer)string_buffer_map.get(sampleName);
 							string_buffer.append("## HTSEQ Intron Quant ##\n");
 							string_buffer.append("cd " + outputIntermediateFolder + "/" + sampleName + "/htseq_intron_level/" + "\n");					
-							string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t intron --nonunique all " + bam_file_path + " " + PRIMARY_GTF_INTRON_REF + " > counts." + sampleName + ".exon.htseq.rawcount.txt\n");
+							string_buffer.append("htseq-count --quiet -f bam -r pos -a 0 -s " + orientation + " -m union -t intron --nonunique all " + bam_file_path + " " + PRIMARY_GTF_INTRON_REF + " > counts." + sampleName + ".intron.htseq.rawcount.txt\n");
 							
 							File htseq_gene_file = new File(outputFolder + "/" + sampleName + "/htseq_gene_level/" + sampleName + ".htseq.count.txt");
 							if (htseq_gene_file.exists()) {
