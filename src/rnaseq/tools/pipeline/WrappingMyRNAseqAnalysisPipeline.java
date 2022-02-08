@@ -1666,6 +1666,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			if (!SKIP_HTSEQ_EXON_QUANT) {
 				out_OUTPUT_HTSEQEXON_FILELST.close();
 			}
+			if (!SKIP_HTSEQ_INTRON_QUANT) {
+				out_OUTPUT_HTSEQINTRON_FILELST.close();
+			}
 			if (!SKIP_HTSEQ_GENE) {
 				out_OUTPUT_HTSEQGENE_FILELST.close();
 			}
