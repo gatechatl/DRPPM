@@ -46,10 +46,13 @@ public class WRAPConfigGenerator {
 			string_buffer.append("PRIMARY_GTF_EXON_LENGTH = /share/dept_bbsr/Projects/Shaw_Timothy/3352_Splicing_Pipeline_2021/references/hg38_release35_GRCh38.p13/pipeline/ExonReference/gencode.v35.primary_assembly.annotation.exon.length.txt");
 			string_buffer.append("# INTRON PIPELINE");
 			string_buffer.append("PRIMARY_GTF_INTRON_LENGTH = /share/dept_bbsr/Projects/Shaw_Timothy/3352_Splicing_Pipeline_2021/references/hg38_release35_GRCh38.p13/pipeline/IntronReference/gencode.v35.primary_assembly.intron.length.txt");
+			string_buffer.append("SUMMARY_SCRIPT_FOLDER_PATH = /share/Lab_Shaw/software/WRAP_SUMMARY/");
+			
 			string_buffer.append("# OUTPUT Files");
 			string_buffer.append("OUTPUT_HTSEQGENE_FILELST = htseq_gene_files.lst");
 			string_buffer.append("OUTPUT_RSEQC_FILELST = rseqc_files.lst");
 			string_buffer.append("OUTPUT_HTSEQEXON_FILELST = htseq_exon_files.lst");
+			string_buffer.append("OUTPUT_HTSEQINTRON_FILELST = htseq_intron_files.lst");
 			string_buffer.append("OUTPUT_STARfinalout_FILELST = star_finalout_files.lst");
 			string_buffer.append("OUTPUT_SPLICING_DEFICIENCY_FILELST = splicing_deficiency_files.lst");
 			string_buffer.append("OUTPUT_PSI_PSO_CALC_FILELST = psi_pso_files.lst");
@@ -79,6 +82,7 @@ public class WRAPConfigGenerator {
 			string_buffer.append("SKIP_PSI_PSO_CALC = false");
 			string_buffer.append("SKIP_SPLICING_DEFICIENCY = false");
 			string_buffer.append("SKIP_HTSEQ_EXON_QUANT = false");
+			string_buffer.append("SKIP_HTSEQ_INTRON_QUANT = false");
 			string_buffer.append("SKIP_HTSEQ_GENE = false");
 			string_buffer.append("SKIP_JUNCSALVAGER = false");
 			string_buffer.append("SKIP_RNAEDIT = true"); // skipping for now

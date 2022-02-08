@@ -1367,14 +1367,14 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("cd " + current_working_dir + "\n");
 							string_buffer.append("cp -r " + outputIntermediateFolder + "/" + sampleName + "/htseq_intron_level/*" + " " + outputFolder + "/" + sampleName + "/htseq_intron_level/\n");
 							
-							out_OUTPUT_HTSEQEXON_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".intron.htseq.fpkm.txt" + "\t" + outputFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".intron.htseq.count.txt" + "\t" + outputFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".htseq.total.count.txt" + "\n");
+							out_OUTPUT_HTSEQINTRON_FILELST.write(sampleName + "\t" + outputFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".intron.htseq.fpkm.txt" + "\t" + outputFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".intron.htseq.count.txt" + "\t" + outputFolder + "/" + sampleName + "/htseq_intron_level/" + sampleName + ".htseq.total.count.txt" + "\n");
 							
 							string_buffer.append("## END HTSEQ Intron Quant ##\n\n");
 							string_buffer_map.put(sampleName, string_buffer);
 						}
 					} else {
-						if (!SKIP_HTSEQ_EXON_QUANT) {
-							System.out.println("bam file for " + sampleName + " is missing... skipping the htseq exon pipeline...");
+						if (!SKIP_HTSEQ_INTRON_QUANT) {
+							System.out.println("bam file for " + sampleName + " is missing... skipping the htseq intron pipeline...");
 						}
 					}
 				}
