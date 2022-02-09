@@ -1631,6 +1631,12 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/htseq_ps_PostProcess.py -ht PostProcess_Output/HTSEQ_FPKM_Summary_Symbol.txt -p PostProcess_Output/PSI_3_prime_alt_spice_Summary.txt -oh PostProcess_Output/HTSEQfpkm_psi3pASProcessed.txt -op PostProcess_Output/PSI3pAS_htseqFPKMProcessed.txt -om PostProcess_Output/merged_PSI3pAS_htseqFPKMProcessed.txt\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/htseq_ps_PostProcess.py -ht PostProcess_Output/HTSEQ_FPKM_Summary_Symbol.txt -p PostProcess_Output/PSI_5_prime_alt_spice_Summary.txt -oh PostProcess_Output/HTSEQfpkm_psi5pASProcessed.txt -op PostProcess_Output/PSI5pAS_htseqFPKMProcessed.txt -om PostProcess_Output/merged_PSI5pAS_htseqFPKMProcessed.txt\n");
 
+			
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -STARPostProteinPaintSplicingTrackGenerateScript " + OUTPUT_STARfinalout_FILELST + " generate_protein_paint_junction.sh\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("sh generate_protein_paint_junction.sh\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mkdir " + outputFolder + "/ProteinPaintOutput/\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("cp " + outputFolder + "/*/star/*pptab* " + outputFolder + "/ProteinPaintOutput/\n");
+			
 			/*
 			// assumes all psi are spliced in
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -JuncSalvagerCombinePSIMatrixIndex " + OUTPUT_PSI_PSO_CALC_FILELST + " 1 1.0 0.3 " + outputFolder + "/psi_output.txt " + outputFolder + "/psi_blacklist_output.txt " + outputFolder + "/psi_output_final.txt\n");
