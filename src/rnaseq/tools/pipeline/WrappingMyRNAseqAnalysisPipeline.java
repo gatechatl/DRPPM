@@ -1632,7 +1632,9 @@ public class WrappingMyRNAseqAnalysisPipeline {
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("python " + SUMMARY_SCRIPT_FOLDER_PATH + "/htseq_ps_PostProcess.py -ht PostProcess_Output/HTSEQ_FPKM_Summary_Symbol.txt -p PostProcess_Output/PSI_5_prime_alt_spice_Summary.txt -oh PostProcess_Output/HTSEQfpkm_psi5pASProcessed.txt -op PostProcess_Output/PSI5pAS_htseqFPKMProcessed.txt -om PostProcess_Output/merged_PSI5pAS_htseqFPKMProcessed.txt\n");
 
 			
-			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -STARPostProteinPaintSplicingTrackGenerateScript " + OUTPUT_STARfinalout_FILELST + " generate_protein_paint_junction.sh\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("#GENERATE THE PROTEINPAINT TRACK\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("ls " + outputFolder + "/*/star/*SJ.out.tab > SJ.out.tab.lst\n");
+			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("drppm -STARPostProteinPaintSplicingTrackGenerateScript SJ.out.tab.lst generate_protein_paint_junction.sh\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("sh generate_protein_paint_junction.sh\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("mkdir " + outputFolder + "/ProteinPaintOutput/\n");
 			out_OUTPUT_TO_MATRIX_SHELL_SCRIPT.write("cp " + outputFolder + "/*/star/*pptab* " + outputFolder + "/ProteinPaintOutput/\n");
