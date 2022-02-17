@@ -53,7 +53,7 @@ public class GTFAnnotateExonLength {
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));					
 			while (in.ready()) {
 				String str = in.readLine().trim();
-				if (!str.substring(0, 2).equals("##")) {
+				if (!str.substring(0, 1).equals("#")) {
 					String[] split = str.split("\t");
 					
 					String geneType = split[2];

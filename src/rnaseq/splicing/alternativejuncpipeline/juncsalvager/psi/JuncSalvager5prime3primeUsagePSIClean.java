@@ -274,10 +274,12 @@ public class JuncSalvager5prime3primeUsagePSIClean {
 	public static String grabMeta(String text, String id) {
 		String returnval = "";
 		if (text.contains(id)) {
-			String val = text.split(id)[1].split(";")[0].trim();
-			val = val.replaceAll("\"", "");
-			val.trim();
-			returnval = val;
+			if (text.split(id).length > 1) {
+				String val = text.split(id)[1].split(";")[0].trim();
+				val = val.replaceAll("\"", "");
+				val.trim();
+				returnval = val;
+			}
 		}
 		return returnval;
 	}

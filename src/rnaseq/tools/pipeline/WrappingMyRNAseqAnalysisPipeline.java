@@ -790,10 +790,33 @@ public class WrappingMyRNAseqAnalysisPipeline {
 							string_buffer.append("## END generating bam index ##\n\n");
 						}
 					}
-					if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
-						bam_path_map.put(sampleName, bam_file_path);
+					if (bam_path_map.containsKey(sampleName)) {
+						String path = (String)bam_path_map.get(sampleName);
+						if (path.equals("NA")) {
+							if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
+								bam_path_map.put(sampleName, bam_file_path);
+							} else {
+								
+								String bam_file_path2 = outputFolder + "/" + sampleName + "/star/" + sampleName + ".Aligned.sortedByCoord.out.bam";
+								if ((new File(bam_file_path2)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
+									bam_path_map.put(sampleName, bam_file_path2);
+								} else {
+									bam_path_map.put(sampleName, "NA");
+								}
+							}
+						}
 					} else {
-						bam_path_map.put(sampleName, "NA");
+						if ((new File(bam_file_path)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
+							bam_path_map.put(sampleName, bam_file_path);
+						} else {
+							
+							String bam_file_path2 = outputFolder + "/" + sampleName + "/star/" + sampleName + ".Aligned.sortedByCoord.out.bam";
+							if ((new File(bam_file_path2)).exists() || remapping || type.equalsIgnoreCase("FASTQ")) {
+								bam_path_map.put(sampleName, bam_file_path2);
+							} else {
+								bam_path_map.put(sampleName, "NA");
+							}
+						}
 					}
 					if ((new File(bam_file.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab"))).exists()) {
 						String orig_sj_tab = bam_file.replaceAll(".Aligned.sortedByCoord.out.bam", ".SJ.out.tab");
