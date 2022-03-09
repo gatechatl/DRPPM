@@ -267,6 +267,7 @@ import misc.RunRScript;
 import misc.SplitFileByCols;
 import misc.SplitFileByRows;
 import misc.stjude.fileprocessing.CleanupStJudeSampleName;
+import misc.tcga.datacleaning.TCGACleanGeneSymbols;
 import misc.test.ReadEnsemblGTFFile;
 import misc.test.Test;
 import misc.textmining.software.annotation.WebTextMining;
@@ -12190,6 +12191,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				GTExProcessPSMPeptidesPipeline.execute(args_remain);
+				System.exit(0);
+				// TCGACleanGeneSymbols
+			} else if (type.equalsIgnoreCase("-TCGACleanGeneSymbols")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -TCGACleanGeneSymbols "
+							+ TCGACleanGeneSymbols.parameter_info());
+					System.exit(0);
+				}
+				TCGACleanGeneSymbols.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

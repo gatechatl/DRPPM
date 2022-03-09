@@ -69,6 +69,7 @@ import misc.RemoveQuotations;
 import misc.SplitFileByCols;
 import misc.SplitFileByRows;
 import misc.stjude.fileprocessing.CleanupStJudeSampleName;
+import misc.tcga.datacleaning.TCGACleanGeneSymbols;
 import misc.textmining.software.annotation.WebTextMining;
 import idconversion.cross_species.AppendHuman2Mouse;
 import idconversion.cross_species.AppendMouse2Human;
@@ -2977,7 +2978,10 @@ public class ProgramDescriptions {
 		if (GTExProcessPSMPeptidesPipeline.type().equals(type)) {
 			result += "GTExProcessPSMPeptidesPipeline: " + GTExProcessPSMPeptidesPipeline.description() + "\n";
 		}
+		if (TCGACleanGeneSymbols.type().equals(type)) {
+			result += "TCGACleanGeneSymbols: " + TCGACleanGeneSymbols.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2022-0309A";	
+	public static String VERSION = "2022-0309B";	
 }
