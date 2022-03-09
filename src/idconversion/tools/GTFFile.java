@@ -20,6 +20,7 @@ public class GTFFile {
 	public static HashMap transcript_clean2gene_clean = new HashMap();
 	public static HashMap transcript_clean2gene = new HashMap();
 	public static HashMap transcript2biotype = new HashMap();
+	public static HashMap transcript_clean2biotype = new HashMap();
 	public static HashMap transcript2exon = new HashMap();
 	public static HashMap transcript2exon_num = new HashMap();
 	public static HashMap transcript2coord_exon = new HashMap();
@@ -139,7 +140,7 @@ public class GTFFile {
 						geneid2biotype.put(gene_id, biotype);
 						geneName2biotype.put(gene_name, biotype);
 						transcript2biotype.put(transcript_id, biotype);
-						
+						transcript_clean2biotype.put(transcript_id.split("\\.")[0], biotype);
 						
 						if (gene2transcript.containsKey(gene_id)) {
 							String orig_transcript = (String)gene2transcript.get(gene_id);							
@@ -311,7 +312,7 @@ public class GTFFile {
 					geneid2biotype.put(gene_id, biotype);
 					geneName2biotype.put(gene_name, biotype);
 					transcript2biotype.put(transcript_id, biotype);
-					
+					transcript_clean2biotype.put(transcript_id.split("\\.")[0], biotype);
 					if (gene2transcript.containsKey(gene_id)) {
 						String orig_transcript = (String)gene2transcript.get(gene_id);
 						if (!orig_transcript.contains(transcript_id)) {

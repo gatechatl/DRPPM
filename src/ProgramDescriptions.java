@@ -422,6 +422,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelaltstart.WRAPJu
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerConvert2GTFFriendlyBED;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerTranslateFasta;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.JuncSalvagerValidateNovelExonAndGeneratePeptide;
+import rnaseq.splicing.alternativejuncpipeline.juncsalvager.novelexon.WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombine3primePSIMatrixIndex;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombine5primePSIMatrixIndex;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerCombinePSIMatrix;
@@ -2880,6 +2881,9 @@ public class ProgramDescriptions {
 		if (WRAPJuncSalvagerValidateAltStartAndGeneratePeptide.type().equals(type)) {
 			result += "WRAPJuncSalvagerValidateAltStartAndGeneratePeptide: " + WRAPJuncSalvagerValidateAltStartAndGeneratePeptide.description() + "\n";
 		}
+		if (WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide.type().equals(type)) {
+			result += "WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide: " + WRAPJuncSalvagerValidateNovelExonAndGeneratePeptide.description() + "\n";
+		}
 		if (WRAPCombineFilesIntoMatrix.type().equals(type)) {
 			result += "WRAPCombineFilesIntoMatrix: " + WRAPCombineFilesIntoMatrix.description() + "\n";
 		}
@@ -2975,5 +2979,5 @@ public class ProgramDescriptions {
 		}
 		return result;
 	}	
-	public static String VERSION = "2022-0217A";	
+	public static String VERSION = "2022-0309A";	
 }

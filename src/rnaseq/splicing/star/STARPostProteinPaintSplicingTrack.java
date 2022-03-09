@@ -19,7 +19,7 @@ public class STARPostProteinPaintSplicingTrack {
 		return "Takes in the sj.out.tab and output\n";
 	}
 	public static String parameter_info() {
-		return "[STAR SJ file] [output6coltab]";
+		return "[STAR SJ file] [output6coltab] [optional: add_chr_flag true/false]";
 	}
 	public static void execute(String[] args) {
 		
@@ -27,7 +27,10 @@ public class STARPostProteinPaintSplicingTrack {
 			
 			String sj_out_tab_file = args[0];
 			String output6coltab = args[1];
-			
+			boolean add_chr_flag = false;
+			if (args.length > 2) {
+				add_chr_flag = new Boolean(args[2]);
+			}
 			FileWriter fwriter_uniq = new FileWriter(output6coltab + "uniq");
 			BufferedWriter out_uniq = new BufferedWriter(fwriter_uniq);
 			
@@ -79,6 +82,9 @@ public class STARPostProteinPaintSplicingTrack {
 				String count_uniq = split[7];
 				String count_multi = split[8];
 				int total_reads = new Integer(count_uniq) + new Integer(count_multi);
+				if (!chr.contains("chr") && add_chr_flag) {
+					chr = "chr" + chr;
+				}
 				if (new Double(count_uniq) > 0) {
 					out_uniq.write(chr + "\t" + junction1_position + "\t" + junction2_position + "\t" + junction1_direction + "\t" + type + "_" + known + "\t" + count_uniq + "\n");
 				}

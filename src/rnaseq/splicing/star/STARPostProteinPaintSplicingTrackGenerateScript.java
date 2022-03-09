@@ -17,7 +17,7 @@ public class STARPostProteinPaintSplicingTrackGenerateScript {
 		return "Takes in a list of sj.out.tab and generate a shell script for execution\n";
 	}
 	public static String parameter_info() {
-		return "[STAR SJ file Lst] [shell script]";
+		return "[STAR SJ file Lst] [shell script] [boolean: add chr]";
 	}
 	public static void execute(String[] args) {
 		
@@ -25,7 +25,11 @@ public class STARPostProteinPaintSplicingTrackGenerateScript {
 			
 			String inputFileLst = args[0];
 			String shell_script = args[1];
-			
+			String add_chr_flag = args[2];
+			String add_chr_flag_str = "false";
+			if (add_chr_flag.equalsIgnoreCase("TRUE") || add_chr_flag.equalsIgnoreCase("YES")) {
+				add_chr_flag_str = "true";
+			}
 
 			FileWriter fwriter = new FileWriter(shell_script);
 			BufferedWriter out = new BufferedWriter(fwriter);
@@ -36,7 +40,7 @@ public class STARPostProteinPaintSplicingTrackGenerateScript {
 			while (in.ready()) {
 				String str = in.readLine().trim();
 				String[] split = str.split("\t");
-				out.write("drppm -STARPostProteinPaintSplicingTrack " + split[0] + " " + split[0] + ".pptab\n");
+				out.write("drppm -STARPostProteinPaintSplicingTrack " + split[0] + " " + split[0] + ".pptab " + add_chr_flag_str + "\n");
 			}
 			in.close();
 			out.close();
