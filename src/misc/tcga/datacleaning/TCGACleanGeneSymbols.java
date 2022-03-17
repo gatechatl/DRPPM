@@ -23,9 +23,9 @@ public class TCGACleanGeneSymbols {
 	public static void execute(String[] args) {
 		
 		try {
-			String inputFile = "/Users/4472414/Projects/TCGA/LUAD_EBPlusPlusAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.tsv";
+			String inputFile = args[0]; //"/Users/4472414/Projects/TCGA/LUAD_EBPlusPlusAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.tsv";
 					//+ "/Users/4472414/Projects/TCGA"; //args[0];
-			String outputFile = "/Users/4472414/Projects/TCGA/LUAD_EBPlusPlusAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.clean.tsv";
+			String outputFile = args[1]; //"/Users/4472414/Projects/TCGA/LUAD_EBPlusPlusAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.clean.tsv";
 					//+ "/Users/4472414/Projects/TCGA"; //args[1];
 			
 			FileWriter fwriter = new FileWriter(outputFile);

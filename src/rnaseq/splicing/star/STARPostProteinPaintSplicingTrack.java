@@ -79,8 +79,8 @@ public class STARPostProteinPaintSplicingTrack {
 					known = "known";
 				}
 				
-				String count_uniq = split[7];
-				String count_multi = split[8];
+				String count_uniq = split[6];
+				String count_multi = split[7];
 				int total_reads = new Integer(count_uniq) + new Integer(count_multi);
 				if (!chr.contains("chr") && add_chr_flag) {
 					chr = "chr" + chr;
