@@ -257,6 +257,7 @@ import misc.Matrix2Log2NoNeg;
 import misc.MergeGeneName;
 import misc.MergeGeneNameClean;
 import misc.MergeGeneNameMAXFast;
+import misc.MoffittFixingDuplicatedCounts;
 import misc.OverlapTwoFiles;
 import misc.RemoveChrYGenesBasedOnGTF;
 import misc.RemoveNoncodingRNA;
@@ -12201,6 +12202,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				TCGACleanGeneSymbols.execute(args_remain);
+				System.exit(0);
+				// MoffittFixingDuplicatedCounts
+			} else if (type.equalsIgnoreCase("-MoffittFixingDuplicatedCounts")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -MoffittFixingDuplicatedCounts "
+							+ MoffittFixingDuplicatedCounts.parameter_info());
+					System.exit(0);
+				}
+				MoffittFixingDuplicatedCounts.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {
