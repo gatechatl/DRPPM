@@ -63,6 +63,7 @@ import misc.Matrix2Log2NoNeg;
 import misc.MergeGeneName;
 import misc.MergeGeneNameClean;
 import misc.MergeGeneNameMAXFast;
+import misc.MoffittFixingDuplicatedCounts;
 import misc.OverlapTwoFiles;
 import misc.RemoveChrYGenesBasedOnGTF;
 import misc.RemoveQuotations;
@@ -2981,7 +2982,10 @@ public class ProgramDescriptions {
 		if (TCGACleanGeneSymbols.type().equals(type)) {
 			result += "TCGACleanGeneSymbols: " + TCGACleanGeneSymbols.description() + "\n";
 		}
+		if (MoffittFixingDuplicatedCounts.type().equals(type)) {
+			result += "MoffittFixingDuplicatedCounts: " + MoffittFixingDuplicatedCounts.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2022-0317B";	
+	public static String VERSION = "2022-0317C";	
 }

@@ -71,6 +71,12 @@ public class MoffittFixingDuplicatedCounts {
 					}
 					in2.close();
 					out2.close();
+					
+					File delete_f = new File(inputFile + ".tmp");
+					if (delete_f.exists()) {
+						delete_f.delete();
+					}
+					
 				}
 			}
 			
