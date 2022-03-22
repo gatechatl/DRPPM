@@ -820,5 +820,6 @@ public class SearchProgram {
 		search_program.add("GTExProcessPSMPeptidesPipeline");
 		search_program.add("TCGACleanGeneSymbols");
 		search_program.add("MoffittFixingDuplicatedCounts");
+		search_program.add("EnsemblGeneIDAppendAnnotationFlex");
 	}
 }

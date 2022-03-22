@@ -119,7 +119,7 @@ public class JuncSalvagerExonSkippingPSI {
 				int multi_read = new Integer(split[7]);
 				int total_read = uniq_read + multi_read;
 				
-				for (int i = 0; i <= buffer; i++) {
+				for (int i = -buffer; i <= buffer; i++) {
 					if (exon_left.containsKey(chr + "\t" + (intron_right + i))) {
 						int prev_read = (Integer)exon_left.get(chr + "\t" + (intron_right + i));
 						if (include_multi_mapped_false) {
@@ -130,7 +130,7 @@ public class JuncSalvagerExonSkippingPSI {
 						exon_left.put(chr + "\t" + (intron_right + i), prev_read);
 					}
 				}
-				for (int i = 0; i <= buffer; i++) {
+				for (int i = -buffer; i <= buffer; i++) {
 					if (exon_right.containsKey(chr + "\t" + (intron_left - i))) {
 						int prev_read = (Integer)exon_right.get(chr + "\t" + (intron_left - i));
 						if (include_multi_mapped_false) {
