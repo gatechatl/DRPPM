@@ -123,6 +123,7 @@ import idconversion.tools.EnsemblGeneID2GeneName;
 import idconversion.tools.EnsemblGeneID2GeneNameXenograft;
 import idconversion.tools.EnsemblGeneIDAppendAnnotation;
 import idconversion.tools.EnsemblGeneIDAppendAnnotationCoord;
+import idconversion.tools.EnsemblGeneIDAppendAnnotationFlex;
 import idconversion.tools.EnsemblGeneIDAppendGeneName;
 import idconversion.tools.EnsemblTranscriptID2GeneNameAppendCoord;
 import idconversion.tools.EnsemblTranscriptID2GeneNameAppened;
@@ -12212,6 +12213,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				MoffittFixingDuplicatedCounts.execute(args_remain);
+				System.exit(0);
+				// EnsemblGeneIDAppendAnnotationFlex
+			} else if (type.equalsIgnoreCase("-EnsemblGeneIDAppendAnnotationFlex")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -EnsemblGeneIDAppendAnnotationFlex "
+							+ EnsemblGeneIDAppendAnnotationFlex.parameter_info());
+					System.exit(0);
+				}
+				EnsemblGeneIDAppendAnnotationFlex.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {

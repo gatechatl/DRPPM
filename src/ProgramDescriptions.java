@@ -85,6 +85,7 @@ import idconversion.tools.EnsemblGeneID2GeneName;
 import idconversion.tools.EnsemblGeneID2GeneNameXenograft;
 import idconversion.tools.EnsemblGeneIDAppendAnnotation;
 import idconversion.tools.EnsemblGeneIDAppendAnnotationCoord;
+import idconversion.tools.EnsemblGeneIDAppendAnnotationFlex;
 import idconversion.tools.EnsemblGeneIDAppendGeneName;
 import idconversion.tools.EnsemblTranscriptID2GeneNameAppendCoord;
 import idconversion.tools.EnsemblTranscriptID2GeneNameAppened;
@@ -2984,6 +2985,9 @@ public class ProgramDescriptions {
 		}
 		if (MoffittFixingDuplicatedCounts.type().equals(type)) {
 			result += "MoffittFixingDuplicatedCounts: " + MoffittFixingDuplicatedCounts.description() + "\n";
+		}
+		if (EnsemblGeneIDAppendAnnotationFlex.type().equals(type)) {
+			result += "EnsemblGeneIDAppendAnnotationFlex: " + EnsemblGeneIDAppendAnnotationFlex.description() + "\n";
 		}
 		return result;
 	}	

@@ -27,7 +27,7 @@ public class MoffittFixingDuplicatedCounts {
 			String folder = args[0];
 			File files = new File(folder);
 			for (File f: files.listFiles()) {
-				if (f.getName().contains("SJ.out.tab")) {
+				if (f.getName().contains("SJ.out.tab") && !f.getName().contains("tmp")) {
 					
 					String inputFile = f.getPath();
 					String outputFile = inputFile + ".tmp";

@@ -27,17 +27,20 @@ public class SpliceWRAPCustomDatabaseGeneral {
 
 
 			//String outputFile_pit_lookup = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetention/JD_IntronRetentionDatabase.lookup.txt";
-			String outputFile_pit_lookup = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetentionV2/JD_IntronRetentionDatabase.lookup.txt";
+			//String outputFile_pit_lookup = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetentionV2/JD_IntronRetentionDatabase.lookup.txt";
+			String outputFile_pit_lookup = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetentionV3/JD_IntronRetentionDatabase.lookup.txt";
 			FileWriter fwriter_pit_lookup = new FileWriter(outputFile_pit_lookup);
 			BufferedWriter out_pit_lookup = new BufferedWriter(fwriter_pit_lookup);
 			
 			//String outputFile_pit = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetention/JD_IntronRetentionDatabase.pit";
-			String outputFile_pit = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetentionV2/JD_IntronRetentionDatabase.pit";
+			//String outputFile_pit = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetentionV2/JD_IntronRetentionDatabase.pit";
+			String outputFile_pit = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetentionV3/JD_IntronRetentionDatabase.pit";
 			FileWriter fwriter_pit = new FileWriter(outputFile_pit);
 			BufferedWriter out_pit = new BufferedWriter(fwriter_pit);
 			
 			//String outputFile_fasta = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetention/JD_IntronRetentionDatabase.pit.fasta";
-			String outputFile_fasta = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetentionV2/JD_IntronRetentionDatabase.pit.fasta";
+			//String outputFile_fasta = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetentionV2/JD_IntronRetentionDatabase.pit.fasta";
+			String outputFile_fasta = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetentionV3/JD_IntronRetentionDatabase.pit.fasta";
 			FileWriter fwriter_fasta = new FileWriter(outputFile_fasta);
 			BufferedWriter out_fasta = new BufferedWriter(fwriter_fasta);
 			
@@ -52,7 +55,8 @@ public class SpliceWRAPCustomDatabaseGeneral {
 			String transcript_id = "";
 			HashMap sequence = new HashMap();
 			//String inputFasta = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetention/dr_vs_ndr_yescarta_intron_seqs_emboss_50bpFlank.pep.flat";
-			String inputFasta = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetentionV2/combined.pep.fasta";
+			//String inputFasta = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetentionV2/combined.pep.fasta";
+			String inputFasta = "/Users/4472414/Projects/CustomProteinDatabase/JUMPdatabaseIntronRetentionV3/combined.pep.fasta";
 			FileInputStream fstream = new FileInputStream(inputFasta);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
