@@ -47,7 +47,7 @@ public class JuncSalvagerGeneratePSIScriptClean {
 				if (f.exists()) {
 					// added multimapped reads
 					out.write("drppm -JuncSalvagerExonSkippingPSIClean " + str + " " + gtfFile + " 5 " + outputFolder + "/" + f.getName() + ".pso.clean.txt" + " " + outputFolder + "/" + f.getName() + ".psi.clean.txt true" + "\n");
-					out.write("drppm -JuncSalvager5prime3primeUsagePSIClean " + str + " " + gtfFile + " 0 " + outputFolder + "/" + f.getName() + ".PSI_5_prime_alt_spice.clean.txt " + outputFolder + "/" + f.getName() + ".PSI_3_prime_alt_spice.clean.txt true" + "\n");
+					out.write("drppm -JuncSalvager5prime3primeUsagePSIClean " + str + " " + gtfFile + " 3 " + outputFolder + "/" + f.getName() + ".PSI_5_prime_alt_spice.clean.txt " + outputFolder + "/" + f.getName() + ".PSI_3_prime_alt_spice.clean.txt true" + "\n");
 					//System.out.println("drppm -JuncSalvagerExonSkippingPSI " + fileLst + " " + gtfFile + " " + outputFolder + "/" + f.getName() + ".psi.txt");
 				} else {
 					System.out.println("Warning! File doesn't exist: " + f.getPath());
