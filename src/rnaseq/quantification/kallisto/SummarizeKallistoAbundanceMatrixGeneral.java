@@ -45,6 +45,7 @@ public class SummarizeKallistoAbundanceMatrixGeneral {
 				FileInputStream fstream2 = new FileInputStream(abundance_path);
 				DataInputStream din2 = new DataInputStream(fstream2);
 				BufferedReader in2 = new BufferedReader(new InputStreamReader(din2));
+				in2.readLine();
 				while (in2.ready()) {
 					String str2 = in2.readLine();
 					String[] split2 = str2.split("\t");
@@ -68,6 +69,7 @@ public class SummarizeKallistoAbundanceMatrixGeneral {
 				FileInputStream fstream2 = new FileInputStream(abundance_path);
 				DataInputStream din2 = new DataInputStream(fstream2);
 				BufferedReader in2 = new BufferedReader(new InputStreamReader(din2));
+				in2.readLine();
 				while (in2.ready()) {
 					String str2 = in2.readLine();
 					String[] split2 = str2.split("\t");
