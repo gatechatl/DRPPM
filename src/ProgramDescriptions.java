@@ -398,6 +398,7 @@ import rnaseq.quantification.kallisto.GenerateScriptForKallisto;
 import rnaseq.quantification.kallisto.KallistoGenerateCountFile;
 import rnaseq.quantification.kallisto.KallistoGenerateCountFileWithReference;
 import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrix;
+import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrixGeneral;
 import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrixSampleCol;
 import rnaseq.splicing.alternativejuncpipeline.exongtf.AlternativeJuncGTFFileGenerator;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.CombineSplicingDeficiencyFlexIndex;
@@ -2989,7 +2990,10 @@ public class ProgramDescriptions {
 		if (EnsemblGeneIDAppendAnnotationFlex.type().equals(type)) {
 			result += "EnsemblGeneIDAppendAnnotationFlex: " + EnsemblGeneIDAppendAnnotationFlex.description() + "\n";
 		}
+		if (SummarizeKallistoAbundanceMatrixGeneral.type().equals(type)) {
+			result += "SummarizeKallistoAbundanceMatrixGeneral: " + SummarizeKallistoAbundanceMatrixGeneral.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2022-0322C";	
+	public static String VERSION = "2022-0408A";	
 }

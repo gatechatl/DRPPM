@@ -725,6 +725,7 @@ public class SearchProgram {
 		search_program.add("RawCount2RPMProteinFeatures");
 		search_program.add("GenerateScriptForKallisto");
 		search_program.add("SummarizeKallistoAbundanceMatrix");
+		search_program.add("SummarizeKallistoAbundanceMatrixGeneral");
 		search_program.add("TransposeMatrixSplit");
 		search_program.add("SummarizeKallistoAbundanceMatrixSampleCol");
 		search_program.add("TransposeMatrixPython");
