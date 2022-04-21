@@ -610,6 +610,7 @@ import rnaseq.quantification.kallisto.KallistoGenerateCountFile;
 import rnaseq.quantification.kallisto.KallistoGenerateCountFileWithReference;
 import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrix;
 import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrixGeneral;
+import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrixGeneralCount;
 import rnaseq.quantification.kallisto.SummarizeKallistoAbundanceMatrixSampleCol;
 import rnaseq.splicing.alternativejuncpipeline.exongtf.AlternativeJuncGTFFileGenerator;
 import rnaseq.splicing.alternativejuncpipeline.intronretention.Bam2BedConversion;
@@ -4624,7 +4625,18 @@ public class DRPPM {
 				}
 				SummarizeKallistoAbundanceMatrixGeneral.execute(args_remain);
 				System.exit(0);
-				// SummarizeKallistoAbundanceMatrixGeneral
+				// SummarizeKallistoAbundanceMatrixGeneralCount
+			} else if (type.equalsIgnoreCase("-SummarizeKallistoAbundanceMatrixGeneralCount")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {					
+					System.out.println("drppm -SummarizeKallistoAbundanceMatrixGeneralCount "
+							+ SummarizeKallistoAbundanceMatrix.parameter_info());
+					System.out.println("Description: " + SummarizeKallistoAbundanceMatrixGeneralCount.description());
+					System.exit(0);
+				}
+				SummarizeKallistoAbundanceMatrixGeneralCount.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-KallistoGenerateCountFile")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {					
