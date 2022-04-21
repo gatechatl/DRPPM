@@ -40,7 +40,7 @@ public class MergeGeneName {
 		return "For genes with multiple expression value, take the mean or median expression value";
 	}
 	public static String parameter_info() {
-		return "[InputFile] [MEDIAN/AVERAGE/MAX][OutputFile] [boolean: true/false quotation or no quoatation]";
+		return "[InputFile] [MEDIAN/AVERAGE/MAX/SUM][OutputFile] [boolean: true/false quotation or no quoatation]";
 	}
 	public static void execute(String[] args) {
 		
@@ -65,6 +65,8 @@ public class MergeGeneName {
 				captureMean(inputFile, outputFile, id, quotation);
 			} else if (type.toUpperCase().equals("MAX")) {
 				captureMax(inputFile, outputFile, id, quotation);
+			} else if (type.toUpperCase().equals("SUM")) {
+				captureSum(inputFile, outputFile, id, quotation);
 			} else {
 				System.out.println("please use the following parameter: " + parameter_info());
 				System.out.println("Please select either: MEDIAN, AVERAGE, MAX");
@@ -151,6 +153,86 @@ public class MergeGeneName {
 							}
 							
 							newStr += "\t" + MathTools.mean(values);
+						}
+						result.put(key, newStr);
+					//if (!newStr.contains("Infinity") && !newStr.contains("null") && !newStr.contains("\tNaN")) {
+						out.write(newStr + "\n");
+					}
+				}
+			}
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public static HashMap captureSum(String inputFile, String outputFile, int tagIndex, boolean quotation) {
+		HashMap result = new HashMap();
+		try {
+			
+			HashMap map = new HashMap();
+			FileWriter fwriter = new FileWriter(outputFile);
+			BufferedWriter out = new BufferedWriter(fwriter);
+								
+			FileInputStream fstream = new FileInputStream(inputFile);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));
+			String header = in.readLine();
+			out.write(header + "\n");
+			while (in.ready()) {
+				String str = in.readLine();
+				if (!str.contains("Infinity") && !str.contains("null")) {
+					String[] split = str.split("\t");
+					String[] tags = split[tagIndex].split(" ");
+					//System.out.println(split[tagIndex] + "\t" + tags.length);
+					
+					for (int j = 0; j < tags.length; j = j + 2) {
+						String tag = tags[j];
+						//System.out.println(tag);
+						if (map.containsKey(tag)) {
+							String[] split2 = ((String)map.get(tag)).split("\t");
+							String newStr = tag;
+							for (int i = tagIndex + 1; i < split.length; i++) {
+								newStr += "\t" + split2[i] + "," + split[i];
+								
+							}
+							
+							map.put(tag, newStr);
+						} else {
+							
+							map.put(tag, str);
+						}
+					}
+				}
+			}
+			in.close();
+			
+			Iterator itr = map.keySet().iterator();
+			while (itr.hasNext()) {
+				String key = (String)itr.next();
+				if (!key.equals("")) {
+					String str = (String)map.get(key);
+					String[] split = str.split("\t");
+					if (!str.contains("Infinity") && !str.contains("null")) {
+						String newStr = "";
+						if (quotation) {
+							newStr = "\"" + key + "\"";	
+						} else {
+							newStr = key;
+						}
+						
+						for (int i = 1; i < split.length; i++) {
+							
+							String[] split2 = split[i].split(",");
+							double[] values = new double[split2.length];
+							double sum = 0;
+							for (int j = 0; j < split2.length; j++) {
+								if (!split2[j].equals("NA")) {
+									sum += new Double(split2[j]);
+								}
+							}
+							
+							newStr += "\t" + sum;
 						}
 						result.put(key, newStr);
 					//if (!newStr.contains("Infinity") && !newStr.contains("null") && !newStr.contains("\tNaN")) {
