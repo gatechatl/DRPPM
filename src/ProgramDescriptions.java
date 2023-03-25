@@ -129,6 +129,7 @@ import expression.matrix.tools.CombineTwoMatrixWithMismatchDoubleGene;
 import expression.matrix.tools.CorrectMarSeptGeneName;
 import expression.matrix.tools.ExtractGMTGeneNameMatrix;
 import expression.matrix.tools.ExtractMatrixBasedOnGeneName;
+import expression.matrix.tools.FillNAsWithLowestValue;
 import expression.matrix.tools.FilterBasedOnAnnotation;
 import expression.matrix.tools.FilterMatrixColumnValue;
 import expression.matrix.tools.FilterMatrixColumnValueText;
@@ -435,6 +436,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerComb
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
 import rnaseq.splicing.alternativejuncpipeline.xbp1.CalculateXBP1sFeatures;
+import rnaseq.splicing.cseminer.prioritization.CSEminerPrioritizationScript;
 import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
 import rnaseq.splicing.csiminer.CSIMinerConsolidateInputs;
 import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
@@ -2993,7 +2995,13 @@ public class ProgramDescriptions {
 		if (SummarizeKallistoAbundanceMatrixGeneral.type().equals(type)) {
 			result += "SummarizeKallistoAbundanceMatrixGeneral: " + SummarizeKallistoAbundanceMatrixGeneral.description() + "\n";
 		}
+		if (FillNAsWithLowestValue.type().equals(type)) {
+			result += "FillNAsWithLowestValue: " + FillNAsWithLowestValue.description() + "\n";
+		}
+		if (CSEminerPrioritizationScript.type().equals(type)) {
+			result += "CSEminerPrioritizationScript: " + CSEminerPrioritizationScript.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2022-0408C";	
+	public static String VERSION = "2023-0309B";	
 }

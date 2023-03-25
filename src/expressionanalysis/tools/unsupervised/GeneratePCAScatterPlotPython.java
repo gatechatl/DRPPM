@@ -100,8 +100,8 @@ public class GeneratePCAScatterPlotPython {
 		script += "\tfor row in reader:\n";
 		script += "\t\tname.append(row[0])\n";
 		script += "\t\tgroup.append(row[1])\n";
-		script += "\t\tPC1.append(row[2])\n";
-		script += "\t\tPC2.append(row[3])\n";
+		script += "\t\tPC1.append(float(row[2]))\n";
+		script += "\t\tPC2.append(float(row[3]))\n";
 		script += "\n";
 		script += "fig, ax = plt.subplots()\n";
 		script += "ax.scatter(PC1, PC2, color='gray', alpha=0.5)\n";

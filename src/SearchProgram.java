@@ -822,5 +822,7 @@ public class SearchProgram {
 		search_program.add("TCGACleanGeneSymbols");
 		search_program.add("MoffittFixingDuplicatedCounts");
 		search_program.add("EnsemblGeneIDAppendAnnotationFlex");
+		search_program.add("FillNAsWithLowestValue");
+		search_program.add("CSEminerPrioritizationScript");
 	}
 }

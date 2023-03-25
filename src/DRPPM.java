@@ -296,6 +296,7 @@ import expression.matrix.tools.CombineTwoMatrixWithMismatchDoubleGene;
 import expression.matrix.tools.CorrectMarSeptGeneName;
 import expression.matrix.tools.ExtractGMTGeneNameMatrix;
 import expression.matrix.tools.ExtractMatrixBasedOnGeneName;
+import expression.matrix.tools.FillNAsWithLowestValue;
 import expression.matrix.tools.FilterBasedOnAnnotation;
 import expression.matrix.tools.FilterMatrixColumnValue;
 import expression.matrix.tools.FilterMatrixColumnValueText;
@@ -665,6 +666,7 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExon
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScriptClean;
 import rnaseq.splicing.alternativejuncpipeline.xbp1.CalculateXBP1sFeatures;
+import rnaseq.splicing.cseminer.prioritization.CSEminerPrioritizationScript;
 import rnaseq.splicing.csiminer.CSIMinerAnnotateExonBasedOnTheSpliceGraph;
 import rnaseq.splicing.csiminer.CSIMinerAnnotatePrioritizedExons;
 import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
@@ -12247,6 +12249,26 @@ public class DRPPM {
 					System.exit(0);
 				}
 				EnsemblGeneIDAppendAnnotationFlex.execute(args_remain);
+				System.exit(0);
+				// CSEminerPrioritizationScript
+			} else if (type.equalsIgnoreCase("-CSEminerPrioritizationScript")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSEminerPrioritizationScript "
+							+ CSEminerPrioritizationScript.parameter_info());
+					System.exit(0);
+				}
+				CSEminerPrioritizationScript.execute(args_remain);
+				System.exit(0);
+				// 
+			} else if (type.equalsIgnoreCase("-FillNAsWithLowestValue")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -FillNAsWithLowestValue "
+							+ FillNAsWithLowestValue.parameter_info());
+					System.exit(0);
+				}
+				FillNAsWithLowestValue.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Find") || type.equalsIgnoreCase("-Search")) {
