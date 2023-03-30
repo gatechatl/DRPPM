@@ -73,7 +73,7 @@ public class CSIMinerAnnotateGeneWithNormalSampleIHCStaining {
 					}				
 				}
 				if (level.equals("Medium") || level.equals("High")) {
-					if (tissue.equals("hippocampus") || tissue.equals("cerebellum") || tissue.equals("cerebral cortex") || tissue.equals("hypothalamus") || tissue.equals("substantia nigra")) {
+					if (tissue.equals("hippocampus") || tissue.equals("cerebellum") || tissue.equals("cerebral cortex") || tissue.equals("	") || tissue.equals("substantia nigra")) {
 						if (gene_brain_specific_annotation_medium_high.containsKey(gene)) {
 							String other_high_tissue = (String)gene_brain_specific_annotation_medium_high.get(gene);
 							gene_brain_specific_annotation_medium_high.put(gene, other_high_tissue + "," + tissue);
