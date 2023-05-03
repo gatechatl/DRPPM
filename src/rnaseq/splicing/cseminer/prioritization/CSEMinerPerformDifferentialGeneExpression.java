@@ -76,7 +76,8 @@ public class CSEMinerPerformDifferentialGeneExpression {
 			}
 			in_genelist.close();
 			
-			String exon_surfaceome_annotation = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/exon_surfaceome_protein_annotation_03282029.txt";			
+			//String exon_surfaceome_annotation = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/exon_surfaceome_protein_annotation_04202023.txt";			
+			String exon_surfaceome_annotation = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/exon_surfaceome_protein_annotation_04272023.txt";
 			FileInputStream fstream = new FileInputStream(exon_surfaceome_annotation);
 			DataInputStream din = new DataInputStream(fstream);
 			BufferedReader in = new BufferedReader(new InputStreamReader(din));
@@ -95,18 +96,29 @@ public class CSEMinerPerformDifferentialGeneExpression {
 				if (not_detected_in_many) {
 					not_detected_in_many_map.put(split[0], split[0]);
 				}
-				boolean removed_questionable = split[27].equalsIgnoreCase("true");
+				boolean removed_questionable = split[27].equalsIgnoreCase("true");				
 				boolean removed_membrane_list = split[28].equalsIgnoreCase("true");
+				
 				boolean hasProtein = !split[8].equalsIgnoreCase("NA") || !split[2].equalsIgnoreCase("NA"); // check both column 2 ensembl peptide and blat derived peptide 
 				//boolean hasProtein = true;
 				boolean OuterMembrane = split[13].equalsIgnoreCase("true");
 				boolean PartialOuterMembrane = split[14].equalsIgnoreCase("true");
+				if (!OuterMembrane) {
+					OuterMembrane = split[13].equalsIgnoreCase("NA");
+				}
+				if (!PartialOuterMembrane) {
+					PartialOuterMembrane = split[14].equalsIgnoreCase("NA");
+				}
 				if (OuterMembrane || PartialOuterMembrane) {
 					OuterMembrane_map.put(split[0], split[0]);
 				}
 				boolean HPA_Predicted_Secreted = split[39].equalsIgnoreCase("true");
+				
 				boolean Final_ECM = split[40].equalsIgnoreCase("true");
 				boolean Final_Surfaceome = split[41].equalsIgnoreCase("true");
+				if (!Final_Surfaceome) {
+					Final_Surfaceome = split[13].equalsIgnoreCase("true") || split[14].equalsIgnoreCase("true"); 
+				}
 				if (hasProtein && HPA_Predicted_Secreted && !removed_membrane_list && !removed_questionable) {
 					HPA_Predicted_Secreted_map.put(split[0], split[0]);
 				}

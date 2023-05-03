@@ -45,21 +45,26 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 			BufferedWriter out_TieredCategory = new BufferedWriter(fwriter_TieredCategory);
 			
 			
-			// the GTEx files were generated from 
+			// the GTEx files were generated from CSEMinerTumorNormalSampleTypeMatch.java
 			String gene_expression_level_tumornormal_pairing_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/GTEx_Exon_Annotation/Gene_Pediatric_GTEx_TissueEnrichment_TissuePairFlag_20230314.txt";
 			String exon_expression_level_tumornormal_pairing_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/GTEx_Exon_Annotation/Exon_Pediatric_GTEx_TissueEnrichment_TissuePairFlag_20230314.txt";
 			String inputFile_alternatively_spliced_exon = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/CSEminer_alternatively_spliced_exon_candidates_updated_20230325.txt";
 			String blacklist_genes_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/blacklist_targetlist.txt";
+			String okaytokeeporfilter_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/OkayToKeepOrFilter.txt";
 			String inputFile_IHC_staining_high_only = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/IHC_Protein_Annotation/tim_summary_ihc_normal_tissue_high_only.txt";
 			String inputFile_IHC_staining_med_high = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/IHC_Protein_Annotation/tim_summary_ihc_normal_tissue_medium_or_high.txt";			
 			String bone_marrow_expression_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/MicroarrayDerivedBoneMarrowExpression/GeneAnnotationOfBoneMarrowExpression.txt";
 			String gtex_proteomics_gene_expression_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/ProteomicsAnnotation/gene_abundance_normPSM_median.txt"; // distribution indicate cutoff should be around 0.1323528
 			String input_exon_folder = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/csiminer_heatmap/gene_exonexp";
 			String gene_transcript_exon_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/csiminer_heatmap/subset_gencodev31_exonname_ENSG_ENST.txt";			
-			String check_for_existing_target_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/existing_car_targets_2021.txt";
+			String check_for_existing_target_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/existing_car_targets_2021.txt";			
 			//String differentially_expressed_exon_list_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/CSEMinerExonList/DifferentiallyExpressed_Exons_AfterCutoff_20211118.bed";
 			String differentially_expressed_exon_list_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/differentially_expressed_exon_surfaceome_protein_annotation_03282023.txt";
 			String differentially_spliced_out_exon_list_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/differentially_spliced_out_exon_surfaceome_protein_annotation_03282023.txt";
+			
+			// double checking the prioritized target list
+			String exon_target_list_2022version_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/CSEMinerExonList/check_candidate_exon_list.txt";			
+			HashMap double_check_exon_candidates = double_check_exon_candidates(exon_target_list_2022version_file);
 			
 			
 			// load transcript information
@@ -100,7 +105,7 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 			System.out.println("Finished Locading Nerve_HiExonProp...");
 			HashMap grabGeneProportion_num_normal_tissue_above_median = grabGeneProportion(gene_expression_level_tumornormal_pairing_file, "NumNormalTissueAboveMedianOverall");
 			System.out.println("Finished Locading NumNormalTissueAboveMedianOverall...");
-			
+									
 			HashMap blacklist_gene_list = new HashMap();
 			FileInputStream fstream_blacklist_file = new FileInputStream(blacklist_genes_file);
 			DataInputStream din_gene_blacklist_file = new DataInputStream(fstream_blacklist_file);
@@ -112,6 +117,9 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 			}
 			in_gene_blacklist_file.close();
 			System.out.println("Finished Locading Blacklist...");
+			
+			HashMap okay2keeporfilter = okay2keeporfilter(okaytokeeporfilter_file);
+			
 			
 			HashMap surfaceome_gene = new HashMap();
 			HashMap matrisome_gene = new HashMap();
@@ -303,6 +311,13 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 			int tier1_AS_exon_shared_surfmat = 0;			
 			int tier2_AS_exon_shared_surfmat = 0;
 			
+			HashMap all_exon_candidates = new HashMap();
+			HashMap all_exon_candidates_tier = new HashMap();
+			
+			HashMap candidates_not_removed_after_manual_check = new HashMap();
+
+			HashMap candidates_not_removed_after_manual_check_status = new HashMap();
+			
 			double rna_cutoff = 0.3;
 			double protein_cutoff = 0.1323528;
 			FileInputStream fstream_filtered_candidate_file = new FileInputStream(outputFirstFilter);
@@ -319,7 +334,9 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 				String str = in_filtered_candidate_file.readLine();
 				String[] split = str.split("\t");
 				String exon = split[0];
+				all_exon_candidates.put(exon, exon);
 				String geneName = split[0].split("_")[0];
+				String line_written = "";
 				double max_prop_sig_exon_in_gene = (Double)calculate_max_percentage_exon_sig_for_each_gene.get(geneName);
 				double min_prop_sig_exon_in_gene = (Double)calculate_min_percentage_exon_sig_for_each_gene.get(geneName);
 				boolean prop_sig_exon_in_gene_flag = false;
@@ -333,6 +350,7 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					if (min_prop_sig_exon_in_gene <= 0.2) {
 						prop_sig_exon_in_gene_flag = true;
 					}
+					line_written += str + "\t" + geneName + "\t" + spliced_exon_status + "\t" + max_prop_sig_exon_in_gene + "\t" + min_prop_sig_exon_in_gene + "\t" + prop_sig_exon_in_gene_flag;
 					out_TieredCategory.write(str + "\t" + geneName + "\t" + spliced_exon_status + "\t" + max_prop_sig_exon_in_gene + "\t" + min_prop_sig_exon_in_gene + "\t" + prop_sig_exon_in_gene_flag);
 					boolean highNormalFlag = false;
 					
@@ -345,18 +363,21 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 							highNormalFlag = true;
 						}
 					}
+					line_written += "\t" + highNormalFlag;
 					out_TieredCategory.write("\t" + highNormalFlag);
 					
 					boolean highRiskTumorNormalMatch = false;
 					if (grab_high_risk_tumornormal_pairs.containsKey(geneName)) {
 						highRiskTumorNormalMatch = true;
 					}
+					line_written += "\t" + highRiskTumorNormalMatch;
 					out_TieredCategory.write("\t" + highRiskTumorNormalMatch);
 					
 					boolean checkForHighIHCNormalFlag = false;
 					if (geneWithAtLeastOneHighIHCinKeyTissue.containsKey(geneName)) {
 						checkForHighIHCNormalFlag = true;
 					}
+					line_written += "\t" + checkForHighIHCNormalFlag;
 					out_TieredCategory.write("\t" + checkForHighIHCNormalFlag);
 					
 					
@@ -364,6 +385,7 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					if (ihc_medium_high_brain.containsKey(geneName)) {
 						checkForHighMediumInBrain = true;
 					}
+					line_written += "\t" + checkForHighMediumInBrain;
 					out_TieredCategory.write("\t" + checkForHighMediumInBrain);
 					
 					/*
@@ -379,6 +401,7 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					if (check_for_exon_coverage_bias_in_gtex_samples.containsKey(geneName) && !grab_alternatively_spliced_gene.containsKey(geneName)) {
 						check_for_exon_coverage_bias_in_gtex_samples_flag = true;
 					}
+					line_written += "\t" + check_for_exon_coverage_bias_in_gtex_samples_flag;
 					out_TieredCategory.write("\t" + check_for_exon_coverage_bias_in_gtex_samples_flag);
 					// Finished Hard Filtering Check
 					// Next Filter for Tier 2 Candidates
@@ -387,6 +410,7 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					if (geneWithAtLeastOneMedHighTissue.containsKey(geneName)) {
 						ihc_AboveIntermediateHighFlag = true;
 					}
+					line_written += "\t" + ihc_AboveIntermediateHighFlag;
 					out_TieredCategory.write("\t" + ihc_AboveIntermediateHighFlag);
 					
 					
@@ -394,6 +418,7 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					if (grab_bone_marrow.containsKey(geneName)) {
 						boneMarrowHighFlag = true;
 					}
+					line_written += "\t" + boneMarrowHighFlag;
 					out_TieredCategory.write("\t" + boneMarrowHighFlag);
 					
 					boolean proteomicsHighGTExFlag = false;
@@ -403,6 +428,7 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 							proteomicsHighGTExFlag = true;
 						}
 					}
+					line_written += "\t" + proteomicsHighGTExFlag;
 					out_TieredCategory.write("\t" + proteomicsHighGTExFlag);
 					
 					
@@ -410,6 +436,7 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					if (grab_low_risk_tumornormal_pairs.containsKey(geneName)) {
 						lowRiskTumorNormalPairFlag = true;
 					}
+					line_written += "\t" + lowRiskTumorNormalPairFlag;
 					out_TieredCategory.write("\t" + lowRiskTumorNormalPairFlag);
 										
 					boolean numNormalTissueAboveMedian = false; 
@@ -419,6 +446,7 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 							numNormalTissueAboveMedian = true;
 						}
 					}
+					line_written += "\t" + numNormalTissueAboveMedian;
 					out_TieredCategory.write("\t" + numNormalTissueAboveMedian);
 					
 					boolean grab_car_target_flag = false;
@@ -434,16 +462,33 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					if (matrisome_gene.containsKey(geneName)) {
 						matrisome_flag = true;
 					}
+					
+					boolean okay2keep = false;
+					boolean okay2filter = false;
+					if (okay2keeporfilter.containsKey(geneName)) {
+						if ((Boolean)okay2keeporfilter.get(geneName)) {
+							okay2keep = true;
+						} else {
+							okay2filter = true;
+						}						
+					}
 					//if ((highNormalFlag || highRiskTumorNormalMatch || checkForHighIHCNormalFlag || checkForHighMediumInBrain) && !spliced_exon_status.equals("AS")) {
 					//if (((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch || checkForHighIHCNormalFlag || checkForHighMediumInBrain) && !spliced_exon_status.equals("AS")) {
-					if (((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !spliced_exon_status.equals("AS")) {
-						exon_prioritization = "Not Priorized";
+					if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !spliced_exon_status.equals("AS") && !okay2keep) || okay2filter) {
+					//if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !spliced_exon_status.equals("AS")) && !okay2keep) {						
+						all_exon_candidates_tier.put(exon, "Not Prioritized");
+						exon_prioritization = "Not Prioritized";
 						not_prioritized_count++;
 						not_prioritized_genes.put(geneName, geneName);
 					//} else if (((checkForHighIHCNormalFlag || checkForHighMediumInBrain || ihc_AboveIntermediateHighFlag || boneMarrowHighFlag || proteomicsHighGTExFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !spliced_exon_status.equals("AS")) {
 						// checkForHighIHCNormalFlag || checkForHighMediumInBrain || proteomicsHighGTExFlag || ihc_AboveIntermediateHighFlag || 
 					//} else if (((boneMarrowHighFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !spliced_exon_status.equals("AS")) {
 					} else if (((boneMarrowHighFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !spliced_exon_status.equals("AS")) {
+						if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !spliced_exon_status.equals("AS"))) {
+							
+							//System.out.println("Not Removed after manual check: " + exon);
+						}
+						all_exon_candidates_tier.put(exon, "Tier2");
 						exon_prioritization = "Tier 2";
 						tier2_count++;
 						tier2_genes.put(geneName, geneName);
@@ -495,7 +540,7 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					} else {
 						tier1_count++;
 						tier1_genes.put(geneName, geneName);
-						
+						all_exon_candidates_tier.put(exon, "Tier1");
 						
 						// Tier 1 counting
 						if (spliced_exon_status.equals("AS")) {
@@ -543,9 +588,18 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					
 					
 					// final exon prioritization
+					line_written += "\t" + exon_prioritization;
 					out_TieredCategory.write("\t" + exon_prioritization);
+					line_written += "\t" + surfaceome_flag + "\t" + matrisome_flag + "\t" + (surfaceome_flag && matrisome_flag);
+					
 					out_TieredCategory.write("\t" + surfaceome_flag + "\t" + matrisome_flag + "\t" + (surfaceome_flag && matrisome_flag));
 					out_TieredCategory.write("\n");
+					// if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !spliced_exon_status.equals("AS")) && !okay2keep) {
+					
+					if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !spliced_exon_status.equals("AS")) && okay2keep) {
+						candidates_not_removed_after_manual_check_status.put(exon.split("_")[0], check_for_exon_coverage_bias_in_gtex_samples_flag + "\t" + grab_car_target_flag + "\t" + highRiskTumorNormalMatch + "\t" + spliced_exon_status + "\n");
+						candidates_not_removed_after_manual_check.put(exon.split("_")[0], line_written);
+					}
 				}
 				
 				
@@ -632,6 +686,69 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 				if (!found.containsKey(geneName)) {
 					System.out.println("BlackListed: " + geneName + "\t" + type);
 				}
+			}
+			
+			int double_check_count = 0;
+			int blacklist_check_count = 0;
+			int exon_tier1_count = 0;
+			int exon_tier2_count = 0;
+			int exon_notprioiritized_count = 0;
+			int exon_na_count = 0;
+			HashMap not_found = new HashMap();
+			// final check on the exon compared to previous lists.
+			Iterator itr4 = double_check_exon_candidates.keySet().iterator();
+			while (itr4.hasNext()) {
+				String exon = (String)itr4.next();		
+				boolean exon_found = false;
+				if (all_exon_candidates_tier.containsKey(exon)) {
+					String category = (String)all_exon_candidates_tier.get(exon);
+					if (category.equals("Tier1")) {
+						exon_tier1_count++;
+					}
+					if (category.equals("Tier2")) {
+						exon_tier2_count++;
+					}
+					if (category.equals("Not Prioritized")) {
+						exon_notprioiritized_count++;
+					}
+					exon_found = true;
+				} else {
+					exon_na_count++;
+					
+				}
+				boolean found_flag = false;
+				if (all_exon_candidates.containsKey(exon)) {
+					double_check_count++;
+					found_flag = true;
+					if (!exon_found) {
+						System.out.println("Contradiction: " + exon);
+					}
+				}
+				String gene = exon.split("_")[0];
+				//System.out.println(gene);
+				if (blacklist_gene_list.containsKey(gene)) {
+					blacklist_check_count++;
+					found_flag = true;
+				}
+				
+				if (!found_flag) {
+					System.out.println("Missing: " + exon);
+				}
+			}						
+			
+			System.out.println(double_check_count + "\t" + (double_check_count + blacklist_check_count) + "\t" + double_check_exon_candidates.size());
+			System.out.println("Tier1 Exons: " + exon_tier1_count);
+			System.out.println("Tier2 Exons: " + exon_tier2_count);
+			System.out.println("Not Prioritized Exons: " + exon_notprioiritized_count);
+			System.out.println("NA Exons: " + exon_na_count);
+			System.out.println("Total: " + (exon_tier1_count + exon_tier2_count + exon_notprioiritized_count));
+			
+			System.out.println("Exon\tcheck_for_exon_coverage_bias_in_gtex_samples_flag\tgrab_car_target_flag\thighRiskTumorNormalMatch\tspliced_exon_status");
+			Iterator itr6 = candidates_not_removed_after_manual_check_status.keySet().iterator();
+			while (itr6.hasNext()) {
+				String exon = (String)itr6.next();
+				String status = (String)candidates_not_removed_after_manual_check_status.get(exon);
+				System.out.println(exon + "\t" + status);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -836,8 +953,7 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 	 * 			pairs.put("HGG", "Brain");			
 			pairs.put("LGG", "Brain");
 			pairs.put("RB", "Nerve");
-			pairs.put("NBL", "Nerve");
-			pairs.put("DSRCT", "Intestine");					
+			pairs.put("NBL", "Nerve");					
 			pairs.put("BT", "Brain");
 			pairs.put("MB", "Brain");			
 			pairs.put("CPC", "Brain");
@@ -1172,7 +1288,31 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 		}
 		return exon2transcript;
 	}
-	
+	public static HashMap okay2keeporfilter(String okaytokeeporfilter_file) {
+		HashMap okay2keeporfilter = new HashMap();
+		try {
+			
+			
+			FileInputStream fstream = new FileInputStream(okaytokeeporfilter_file);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));			
+			while (in.ready()) {
+				String str = in.readLine();
+				String[] split = str.split("\t");
+				if (split[1].equals("OkayToKeep")) {
+					okay2keeporfilter.put(split[0], true);
+				}
+				if (split[1].equals("OkayToRemove")) {
+					okay2keeporfilter.put(split[0], false);
+				}
+			}
+			in.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return okay2keeporfilter;
+	}
 	public static HashMap check_for_exon_coverage_bias_in_gtex_samples(String exon_folder) {		
 		
 		HashMap gene_with_problem = new HashMap();
@@ -1220,7 +1360,10 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					int num_of_exons = tissue[0].size();
 					//System.out.println(f.getName());
 					double[] exon_numbers = MathTools.convertListDouble2Double(tissue[0]);
-					for (int i = 1; i < 32; i++) {						
+					for (int i = 1; i <= 32; i++) {
+					//int[] indexes = {2, 3, 7, 9, 10, 13, 14, 15, 16, 20, 21, 25, 27, 29};
+					//for (int i: indexes) {
+					    
 						double[] sample_values = MathTools.convertListDouble2Double(tissue[i]);
 						
 						if (sample_values.length > 1) {
@@ -1240,8 +1383,8 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 								
 							}
 						}
-					}
-				//}
+					
+				}
 				
 				
 			}
@@ -1298,5 +1441,29 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 			e.printStackTrace();
 		}
 		return gene_list;
+	}
+	
+	public static HashMap double_check_exon_candidates(String inputFile) {
+		HashMap double_check_exon_candidates = new HashMap();
+		try {
+			
+			FileInputStream fstream = new FileInputStream(inputFile);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));
+			String header = in.readLine();
+			while (in.ready()) {
+				String str = in.readLine();
+				String[] split = str.split("\t");
+				//gene_list.put(split[3], split[3]);
+				//
+				double_check_exon_candidates.put(split[0], split[0]);
+			}
+			in.close();
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return double_check_exon_candidates;
 	}
 }

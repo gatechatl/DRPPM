@@ -3,9 +3,14 @@ package rnaseq.splicing.csiminer;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -33,19 +38,21 @@ public class CSEMinerTumorNormalSampleTypeMatch {
 			pairs.put("HGG", "Brain");
 			
 			pairs.put("LGG", "Brain");
-			pairs.put("RB", "Nerve");
-			pairs.put("NBL", "Nerve");
+
 			//					
 			pairs.put("BT", "Brain");
 			pairs.put("MB", "Brain");			
 			pairs.put("CPC", "Brain");
 			pairs.put("EPD", "Brain");
-			pairs.put("WLM", "Kidney");
 			
+
+			low_risk_pairs.put("RB", "Nerve");
+			low_risk_pairs.put("NBL", "Nerve");
 			low_risk_pairs.put("MEL", "Skin");
 			low_risk_pairs.put("ACT", "Adrenal");
 			low_risk_pairs.put("ACC", "Adrenal");
 			low_risk_pairs.put("RHB", "Muscle");
+			low_risk_pairs.put("WLM", "Kidney");
 			//pairs.put("DSRCT", "Intestine");
 			HashMap all_gene = new HashMap();
 			HashMap brain = new HashMap();
@@ -325,8 +332,29 @@ public class CSEMinerTumorNormalSampleTypeMatch {
 				outGeneSpecific.write(geneName + "\t" + flag + "\t" + brain_flag + "\t" + lung_flag + "\t" + liver_flag + "\t" + pancreas_flag + "\t" + pituitary_flag + "\t" + nerve_flag + "\t" + (brain_flag || lung_flag || liver_flag || pancreas_flag || nerve_flag || pituitary_flag) + "\t" + brain_freq + "\t" + lung_freq + "\t" + liver_freq + "\t" + pancreas_freq + "\t" + pituitary_freq + "\t" + nerve_freq + "\t" + max_freq + "\t" + list_of_normal_tissue.size() + "\t" + low_risk_flag + "\n");
 			}
 			outGeneSpecific.close();
+			
+			// copy file 
+			copyFileUsingStream(new File("/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/Exon_Pediatric_GTEx_TissueEnrichment_TissuePairFlag_20230314.txt"), new File("/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/GTEx_Exon_Annotation/Exon_Pediatric_GTEx_TissueEnrichment_TissuePairFlag_20230314.txt"));
+			copyFileUsingStream(new File("/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/Gene_Pediatric_GTEx_TissueEnrichment_TissuePairFlag_20230314.txt"), new File("/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/GTEx_Exon_Annotation/Gene_Pediatric_GTEx_TissueEnrichment_TissuePairFlag_20230314.txt"));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	private static void copyFileUsingStream(File source, File dest) throws IOException {
+	    InputStream is = null;
+	    OutputStream os = null;
+	    try {
+	        is = new FileInputStream(source);
+	        os = new FileOutputStream(dest);
+	        byte[] buffer = new byte[1024];
+	        int length;
+	        while ((length = is.read(buffer)) > 0) {
+	            os.write(buffer, 0, length);
+	        }
+	    } finally {
+	        is.close();
+	        os.close();
+	    }
 	}
 }
