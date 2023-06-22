@@ -46,13 +46,25 @@ public class CSEMinerTumorNormalSampleTypeMatch {
 			pairs.put("EPD", "Brain");
 			
 
+			
+			
+			
+			low_risk_pairs.put("ACT", "Adrenal");
+			low_risk_pairs.put("ACC", "Adrenal");
+			
+			low_risk_pairs.put("WLM", "Kidney");
+			
+			low_risk_pairs.put("RHB", "Muscle");
 			low_risk_pairs.put("RB", "Nerve");
+			low_risk_pairs.put("NBL", "Nerve");
+			low_risk_pairs.put("MEL", "Skin");
+			/*low_risk_pairs.put("RB", "Nerve");
 			low_risk_pairs.put("NBL", "Nerve");
 			low_risk_pairs.put("MEL", "Skin");
 			low_risk_pairs.put("ACT", "Adrenal");
 			low_risk_pairs.put("ACC", "Adrenal");
 			low_risk_pairs.put("RHB", "Muscle");
-			low_risk_pairs.put("WLM", "Kidney");
+			low_risk_pairs.put("WLM", "Kidney");*/
 			//pairs.put("DSRCT", "Intestine");
 			HashMap all_gene = new HashMap();
 			HashMap brain = new HashMap();

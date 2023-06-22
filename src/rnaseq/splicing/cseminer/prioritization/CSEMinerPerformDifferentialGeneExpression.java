@@ -34,6 +34,7 @@ public class CSEMinerPerformDifferentialGeneExpression {
 			HashMap surfaceome_exon_annotation = new HashMap();
 			HashMap good_gene_symbols = new HashMap();
 			HashMap has_protein = new HashMap();
+			HashMap manual_override = new HashMap();
 			HashMap not_detected_in_all_map = new HashMap();
 			HashMap not_detected_in_many_map = new HashMap();
 
@@ -50,6 +51,19 @@ public class CSEMinerPerformDifferentialGeneExpression {
 			
 			FileWriter fwriter_sig_exons = new FileWriter("/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/significant_exon_surfaceome_protein_annotation_03282023.txt");
 			BufferedWriter out_sig_exons = new BufferedWriter(fwriter_sig_exons);
+			
+			String additional_manual_override_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/ManualOverrideFromTS.txt";
+			FileInputStream fstream_override = new FileInputStream(additional_manual_override_file);
+			DataInputStream din_override = new DataInputStream(fstream_override);
+			BufferedReader in_override = new BufferedReader(new InputStreamReader(din_override));									
+			String header_override = in_override.readLine();
+			while (in_override.ready()) {
+				String str = in_override.readLine();
+				String[] split = str.split("\t");
+				manual_override.put(split[0], split[0]);
+				System.out.println(split[0]);
+			}
+			in_override.close();
 			
 			String overlap_exon_list_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/OverlappingExons.txt";
 			FileInputStream fstream_exonlist = new FileInputStream(overlap_exon_list_file);
@@ -103,12 +117,12 @@ public class CSEMinerPerformDifferentialGeneExpression {
 				//boolean hasProtein = true;
 				boolean OuterMembrane = split[13].equalsIgnoreCase("true");
 				boolean PartialOuterMembrane = split[14].equalsIgnoreCase("true");
-				if (!OuterMembrane) {
-					OuterMembrane = split[13].equalsIgnoreCase("NA");
-				}
-				if (!PartialOuterMembrane) {
-					PartialOuterMembrane = split[14].equalsIgnoreCase("NA");
-				}
+				//if (!OuterMembrane) {
+				//	OuterMembrane = split[13].equalsIgnoreCase("NA");
+				//}
+				//if (!PartialOuterMembrane) {
+				//	PartialOuterMembrane = split[14].equalsIgnoreCase("NA");
+				//}
 				if (OuterMembrane || PartialOuterMembrane) {
 					OuterMembrane_map.put(split[0], split[0]);
 				}
@@ -119,13 +133,18 @@ public class CSEMinerPerformDifferentialGeneExpression {
 				if (!Final_Surfaceome) {
 					Final_Surfaceome = split[13].equalsIgnoreCase("true") || split[14].equalsIgnoreCase("true"); 
 				}
+				if (manual_override.containsKey(split[0].split("_")[0])) {
+					OuterMembrane = true;
+				}
 				if (hasProtein && HPA_Predicted_Secreted && !removed_membrane_list && !removed_questionable) {
 					HPA_Predicted_Secreted_map.put(split[0], split[0]);
 				}
 				if (hasProtein && Final_ECM && !removed_membrane_list && !removed_questionable) {
 					Final_ECM_map.put(split[0], split[0]);
 				}
+				
 				if (hasProtein && Final_Surfaceome && (OuterMembrane || PartialOuterMembrane) && !removed_membrane_list && !removed_questionable) {
+				//if (hasProtein && Final_Surfaceome && (OuterMembrane) && !removed_membrane_list && !removed_questionable) {
 					Final_Surfaceome_map.put(split[0], split[0]);
 				}
 				
