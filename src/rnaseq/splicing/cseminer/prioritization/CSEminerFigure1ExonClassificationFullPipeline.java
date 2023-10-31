@@ -16,7 +16,7 @@ import statistics.general.MathTools;
 
 /**
  * Perform the entire classification.
- * Criteria for removal	HighNormalExonProp>0.3_Flag
+ * Criteria for removal 
  * Criteria for removal	HighRiskTumorNormalMatch
  * Criteria for removal	CheckForHighIHCNormalFlag
  * Criteria for removal	CheckForHighMediumInIHCBrainTissues
@@ -329,8 +329,8 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 
 			HashMap candidates_not_removed_after_manual_check_status = new HashMap();
 			
-			double rna_cutoff = 0.3; // high normal exon proportion above 0.3
-			double protein_cutoff = 0.1618458;
+			double rna_cutoff = 0.3; // high normal exon proportion above 30%
+			double protein_cutoff = 0.1618458;  // protein expression cutoff determined based on histogram
 			FileInputStream fstream_filtered_candidate_file = new FileInputStream(outputFirstFilter);
 			DataInputStream din_filtered_candidate_file = new DataInputStream(fstream_filtered_candidate_file);
 			BufferedReader in_filtered_candidate_file = new BufferedReader(new InputStreamReader(din_filtered_candidate_file));
@@ -383,6 +383,7 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					out_TieredCategory.write(str + "\t" + geneName + "\t" + spliced_exon_status + "\t" + max_prop_sig_exon_in_gene + "\t" + min_prop_sig_exon_in_gene + "\t" + prop_sig_exon_in_gene_flag + "\t" + exon_splicing_annotation + "\t" + exon_apris_annotation);
 					boolean highNormalFlag = false;
 					
+					// gene level test for key genes
 					if (grabGeneProportion_Brain.containsKey(geneName)) {
 						double Brain_HiExonProp = (Double)grabGeneProportion_Brain.get(geneName);
 						double Lung_HiExonProp = (Double)grabGeneProportion_Lung.get(geneName);
@@ -514,19 +515,24 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					//}
 					//if ((highNormalFlag || highRiskTumorNormalMatch || checkForHighIHCNormalFlag || checkForHighMediumInBrain) && !spliced_exon_status.equals("AS")) {
 					//if (((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch || checkForHighIHCNormalFlag || checkForHighMediumInBrain) && !spliced_exon_status.equals("AS")) {
+					
+					//if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !spliced_exon_status.equals("AS")) && !okay2keep) {
+					
 					if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !(spliced_exon_status.equals("AS") || spliced_exon_status.equals("Tier2_AS")) && !okay2keep) || okay2filter) {
-					//if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !spliced_exon_status.equals("AS")) && !okay2keep) {						
 						all_exon_candidates_tier.put(exon, "Not Prioritized");
 						exon_prioritization = "Not Prioritized";
 						not_prioritized_count++;
 						not_prioritized_genes.put(geneName, geneName);
 						//System.out.println("Why is this not prioritized:\t" + geneName + "\t" + check_for_exon_coverage_bias_in_gtex_samples_flag + "\t" + grab_car_target_flag + "\t" + highRiskTumorNormalMatch);
 					//} else if (((checkForHighIHCNormalFlag || checkForHighMediumInBrain || ihc_AboveIntermediateHighFlag || boneMarrowHighFlag || proteomicsHighGTExFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !spliced_exon_status.equals("AS")) {
-					} else if (((checkForHighIHCNormalFlag || checkForHighMediumInBrain || ihc_AboveIntermediateHighFlag || boneMarrowHighFlag || proteomicsHighGTExFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !(spliced_exon_status.equals("AS"))) {	
+					//	
 					//} else if ((((checkForHighIHCNormalFlag || ihc_AboveIntermediateHighFlag || boneMarrowHighFlag || proteomicsHighGTExFlag || numNormalTissueAboveMedian)) && !spliced_exon_status.equals("AS")) || ((lowRiskTumorNormalPairFlag || checkForHighMediumInBrain || highNormalFlag))) {	
 						// checkForHighIHCNormalFlag || checkForHighMediumInBrain || proteomicsHighGTExFlag || ihc_AboveIntermediateHighFlag || 
 					//} else if (((boneMarrowHighFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !spliced_exon_status.equals("AS")) {
 					//} else if (((boneMarrowHighFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !spliced_exon_status.equals("AS")) {
+					
+					//} else if (((checkForHighIHCNormalFlag || checkForHighMediumInBrain || ihc_AboveIntermediateHighFlag || boneMarrowHighFlag || proteomicsHighGTExFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !(spliced_exon_status.equals("AS"))) {
+					} else if (((boneMarrowHighFlag || proteomicsHighGTExFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !(spliced_exon_status.equals("AS"))) {
 						if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !spliced_exon_status.equals("AS"))) {
 							
 							//System.out.println("Not Removed after manual check: " + exon);
@@ -539,6 +545,10 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 						
 						// Tier 2 counting
 						if (spliced_exon_status.equals("AS") || spliced_exon_status.equals("Tier2_AS")) {
+							
+							// neglect gene level annotations
+							boneMarrowHighFlag = false;
+							proteomicsHighGTExFlag = false;
 							
 							tier2_AS_genes.put(geneName, geneName);
 							
@@ -789,16 +799,6 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 				}
 			}						
 			
-			System.out.println(double_check_count + "\t" + (double_check_count + blacklist_check_count) + "\t" + double_check_exon_candidates.size());
-			System.out.println("Tier1 Exons: " + exon_tier1_count);
-			System.out.println("Tier2 Exons: " + exon_tier2_count);
-			System.out.println("Not Prioritized Exons: " + exon_notprioiritized_count);
-			System.out.println("NA Exons: " + exon_na_count);
-			System.out.println("Total: " + (exon_tier1_count + exon_tier2_count + exon_notprioiritized_count));
-			
-			System.out.println("Exon\tcheck_for_exon_coverage_bias_in_gtex_samples_flag\tgrab_car_target_flag\thighRiskTumorNormalMatch\tspliced_exon_status");
-			
-			System.out.println();
 			System.out.println("List of candidates that were not removed after manual check");
 			Iterator itr6 = candidates_not_removed_after_manual_check_status.keySet().iterator();
 			while (itr6.hasNext()) {
@@ -826,6 +826,17 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					System.out.println(gene);
 				}
 			}
+			System.out.println(double_check_count + "\t" + (double_check_count + blacklist_check_count) + "\t" + double_check_exon_candidates.size());
+			System.out.println("Tier1 Exons: " + exon_tier1_count);
+			System.out.println("Tier2 Exons: " + exon_tier2_count);
+			System.out.println("Not Prioritized Exons: " + exon_notprioiritized_count);
+			System.out.println("NA Exons: " + exon_na_count);
+			System.out.println("Total: " + (exon_tier1_count + exon_tier2_count + exon_notprioiritized_count));
+			
+			System.out.println("Exon\tcheck_for_exon_coverage_bias_in_gtex_samples_flag\tgrab_car_target_flag\thighRiskTumorNormalMatch\tspliced_exon_status");
+			
+			System.out.println();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1517,9 +1528,9 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 								double q3 = MathTools.quartile(sample_values, 75);
 								if (pval < 0.01 && q2 >= 0.75) {
 									String geneName = f.getName().replaceAll(".txt", "");
-									if (geneName.equals("MMP9")) {
+									/*if (geneName.equals("MMP9")) {
 										System.out.println("MMP9" + "\t" + q1 + "\t" + q2 + "\t" + q3 + "\t" + pval);
-									}
+									}*/
 									String line = f.getName().replaceAll(".txt", "") + "\t" + split_header[i] + "\t" + r + "\t" + pval + "\t" + q1 + "\t" + q3 + "\t" + num_of_exons;
 									//System.out.println(line);
 									gene_with_problem.put(geneName, geneName);
