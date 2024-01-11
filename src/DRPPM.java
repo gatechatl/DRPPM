@@ -304,6 +304,7 @@ import expression.matrix.tools.FilterMatrixExpression;
 import expression.matrix.tools.FilterMatrixFile;
 import expression.matrix.tools.FilterMatrixFileFlex;
 import expression.matrix.tools.FilterTopMADScores;
+import expression.matrix.tools.FindOverlappingGeneList;
 import expression.matrix.tools.GeneListMatrix;
 import expression.matrix.tools.GeneListMatrix2;
 import expression.matrix.tools.GenerateGenesetMatrix;
@@ -666,31 +667,31 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExon
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScriptClean;
 import rnaseq.splicing.alternativejuncpipeline.xbp1.CalculateXBP1sFeatures;
+import rnaseq.splicing.cseminer.annotation.CSIMinerAnnotateExonBasedOnTheSpliceGraph;
+import rnaseq.splicing.cseminer.annotation.CSIMinerAnnotatePrioritizedExons;
+import rnaseq.splicing.cseminer.annotation.CSIMinerCalculatePercentileCutoff;
+import rnaseq.splicing.cseminer.annotation.CSIMinerConsolidateInputs;
+import rnaseq.splicing.cseminer.annotation.CSIMinerFilterExonMatrixByGeneSymbol;
+import rnaseq.splicing.cseminer.annotation.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
+import rnaseq.splicing.cseminer.annotation.CSIMinerGenerateViolinAndBarPlotDataTable;
+import rnaseq.splicing.cseminer.annotation.CSIMinerPipeline;
+import rnaseq.splicing.cseminer.annotation.CSIMinerSplitMatrixCandidates;
+import rnaseq.splicing.cseminer.annotation.CSIMinerViolinAndBarPlotDataTableIndexed;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerAnnotateExonWithProteinAtlasPipeline;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerAnnotationBasedOnBLATOutputPipeline;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerAppendMembraneAnnotationPipeline;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerCheckGTExProteomicsHitsPipeline;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerExonAnnotateTMHMMPipeline;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerGenerateExonTranslationPipeline;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerManuscriptCombineSolidBrainResult;
 import rnaseq.splicing.cseminer.prioritization.CSEminerPrioritizationScript;
-import rnaseq.splicing.csiminer.CSIMinerAnnotateExonBasedOnTheSpliceGraph;
-import rnaseq.splicing.csiminer.CSIMinerAnnotatePrioritizedExons;
-import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
-import rnaseq.splicing.csiminer.CSIMinerConsolidateInputs;
-import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
-import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
-import rnaseq.splicing.csiminer.CSIMinerGenerateViolinAndBarPlotDataTable;
-import rnaseq.splicing.csiminer.CSIMinerPipeline;
-import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
-import rnaseq.splicing.csiminer.CSIMinerViolinAndBarPlotDataTableIndexed;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerAnnotateExonWithProteinAtlasPipeline;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerAnnotationBasedOnBLATOutputPipeline;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerAppendMembraneAnnotationPipeline;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerCheckGTExProteomicsHitsPipeline;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerExonAnnotateTMHMMPipeline;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerGenerateExonTranslationPipeline;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerManuscriptCombineSolidBrainResult;
-import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
-import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
-import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
-import rnaseq.splicing.csiminer.reference.CSIMinerCandidate2BED;
-import rnaseq.splicing.csiminer.reference.CSIMinerCandidateRegion2Fasta;
-import rnaseq.splicing.csiminer.reference.tmhmmdb.CSIMinerExonAnnotateTMHMM;
-import rnaseq.splicing.csiminer.reference.tmhmmdb.CSIMinerGeneNameUniprotProtein;
+import rnaseq.splicing.cseminer.proteomics.CSEMinerAppendProteinHits;
+import rnaseq.splicing.cseminer.reference.CSEMinerAppendAnnotatedInformation;
+import rnaseq.splicing.cseminer.reference.CSEMinerAppendTMHMMAnnotation2Candidate;
+import rnaseq.splicing.cseminer.reference.CSEMinerCandidate2BED;
+import rnaseq.splicing.cseminer.reference.CSEMinerCandidateRegion2Fasta;
+import rnaseq.splicing.cseminer.reference.tmhmmdb.CSIMinerExonAnnotateTMHMM;
+import rnaseq.splicing.cseminer.reference.tmhmmdb.CSIMinerGeneNameUniprotProtein;
 import rnaseq.splicing.mats308.AddGeneName2MATS;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
@@ -3889,6 +3890,17 @@ public class DRPPM {
 					System.exit(0);
 				}
 				CombineMultipleMatrixTogetherButSkipLeftNCols.execute(args_remain);
+				System.exit(0);
+				// FindOverlappingGeneList
+			} else if (type.equalsIgnoreCase("-FindOverlappingGeneList")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {					
+					System.out.println("drppm -FindOverlappingGeneList "
+							+ FindOverlappingGeneList.parameter_info());
+					System.out.println("Description: " + FindOverlappingGeneList.description());
+					System.exit(0);
+				}
+				FindOverlappingGeneList.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-Fastq2FileListFlex")) {
@@ -11825,20 +11837,20 @@ public class DRPPM {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -CSIMinerCandidateRegion2Fasta "
-							+ CSIMinerCandidateRegion2Fasta.parameter_info());
+							+ CSEMinerCandidateRegion2Fasta.parameter_info());
 					System.exit(0);
 				}
-				CSIMinerCandidateRegion2Fasta.execute(args_remain);
+				CSEMinerCandidateRegion2Fasta.execute(args_remain);
 				System.exit(0);
 				// CSIMinerAppendTMHMMAnnotation2Candidate
 			} else if (type.equalsIgnoreCase("-CSIMinerAppendTMHMMAnnotation2Candidate")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -CSIMinerAppendTMHMMAnnotation2Candidate "
-							+ CSIMinerAppendTMHMMAnnotation2Candidate.parameter_info());
+							+ CSEMinerAppendTMHMMAnnotation2Candidate.parameter_info());
 					System.exit(0);
 				}
-				CSIMinerAppendTMHMMAnnotation2Candidate.execute(args_remain);
+				CSEMinerAppendTMHMMAnnotation2Candidate.execute(args_remain);
 				System.exit(0);
 				// CSIMinerCandidateRegion2Fasta CSIMinerAppendTMHMMAnnotation2Candidate
 			} else if (type.equalsIgnoreCase("-GenerateInputMatrixIllumina")) {
@@ -11865,10 +11877,10 @@ public class DRPPM {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -CSIMinerCandidate2BED "
-							+ CSIMinerCandidate2BED.parameter_info());
+							+ CSEMinerCandidate2BED.parameter_info());
 					System.exit(0);
 				}
-				CSIMinerCandidate2BED.execute(args_remain);
+				CSEMinerCandidate2BED.execute(args_remain);
 				System.exit(0);
 				// CSIMinerConsolidateInputs
 			} else if (type.equalsIgnoreCase("-CSIMinerConsolidateInputs")) {
@@ -11885,10 +11897,10 @@ public class DRPPM {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -CSIMinerAppendAnnotatedInformation "
-							+ CSIMinerAppendAnnotatedInformation.parameter_info());
+							+ CSEMinerAppendAnnotatedInformation.parameter_info());
 					System.exit(0);
 				}
-				CSIMinerAppendAnnotatedInformation.execute(args_remain);
+				CSEMinerAppendAnnotatedInformation.execute(args_remain);
 				System.exit(0);
 				// JuncSalvagerValidateAltStartAndGeneratePeptide
 			} else if (type.equalsIgnoreCase("-JuncSalvagerValidateAltStartAndGeneratePeptide")) {
@@ -11965,10 +11977,10 @@ public class DRPPM {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -CSIMinerAppendProteinHits "
-							+ CSIMinerAppendProteinHits.parameter_info());
+							+ CSEMinerAppendProteinHits.parameter_info());
 					System.exit(0);
 				}
-				CSIMinerAppendProteinHits.execute(args_remain);
+				CSEMinerAppendProteinHits.execute(args_remain);
 				System.exit(0);
 				// COMETPepXML2Table
 			} else if (type.equalsIgnoreCase("-COMETPepXML2Table")) {
@@ -12145,70 +12157,70 @@ public class DRPPM {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -CSIMinerGenerateExonTranslationPipeline "
-							+ CSIMinerGenerateExonTranslationPipeline.parameter_info());
+							+ CSEMinerGenerateExonTranslationPipeline.parameter_info());
 					System.exit(0);
 				}
-				CSIMinerGenerateExonTranslationPipeline.execute(args_remain);
+				CSEMinerGenerateExonTranslationPipeline.execute(args_remain);
 				System.exit(0);
 				// CSIMinerAnnotationBasedOnBLATOutputPipeline
 			} else if (type.equalsIgnoreCase("-CSIMinerAnnotationBasedOnBLATOutputPipeline")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -CSIMinerAnnotationBasedOnBLATOutputPipeline "
-							+ CSIMinerAnnotationBasedOnBLATOutputPipeline.parameter_info());
+							+ CSEMinerAnnotationBasedOnBLATOutputPipeline.parameter_info());
 					System.exit(0);
 				}
-				CSIMinerAnnotationBasedOnBLATOutputPipeline.execute(args_remain);
+				CSEMinerAnnotationBasedOnBLATOutputPipeline.execute(args_remain);
 				System.exit(0);
 				// CSIMinerCheckGTExProteomicsHitsPipeline
 			} else if (type.equalsIgnoreCase("-CSIMinerCheckGTExProteomicsHitsPipeline")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -CSIMinerCheckGTExProteomicsHitsPipeline "
-							+ CSIMinerCheckGTExProteomicsHitsPipeline.parameter_info());
+							+ CSEMinerCheckGTExProteomicsHitsPipeline.parameter_info());
 					System.exit(0);
 				}
-				CSIMinerCheckGTExProteomicsHitsPipeline.execute(args_remain);
+				CSEMinerCheckGTExProteomicsHitsPipeline.execute(args_remain);
 				System.exit(0);
 				// CSIMinerExonAnnotateTMHMMPipeline
 			} else if (type.equalsIgnoreCase("-CSIMinerExonAnnotateTMHMMPipeline")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -CSIMinerExonAnnotateTMHMMPipeline "
-							+ CSIMinerExonAnnotateTMHMMPipeline.parameter_info());
+							+ CSEMinerExonAnnotateTMHMMPipeline.parameter_info());
 					System.exit(0);
 				}
-				CSIMinerExonAnnotateTMHMMPipeline.execute(args_remain);
+				CSEMinerExonAnnotateTMHMMPipeline.execute(args_remain);
 				System.exit(0);
 				// CSIMinerAnnotateExonWithProteinAtlasPipeline
 			} else if (type.equalsIgnoreCase("-CSIMinerAnnotateExonWithProteinAtlasPipeline")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -CSIMinerAnnotateExonWithProteinAtlasPipeline "
-							+ CSIMinerAnnotateExonWithProteinAtlasPipeline.parameter_info());
+							+ CSEMinerAnnotateExonWithProteinAtlasPipeline.parameter_info());
 					System.exit(0);
 				}
-				CSIMinerAnnotateExonWithProteinAtlasPipeline.execute(args_remain);
+				CSEMinerAnnotateExonWithProteinAtlasPipeline.execute(args_remain);
 				System.exit(0);
 				// CSIMinerAppendMembraneAnnotationPipeline
 			} else if (type.equalsIgnoreCase("-CSIMinerAppendMembraneAnnotationPipeline")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -CSIMinerAppendMembraneAnnotationPipeline "
-							+ CSIMinerAppendMembraneAnnotationPipeline.parameter_info());
+							+ CSEMinerAppendMembraneAnnotationPipeline.parameter_info());
 					System.exit(0);
 				}
-				CSIMinerAppendMembraneAnnotationPipeline.execute(args_remain);
+				CSEMinerAppendMembraneAnnotationPipeline.execute(args_remain);
 				System.exit(0);
 				// CSIMinerManuscriptCombineSolidBrainResult
 			} else if (type.equalsIgnoreCase("-CSIMinerManuscriptCombineSolidBrainResult")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {
 					System.out.println("drppm -CSIMinerManuscriptCombineSolidBrainResult "
-							+ CSIMinerManuscriptCombineSolidBrainResult.parameter_info());
+							+ CSEMinerManuscriptCombineSolidBrainResult.parameter_info());
 					System.exit(0);
 				}
-				CSIMinerManuscriptCombineSolidBrainResult.execute(args_remain);
+				CSEMinerManuscriptCombineSolidBrainResult.execute(args_remain);
 				System.exit(0);
 				// GTExProcessPSMPeptidesPipeline
 			} else if (type.equalsIgnoreCase("-GTExProcessPSMPeptidesPipeline")) {

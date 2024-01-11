@@ -137,6 +137,7 @@ import expression.matrix.tools.FilterMatrixExpression;
 import expression.matrix.tools.FilterMatrixFile;
 import expression.matrix.tools.FilterMatrixFileFlex;
 import expression.matrix.tools.FilterTopMADScores;
+import expression.matrix.tools.FindOverlappingGeneList;
 import expression.matrix.tools.GeneListMatrix;
 import expression.matrix.tools.GeneListMatrix2;
 import expression.matrix.tools.GenerateGenesetMatrix;
@@ -436,29 +437,29 @@ import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerComb
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerExonSkippingPSI;
 import rnaseq.splicing.alternativejuncpipeline.juncsalvager.psi.JuncSalvagerGeneratePSIScript;
 import rnaseq.splicing.alternativejuncpipeline.xbp1.CalculateXBP1sFeatures;
+import rnaseq.splicing.cseminer.annotation.CSIMinerCalculatePercentileCutoff;
+import rnaseq.splicing.cseminer.annotation.CSIMinerConsolidateInputs;
+import rnaseq.splicing.cseminer.annotation.CSIMinerFilterExonMatrixByGeneSymbol;
+import rnaseq.splicing.cseminer.annotation.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
+import rnaseq.splicing.cseminer.annotation.CSIMinerGenerateViolinAndBarPlotDataTable;
+import rnaseq.splicing.cseminer.annotation.CSIMinerPipeline;
+import rnaseq.splicing.cseminer.annotation.CSIMinerSplitMatrixCandidates;
+import rnaseq.splicing.cseminer.annotation.CSIMinerViolinAndBarPlotDataTableIndexed;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerAnnotateExonWithProteinAtlasPipeline;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerAnnotationBasedOnBLATOutputPipeline;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerAppendMembraneAnnotationPipeline;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerCheckGTExProteomicsHitsPipeline;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerExonAnnotateTMHMMPipeline;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerGenerateExonTranslationPipeline;
+import rnaseq.splicing.cseminer.exonannotation.CSEMinerManuscriptCombineSolidBrainResult;
 import rnaseq.splicing.cseminer.prioritization.CSEminerPrioritizationScript;
-import rnaseq.splicing.csiminer.CSIMinerCalculatePercentileCutoff;
-import rnaseq.splicing.csiminer.CSIMinerConsolidateInputs;
-import rnaseq.splicing.csiminer.CSIMinerFilterExonMatrixByGeneSymbol;
-import rnaseq.splicing.csiminer.CSIMinerGenerateCustomHeatmapFromPercentileMatrix;
-import rnaseq.splicing.csiminer.CSIMinerGenerateViolinAndBarPlotDataTable;
-import rnaseq.splicing.csiminer.CSIMinerPipeline;
-import rnaseq.splicing.csiminer.CSIMinerSplitMatrixCandidates;
-import rnaseq.splicing.csiminer.CSIMinerViolinAndBarPlotDataTableIndexed;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerAnnotateExonWithProteinAtlasPipeline;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerAnnotationBasedOnBLATOutputPipeline;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerAppendMembraneAnnotationPipeline;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerCheckGTExProteomicsHitsPipeline;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerExonAnnotateTMHMMPipeline;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerGenerateExonTranslationPipeline;
-import rnaseq.splicing.csiminer.exonannotation.CSIMinerManuscriptCombineSolidBrainResult;
-import rnaseq.splicing.csiminer.proteomics.CSIMinerAppendProteinHits;
-import rnaseq.splicing.csiminer.reference.CSIMinerAppendAnnotatedInformation;
-import rnaseq.splicing.csiminer.reference.CSIMinerAppendTMHMMAnnotation2Candidate;
-import rnaseq.splicing.csiminer.reference.CSIMinerCandidate2BED;
-import rnaseq.splicing.csiminer.reference.CSIMinerCandidateRegion2Fasta;
-import rnaseq.splicing.csiminer.reference.tmhmmdb.CSIMinerExonAnnotateTMHMM;
-import rnaseq.splicing.csiminer.reference.tmhmmdb.CSIMinerGeneNameUniprotProtein;
+import rnaseq.splicing.cseminer.proteomics.CSEMinerAppendProteinHits;
+import rnaseq.splicing.cseminer.reference.CSEMinerAppendAnnotatedInformation;
+import rnaseq.splicing.cseminer.reference.CSEMinerAppendTMHMMAnnotation2Candidate;
+import rnaseq.splicing.cseminer.reference.CSEMinerCandidate2BED;
+import rnaseq.splicing.cseminer.reference.CSEMinerCandidateRegion2Fasta;
+import rnaseq.splicing.cseminer.reference.tmhmmdb.CSIMinerExonAnnotateTMHMM;
+import rnaseq.splicing.cseminer.reference.tmhmmdb.CSIMinerGeneNameUniprotProtein;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
 import rnaseq.splicing.mats308.SummarizeMATSSummary;
@@ -2863,14 +2864,14 @@ public class ProgramDescriptions {
 		if (CSIMinerGenerateCustomHeatmapFromPercentileMatrix.type().equals(type)) {
 			result += "CSIMinerGenerateCustomHeatmapFromPercentileMatrix: " + CSIMinerGenerateCustomHeatmapFromPercentileMatrix.description() + "\n";
 		}
-		if (CSIMinerCandidateRegion2Fasta.type().equals(type)) {
-			result += "CSIMinerCandidateRegion2Fasta: " + CSIMinerCandidateRegion2Fasta.description() + "\n";
+		if (CSEMinerCandidateRegion2Fasta.type().equals(type)) {
+			result += "CSIMinerCandidateRegion2Fasta: " + CSEMinerCandidateRegion2Fasta.description() + "\n";
 		}
-		if (CSIMinerAppendTMHMMAnnotation2Candidate.type().equals(type)) {
-			result += "CSIMinerAppendTMHMMAnnotation2Candidate: " + CSIMinerAppendTMHMMAnnotation2Candidate.description() + "\n";
+		if (CSEMinerAppendTMHMMAnnotation2Candidate.type().equals(type)) {
+			result += "CSIMinerAppendTMHMMAnnotation2Candidate: " + CSEMinerAppendTMHMMAnnotation2Candidate.description() + "\n";
 		}
-		if (CSIMinerCandidate2BED.type().equals(type)) {
-			result += "CSIMinerCandidate2BED: " + CSIMinerCandidate2BED.description() + "\n";
+		if (CSEMinerCandidate2BED.type().equals(type)) {
+			result += "CSIMinerCandidate2BED: " + CSEMinerCandidate2BED.description() + "\n";
 		}
 		if (CSIMinerConsolidateInputs.type().equals(type)) {
 			result += "CSIMinerConsolidateInputs: " + CSIMinerConsolidateInputs.description() + "\n";
@@ -2878,8 +2879,8 @@ public class ProgramDescriptions {
 		if (GenerateExonLengthReference.type().equals(type)) {
 			result += "GenerateExonLengthReference: " + GenerateExonLengthReference.description() + "\n";
 		}
-		if (CSIMinerAppendAnnotatedInformation.type().equals(type)) {
-			result += "CSIMinerAppendAnnotatedInformation: " + CSIMinerAppendAnnotatedInformation.description() + "\n";
+		if (CSEMinerAppendAnnotatedInformation.type().equals(type)) {
+			result += "CSIMinerAppendAnnotatedInformation: " + CSEMinerAppendAnnotatedInformation.description() + "\n";
 		}
 		if (JuncSalvagerValidateAltStartAndGeneratePeptide.type().equals(type)) {
 			result += "JuncSalvagerValidateAltStartAndGeneratePeptide: " + JuncSalvagerValidateAltStartAndGeneratePeptide.description() + "\n";
@@ -2902,8 +2903,8 @@ public class ProgramDescriptions {
 		if (CalculateXBP1sFeatures.type().equals(type)) {
 			result += "CalculateXBP1sFeatures: " + CalculateXBP1sFeatures.description() + "\n";
 		}
-		if (CSIMinerAppendProteinHits.type().equals(type)) {
-			result += "CSIMinerAppendProteinHits: " + CSIMinerAppendProteinHits.description() + "\n";
+		if (CSEMinerAppendProteinHits.type().equals(type)) {
+			result += "CSIMinerAppendProteinHits: " + CSEMinerAppendProteinHits.description() + "\n";
 		}
 		if (COMETPepXML2Table.type().equals(type)) {
 			result += "COMETPepXML2Table: " + COMETPepXML2Table.description() + "\n";
@@ -2959,26 +2960,26 @@ public class ProgramDescriptions {
 		if (CombineSplicingDeficiencyFlexIndex.type().equals(type)) {
 			result += "CombineSplicingDeficiencyFlexIndex: " + CombineSplicingDeficiencyFlexIndex.description() + "\n";
 		}
-		if (CSIMinerGenerateExonTranslationPipeline.type().equals(type)) {
-			result += "CSIMinerGenerateExonTranslationPipeline: " + CSIMinerGenerateExonTranslationPipeline.description() + "\n";
+		if (CSEMinerGenerateExonTranslationPipeline.type().equals(type)) {
+			result += "CSIMinerGenerateExonTranslationPipeline: " + CSEMinerGenerateExonTranslationPipeline.description() + "\n";
 		}
-		if (CSIMinerAnnotationBasedOnBLATOutputPipeline.type().equals(type)) {
-			result += "CSIMinerAnnotationBasedOnBLATOutputPipeline: " + CSIMinerAnnotationBasedOnBLATOutputPipeline.description() + "\n";
+		if (CSEMinerAnnotationBasedOnBLATOutputPipeline.type().equals(type)) {
+			result += "CSIMinerAnnotationBasedOnBLATOutputPipeline: " + CSEMinerAnnotationBasedOnBLATOutputPipeline.description() + "\n";
 		}
-		if (CSIMinerCheckGTExProteomicsHitsPipeline.type().equals(type)) {
-			result += "CSIMinerCheckGTExProteomicsHitsPipeline: " + CSIMinerCheckGTExProteomicsHitsPipeline.description() + "\n";
+		if (CSEMinerCheckGTExProteomicsHitsPipeline.type().equals(type)) {
+			result += "CSIMinerCheckGTExProteomicsHitsPipeline: " + CSEMinerCheckGTExProteomicsHitsPipeline.description() + "\n";
 		}
-		if (CSIMinerExonAnnotateTMHMMPipeline.type().equals(type)) {
-			result += "CSIMinerExonAnnotateTMHMMPipeline: " + CSIMinerExonAnnotateTMHMMPipeline.description() + "\n";
+		if (CSEMinerExonAnnotateTMHMMPipeline.type().equals(type)) {
+			result += "CSIMinerExonAnnotateTMHMMPipeline: " + CSEMinerExonAnnotateTMHMMPipeline.description() + "\n";
 		}
-		if (CSIMinerAnnotateExonWithProteinAtlasPipeline.type().equals(type)) {
-			result += "CSIMinerAnnotateExonWithProteinAtlasPipeline: " + CSIMinerAnnotateExonWithProteinAtlasPipeline.description() + "\n";
+		if (CSEMinerAnnotateExonWithProteinAtlasPipeline.type().equals(type)) {
+			result += "CSIMinerAnnotateExonWithProteinAtlasPipeline: " + CSEMinerAnnotateExonWithProteinAtlasPipeline.description() + "\n";
 		}
-		if (CSIMinerAppendMembraneAnnotationPipeline.type().equals(type)) {
-			result += "CSIMinerAppendMembraneAnnotationPipeline: " + CSIMinerAppendMembraneAnnotationPipeline.description() + "\n";
+		if (CSEMinerAppendMembraneAnnotationPipeline.type().equals(type)) {
+			result += "CSIMinerAppendMembraneAnnotationPipeline: " + CSEMinerAppendMembraneAnnotationPipeline.description() + "\n";
 		}
-		if (CSIMinerManuscriptCombineSolidBrainResult.type().equals(type)) {
-			result += "CSIMinerManuscriptCombineSolidBrainResult: " + CSIMinerManuscriptCombineSolidBrainResult.description() + "\n";
+		if (CSEMinerManuscriptCombineSolidBrainResult.type().equals(type)) {
+			result += "CSIMinerManuscriptCombineSolidBrainResult: " + CSEMinerManuscriptCombineSolidBrainResult.description() + "\n";
 		}
 		if (GTExProcessPSMPeptidesPipeline.type().equals(type)) {
 			result += "GTExProcessPSMPeptidesPipeline: " + GTExProcessPSMPeptidesPipeline.description() + "\n";
@@ -3001,7 +3002,10 @@ public class ProgramDescriptions {
 		if (CSEminerPrioritizationScript.type().equals(type)) {
 			result += "CSEminerPrioritizationScript: " + CSEminerPrioritizationScript.description() + "\n";
 		}
+		if (FindOverlappingGeneList.type().equals(type)) {
+			result += "FindOverlappingGeneList: " + FindOverlappingGeneList.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2023-0309B";	
+	public static String VERSION = "2023-1128A";	
 }

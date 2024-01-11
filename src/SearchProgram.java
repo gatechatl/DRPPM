@@ -824,5 +824,6 @@ public class SearchProgram {
 		search_program.add("EnsemblGeneIDAppendAnnotationFlex");
 		search_program.add("FillNAsWithLowestValue");
 		search_program.add("CSEminerPrioritizationScript");
+		search_program.add("FindOverlappingGeneList");
 	}
 }

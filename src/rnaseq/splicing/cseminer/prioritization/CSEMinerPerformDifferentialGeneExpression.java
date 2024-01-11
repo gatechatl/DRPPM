@@ -143,6 +143,7 @@ public class CSEMinerPerformDifferentialGeneExpression {
 					Final_ECM_map.put(split[0], split[0]);
 				}
 				
+				// final criteria for being considered as a surfaceome.
 				if (hasProtein && Final_Surfaceome && (OuterMembrane || PartialOuterMembrane) && !removed_membrane_list && !removed_questionable) {
 				//if (hasProtein && Final_Surfaceome && (OuterMembrane) && !removed_membrane_list && !removed_questionable) {
 					Final_Surfaceome_map.put(split[0], split[0]);

@@ -43,7 +43,36 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 			String outputTieredCategoryFile = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/CSEMiner_Tiered_Exons_FullPipeline.txt";
 			FileWriter fwriter_TieredCategory = new FileWriter(outputTieredCategoryFile);
 			BufferedWriter out_TieredCategory = new BufferedWriter(fwriter_TieredCategory);
+						
+
+			String outputDoubleCheckProteinAnnotation = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/CSEMiner_Protein_Annotation.txt";
+			FileWriter fwriter_ProteinAnnotation = new FileWriter(outputDoubleCheckProteinAnnotation);
+			BufferedWriter out_PublishedTiers = new BufferedWriter(fwriter_ProteinAnnotation);
+						
 			
+			String outputTierPublication = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/Supplementary_Table1A_Tiered_Exons_For_Publication.txt";
+			FileWriter fwriter_TierPublication = new FileWriter(outputTierPublication);
+			BufferedWriter out_TierPublication = new BufferedWriter(fwriter_TierPublication);
+			
+
+			String outputTierPublication_All = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/Supplementary_Table1B_Tiered_Exons_For_Publication.txt";
+			FileWriter fwriter_TierPublication_All = new FileWriter(outputTierPublication_All);
+			BufferedWriter out_TierPublication_All = new BufferedWriter(fwriter_TierPublication_All);
+			
+
+			String outputProteinAnnotation_All = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/Supplementary_Table1C_Protein_Annotation_For_Publication.txt";
+			FileWriter fwriter_ProteinAnnotation_All = new FileWriter(outputProteinAnnotation_All);
+			BufferedWriter out_ProteinAnnotation_All = new BufferedWriter(fwriter_ProteinAnnotation_All);
+			
+
+			String outputTopCandidatesForWebserver = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/CSEminer_CandidateFile.txt";
+			FileWriter fwriter_TopCandidatesForWebserver = new FileWriter(outputTopCandidatesForWebserver);
+			BufferedWriter out_TopCandidatesForWebserver = new BufferedWriter(fwriter_TopCandidatesForWebserver);
+			
+
+			String outputScatterPlotForWebserver = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/CSEminer_ScatterPlotFile.txt";
+			FileWriter fwriter_ScatterPlotForWebserver = new FileWriter(outputScatterPlotForWebserver);
+			BufferedWriter out_ScatterPlotForWebserver = new BufferedWriter(fwriter_ScatterPlotForWebserver);
 			
 			// the GTEx files were generated from CSEMinerTumorNormalSampleTypeMatch.java
 			String gene_expression_level_tumornormal_pairing_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/GTEx_Exon_Annotation/Gene_Pediatric_GTEx_TissueEnrichment_TissuePairFlag_20230314.txt";
@@ -60,6 +89,8 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 			String exon_alterantivesplicing_annotation_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/ExonLevelAnnotation/AS_Annotation_20230609.txt";
 			String exon_apris_annotation_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/ExonLevelAnnotation/Gencode36_Ensembl102_ApprisExonAnnotation.txt";
 			
+			String exon_surfaceome_protein_annotation = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/exon_surfaceome_protein_annotation_04272023.txt";
+			
 			String input_exon_folder = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/csiminer_heatmap/gene_exonexp";
 			String gene_transcript_exon_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/csiminer_heatmap/subset_gencodev31_exonname_ENSG_ENST.txt";			
 			String check_for_existing_target_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/existing_car_targets_2021.txt";			
@@ -68,7 +99,15 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 			String differentially_spliced_out_exon_list_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/differentially_spliced_out_exon_surfaceome_protein_annotation_03282023.txt";
 			
 			// double checking the prioritized target list
-			String exon_target_list_2022version_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/CSEMinerExonList/check_candidate_exon_list.txt";			
+			String exon_target_list_2022version_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/CSEMinerExonList/check_candidate_exon_list.txt";
+			
+			String exon_target_surfaceome_categories_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/exon_target_surfaceome_categories.txt";
+			
+			String webserver_old_scatter_plot_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/CSEMinerExonList/Updated_Subset_Solid_Brain_Scatter_Plot_20220513_more.txt";
+			HashMap old_scatter_plot_data = grab_old_scatter_plot_data(webserver_old_scatter_plot_file);
+			
+			HashMap exon_target_surfaceome_categories = grab_exon_surfaceome_categories(exon_target_surfaceome_categories_file);
+			
 			HashMap double_check_exon_candidates = double_check_exon_candidates(exon_target_list_2022version_file);
 						
 			// load transcript information
@@ -134,12 +173,14 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 			
 			HashMap surfaceome_gene = new HashMap();
 			HashMap matrisome_gene = new HashMap();
+			HashMap secretome_gene = new HashMap();
 			
 			HashMap grab_gene_list = grab_gene_list(check_for_existing_target_file); // 
 			System.out.println("Load previously reported CAR targets...");
 			HashMap all_sig_exon = new HashMap();
 			HashMap all_gene_exon = new HashMap();
 			HashMap all_gene_exon_sig = new HashMap();
+			HashMap all_de_exons = new HashMap();
 			FileInputStream fstream_exon_candidate_file = new FileInputStream(inputFile_exon_candidate_file);
 			DataInputStream din_exon_candidate_file = new DataInputStream(fstream_exon_candidate_file);
 			BufferedReader in_exon_candidate_file = new BufferedReader(new InputStreamReader(din_exon_candidate_file));
@@ -149,49 +190,51 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 				String str = in_exon_candidate_file.readLine();
 				String[] split = str.split("\t");
 				String exon = split[0];
-				String geneName = split[0].split("_")[0];			
-				if (all_gene_exon.containsKey(geneName)) {
-					LinkedList list = (LinkedList)all_gene_exon.get(geneName);
-					list.add(exon);
-					all_gene_exon.put(geneName, list);
-				} else {
-					LinkedList list = new LinkedList();
-					list.add(exon);
-					all_gene_exon.put(geneName, list);
-				}
-				
-				if (split[24].equalsIgnoreCase("true")) {
-					matrisome_gene.put(geneName, geneName);
-				}
-				if (split[25].equalsIgnoreCase("true")) {
-					surfaceome_gene.put(geneName, geneName);
-				}
-				// restrict to significant candidates
-				// significant candidates were filetered based on Restricted to <= 5 normal samples and at least >= 1 Tumor expression 
-				// Tumor score must be higher than normal score.
-				// Meta Score > 1
-				// filter black list genes
-				if (!blacklist_gene_list.containsKey(geneName)) {
-					//if (split[7].contains("MATRISOME") || split[7].contains("SURFACEOME")) {
-					if (split[24].equalsIgnoreCase("true") || (split[25].equalsIgnoreCase("true"))) {
-						//if (split[17].equals("Significant")) {
-						if (split[28].equalsIgnoreCase("true")) {
-							all_sig_exon.put(exon, exon);
-							if (all_gene_exon_sig.containsKey(geneName)) {
-								LinkedList list = (LinkedList)all_gene_exon_sig.get(geneName);
-								list.add(exon);
-								all_gene_exon_sig.put(geneName, list);
-							} else {
-								LinkedList list = new LinkedList();
-								list.add(exon);
-								all_gene_exon_sig.put(geneName, list);
+				if (!exon.contains("|")) {
+					all_de_exons.put(exon, exon);
+					String geneName = split[0].split("_")[0];			
+					if (all_gene_exon.containsKey(geneName)) {
+						LinkedList list = (LinkedList)all_gene_exon.get(geneName);
+						list.add(exon);
+						all_gene_exon.put(geneName, list);
+					} else {
+						LinkedList list = new LinkedList();
+						list.add(exon);
+						all_gene_exon.put(geneName, list);
+					}
+					
+					if (split[24].equalsIgnoreCase("true")) {
+						matrisome_gene.put(geneName, geneName);
+					}
+					if (split[25].equalsIgnoreCase("true")) {
+						surfaceome_gene.put(geneName, geneName);
+					}
+					// restrict to significant candidates
+					// significant candidates were filetered based on Restricted to <= 5 normal samples and at least >= 1 Tumor expression 
+					// Tumor score must be higher than normal score.
+					// Meta Score > 1
+					// filter black list genes
+					if (!blacklist_gene_list.containsKey(geneName)) {
+						//if (split[7].contains("MATRISOME") || split[7].contains("SURFACEOME")) {
+						if (split[24].equalsIgnoreCase("true") || (split[25].equalsIgnoreCase("true"))) {
+							//if (split[17].equals("Significant")) {
+							if (split[28].equalsIgnoreCase("true")) {
+								all_sig_exon.put(exon, exon);
+								if (all_gene_exon_sig.containsKey(geneName)) {
+									LinkedList list = (LinkedList)all_gene_exon_sig.get(geneName);
+									list.add(exon);
+									all_gene_exon_sig.put(geneName, list);
+								} else {
+									LinkedList list = new LinkedList();
+									list.add(exon);
+									all_gene_exon_sig.put(geneName, list);
+								}
+								
+								out_FirstFilter.write(str + "\n");
 							}
-							
-							out_FirstFilter.write(str + "\n");
 						}
 					}
 				}
-				
 			}
 			in_exon_candidate_file.close();
 			out_FirstFilter.close();
@@ -375,7 +418,7 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 							spliced_exon_status = "Tier2_AS";
 						}
 					}
-					// check if at least 50% gene coverage
+					// check for target with exons that is significantly differentially expressed 
 					if (min_prop_sig_exon_in_gene <= 0.2) {
 						prop_sig_exon_in_gene_flag = true;
 					}
@@ -696,6 +739,9 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 				}
 			}
 			
+			System.out.println("Total number of differentially expressed exons: " + all_de_exons.size());
+			System.out.println("Total number of differentially expressed genes: " + all_gene_exon.size());			
+			
 			System.out.println("A total of " + (tier1_count + tier2_count + not_prioritized_count) + " exons in " + (tier1_genes.size() + tier2_genes.size() + not_prioritized_genes.size()) + " genes were analyzed.");
 			System.out.println("");
 			
@@ -836,12 +882,307 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 			System.out.println("Exon\tcheck_for_exon_coverage_bias_in_gtex_samples_flag\tgrab_car_target_flag\thighRiskTumorNormalMatch\tspliced_exon_status");
 			
 			System.out.println();
+			// Generate a clean matrix of the candidate
+			// read this file 			
 			
+			// CSEMiner_Tiered_Exons_FullPipeline.txt
+			
+			// out_TierPublication.write(exon_id + "\t" + geneName + "\t" + AS_flag + "\t" + representative_exon + "\t" + location + "\t" + expr_High_in_Normal + "\t" + expression_High_in_Tumor + "\n");
+			
+			// 	out_ProteinAnnotation_All
+			// GeneName	tumor_suppressor	kinase	translocated_cancer_gene	cell_differentiation	cytokine_growth_factor	homeodomain	transcription_factor	oncogene	epigenetic	MGI_ExtrinsicCase	MGI_ECM	Compartment_ECM	AMIGO_ECM	MatrixDB	MGI_ExtracellularRegion	HSA_Predicted_Secreted	MGI_ExternalSidePM	ClusterOfDifferentiation	HPA_MembraneBound	Cell_Surface_Composite_Annotation	Compartment_CellSurface
+			out_ProteinAnnotation_All.write("GeneName\tCluster_of_Differentiation\tGPCR\tMGI_ExtrinsicCase\tMGI_ECM\tCompartment_ECM\tAMIGO_ECM\tMatrixDB\tCompartment_CellSurface\tCell_Surface_Protein_Atlas\tTMHMM_Output_Membrane\tTMHMM_Partial_OuterMembrane\tMGI_ExtracellularRegion\tMGI_ExternalSidePM\tHSA_Predicted_Secreted\tHPA_MembraneBound\tOncofetal\n");
+			
+			HashMap no_gene_repeat = new HashMap();
+			HashMap oncogene_status = new HashMap();
+			HashMap protein_annotation = new HashMap();
+			
+			FileInputStream fstream_protein_annotation_file = new FileInputStream(exon_surfaceome_protein_annotation);
+			DataInputStream din_protein_annotation_file = new DataInputStream(fstream_protein_annotation_file);
+			BufferedReader in_protein_annotation = new BufferedReader(new InputStreamReader(din_protein_annotation_file));
+			String header_in_protein_annotation = in_protein_annotation.readLine();
+			while (in_protein_annotation.ready()) {
+				String str = in_protein_annotation.readLine();
+				String[] split = str.split("\t");
+				String geneName = split[1];
+				String cluster_of_differentiation = split[32];
+				String GPCR = split[31];
+				String MGI_ExtrinsicCase = split[25];
+				String MGI_ECM = split[38];
+				String Compartment_ECM = split[37];
+				String AMIGO_ECM = split[36];
+				String MatrixDB	= split[35];
+				String Compartment_CellSurface = split[30];
+				String Cell_Surface_Protein_Atlas = split[29];
+				String tmhmm_outer_membrane = split[13];
+				String tmhmm_partial_out_annotation = split[14];
+				String MGI_ExtracellularRegion = split[34];
+				
+				String MGI_ExternalSidePM = split[24];
+				String HSA_Predicted_Secreted = split[39];
+				String HPA_MembraneBound = split[33];				
+
+				
+				String oncofetal1 = split[42];
+				String oncofetal2 = split[48];				
+				String final_oncofetal = "false";
+				//System.out.println(oncofetal1);
+				if (oncofetal1.equals("TRUE") || oncofetal2.equals("TRUE")) {
+					final_oncofetal = "true";			
+					
+				}
+				oncogene_status.put(geneName, final_oncofetal);
+				
+				String final_surfaceome = "Other";
+				String final_matrisome = "Other";
+				if (matrisome_gene.containsKey(geneName)) {
+					final_matrisome = "true";
+				}
+				if (surfaceome_gene.containsKey(geneName)) {
+					final_surfaceome = "true";
+				}
+				
+				if (!no_gene_repeat.containsKey(geneName)) {
+					if (all_gene_exon.containsKey(geneName)) {
+						out_ProteinAnnotation_All.write(geneName + "\t" + cluster_of_differentiation + "\t" + GPCR + "\t" + MGI_ExtrinsicCase + "\t" + 
+						MGI_ECM + "\t" + Compartment_ECM + "\t" + AMIGO_ECM + "\t" + MatrixDB + "\t" + Compartment_CellSurface + "\t" + Cell_Surface_Protein_Atlas + "\t" +
+						tmhmm_outer_membrane + "\t" + tmhmm_partial_out_annotation + "\t" + MGI_ExtracellularRegion + "\t" + MGI_ExternalSidePM + "\t" + HSA_Predicted_Secreted +
+						"\t" + HPA_MembraneBound + "\t" + final_oncofetal + "\n");
+					}
+				}
+				no_gene_repeat.put(geneName, geneName);
+			}
+			in_protein_annotation.close();
+			out_ProteinAnnotation_All.close();
+			
+			out_TopCandidatesForWebserver.write("ExonID\tGeneName\tCandidateCategory\tClass\tGTEx_Normal\tTargetDisease\tProteinType\tLocation\tOncofetal\tPanCancerExprScore\tPanNormalExprScore\tWeightedDEScore\n");
+			
+			
+			HashMap final_tier1_exon = new HashMap();
+			HashMap final_tier2_exon = new HashMap();
+			HashMap final_representative_exon_map = new HashMap();
+			
+			out_TierPublication.write("Exon\tGeneName\tAlternativeSplicedExon\tRepresentativeExon\tLocation\tTier\tExpression_High_in_Normal\tExpression_High_In_Tumor\n");
+			out_TierPublication_All.write("Exon\tGeneName\tAlternativeSplicedExon\tPanExpressionScore\tRepresentativeExon\tLocation\tTier\tExpression_High_in_Normal\tExpression_High_In_Tumor\n");
+			FileInputStream fstream_read_file = new FileInputStream(outputTieredCategoryFile);
+			DataInputStream din_read_file = new DataInputStream(fstream_read_file);
+			BufferedReader in_read_file = new BufferedReader(new InputStreamReader(din_read_file));
+			String header_read_file = in_read_file.readLine();
+			while (in_read_file.ready()) {
+				String str = in_read_file.readLine();
+				String[] split = str.split("\t");
+				
+				String exon_id = split[0];
+				String protein_type = "NA";
+				if (exon_target_surfaceome_categories.containsKey(exon_id)) {
+					protein_type = (String)exon_target_surfaceome_categories.get(exon_id);
+				}
+				String geneName = split[29];
+				String AS_flag = split[30];
+				String weighted_score = split[1];
+				String Pan_Expression_Score = split[2];
+				String Pan_Normal_Expression_Score = split[3];
+				String representative_exon = split[51];
+				String sufaceome = split[48];
+				String matrisome = split[49];
+				String location = "";
+				if (split[48].equals("true") && split[49].equals("true")) {
+					location = "MATRISOME_SURFACEOME";
+				} else if (split[48].equals("true")) {
+					location = "SURFACEOME";
+				} else if (split[49].equals("true")) {
+					location = "MATRISOME";
+				} else {
+					location = "OTHER";
+				}
+				
+				
+				
+				String tier_group = split[47];
+				if (split[21].equals("NA")) {
+					split[21] = "";
+					if (split[21].equals(",")) {
+						split[21] = ",";
+					}
+				}
+				if (split[22].equals("NA")) {
+					split[22] = "";
+					if (split[22].equals(",")) {
+						split[22] = ",";
+					}
+				}
+				String expression_High_in_Tumor = split[21] + "," + split[22];
+				expression_High_in_Tumor = expression_High_in_Tumor.replaceAll(",,", ",");
+				if (expression_High_in_Tumor.equals(",")) {
+					expression_High_in_Tumor = "";
+				}
+				if (split[17].equals("NA")) {
+					split[17] = "";
+					if (split[17].equals(",")) {
+						split[17] = ",";
+					}
+				}
+				if (split[18].equals("NA")) {
+					split[18] = "";
+					if (split[18].equals(",")) {
+						split[18] = ",";
+					}
+				}
+				String expr_High_in_Normal = split[17] + "," + split[18];
+				expr_High_in_Normal = expr_High_in_Normal.replaceAll(",,", ",");
+				if (expr_High_in_Normal.equals(",")) {
+					expr_High_in_Normal = "";
+				}
+				
+				if (tier_group.equals("Tier 1")) {
+					tier_group = "Tier1";
+				}
+				if (tier_group.equals("Tier 2")) {
+					tier_group = "Tier2";
+				}
+				if (tier_group.equals("Tier2_AS")) {
+					tier_group = "Tier2";
+				}
+				if (AS_flag.equals("Tier2_AS")) {
+					AS_flag = "AS";
+				}
+				
+				String oncofetal_status = "false";
+				if (oncogene_status.containsKey(geneName)) {
+					oncofetal_status = (String)oncogene_status.get(geneName);
+				}
+				if ((tier_group.equals("Tier1") || tier_group.equals("Tier2")) && representative_exon.equals("true")) {
+					final_representative_exon_map.put(exon_id, exon_id);
+					out_TierPublication.write(exon_id + "\t" + geneName + "\t" + AS_flag + "\t" + representative_exon + "\t" + location + "\t" + tier_group + "\t" + expr_High_in_Normal + "\t" + expression_High_in_Tumor + "\n");
+					
+					
+					// out_TopCandidatesForWebserver.write("ExonID\tGeneName\tCandidateCategory\tClass\tGTEx_Normal\tTargetDisease\tProteinType\tLocation\tOncofetal\tPanExpressionScore\tWeightedDEScore\n");
+					out_TopCandidatesForWebserver.write(exon_id + "\t" + geneName + "\t" + tier_group + "\t" + AS_flag + "\t" + expr_High_in_Normal + "\t" + expression_High_in_Tumor + "\t" + protein_type + "\t" + location + "\t" + oncofetal_status + "\t" + Pan_Expression_Score + "\t" + Pan_Normal_Expression_Score + "\t" + weighted_score + "\n");
+				}
+				if (tier_group.equals("Tier1")) {
+					final_tier1_exon.put(exon_id, exon_id);
+				}
+				if (tier_group.equals("Tier2")) {
+					final_tier2_exon.put(exon_id, exon_id);
+				}
+				
+				out_TierPublication_All.write(exon_id + "\t" + geneName + "\t" + AS_flag + "\t" + Pan_Expression_Score + "\t" + representative_exon + "\t" + location + "\t" + tier_group + "\t" + expr_High_in_Normal + "\t" + expression_High_in_Tumor + "\n");
+			}
+			in_read_file.close();
+			out_TierPublication.close();
+			out_TierPublication_All.close();
+			out_TopCandidatesForWebserver.close();
+			
+			System.out.println("Write out the scatter plot data for CSEminer");
+			
+			// Generate the scatter plot matrix
+			// Exon	GTEx_Score	Disease_Score	NoSigType4Name	Tier	NoSigType5Name	Filter	Tab1_Matrisome_Candidates_Restrictive	Tab2_Transmembrane_Filtered_Surfaceome_Candidates	Oncofetal	Shared_Matrisome_Surfaceome	Tab4_FinalTarget	Random	ExonType	FinalAnnotation
+			out_ScatterPlotForWebserver.write("Exon\tGTEx_Score\tDisease_Score\tNoSigType4Name\tTier\tNoSigType5Name\tFilter\tTab1_Matrisome_Candidates_Restrictive\tTab2_Transmembrane_Filtered_Surfaceome_Candidates\tOncofetal\tShared_Matrisome_Surfaceome\tTab4_FinalTarget\tRandom\tExonType\tFinalAnnotation\n");
+			Iterator itr_exon_list = old_scatter_plot_data.keySet().iterator();
+			while (itr_exon_list.hasNext()) {
+				String exon_id = (String)itr_exon_list.next();
+				String geneName = exon_id.split("_")[0];
+				String line = (String)old_scatter_plot_data.get(exon_id);
+				String[] split = line.split("\t");
+				String GTEx_Score = split[1];
+				String Disease_Score = split[2];
+				String NoSigType4Name = split[3];
+				String tier = "NA";
+				if (final_tier1_exon.containsKey(exon_id)) {
+					tier = "Tier1";
+				}
+				if (final_tier2_exon.containsKey(exon_id)) {
+					tier = "Tier2";
+				}
+				String NoSigType5Name = split[5];
+				String Filter = split[6];
+				String Tab1_Matrisome_Candidates_Restrictive = "FALSE"; //split[7]
+				String Tab2_Transmembrane_Filtered_Surfaceome_Candidates = "FALSE"; //split[8]
+				
+				String Oncofetal = "FALSE"; // split[9];
+				if (oncogene_status.containsKey(geneName)) {
+					Oncofetal = ((String)oncogene_status.get(geneName)).toUpperCase();
+				}
+				
+				String Shared_Matrisome_Surfaceome = "FALSE"; // split[10];
+				
+				
+				String Tab4_FinalTarget = "FALSE"; // split[11];
+				if (final_representative_exon_map.containsKey(exon_id)) {
+					Tab4_FinalTarget = "TRUE";
+				}
+				
+				String Random = split[12]; // split[12];
+				String ExonType = "NA";
+				String matrisome_status = "FALSE";
+				String surfaceome_status = "FALSE";
+				String FinalAnnotation = split[14];
+				if (matrisome_gene.containsKey(geneName)) {
+					matrisome_status = "TRUE";
+				}
+				Tab1_Matrisome_Candidates_Restrictive = matrisome_status;
+				if (surfaceome_gene.containsKey(geneName)) {
+					surfaceome_status = "TRUE";
+				}
+				Tab2_Transmembrane_Filtered_Surfaceome_Candidates = surfaceome_status;
+				if (matrisome_status.equals("TRUE") && surfaceome_status.equals("TRUE")) {
+					Shared_Matrisome_Surfaceome = "TRUE";
+				}
+				String tier_category = "NA";
+				if (all_de_exons.containsKey(exon_id)) {
+					if (Shared_Matrisome_Surfaceome.equals("TRUE")) {
+						
+					} else if (surfaceome_status.equals("TRUE")) {
+						
+					} else if (matrisome_status.equals("TRUE")) {
+						
+					} else {
+						
+					}
+					if (all_exon_candidates_tier.containsKey(exon_id)) {
+						FinalAnnotation = "Significant";
+					}
+					if (FinalAnnotation.equals("Significant")) {
+						if (all_exon_candidates_tier.containsKey(exon_id)) {
+							
+						}
+					}
+					out_ScatterPlotForWebserver.write(exon_id + "\t" + GTEx_Score + "\t" + Disease_Score + "\t" + NoSigType4Name + "\t" + tier + "\t" + NoSigType5Name + "\t" + Filter + "\t" + Tab1_Matrisome_Candidates_Restrictive + "\t" + Tab2_Transmembrane_Filtered_Surfaceome_Candidates + "\t" + Oncofetal + "\t" + Shared_Matrisome_Surfaceome + "\t" + Tab4_FinalTarget + "\t" + Random + "\t" + ExonType + "\t" + FinalAnnotation + "\n");
+				}
+				System.out.println(exon_id);
+				// we should show the 2933 exons along with non-prioritized targets as background.
+				
+			}
+			
+			out_ScatterPlotForWebserver.close();
+			
+			System.out.println("old_scatter_plot_data: " + old_scatter_plot_data.size());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	public static HashMap grab_old_scatter_plot_data(String inputFile) {
+		HashMap grab_all_exon = new HashMap();
+		try {
+			
+			FileInputStream fstream = new FileInputStream(inputFile);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));
+			in.readLine();
+			while (in.ready()) {
+				String str = in.readLine();
+				String[] split = str.split("\t");
+				grab_all_exon.put(split[0], str);
+			}
+			in.close();
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return grab_all_exon;
+	}
 	public static HashMap grab_all_exon_list(String inputFile) {
 		HashMap grab_all_exon = new HashMap();
 		try {
@@ -1552,6 +1893,29 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 		// gene_with_problem.put("LAMA4", "LAMA4");
 		return gene_with_problem;
 	}
+	
+	public static HashMap grab_exon_surfaceome_categories(String inputFile) {
+		HashMap gene_list = new HashMap();
+		try {
+			
+			FileInputStream fstream = new FileInputStream(inputFile);
+			DataInputStream din = new DataInputStream(fstream);
+			BufferedReader in = new BufferedReader(new InputStreamReader(din));
+			String header = in.readLine();
+			while (in.ready()) {
+				String str = in.readLine();
+				String[] split = str.split("\t");
+				gene_list.put(split[0], split[1]);
+			}
+			in.close();
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return gene_list;
+	}
+	
 	
 	public static HashMap grab_gene_list(String inputFile) {
 		HashMap gene_list = new HashMap();
