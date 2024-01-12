@@ -452,6 +452,7 @@ import rnaseq.splicing.cseminer.exonannotation.CSEMinerCheckGTExProteomicsHitsPi
 import rnaseq.splicing.cseminer.exonannotation.CSEMinerExonAnnotateTMHMMPipeline;
 import rnaseq.splicing.cseminer.exonannotation.CSEMinerGenerateExonTranslationPipeline;
 import rnaseq.splicing.cseminer.exonannotation.CSEMinerManuscriptCombineSolidBrainResult;
+import rnaseq.splicing.cseminer.prioritization.CSEminerFigure1ExonClassificationFullPipelineExecMode;
 import rnaseq.splicing.cseminer.prioritization.CSEminerPrioritizationScript;
 import rnaseq.splicing.cseminer.proteomics.CSEMinerAppendProteinHits;
 import rnaseq.splicing.cseminer.reference.CSEMinerAppendAnnotatedInformation;
@@ -3005,7 +3006,10 @@ public class ProgramDescriptions {
 		if (FindOverlappingGeneList.type().equals(type)) {
 			result += "FindOverlappingGeneList: " + FindOverlappingGeneList.description() + "\n";
 		}
+		if (CSEminerFigure1ExonClassificationFullPipelineExecMode.type().equals(type)) {
+			result += "CSEminerFigure1ExonClassificationFullPipelineExecMode: " + CSEminerFigure1ExonClassificationFullPipelineExecMode.description() + "\n";
+		}
 		return result;
 	}	
-	public static String VERSION = "2023-1128A";	
+	public static String VERSION = "2024-0112A";	
 }

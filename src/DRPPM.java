@@ -684,6 +684,7 @@ import rnaseq.splicing.cseminer.exonannotation.CSEMinerCheckGTExProteomicsHitsPi
 import rnaseq.splicing.cseminer.exonannotation.CSEMinerExonAnnotateTMHMMPipeline;
 import rnaseq.splicing.cseminer.exonannotation.CSEMinerGenerateExonTranslationPipeline;
 import rnaseq.splicing.cseminer.exonannotation.CSEMinerManuscriptCombineSolidBrainResult;
+import rnaseq.splicing.cseminer.prioritization.CSEminerFigure1ExonClassificationFullPipelineExecMode;
 import rnaseq.splicing.cseminer.prioritization.CSEminerPrioritizationScript;
 import rnaseq.splicing.cseminer.proteomics.CSEMinerAppendProteinHits;
 import rnaseq.splicing.cseminer.reference.CSEMinerAppendAnnotatedInformation;
@@ -11852,7 +11853,17 @@ public class DRPPM {
 				}
 				CSEMinerAppendTMHMMAnnotation2Candidate.execute(args_remain);
 				System.exit(0);
-				// CSIMinerCandidateRegion2Fasta CSIMinerAppendTMHMMAnnotation2Candidate
+				// CSEminerFigure1ExonClassificationFullPipelineExecMode
+			} else if (type.equalsIgnoreCase("-CSEminerFigure1ExonClassificationFullPipelineExecMode")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSEminerFigure1ExonClassificationFullPipelineExecMode "
+							+ CSEminerFigure1ExonClassificationFullPipelineExecMode.parameter_info());
+					System.exit(0);
+				}
+				CSEminerFigure1ExonClassificationFullPipelineExecMode.execute(args_remain);
+				System.exit(0);
+				// 
 			} else if (type.equalsIgnoreCase("-GenerateInputMatrixIllumina")) {
 				String[] args_remain = getRemaining(args);
 				if (args_remain.length == 0) {

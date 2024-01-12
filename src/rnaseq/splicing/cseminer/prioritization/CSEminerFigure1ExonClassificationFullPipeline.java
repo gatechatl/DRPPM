@@ -25,85 +25,84 @@ import statistics.general.MathTools;
  * To Tier 2	HighProteomicsHitInGTExForExon
  * To Tier 2	LowRiskTumorNormalPair
  * To Tier 2	ExcludeTestisOvaryRNAExpr
- * @author 4472414
+ * @author Timothy Shaw
  *
  */
 public class CSEminerFigure1ExonClassificationFullPipeline {
 
+	public static void execute(String[] args) {
+		
+		
+	}
 	public static void main(String[] args) {
 		
 		try {
 			
-			String inputFile_exon_candidate_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/CSEMinerExonList/67502_Exon_list_complete_pipeline.txt";
+			String folder_path = args[0]; // "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/"
+			String inputFile_exon_candidate_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/CSEMinerExonList/67502_Exon_list_complete_pipeline.txt";
 			
-			String outputFirstFilter = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/CSEMiner_Significant_Exons_FullPipeline.txt";
+			String outputFirstFilter = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/CSEMiner_Significant_Exons_FullPipeline.txt";
 			FileWriter fwriter_FirstFilter = new FileWriter(outputFirstFilter);
 			BufferedWriter out_FirstFilter = new BufferedWriter(fwriter_FirstFilter);
 									
-			String outputTieredCategoryFile = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/CSEMiner_Tiered_Exons_FullPipeline.txt";
+			String outputTieredCategoryFile = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/CSEMiner_Tiered_Exons_FullPipeline.txt";
 			FileWriter fwriter_TieredCategory = new FileWriter(outputTieredCategoryFile);
-			BufferedWriter out_TieredCategory = new BufferedWriter(fwriter_TieredCategory);
-						
+			BufferedWriter out_TieredCategory = new BufferedWriter(fwriter_TieredCategory);						
 
-			String outputDoubleCheckProteinAnnotation = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/CSEMiner_Protein_Annotation.txt";
+			String outputDoubleCheckProteinAnnotation = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/CSEMiner_Protein_Annotation.txt";
 			FileWriter fwriter_ProteinAnnotation = new FileWriter(outputDoubleCheckProteinAnnotation);
 			BufferedWriter out_PublishedTiers = new BufferedWriter(fwriter_ProteinAnnotation);
-						
-			
-			String outputTierPublication = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/Supplementary_Table1A_Tiered_Exons_For_Publication.txt";
+									
+			String outputTierPublication = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/Supplementary_Table1A_Tiered_Exons_For_Publication.txt";
 			FileWriter fwriter_TierPublication = new FileWriter(outputTierPublication);
 			BufferedWriter out_TierPublication = new BufferedWriter(fwriter_TierPublication);
 			
-
-			String outputTierPublication_All = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/Supplementary_Table1B_Tiered_Exons_For_Publication.txt";
+			String outputTierPublication_All = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/Supplementary_Table1B_Tiered_Exons_For_Publication.txt";
 			FileWriter fwriter_TierPublication_All = new FileWriter(outputTierPublication_All);
 			BufferedWriter out_TierPublication_All = new BufferedWriter(fwriter_TierPublication_All);
 			
 
-			String outputProteinAnnotation_All = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/Supplementary_Table1C_Protein_Annotation_For_Publication.txt";
+			String outputProteinAnnotation_All = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/Supplementary_Table1C_Protein_Annotation_For_Publication.txt";
 			FileWriter fwriter_ProteinAnnotation_All = new FileWriter(outputProteinAnnotation_All);
 			BufferedWriter out_ProteinAnnotation_All = new BufferedWriter(fwriter_ProteinAnnotation_All);
 			
-
-			String outputTopCandidatesForWebserver = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/CSEminer_CandidateFile.txt";
+			String outputTopCandidatesForWebserver = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/CSEminer_CandidateFile.txt";
 			FileWriter fwriter_TopCandidatesForWebserver = new FileWriter(outputTopCandidatesForWebserver);
-			BufferedWriter out_TopCandidatesForWebserver = new BufferedWriter(fwriter_TopCandidatesForWebserver);
-			
+			BufferedWriter out_TopCandidatesForWebserver = new BufferedWriter(fwriter_TopCandidatesForWebserver);			
 
 			String outputScatterPlotForWebserver = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/OutputFilteredCandidates/CSEminer_ScatterPlotFile.txt";
 			FileWriter fwriter_ScatterPlotForWebserver = new FileWriter(outputScatterPlotForWebserver);
 			BufferedWriter out_ScatterPlotForWebserver = new BufferedWriter(fwriter_ScatterPlotForWebserver);
+			 
+			String gene_expression_level_tumornormal_pairing_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/GTEx_Exon_Annotation/Gene_Pediatric_GTEx_TissueEnrichment_TissuePairFlag_20230314.txt";
+			String exon_expression_level_tumornormal_pairing_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/GTEx_Exon_Annotation/Exon_Pediatric_GTEx_TissueEnrichment_TissuePairFlag_20230314.txt";
+			String inputFile_alternatively_spliced_exon = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/CSEminer_alternatively_spliced_exon_candidates_updated_20230325.txt";
+			String blacklist_genes_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/blacklist_targetlist.txt";
+			String okaytokeeporfilter_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/OkayToKeepOrFilterV2.txt";
+			String tier2_as_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/Tier2_AS.txt";			
+			String oncogene_tumor_suppressor_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/GeneLevelAnnotation/Bailey_et_al_cell_2018_oncogene_tumor_suppressors.txt";
+			String inputFile_IHC_staining_high_only = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/IHC_Protein_Annotation/tim_summary_ihc_normal_tissue_high_only.txt";
+			String inputFile_IHC_staining_med_high = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/IHC_Protein_Annotation/tim_summary_ihc_normal_tissue_medium_or_high.txt";			
+			String bone_marrow_expression_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/MicroarrayDerivedBoneMarrowExpression/GeneAnnotationOfBoneMarrowExpression.txt";
+			String gtex_proteomics_gene_expression_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/ProteomicsAnnotation/gene_abundance_normPSM_median.txt"; // distribution indicate cutoff should be around 0.1323528
+			String exon_alterantivesplicing_annotation_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/ExonLevelAnnotation/AS_Annotation_20230609.txt";
+			String exon_apris_annotation_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/ExonLevelAnnotation/Gencode36_Ensembl102_ApprisExonAnnotation.txt";
 			
-			// the GTEx files were generated from CSEMinerTumorNormalSampleTypeMatch.java
-			String gene_expression_level_tumornormal_pairing_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/GTEx_Exon_Annotation/Gene_Pediatric_GTEx_TissueEnrichment_TissuePairFlag_20230314.txt";
-			String exon_expression_level_tumornormal_pairing_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/GTEx_Exon_Annotation/Exon_Pediatric_GTEx_TissueEnrichment_TissuePairFlag_20230314.txt";
-			String inputFile_alternatively_spliced_exon = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/CSEminer_alternatively_spliced_exon_candidates_updated_20230325.txt";
-			String blacklist_genes_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/blacklist_targetlist.txt";
-			String okaytokeeporfilter_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/OkayToKeepOrFilterV2.txt";
-			String tier2_as_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/Tier2_AS.txt";			
-			String oncogene_tumor_suppressor_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/GeneLevelAnnotation/Bailey_et_al_cell_2018_oncogene_tumor_suppressors.txt";
-			String inputFile_IHC_staining_high_only = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/IHC_Protein_Annotation/tim_summary_ihc_normal_tissue_high_only.txt";
-			String inputFile_IHC_staining_med_high = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/IHC_Protein_Annotation/tim_summary_ihc_normal_tissue_medium_or_high.txt";			
-			String bone_marrow_expression_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/MicroarrayDerivedBoneMarrowExpression/GeneAnnotationOfBoneMarrowExpression.txt";
-			String gtex_proteomics_gene_expression_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/ProteomicsAnnotation/gene_abundance_normPSM_median.txt"; // distribution indicate cutoff should be around 0.1323528
-			String exon_alterantivesplicing_annotation_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/ExonLevelAnnotation/AS_Annotation_20230609.txt";
-			String exon_apris_annotation_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/ExonLevelAnnotation/Gencode36_Ensembl102_ApprisExonAnnotation.txt";
+			String exon_surfaceome_protein_annotation = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/exon_surfaceome_protein_annotation_04272023.txt";
 			
-			String exon_surfaceome_protein_annotation = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/exon_surfaceome_protein_annotation_04272023.txt";
-			
-			String input_exon_folder = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/csiminer_heatmap/gene_exonexp";
-			String gene_transcript_exon_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/csiminer_heatmap/subset_gencodev31_exonname_ENSG_ENST.txt";			
-			String check_for_existing_target_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/existing_car_targets_2021.txt";			
+			String input_exon_folder = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/csiminer_heatmap/gene_exonexp";
+			String gene_transcript_exon_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/csiminer_heatmap/subset_gencodev31_exonname_ENSG_ENST.txt";			
+			String check_for_existing_target_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/existing_car_targets_2021.txt";			
 			//String differentially_expressed_exon_list_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/CSEMinerExonList/DifferentiallyExpressed_Exons_AfterCutoff_20211118.bed";
-			String differentially_expressed_exon_list_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/differentially_expressed_exon_surfaceome_protein_annotation_03282023.txt";
-			String differentially_spliced_out_exon_list_file = "/Users/4472414/Projects/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/differentially_spliced_out_exon_surfaceome_protein_annotation_03282023.txt";
+			String differentially_expressed_exon_list_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/differentially_expressed_exon_surfaceome_protein_annotation_03282023.txt";
+			String differentially_spliced_out_exon_list_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/cseminer_data/initializing_the_surfaceome_de_gene_list/differentially_spliced_out_exon_surfaceome_protein_annotation_03282023.txt";
 			
 			// double checking the prioritized target list
-			String exon_target_list_2022version_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/CSEMinerExonList/check_candidate_exon_list.txt";
+			String exon_target_list_2022version_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/CSEMinerExonList/check_candidate_exon_list.txt";
 			
-			String exon_target_surfaceome_categories_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/exon_target_surfaceome_categories.txt";
+			String exon_target_surfaceome_categories_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/AfterManualReview/exon_target_surfaceome_categories.txt";
 			
-			String webserver_old_scatter_plot_file = "/Users/4472414/Documents/Current_Manuscripts/CSIMiner/Current_Manuscript/NatureCommunication_Draft/CompleteAnnotationPipeline/pipeline_input_files/CSEMinerExonList/Updated_Subset_Solid_Brain_Scatter_Plot_20220513_more.txt";
+			String webserver_old_scatter_plot_file = folder_path + "/CompleteAnnotationPipeline/pipeline_input_files/CSEMinerExonList/Updated_Subset_Solid_Brain_Scatter_Plot_20220513_more.txt";
 			HashMap old_scatter_plot_data = grab_old_scatter_plot_data(webserver_old_scatter_plot_file);
 			
 			HashMap exon_target_surfaceome_categories = grab_exon_surfaceome_categories(exon_target_surfaceome_categories_file);
@@ -552,29 +551,13 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					if (double_check_exon_candidates.containsKey(exon)) {
 						target_exon = "true";
 					}
-					//if (exon.equals("SORL1_chr11_121627555_121627767_+")) {
-					//	System.out.println("SORL1_chr11_121627555_121627767_");
-					//	System.out.println("Why is this not prioritized:\t" + geneName + "\t" + check_for_exon_coverage_bias_in_gtex_samples_flag + "\t" + grab_car_target_flag + "\t" + highRiskTumorNormalMatch);
-					//}
-					//if ((highNormalFlag || highRiskTumorNormalMatch || checkForHighIHCNormalFlag || checkForHighMediumInBrain) && !spliced_exon_status.equals("AS")) {
-					//if (((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch || checkForHighIHCNormalFlag || checkForHighMediumInBrain) && !spliced_exon_status.equals("AS")) {
-					
-					//if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !spliced_exon_status.equals("AS")) && !okay2keep) {
-					
+
 					if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !(spliced_exon_status.equals("AS") || spliced_exon_status.equals("Tier2_AS")) && !okay2keep) || okay2filter) {
 						all_exon_candidates_tier.put(exon, "Not Prioritized");
 						exon_prioritization = "Not Prioritized";
 						not_prioritized_count++;
 						not_prioritized_genes.put(geneName, geneName);
-						//System.out.println("Why is this not prioritized:\t" + geneName + "\t" + check_for_exon_coverage_bias_in_gtex_samples_flag + "\t" + grab_car_target_flag + "\t" + highRiskTumorNormalMatch);
-					//} else if (((checkForHighIHCNormalFlag || checkForHighMediumInBrain || ihc_AboveIntermediateHighFlag || boneMarrowHighFlag || proteomicsHighGTExFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !spliced_exon_status.equals("AS")) {
-					//	
-					//} else if ((((checkForHighIHCNormalFlag || ihc_AboveIntermediateHighFlag || boneMarrowHighFlag || proteomicsHighGTExFlag || numNormalTissueAboveMedian)) && !spliced_exon_status.equals("AS")) || ((lowRiskTumorNormalPairFlag || checkForHighMediumInBrain || highNormalFlag))) {	
-						// checkForHighIHCNormalFlag || checkForHighMediumInBrain || proteomicsHighGTExFlag || ihc_AboveIntermediateHighFlag || 
-					//} else if (((boneMarrowHighFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !spliced_exon_status.equals("AS")) {
-					//} else if (((boneMarrowHighFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !spliced_exon_status.equals("AS")) {
 					
-					//} else if (((checkForHighIHCNormalFlag || checkForHighMediumInBrain || ihc_AboveIntermediateHighFlag || boneMarrowHighFlag || proteomicsHighGTExFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !(spliced_exon_status.equals("AS"))) {
 					} else if (((boneMarrowHighFlag || proteomicsHighGTExFlag || lowRiskTumorNormalPairFlag || numNormalTissueAboveMedian) || highNormalFlag) && !(spliced_exon_status.equals("AS"))) {
 						if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !spliced_exon_status.equals("AS"))) {
 							
@@ -693,7 +676,6 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 					
 					out_TieredCategory.write("\t" + surfaceome_flag + "\t" + matrisome_flag + "\t" + (surfaceome_flag && matrisome_flag) + "\t" + target_exon);
 					out_TieredCategory.write("\n");
-					// if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !spliced_exon_status.equals("AS")) && !okay2keep) {
 					
 					if ((((check_for_exon_coverage_bias_in_gtex_samples_flag && !grab_car_target_flag) || highRiskTumorNormalMatch) && !spliced_exon_status.equals("AS")) && okay2keep) {
 						candidates_not_removed_after_manual_check_status.put(exon.split("_")[0], check_for_exon_coverage_bias_in_gtex_samples_flag + "\t" + grab_car_target_flag + "\t" + highRiskTumorNormalMatch + "\t" + spliced_exon_status + "\n");
@@ -2056,5 +2038,18 @@ public class CSEminerFigure1ExonClassificationFullPipeline {
 			e.printStackTrace();
 		}
 		return check_as_exon_type;
+	}
+	
+	public static double[] convertListDouble2Double(LinkedList list) {
+		double[] num = new double[list.size()];
+		int i = 0;
+		Iterator itr = list.iterator();
+		while (itr.hasNext()) {
+			double val = (Double)itr.next();
+			double n = val;
+			num[i] = n;
+			i++;
+		}
+		return num;
 	}
 }

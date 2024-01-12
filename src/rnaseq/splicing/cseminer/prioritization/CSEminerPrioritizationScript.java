@@ -14,7 +14,7 @@ import idconversion.tools.GTFFile;
 
 /**
  * Given the exon annotation, we will look at the percentage of exons significantly expressed.
- * @author 4472414
+ * @author Timothy Shaw
  *
  */
 public class CSEminerPrioritizationScript {
