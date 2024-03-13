@@ -16,7 +16,7 @@ public class CSIMinerViolinAndBarPlotDataTableIndexed {
 		return "Generate the file for the violin and barplot. Skipping header for inputExonList and inputDisease file.";
 	}
 	public static String type() {
-		return "CSI-Miner";
+		return "CSEMiner";
 	}
 	public static String parameter_info() {
 		return "[inputExonList] [inputDiseaseFiles] [sampleBlackList] [outputBarPlotFile] [outputBarPlotFracFile] [outputBoxplotFolder]";

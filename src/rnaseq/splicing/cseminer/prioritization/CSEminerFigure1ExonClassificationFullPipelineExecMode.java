@@ -16,11 +16,7 @@ import statistics.general.MathTools;
 
 /**
  * Perform the entire classification.
- * Criteria for removal 
  * Criteria for removal	HighRiskTumorNormalMatch
- * Criteria for removal	CheckForHighIHCNormalFlag
- * Criteria for removal	CheckForHighMediumInIHCBrainTissues
- * To Tier 2	IHC_AboveIntermediateHigh(Exclude Testis Ovary)
  * To Tier 2	BoneMarrowHigh
  * To Tier 2	HighProteomicsHitInGTExForExon
  * To Tier 2	LowRiskTumorNormalPair
@@ -55,11 +51,8 @@ public class CSEminerFigure1ExonClassificationFullPipelineExecMode {
 			String outputTieredCategoryFile = outputFolder + "/CSEMiner_Tiered_Exons_FullPipeline.txt";
 			FileWriter fwriter_TieredCategory = new FileWriter(outputTieredCategoryFile);
 			BufferedWriter out_TieredCategory = new BufferedWriter(fwriter_TieredCategory);						
-
-			String outputDoubleCheckProteinAnnotation = outputFolder + "/CSEMiner_Protein_Annotation.txt";
-			FileWriter fwriter_ProteinAnnotation = new FileWriter(outputDoubleCheckProteinAnnotation);
-			BufferedWriter out_PublishedTiers = new BufferedWriter(fwriter_ProteinAnnotation);
-									
+			
+		
 			String outputTierPublication = outputFolder + "/Supplementary_Table1A_Tiered_Exons_For_Publication.txt";
 			FileWriter fwriter_TierPublication = new FileWriter(outputTierPublication);
 			BufferedWriter out_TierPublication = new BufferedWriter(fwriter_TierPublication);
@@ -1093,6 +1086,11 @@ public class CSEminerFigure1ExonClassificationFullPipelineExecMode {
 			
 			out_ScatterPlotForWebserver.close();
 			
+			
+			File f = new File(outputFirstFilter);
+			f.delete();
+			File f2 = new File(outputTieredCategoryFile);
+			f2.delete();
 			//System.out.println("old_scatter_plot_data: " + old_scatter_plot_data.size());
 		} catch (Exception e) {
 			e.printStackTrace();
