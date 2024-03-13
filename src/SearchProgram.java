@@ -827,5 +827,6 @@ public class SearchProgram {
 		search_program.add("FindOverlappingGeneList");
 		search_program.add("CSEminerFigure1ExonClassificationFullPipelineExecMode");
 		search_program.add("CSEMinerViolinAndBarPlotGenerateMetaTable");
+		search_program.add("CSEMinerGenerateViolinAndBarPlotData");
 	}
 }

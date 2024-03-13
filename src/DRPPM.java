@@ -693,6 +693,7 @@ import rnaseq.splicing.cseminer.reference.CSEMinerCandidate2BED;
 import rnaseq.splicing.cseminer.reference.CSEMinerCandidateRegion2Fasta;
 import rnaseq.splicing.cseminer.reference.tmhmmdb.CSIMinerExonAnnotateTMHMM;
 import rnaseq.splicing.cseminer.reference.tmhmmdb.CSIMinerGeneNameUniprotProtein;
+import rnaseq.splicing.cseminer.violinbarplotdata.CSEMinerGenerateViolinAndBarPlotData;
 import rnaseq.splicing.cseminer.violinbarplotdata.CSEMinerViolinAndBarPlotGenerateMetaTable;
 import rnaseq.splicing.mats308.AddGeneName2MATS;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
@@ -12293,6 +12294,16 @@ public class DRPPM {
 					System.exit(0);
 				}
 				CSEMinerViolinAndBarPlotGenerateMetaTable.execute(args_remain);
+				System.exit(0);
+				// CSEMinerGenerateViolinAndBarPlotData
+			} else if (type.equalsIgnoreCase("-CSEMinerGenerateViolinAndBarPlotData")) {
+				String[] args_remain = getRemaining(args);
+				if (args_remain.length == 0) {
+					System.out.println("drppm -CSEMinerGenerateViolinAndBarPlotData "
+							+ CSEMinerGenerateViolinAndBarPlotData.parameter_info());
+					System.exit(0);
+				}
+				CSEMinerGenerateViolinAndBarPlotData.execute(args_remain);
 				System.exit(0);
 				// 
 			} else if (type.equalsIgnoreCase("-FillNAsWithLowestValue")) {

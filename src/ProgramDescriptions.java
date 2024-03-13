@@ -461,6 +461,7 @@ import rnaseq.splicing.cseminer.reference.CSEMinerCandidate2BED;
 import rnaseq.splicing.cseminer.reference.CSEMinerCandidateRegion2Fasta;
 import rnaseq.splicing.cseminer.reference.tmhmmdb.CSIMinerExonAnnotateTMHMM;
 import rnaseq.splicing.cseminer.reference.tmhmmdb.CSIMinerGeneNameUniprotProtein;
+import rnaseq.splicing.cseminer.violinbarplotdata.CSEMinerGenerateViolinAndBarPlotData;
 import rnaseq.splicing.cseminer.violinbarplotdata.CSEMinerViolinAndBarPlotGenerateMetaTable;
 import rnaseq.splicing.mats308.AddGeneName2rMATS401;
 import rnaseq.splicing.mats308.FilterMATSResults;
@@ -3012,6 +3013,9 @@ public class ProgramDescriptions {
 		}
 		if (CSEMinerViolinAndBarPlotGenerateMetaTable.type().equals(type)) {
 			result += "CSEMinerViolinAndBarPlotGenerateMetaTable: " + CSEMinerViolinAndBarPlotGenerateMetaTable.description() + "\n";
+		}
+		if (CSEMinerGenerateViolinAndBarPlotData.type().equals(type)) {
+			result += "CSEMinerGenerateViolinAndBarPlotData: " + CSEMinerGenerateViolinAndBarPlotData.description() + "\n";
 		}
 		return result;
 	}	
